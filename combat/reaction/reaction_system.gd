@@ -163,6 +163,8 @@ func get_post_hit_prompt(attacker, target, attack: AttackData, attack_result, cu
 				continue
 		elif movement_effect == null:
 			continue
+		elif movement_effect.uses_margin_range and (attack_result.margin < movement_effect.minimum_margin or attack_result.margin > movement_effect.maximum_margin):
+			continue
 		available_reactions.append(reaction)
 	if available_reactions.is_empty():
 		return {}

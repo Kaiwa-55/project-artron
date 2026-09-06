@@ -10,11 +10,13 @@
 [ext_resource type="Resource" path="res://data/ability/crushing_palm.tres" id="7_crushing_palm"]
 [ext_resource type="Resource" path="res://data/ability/flowing_guard.tres" id="8_flowing_guard"]
 [ext_resource type="Resource" path="res://data/ability/sweeping_kick.tres" id="9_sweeping_kick"]
+[ext_resource type="Resource" path="res://data/ability/martial_sense.tres" id="10_martial_sense"]
+[ext_resource type="Resource" path="res://data/ability/redirect_force.tres" id="11_redirect_force"]
 
 [sub_resource type="Resource" id="Progression_L1"]
 script = ExtResource("5_progression")
 max_hp_gain = 8
-granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("2_build_up_body")])
+granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("2_build_up_body"), ExtResource("10_martial_sense")])
 
 [sub_resource type="Resource" id="Progression_L2"]
 script = ExtResource("5_progression")
@@ -26,7 +28,7 @@ granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("3_combo_techniqu
 script = ExtResource("5_progression")
 level = 3
 max_hp_gain = 7
-granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("9_sweeping_kick")])
+granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("9_sweeping_kick"), ExtResource("11_redirect_force")])
 
 [sub_resource type="Resource" id="Progression_L4"]
 script = ExtResource("5_progression")

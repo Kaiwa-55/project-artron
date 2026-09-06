@@ -22,9 +22,13 @@ func _init() -> void:
 	enemy_out.active_reactions.clear()
 	var system := CombatSystem.new()
 	system.start_combat([player, enemy_a, enemy_b, enemy_out])
+	# start_combat reapplies the current class loadout; add this standalone test
+	# Skill afterwards so the fixture does not depend on the player's class.
+	if not player.available_skills.any(func(skill): return skill != null and skill.id == BurstData.id):
+		player.available_skills.append(BurstData)
 	system.combat_state.current_actor_id = player.id
 	player.ap = player.max_ap
-	player.mana = player.max_mana
+	player.mana = maxi(player.max_mana, BurstData.mana_cost)
 	check(system.validate_ground_skill_start(player.id, BurstData.id).success, "Available Area Skill should enter targeting mode")
 	player.ap = 0
 	check(system.validate_ground_skill_start(player.id, BurstData.id).failure_reason.contains("AP"), "Targeting should explain insufficient AP")
@@ -35,7 +39,7 @@ func _init() -> void:
 	player.available_skills.append(mana_skill)
 	player.mana = 0
 	check(system.validate_ground_skill_start(player.id, mana_skill.id).failure_reason.contains("Mana"), "Targeting should explain insufficient Mana")
-	player.mana = player.max_mana
+	player.mana = maxi(player.max_mana, BurstData.mana_cost)
 	player.skill_cooldowns[BurstData.id] = 2
 	check(system.validate_ground_skill_start(player.id, BurstData.id).failure_reason.contains("cooldown"), "Targeting should explain active Cooldown")
 	player.skill_cooldowns.erase(BurstData.id)

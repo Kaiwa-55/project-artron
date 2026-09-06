@@ -12,6 +12,7 @@ enum DistanceMode { FIXED_FEET, SPEED_MULTIPLIER }
 @export_range(0, 99) var minimum_amount: int = 0
 @export var minimum_margin: int = 0
 @export var maximum_margin: int = 0
+@export var uses_margin_range: bool = false
 @export var distance_mode: DistanceMode = DistanceMode.FIXED_FEET
 @export var distance_feet: float = 0.0
 @export var speed_multiplier: float = 0.0

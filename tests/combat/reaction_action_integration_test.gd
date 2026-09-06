@@ -128,13 +128,23 @@ func test_area_action_resumes_after_each_defense() -> void:
 	attack.id = "enemy_area_attack"
 	attack.display_name = "Enemy Area Attack"
 	attack.requires_to_hit = false
-	attack.base_damage = 0
+	# A damaging Attack opens Defensive Reactions even when it does not need a
+	# To Hit roll. A zero-damage effect correctly skips the Reaction window.
+	attack.base_damage = 1
 	attack.range_feet = 20.0
 	ability.attack_data = attack
 	attacker.available_abilities = [ability]
 	attacker.equipped_abilities = [ability.id]
 	var system := CombatSystem.new()
 	system.start_combat([attacker, player, ally])
+	# Keep this fixture focused on per-target Defensive Reactions. The current
+	# Devotee template can otherwise open a nested Divine Intervention prompt.
+	player.available_abilities.clear()
+	player.equipped_abilities.clear()
+	ally.available_abilities.clear()
+	ally.equipped_abilities.clear()
+	player.active_reactions = [ParryData]
+	ally.active_reactions = [ParryData]
 	system.combat_state.turn_order = [player.id, ally.id, attacker.id]
 	system.combat_state.current_actor_id = attacker.id
 	attacker.ap = attacker.max_ap

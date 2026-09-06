@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/move.tres" id="4"]
+[ext_resource type="Resource" path="res://data/reaction/redirect_force_reaction.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "redirect_force"
+display_name = "Redirect Force"
+required_level = 3
+prerequisite_id = "martial_sense"
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
+reaction_only = true
+ap_cost = 1
+description = "When hit by a Melee Attack with Margin 0-2, Move up to 5 ft before Hit/Miss resolves. The movement does not trigger Reactions; leaving the Attack's range turns it into a Miss. Once per Round."
+granted_reactions = [ExtResource("5")]
+

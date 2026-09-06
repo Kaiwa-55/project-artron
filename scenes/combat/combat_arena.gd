@@ -326,6 +326,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if is_movement_animating():
 		get_viewport().set_input_as_handled()
 		return
+	if combat_system.has_pending_step_back_move() and ((event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed) or event.is_action_pressed("ui_cancel")):
+		var cancel_result := combat_system.cancel_step_back_move()
+		move_mode = false
+		if cancel_result.requires_reaction_choice:
+			$Control.show_reaction_prompt(cancel_result.reaction_prompt)
+			$Control.set_mode_hint("Movement cancelled. Resolve the next Reaction.")
+		else:
+			$Control.set_mode_hint("Reaction movement cancelled. The original Attack continues.")
+		$Control.record_action_result(cancel_result)
+		$Control.update_ui()
+		get_viewport().set_input_as_handled()
+		return
 	if move_mode and not combat_system.has_pending_step_back_move() and not combat_system.has_pending_ability_movement() and ((event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed) or event.is_action_pressed("ui_cancel")):
 		move_mode = false
 		get_viewport().set_input_as_handled()
@@ -419,7 +431,11 @@ func move_player(destination: Vector2) -> void:
 	if combat_system.has_pending_step_back_move():
 		var reaction_move_name: String = combat_system.pending_reaction_move_name if not combat_system.pending_reaction_move_name.is_empty() else "Step Back"
 		var step_result := combat_system.execute_step_back_move(destination)
-		if step_result.success:
+		if step_result.requires_reaction_choice:
+			move_mode = false
+			$Control.show_reaction_prompt(step_result.reaction_prompt)
+			$Control.set_mode_hint("Movement completed. Resolve the next Reaction.")
+		elif step_result.success:
 			move_mode = false
 			$PlayerCharacter.refresh_from_state()
 			$Control.set_mode_hint("%s completed." % reaction_move_name)

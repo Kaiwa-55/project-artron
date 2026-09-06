@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3]
+
+[ext_resource type="Script" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/move.tres" id="5"]
+
+[sub_resource type="Resource" id="RedirectMovement"]
+script = ExtResource("2")
+effect_type = 3
+minimum_margin = 0
+maximum_margin = 2
+uses_margin_range = true
+distance_feet = 5.0
+movement_triggers_reactions = false
+
+[resource]
+script = ExtResource("1")
+id = "redirect_force_reaction"
+display_name = "Redirect Force"
+description = "When a Melee Attack hits with Margin 0-2, spend 1 AP to Move up to 5 ft before final resolution. If this leaves the Attack's range, it Misses."
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+trigger = 1
+auto_resolve = false
+ap_cost = 1
+required_trait_id = "martial_artist"
+melee_only = true
+effects = [SubResource("RedirectMovement")]
+uses_per_round = 1
+
