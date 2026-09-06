@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TraitData" format=3 uid="uid://cefqsb1cdyms4"]
+
+[ext_resource type="Script" uid="uid://ctfrx47gl7o1h" path="res://data/trait/trait_data.gd" id="1_trait_data"]
+
+[resource]
+script = ExtResource("1_trait_data")
+id = "melee"
+display_name = "Melee"
+description = "Classifies this Attack as a melee attack for rules and requirements."

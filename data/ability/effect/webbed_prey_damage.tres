@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+effect_type = 3
+condition_mode = 0
+required_target_status_ids = ["rooted", "slowed"]
+flat_damage_bonus = 2

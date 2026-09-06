@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://1od2i052wuwj"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_nxffd"]
+[ext_resource type="Resource" uid="uid://lj0eqcgaea7i" path="res://data/reaction/pursuit_reaction.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "pursuit"
+display_name = "Pursuit"
+required_level = 3
+required_trait_ids = Array[String](["assassin"])
+traits = [ExtResource("3"), ExtResource("4")]
+ap_cost = 1
+description = "Reactive. When an enemy leaves your Reach, spend 1 AP to Move up to 5 ft."
+granted_reactions = [ExtResource("2")]

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://lj0eqcgaea7i"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+
+[sub_resource type="Resource" id="Movement"]
+script = ExtResource("2")
+effect_type = 3
+distance_feet = 5.0
+
+[resource]
+script = ExtResource("1")
+id = "pursuit"
+display_name = "Pursuit"
+description = "When an enemy leaves your Reach, spend 1 AP to Move up to 5 ft."
+traits = [ExtResource("3")]
+auto_resolve = false
+required_trait_id = "assassin"
+effects = [SubResource("Movement")]

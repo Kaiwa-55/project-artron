@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ProgressionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/progression/progression_data.gd" id="1_progression"]
+
+[resource]
+script = ExtResource("1_progression")
+max_level = 10
+cumulative_xp_thresholds = PackedInt32Array(0, 0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500)
+ability_points_by_level = PackedInt32Array(0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0)
+attribute_points_by_level = PackedInt32Array(0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)

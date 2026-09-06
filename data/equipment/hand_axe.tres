@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/attack/hand_axe.tres" id="attack"]
+
+[resource]
+script = ExtResource("script")
+id = "hand_axe"
+display_name = "Hand Axe"
+description = "A one-handed axe: melee 5 ft or throw 15 ft. Throwing consumes it unless it has Returning."
+weapon_attack = ExtResource("attack")

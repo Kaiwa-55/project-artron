@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://bimqa77mj5ila"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1_reaction_data"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="2_reactive"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="3_effect"]
+
+[sub_resource type="Resource" id="AttackEffect"]
+script = ExtResource("3_effect")
+effect_type = 2
+attack_source = 1
+
+[resource]
+script = ExtResource("1_reaction_data")
+id = "opportunity_attack"
+display_name = "Opportunity Attack"
+description = "When an enemy leaves your equipped weapon's reach, make an attack with that weapon before it moves."
+traits = [ExtResource("2_reactive")]
+attack_source = 1
+required_weapon_trait_ids = Array[String](["melee"])
+effects = [SubResource("AttackEffect")]

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://ctqkt0361nl8"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_r525n"]
+[ext_resource type="Resource" uid="uid://c7ccix64o16w0" path="res://data/attack/web_shot.tres" id="3"]
+[ext_resource type="Resource" uid="uid://bkdigf3b6p2nf" path="res://data/status/slowed.tres" id="4"]
+
+[sub_resource type="Resource" id="UseEffect_slow_on_miss"]
+script = ExtResource("2")
+timing = 2
+recipient = 1
+effect = ExtResource("4")
+
+[resource]
+script = ExtResource("1")
+id = "web_shot"
+display_name = "Web Shot"
+auto_equip_on_grant = true
+ap_cost = 2
+cooldown_turns = 2
+description = "Attack Reflex at 30 feet. On hit, Root the target; on miss, Slow it."
+attack_source = 2
+attack_data = ExtResource("3")
+use_effects = [SubResource("UseEffect_slow_on_miss")]
+targeting_range_feet = 30.0

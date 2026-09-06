@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://digjbueytlfmk"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dlrgbp1au2g6y" path="res://assets/icon/skill_icons50.png" id="1_m632o"]
+
+[resource]
+script = ExtResource("1")
+id = "poisoned"
+display_name = "Poisoned"
+icon_texture = ExtResource("1_m632o")
+status_kind = 3
+fortitude_bonus = -2
+status_tags = Array[String](["status", "poison"])
+ap_penalty_per_stack = 1

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AIProfile" format=3 uid="uid://dfuj1bx0ewq6l"]
+
+[ext_resource type="Script" uid="uid://bcpei8cgtivk1" path="res://data/ai/ai_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+damage_weight = 20.0
+useful_action_end_turn_penalty = 10.0

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bbs04rtl6gm2j"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_22jba"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/ability/effect/sacred_ward_defenses.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="5"]
+
+[sub_resource type="Resource" id="SacredWardEffect"]
+script = ExtResource("2")
+recipient = 1
+effect = ExtResource("3")
+scale_stat_bonuses_with_attribute = true
+scale_reflex_bonus = true
+scale_fortitude_bonus = true
+scale_will_bonus = true
+
+[resource]
+script = ExtResource("1")
+id = "sacred_ward"
+display_name = "Sacred Ward"
+required_level = 2
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("4"), ExtResource("5")]
+ap_cost = 2
+description = "Grant one Ally or yourself within 30 ft Fortitude, Reflex, and Will bonuses equal to your Wisdom modifier until the end of the target's next turn. Reusing Sacred Ward refreshes its duration and does not stack. Requires line of sight and does not consume Faith."
+target_filter = 2
+use_effects = [SubResource("SacredWardEffect")]
+targeting_range_feet = 30.0

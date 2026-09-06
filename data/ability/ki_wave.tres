@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dwe3brusekjlm"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
+[ext_resource type="Resource" path="res://data/attack/arcane_burst.tres" id="2_attack"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_n28se"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3_trait"]
+
+[resource]
+script = ExtResource("1_ability")
+id = "ki_wave"
+display_name = "Ki Wave"
+required_level = 2
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("3_trait")]
+auto_equip_on_grant = true
+ap_cost = 1
+cooldown_turns = 1
+uses_per_turn = 1
+description = "Release a 20-foot line of force that strikes every enemy along its path."
+target_mode = 2
+attack_source = 2
+attack_data = ExtResource("2_attack")
+area_shape = 2
+targeting_range_feet = 20.0
+line_length_feet = 20.0

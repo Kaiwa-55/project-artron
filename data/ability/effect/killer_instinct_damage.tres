@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" format=3 uid="uid://fiaexscng7xr"]
+
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="1_effect"]
+
+[resource]
+script = ExtResource("1_effect")
+effect_type = 3
+requires_target_unattacked_this_round = true
+target_hp_below_percent = 50
+damage_bonus_per_level = 1

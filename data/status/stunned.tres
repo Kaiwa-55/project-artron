@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://oeioptks3bgs"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://jco4kra07t0m" path="res://assets/icon/skill_icons5.png" id="1_ocsyx"]
+
+[resource]
+script = ExtResource("1")
+id = "stunned"
+display_name = "Stunned"
+icon_texture = ExtResource("1_ocsyx")
+status_kind = 7
+stack_mode = 2
+potency = 1
+status_tags = Array[String](["status", "control"])
+ap_penalty_per_stack = 1

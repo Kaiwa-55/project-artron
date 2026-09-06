@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TraitData" format=3 uid="uid://cif2nm8gwigh5"]
+
+[ext_resource type="Script" uid="uid://ctfrx47gl7o1h" path="res://data/trait/trait_data.gd" id="1_trait"]
+
+[resource]
+script = ExtResource("1_trait")
+id = "assassin"
+display_name = "Assassin"
+description = "This feature belongs to the Assassin class."

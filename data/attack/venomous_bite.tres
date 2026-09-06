@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://ba4d63ubjm6ab"]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_d3knb"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="1_uhjj6"]
+[ext_resource type="Resource" path="res://data/status/poisoned.tres" id="2"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_uhjj6"]
+[ext_resource type="Resource" path="res://data/trait/simple.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
+[ext_resource type="Resource" path="res://data/ability/webbed_prey.tres" id="7"]
+
+[resource]
+script = ExtResource("1")
+id = "venomous_bite"
+display_name = "Venomous Bite"
+animation_template = ExtResource("1_uhjj6")
+to_hit_bonus = 2
+base_damage = 6
+damage_type = "pierce"
+effects_on_hit = Array[ExtResource("1_d3knb")]([ExtResource("2")])
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")]
+granted_abilities = Array[ExtResource("3_uhjj6")]([ExtResource("7")])

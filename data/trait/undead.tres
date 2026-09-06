@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TraitData" format=3 uid="uid://dgajoqqeuh7xa"]
+
+[ext_resource type="Script" uid="uid://ctfrx47gl7o1h" path="res://data/trait/trait_data.gd" id="1_trait_data"]
+
+[resource]
+script = ExtResource("1_trait_data")
+id = "undead"
+display_name = "Undead"
+description = "Takes 2 extra damage from Light damage."
+trait_type = 1
+tags = Array[String](["creature", "undead"])
+triggering_damage_type = "light"
+value = 2

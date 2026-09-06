@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://cfka8kbn040md"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dq5liup37oxso" path="res://assets/token/velkaria_brood_matriarch.jpg" id="2"]
+[ext_resource type="Resource" path="res://data/attack/matriarch_fangs.tres" id="3"]
+[ext_resource type="Resource" uid="uid://dh8ga6jndtyxy" path="res://data/ability/royal_web.tres" id="4"]
+[ext_resource type="Resource" uid="uid://cavsk0n3fecin" path="res://data/ability/brood_rush.tres" id="5"]
+[ext_resource type="Resource" uid="uid://ba1p6uancpnja" path="res://data/reaction/skittering_guard.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/beast.tres" id="7"]
+[ext_resource type="Resource" path="res://data/trait/spider.tres" id="8"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="8_yve88"]
+[ext_resource type="Resource" path="res://data/trait/poison.tres" id="9"]
+[ext_resource type="Resource" path="res://data/trait/web_walker.tres" id="10"]
+[ext_resource type="Resource" path="res://data/ai/velkaria_boss_profile.tres" id="11"]
+
+[resource]
+script = ExtResource("1")
+id = "velkaria"
+display_name = "Velkaria, Brood Matriarch"
+portrait = ExtResource("2")
+token_texture = ExtResource("2")
+team = 2
+position = Vector2(820, 390)
+collision_radius_feet = 5.0
+level = 5
+base_max_hp = 48
+base_max_ap = 4
+base_speed = 25.0
+reflex_stat_bonus = 2
+fortitude_stat_bonus = 2
+strength = 16
+dexterity = 18
+constitution = 16
+wisdom = 12
+initiative_bonus = 4
+available_abilities = [ExtResource("4"), ExtResource("5")]
+equipped_abilities = ["royal_web", "brood_rush"]
+equipped_weapon_attack = ExtResource("3")
+natural_attack = ExtResource("3")
+traits = [ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10")]
+reactions = [ExtResource("6")]
+ai_profile = ExtResource("11")

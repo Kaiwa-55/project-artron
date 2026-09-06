@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://dsgkcvrpmemcm"]
+
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/arcane_burst.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "arcane_burst"
+display_name = "Arcane Burst"
+description = "Choose a point within 20 feet. Attack every enemy in a 7.5-foot circle."
+mana_cost = 5
+cooldown_turns = 2
+attack_data = ExtResource("2")
+target_mode = 2
+area_shape = 1
+targeting_range_feet = 20.0
+area_radius_feet = 7.5

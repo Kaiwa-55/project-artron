@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://cy5waqds62ljf"]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1_attack_data"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_fkpb5"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="1_v7jxm"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="2_an8fi"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="2_melee"]
+[ext_resource type="Resource" path="res://data/trait/two_handed.tres" id="3_two_handed"]
+[ext_resource type="Resource" path="res://data/trait/advanced.tres" id="4_advanced"]
+[ext_resource type="Resource" path="res://data/trait/reach.tres" id="5_reach"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="6_pierce"]
+[ext_resource type="Resource" uid="uid://bpe846j2bhgu3" path="res://data/ability/long_reach.tres" id="7_long_reach"]
+
+[resource]
+script = ExtResource("1_attack_data")
+id = "long_spear_attack"
+display_name = "Long Spear"
+animation_template = ExtResource("1_v7jxm")
+defense_type = 0
+base_damage = 4
+range_feet = 8.0
+damage_type = "pierce"
+traits = [ExtResource("2_melee"), ExtResource("3_two_handed"), ExtResource("4_advanced"), ExtResource("5_reach"), ExtResource("6_pierce")]
+granted_abilities = Array[ExtResource("2_an8fi")]([ExtResource("7_long_reach")])

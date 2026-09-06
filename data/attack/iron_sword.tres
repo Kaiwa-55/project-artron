@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://pxmfobghjq0f"]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1_attack_data"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_f7f5v"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="2_21d24"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="2_melee"]
+[ext_resource type="Resource" path="res://data/trait/simple.tres" id="3_simple"]
+[ext_resource type="Resource" path="res://data/trait/slash.tres" id="4_slash"]
+[ext_resource type="Resource" path="res://data/trait/shield_compatible.tres" id="5_shield"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
+
+[resource]
+script = ExtResource("1_attack_data")
+id = "iron_sword_attack"
+display_name = "Iron Sword"
+animation_template = ExtResource("animation")
+defense_type = 0
+base_damage = 5
+traits = [ExtResource("2_melee"), ExtResource("3_simple"), ExtResource("4_slash"), ExtResource("5_shield")]

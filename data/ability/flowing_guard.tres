@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/effect/flowing_guard_move.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "flowing_guard"
+display_name = "Flowing Guard"
+required_level = 2
+prerequisite_id = "build_up_body"
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Passive. After moving at least 5 ft during your Turn, gain +1 Reflex until the start of your next Turn. This bonus does not stack."
+effects = [ExtResource("2")]
+

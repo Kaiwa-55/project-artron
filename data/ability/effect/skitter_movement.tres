@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+effect_type = 5
+movement_distance_feet = 15.0
+movement_triggers_reactions = false

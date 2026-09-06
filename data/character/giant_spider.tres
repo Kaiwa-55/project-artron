@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://4g4hfpn4l1x1"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://ba4d63ubjm6ab" path="res://data/attack/venomous_bite.tres" id="2"]
+[ext_resource type="Resource" uid="uid://ctqkt0361nl8" path="res://data/ability/web_shot.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cvd6jwl5g2sqy" path="res://data/ability/skitter.tres" id="4"]
+[ext_resource type="Texture2D" uid="uid://dbwiijuaampm4" path="res://assets/token/Giant Spider Portrait.jpg" id="4_c3hra"]
+[ext_resource type="Resource" path="res://data/trait/beast.tres" id="5"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="5_4byrn"]
+[ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/web_walker.tres" id="7"]
+[ext_resource type="Texture2D" uid="uid://1j04obpn8av3" path="res://assets/token/token_Giant Spider.png" id="7_c3hra"]
+
+[resource]
+script = ExtResource("1")
+id = "giant_spider"
+display_name = "Giant Spider"
+portrait = ExtResource("4_c3hra")
+token_texture = ExtResource("7_c3hra")
+team = 2
+position = Vector2(720, 250)
+collision_radius_feet = 5.0
+level = 2
+base_max_hp = 22
+base_max_ap = 3
+base_speed = 30.0
+reflex_stat_bonus = 1
+fortitude_stat_bonus = 1
+will_stat_bonus = -1
+dexterity = 16
+constitution = 12
+wisdom = 8
+initiative_bonus = 3
+available_abilities = [ExtResource("3"), ExtResource("4")]
+equipped_abilities = ["web_shot", "skitter"]
+equipped_weapon_attack = ExtResource("2")
+natural_attack = ExtResource("2")
+traits = [ExtResource("5"), ExtResource("6"), ExtResource("7")]

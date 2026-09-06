@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://cwx0k7bcp8n6"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cvrrmlsvk36bg" path="res://assets/icon/skill_icons55.png" id="1_3b1u4"]
+
+[resource]
+script = ExtResource("1")
+id = "dazed"
+display_name = "Dazed"
+icon_texture = ExtResource("1_3b1u4")
+status_kind = 6
+reflex_bonus = -2
+status_tags = Array[String](["status", "mental"])
+ap_penalty_per_stack = 1

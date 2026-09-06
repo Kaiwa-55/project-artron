@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+effect_type = 3
+required_attack_trait_ids = Array[String](["melee"])
+first_successful_hit_per_turn = true
+flat_damage_bonus = 2
+alternate_target_hp_at_or_below_percent = 50
+alternate_flat_damage_bonus = 3

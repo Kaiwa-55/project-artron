@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://np27ob6fbg2q"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_un4j8"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="4"]
+
+[sub_resource type="Resource" id="AreaFaithHeal"]
+script = ExtResource("2")
+timing = 1
+recipient = 1
+dynamic_effect = 4
+
+[resource]
+script = ExtResource("1")
+id = "shared_blessing"
+display_name = "Shared Blessing"
+required_level = 3
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("3"), ExtResource("4")]
+ap_cost = 2
+faith_cost = 2
+description = "Choose a point within 30 ft. Heal each non-Dying Ally in a 10 ft circle once for floor(Faith / 2), calculated before paying 2 Faith. The caster can be affected. Requires line of sight; the area does not pass through obstacles."
+target_mode = 2
+target_filter = 1
+use_effects = [SubResource("AreaFaithHeal")]
+area_shape = 1
+targeting_range_feet = 30.0
+area_radius_feet = 10.0
+include_caster = true

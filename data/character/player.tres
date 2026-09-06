@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://87olcsmdty3u"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1_character_data"]
+[ext_resource type="Resource" uid="uid://cc0jbkieew8kx" path="res://data/class/devotee.tres" id="3_oq1jv"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="4_8rcdb"]
+[ext_resource type="Resource" uid="uid://ckrki53jpb51j" path="res://data/equipment/iron_sword.tres" id="8_iron_sword"]
+[ext_resource type="Resource" uid="uid://cp2oeb5hig86m" path="res://data/equipment/long_spear.tres" id="9_long_spear"]
+[ext_resource type="Resource" path="res://data/equipment/leather_armor.tres" id="10_leather_armor"]
+[ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="11_buckler"]
+[ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="13_human"]
+[ext_resource type="Resource" path="res://data/ability/belief.tres" id="ability_belief"]
+[ext_resource type="Resource" uid="uid://52710ckhwush" path="res://data/ability/divine_intervention.tres" id="ability_divine_intervention"]
+[ext_resource type="Resource" uid="uid://bowe4sdgeblby" path="res://data/ability/heal_or_harm.tres" id="ability_heal_or_harm"]
+[ext_resource type="Resource" uid="uid://c4p6h14djslvg" path="res://data/ability/pray.tres" id="ability_pray"]
+[ext_resource type="Resource" uid="uid://bbs04rtl6gm2j" path="res://data/ability/sacred_ward.tres" id="ability_sacred_ward"]
+[ext_resource type="Resource" uid="uid://np27ob6fbg2q" path="res://data/ability/shared_blessing.tres" id="ability_shared_blessing"]
+[ext_resource type="Resource" uid="uid://cw4oh02n2g1fh" path="res://data/ability/smite.tres" id="ability_smite"]
+[ext_resource type="Resource" path="res://data/equipment/club.tres" id="item_club"]
+[ext_resource type="Resource" path="res://data/equipment/dagger.tres" id="item_dagger"]
+[ext_resource type="Resource" path="res://data/equipment/hand_axe.tres" id="item_hand_axe"]
+[ext_resource type="Resource" path="res://data/equipment/shortbow.tres" id="item_shortbow"]
+[ext_resource type="Resource" path="res://data/equipment/short_spear.tres" id="item_short_spear"]
+
+[resource]
+script = ExtResource("1_character_data")
+id = "player"
+display_name = "Player"
+team = 1
+position = Vector2(510, 250)
+ancestry = ExtResource("13_human")
+ancestry_attribute_choices = Array[int]([1, 2, 4])
+character_class = ExtResource("3_oq1jv")
+class_attribute_choices = Array[int]([2])
+level = 3
+selected_ability_ids = Array[String](["smite", "sacred_ward", "shared_blessing", "divine_intervention"])
+granted_ability_ids = Array[String](["belief", "pray", "heal_or_harm"])
+base_max_hp = 0
+base_max_ap = 4
+available_abilities = [ExtResource("ability_belief"), ExtResource("ability_pray"), ExtResource("ability_heal_or_harm"), ExtResource("ability_smite"), ExtResource("ability_sacred_ward"), ExtResource("ability_shared_blessing"), ExtResource("ability_divine_intervention")]
+equipped_abilities = ["belief", "pray", "heal_or_harm", "smite", "sacred_ward", "shared_blessing", "divine_intervention"]
+equipment_inventory = [ExtResource("8_iron_sword"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")]
+starting_equipment = [ExtResource("8_iron_sword"), ExtResource("10_leather_armor")]

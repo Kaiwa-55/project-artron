@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://wx7cu1dipknu"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bpuab06sns2qg" path="res://assets/icon/skill_icons30.png" id="1_e1cc8"]
+
+[resource]
+script = ExtResource("1")
+id = "haste"
+display_name = "Haste"
+icon_texture = ExtResource("1_e1cc8")
+status_kind = 13
+stack_mode = 2
+potency = 1
+speed_bonus_per_stack = 5.0
+status_tags = Array[String](["status", "buff", "movement"])
+max_ap_bonus_per_stack = 1

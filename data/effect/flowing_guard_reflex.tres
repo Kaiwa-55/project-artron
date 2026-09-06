@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "flowing_guard_reflex"
+display_name = "Flowing Guard"
+duration_turns = 1
+expire_at_start_of_turn = true
+stack_mode = 0
+reflex_bonus = 1
+status_tags = Array[String](["buff"])
+

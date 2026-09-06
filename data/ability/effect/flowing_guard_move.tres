@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/effect/flowing_guard_reflex.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+effect_type = 11
+status_effect = ExtResource("2")
+minimum_move_distance_feet = 5.0
+

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AncestryData" format=3 uid="uid://dmhchlar7qr22"]
+
+[ext_resource type="Script" uid="uid://k88uu57v5uny" path="res://data/ancestry/ancestry_data.gd" id="1_ancestry_data"]
+[ext_resource type="Resource" uid="uid://bigb1oyrju84o" path="res://data/trait/human.tres" id="2_human_trait"]
+[ext_resource type="Resource" uid="uid://bvlc47pxwgove" path="res://data/ability/human_adapt.tres" id="3_human_adapt"]
+
+[resource]
+script = ExtResource("1_ancestry_data")
+id = "human"
+display_name = "Human"
+description = "Adaptable people with broad potential."
+base_hp = 10
+speed_feet = 10.0
+attribute_choice_count = 3
+traits = [ExtResource("2_human_trait")]
+granted_abilities = [ExtResource("3_human_adapt")]

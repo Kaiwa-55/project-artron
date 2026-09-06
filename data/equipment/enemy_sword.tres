@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EquipmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="1_equipment"]
+[ext_resource type="Resource" path="res://data/attack/enemy_sword.tres" id="2_attack"]
+
+[resource]
+script = ExtResource("1_equipment")
+id = "enemy_sword"
+display_name = "Enemy Sword"
+weapon_attack = ExtResource("2_attack")

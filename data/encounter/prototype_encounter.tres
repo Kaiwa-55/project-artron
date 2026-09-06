@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3]
+
+[ext_resource type="Script" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/character/velkaria.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "prototype_velkaria"
+display_name = "Velkaria Prototype Encounter"
+enemies = [ExtResource("2")]

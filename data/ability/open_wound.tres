@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cge8hvgoarwat"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/effect/open_wound_bleeding.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_uvmp5"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "open_wound"
+display_name = "Open Wound"
+required_trait_ids = Array[String](["assassin"])
+traits = [ExtResource("3"), ExtResource("4")]
+is_passive = true
+description = "Passive. The first Melee Attack that Hits each Turn applies Bleeding 1. Limit 1/Turn."
+effects = [ExtResource("2")]

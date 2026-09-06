@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://c1tpa53aw63r"]
+
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1_skill_data"]
+[ext_resource type="Resource" uid="uid://d3xh4uq25lx7t" path="res://data/attack/arcane_bolt.tres" id="2_attack"]
+
+[resource]
+script = ExtResource("1_skill_data")
+id = "arcane_bolt"
+display_name = "Arcane Bolt"
+description = "Fire an arcane projectile at an enemy within 15 feet."
+mana_cost = 3
+cooldown_turns = 2
+attack_data = ExtResource("2_attack")

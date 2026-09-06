@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://bcmu0jrkddx8m"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1_5mpvm"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="2_reactive"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="3_effect"]
+
+[sub_resource type="Resource" id="MissEffect"]
+script = ExtResource("3_effect")
+effect_type = 1
+minimum_margin = 1
+maximum_margin = 1
+
+[resource]
+script = ExtResource("1_5mpvm")
+id = "martial_sense"
+display_name = "Martial Sense"
+description = "When a melee attack's To Hit equals Defense + 1, spend AP to turn it into a Miss."
+traits = [ExtResource("2_reactive")]
+trigger = 1
+auto_resolve = false
+resolution = 1
+required_trait_id = "martial_artist"
+melee_only = true
+max_hit_margin = 1
+effects = [SubResource("MissEffect")]

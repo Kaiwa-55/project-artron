@@ -1,0 +1,77 @@
+[gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://cc0jbkieew8kx"]
+
+[ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/belief.tres" id="2"]
+[ext_resource type="Resource" uid="uid://c4p6h14djslvg" path="res://data/ability/pray.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="4"]
+[ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="6"]
+[ext_resource type="Resource" uid="uid://bowe4sdgeblby" path="res://data/ability/heal_or_harm.tres" id="7"]
+
+[sub_resource type="Resource" id="L1"]
+script = ExtResource("5")
+max_hp_gain = 5
+granted_abilities = Array[ExtResource("6")]([ExtResource("2"), ExtResource("3"), ExtResource("7")])
+
+[sub_resource type="Resource" id="L2"]
+script = ExtResource("5")
+level = 2
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L3"]
+script = ExtResource("5")
+level = 3
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L4"]
+script = ExtResource("5")
+level = 4
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L5"]
+script = ExtResource("5")
+level = 5
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L6"]
+script = ExtResource("5")
+level = 6
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L7"]
+script = ExtResource("5")
+level = 7
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L8"]
+script = ExtResource("5")
+level = 8
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L9"]
+script = ExtResource("5")
+level = 9
+max_hp_gain = 5
+
+[sub_resource type="Resource" id="L10"]
+script = ExtResource("5")
+level = 10
+max_hp_gain = 5
+
+[resource]
+script = ExtResource("1")
+id = "devotee"
+display_name = "Devotee"
+description = "A back-line divine supporter who heals and empowers allies through Faith."
+base_speed_feet = 10.0
+base_mana = 0
+base_faith = 10
+fixed_attribute_bonuses = {
+4: 1
+}
+attribute_choice_count = 1
+attribute_choice_options = Array[int]([2, 1])
+granted_abilities = [ExtResource("2"), ExtResource("3"), ExtResource("7")]
+traits = [ExtResource("4")]
+auto_equipped_ability_ids = Array[String](["belief", "pray", "heal_or_harm"])
+progression_entries = Array[Resource]([SubResource("L1"), SubResource("L2"), SubResource("L3"), SubResource("L4"), SubResource("L5"), SubResource("L6"), SubResource("L7"), SubResource("L8"), SubResource("L9"), SubResource("L10")])

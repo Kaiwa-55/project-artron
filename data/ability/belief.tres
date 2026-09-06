@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=4 format=3]
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[resource]
+script = ExtResource("1")
+id = "belief"
+display_name = "Belief"
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("2"), ExtResource("3")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Passive. Gain +1 Wisdom and choose +1 Constitution or +1 Dexterity."

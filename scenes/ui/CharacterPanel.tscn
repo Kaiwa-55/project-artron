@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/character_panel.gd" id="1_script"]
+
+[node name="CharacterPanel" type="PanelContainer"]
+offset_right = 1175.0
+offset_bottom = 610.0
+script = ExtResource("1_script")

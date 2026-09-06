@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EffectData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1_effect_data"]
+
+[resource]
+script = ExtResource("1_effect_data")
+id = "stun"
+display_name = "Stun"
+duration_turns = 1
+effect_type = 2
+trigger = 1
+stackable = true
+max_stacks = 3
+status_tags = ["control", "stun"]
+ap_penalty_per_stack = 1

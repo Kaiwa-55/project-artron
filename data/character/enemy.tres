@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://8twfcy8dhjc4"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1_character_data"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_u67qu"]
+[ext_resource type="Resource" uid="uid://bimqa77mj5ila" path="res://data/reaction/opportunity_attack.tres" id="3_opportunity_attack"]
+[ext_resource type="Resource" uid="uid://b6045h54hd0e" path="res://data/attack/enemy_sword.tres" id="4_enemy_sword"]
+[ext_resource type="Resource" path="res://data/equipment/enemy_sword.tres" id="5_enemy_sword_equipment"]
+
+[resource]
+script = ExtResource("1_character_data")
+id = "enemy"
+display_name = "Enemy"
+team = 2
+position = Vector2(570, 250)
+base_max_hp = 50
+base_max_ap = 4
+base_speed = 15.0
+max_hp_bonus = 1
+reflex_stat_bonus = 1
+fortitude_stat_bonus = 2
+strength = 12
+constitution = 12
+damage_resistances = {
+"slash": 2
+}
+equipped_weapon_attack = ExtResource("4_enemy_sword")
+equipment_inventory = [ExtResource("5_enemy_sword_equipment")]
+starting_equipment = [ExtResource("5_enemy_sword_equipment")]
+reactions = [ExtResource("3_opportunity_attack")]

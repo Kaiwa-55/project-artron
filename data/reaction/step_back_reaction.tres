@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://3mrdcavehvpc"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+
+[sub_resource type="Resource" id="Movement"]
+script = ExtResource("2")
+effect_type = 3
+distance_mode = 1
+speed_multiplier = 0.5
+
+[resource]
+script = ExtResource("1")
+id = "step_back"
+display_name = "Step Back"
+description = "After an enemy finishes an attack against you, spend 1 AP to Move up to half your Speed. Once per round."
+traits = [ExtResource("3")]
+trigger = 2
+auto_resolve = false
+effects = [SubResource("Movement")]
+uses_per_round = 1

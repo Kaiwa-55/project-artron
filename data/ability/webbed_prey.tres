@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/effect/webbed_prey_damage.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "webbed_prey"
+display_name = "Webbed Prey"
+traits = [ExtResource("3")]
+is_passive = true
+description = "Venomous Bite deals 2 additional damage to a Rooted or Slowed target."
+effects = [ExtResource("2")]

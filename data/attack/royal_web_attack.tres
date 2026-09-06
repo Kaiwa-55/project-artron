@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/status/rooted.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/ranged.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "royal_web_attack"
+display_name = "Royal Web"
+attack_attribute = 1
+defense_type = 1
+to_hit_bonus = 4
+can_critical = false
+base_damage = 0
+range_feet = 30.0
+effects_on_hit = [ExtResource("2")]
+traits = [ExtResource("3")]

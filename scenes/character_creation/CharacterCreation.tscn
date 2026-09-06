@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://btbo07u6ffxlc"]
+
+[ext_resource type="Script" uid="uid://nl20nsv533pu" path="res://scenes/character_creation/creation_wizard.gd" id="1_script"]
+
+[node name="CharacterCreation" type="Control" unique_id=1050848233]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")

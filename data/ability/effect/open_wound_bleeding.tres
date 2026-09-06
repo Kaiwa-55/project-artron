@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/status/bleeding.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+effect_type = 10
+required_attack_trait_ids = Array[String](["melee"])
+first_successful_hit_per_turn = true
+status_effect = ExtResource("2")

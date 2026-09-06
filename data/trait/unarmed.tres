@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TraitData" format=3]
+
+[ext_resource type="Script" path="res://data/trait/trait_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "unarmed"
+display_name = "Unarmed"
+description = "This attack counts as an Unarmed Attack. It requires at least one free hand."
+

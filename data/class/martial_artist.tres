@@ -1,0 +1,81 @@
+[gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://dxh6wswhj882n"]
+
+[ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="1_class_data"]
+[ext_resource type="Resource" uid="uid://623hc2j4n3co" path="res://data/ability/build_up_body.tres" id="2_build_up_body"]
+[ext_resource type="Resource" uid="uid://dvojdlcrghdp6" path="res://data/ability/combo_techniques.tres" id="3_combo_techniques"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_xw4r0"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4_trait"]
+[ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5_progression"]
+[ext_resource type="Resource" uid="uid://dwe3brusekjlm" path="res://data/ability/ki_wave.tres" id="6_ki_wave"]
+[ext_resource type="Resource" path="res://data/ability/crushing_palm.tres" id="7_crushing_palm"]
+[ext_resource type="Resource" path="res://data/ability/flowing_guard.tres" id="8_flowing_guard"]
+[ext_resource type="Resource" path="res://data/ability/sweeping_kick.tres" id="9_sweeping_kick"]
+
+[sub_resource type="Resource" id="Progression_L1"]
+script = ExtResource("5_progression")
+max_hp_gain = 8
+granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("2_build_up_body")])
+
+[sub_resource type="Resource" id="Progression_L2"]
+script = ExtResource("5_progression")
+level = 2
+max_hp_gain = 7
+granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("3_combo_techniques"), ExtResource("6_ki_wave"), ExtResource("7_crushing_palm"), ExtResource("8_flowing_guard")])
+
+[sub_resource type="Resource" id="Progression_L3"]
+script = ExtResource("5_progression")
+level = 3
+max_hp_gain = 7
+granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("9_sweeping_kick")])
+
+[sub_resource type="Resource" id="Progression_L4"]
+script = ExtResource("5_progression")
+level = 4
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L5"]
+script = ExtResource("5_progression")
+level = 5
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L6"]
+script = ExtResource("5_progression")
+level = 6
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L7"]
+script = ExtResource("5_progression")
+level = 7
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L8"]
+script = ExtResource("5_progression")
+level = 8
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L9"]
+script = ExtResource("5_progression")
+level = 9
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L10"]
+script = ExtResource("5_progression")
+level = 10
+max_hp_gain = 7
+
+[resource]
+script = ExtResource("1_class_data")
+id = "martial_artist"
+display_name = "Martial Artist"
+description = "An unarmed combatant who builds momentum through disciplined technique."
+base_speed_feet = 20.0
+base_mana = 0
+fixed_attribute_bonuses = {
+2: 1
+}
+attribute_choice_count = 1
+attribute_choice_options = Array[int]([0, 1])
+granted_abilities = [ExtResource("2_build_up_body")]
+traits = [ExtResource("4_trait")]
+auto_equipped_ability_ids = Array[String](["build_up_body"])
+progression_entries = Array[Resource]([SubResource("Progression_L1"), SubResource("Progression_L2"), SubResource("Progression_L3"), SubResource("Progression_L4"), SubResource("Progression_L5"), SubResource("Progression_L6"), SubResource("Progression_L7"), SubResource("Progression_L8"), SubResource("Progression_L9"), SubResource("Progression_L10")])

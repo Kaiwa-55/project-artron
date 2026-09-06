@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bvlc47pxwgove"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability_data"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_xmx1q"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="2_passive"]
+[ext_resource type="Resource" uid="uid://bigb1oyrju84o" path="res://data/trait/human.tres" id="4_nw85x"]
+
+[resource]
+script = ExtResource("1_ability_data")
+id = "human_adapt"
+display_name = "Human Adapt"
+required_trait_ids = Array[String](["human"])
+traits = [ExtResource("2_passive"), ExtResource("4_nw85x")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Ancestry feature: choose three different Attributes; each gains +1."

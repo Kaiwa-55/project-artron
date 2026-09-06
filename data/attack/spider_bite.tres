@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AttackData" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
+[ext_resource type="Resource" path="res://data/status/poisoned.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/simple.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/poison.tres" id="7"]
+
+[resource]
+script = ExtResource("1")
+id = "spider_bite"
+display_name = "Spider Bite"
+animation_template = ExtResource("2")
+attack_attribute = 1
+defense_type = 0
+to_hit_bonus = 1
+ap_cost = 1
+base_damage = 3
+damage_type = "pierce"
+effects_on_hit = [ExtResource("3")]
+traits = [ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7")]

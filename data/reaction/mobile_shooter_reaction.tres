@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://c3kfwp8x2gwbp"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+
+[sub_resource type="Resource" id="Movement"]
+script = ExtResource("2")
+effect_type = 3
+distance_feet = 5.0
+movement_triggers_reactions = false
+
+[resource]
+script = ExtResource("1")
+id = "mobile_shooter"
+display_name = "Mobile Shooter"
+description = "After your first Ranged Attack Hit each Turn, Move up to 5 ft without triggering Reactions."
+traits = [ExtResource("3")]
+trigger = 9
+auto_resolve = false
+ap_cost = 0
+required_trait_id = "assassin"
+effects = [SubResource("Movement")]

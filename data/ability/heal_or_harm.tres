@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bowe4sdgeblby"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_qwya5"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="4"]
+
+[sub_resource type="Resource" id="FaithEffect"]
+script = ExtResource("2")
+recipient = 1
+dynamic_effect = 2
+damage_type = "light"
+
+[resource]
+script = ExtResource("1")
+id = "heal_or_harm"
+display_name = "Heal or Harm"
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+ap_cost = 2
+description = "Choose one combatant within 30 ft. Heal an ally equal to current Faith, or deal Light Damage to an enemy equal to floor(current Faith / 2). Does not consume Faith."
+target_filter = 2
+use_effects = [SubResource("FaithEffect")]
+targeting_range_feet = 30.0

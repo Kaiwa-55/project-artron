@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dh8ga6jndtyxy"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_tykwl"]
+[ext_resource type="Resource" path="res://data/attack/royal_web_attack.tres" id="3"]
+[ext_resource type="Resource" uid="uid://bkdigf3b6p2nf" path="res://data/status/slowed.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/ranged.tres" id="5"]
+
+[sub_resource type="Resource" id="SlowOnMiss"]
+script = ExtResource("2")
+timing = 2
+recipient = 1
+effect = ExtResource("4")
+
+[resource]
+script = ExtResource("1")
+id = "royal_web"
+display_name = "Royal Web"
+required_level = 5
+traits = [ExtResource("5")]
+auto_equip_on_grant = true
+ap_cost = 2
+cooldown_turns = 2
+description = "Choose a point within 30 ft. Attack Reflex of enemies in a 10 ft circle; Root on hit and Slow on miss."
+target_mode = 2
+attack_source = 2
+attack_data = ExtResource("3")
+use_effects = [SubResource("SlowOnMiss")]
+area_shape = 1
+targeting_range_feet = 30.0
+area_radius_feet = 10.0

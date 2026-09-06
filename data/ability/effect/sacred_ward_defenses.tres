@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "sacred_ward"
+display_name = "Sacred Ward"
+duration_turns = 1
+effect_type = 2
+stack_mode = 0
+stackable = false
+max_stacks = 1
+status_tags = Array[String](["divine", "buff"])

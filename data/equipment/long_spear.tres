@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://cp2oeb5hig86m"]
+
+[ext_resource type="Script" uid="uid://cng3y0g4b8i0c" path="res://data/equipment/equipment_data.gd" id="1_equipment"]
+[ext_resource type="Resource" uid="uid://cy5waqds62ljf" path="res://data/attack/long_spear.tres" id="2_attack"]
+
+[resource]
+script = ExtResource("1_equipment")
+id = "long_spear"
+display_name = "Long Spear"
+description = "A reach weapon. Opportunity Attack range becomes 10 feet."
+weapon_attack = ExtResource("2_attack")

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cvd6jwl5g2sqy"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/effect/skitter_movement.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_wp33y"]
+[ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "skitter"
+display_name = "Skitter"
+traits = [ExtResource("3")]
+auto_equip_on_grant = true
+ap_cost = 1
+cooldown_turns = 1
+uses_per_turn = 1
+description = "Move up to 15 feet without triggering Reactions. Cannot pass through obstacles or creatures."
+effects = [ExtResource("2")]
+target_mode = 1

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MapObstacleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/map/map_obstacle_data.gd" id="1_obstacle_data"]
+
+[resource]
+script = ExtResource("1_obstacle_data")
+id = "stone_pillar"
+display_name = "Stone Pillar"
+base_collision_radius = 26.0

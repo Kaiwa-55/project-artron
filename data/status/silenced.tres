@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://b2ywjbvn7fhmn"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dekcaocku3ka6" path="res://assets/icon/skill_icons25.png" id="1_25ysx"]
+
+[resource]
+script = ExtResource("1")
+id = "silenced"
+display_name = "Silenced"
+icon_texture = ExtResource("1_25ysx")
+status_kind = 8
+status_tags = Array[String](["status", "mental"])

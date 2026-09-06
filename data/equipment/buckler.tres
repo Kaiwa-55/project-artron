@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://ckvdq66wiwbbl"]
+
+[ext_resource type="Script" uid="uid://cng3y0g4b8i0c" path="res://data/equipment/equipment_data.gd" id="1_equipment"]
+
+[resource]
+script = ExtResource("1_equipment")
+id = "buckler"
+display_name = "Buckler"
+description = "A small shield that grants +1Reflex ,+3Fortitude"
+slot = 2
+reflex_bonus = 1
+fortitude_bonus = 3

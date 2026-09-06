@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://w63t74u6yu60"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_1nkfb"]
+[ext_resource type="Resource" uid="uid://fiaexscng7xr" path="res://data/ability/effect/killer_instinct_damage.tres" id="2_effect"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3_passive"]
+[ext_resource type="Resource" path="res://data/trait/assassin.tres" id="5_gwfl6"]
+
+[resource]
+script = ExtResource("1_ability")
+id = "killer_instinct"
+display_name = "Killer Instinct"
+required_trait_ids = Array[String](["assassin"])
+traits = [ExtResource("3_passive"), ExtResource("5_gwfl6")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Passive. Gain bonus damage equal to Level when attacking a target that has not been attacked this round or is below 50% HP. An attack counts when declared, even if it misses or is parried."
+effects = [ExtResource("2_effect")]

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://c4p6h14djslvg"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_mkp1b"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/concentrate.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="6"]
+
+[sub_resource type="Resource" id="PrayEffect"]
+script = ExtResource("2")
+dynamic_effect = 1
+
+[resource]
+script = ExtResource("1")
+id = "pray"
+display_name = "Pray"
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")]
+auto_equip_on_grant = true
+ap_cost = 1
+description = "Gain Faith equal to your Wisdom modifier. Faith above 10 becomes Temporary Faith."
+target_mode = 1
+use_effects = [SubResource("PrayEffect")]

@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="AIProfile" format=3]
+
+[ext_resource type="Script" path="res://data/ai/ai_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "velkaria_boss"
+display_name = "Velkaria Boss"
+damage_weight = 18.0
+kill_bonus = 140.0
+position_weight = 18.0
+planning_weight = 6.0
+area_target_bonus = 24.0
+low_hp_damage_multiplier = 1.5
+low_hp_status_multiplier = 0.65
+status_weight = 1.4
+ap_cost_weight = 6.0
+useful_action_end_turn_penalty = 50.0
+reaction_ap_reserve = 1
+phase_two_hp_ratio = 0.65
+phase_three_hp_ratio = 0.35
+phase_one_source_id = "royal_web"
+phase_two_source_id = "brood_rush"
+phase_three_source_id = "matriarch_fangs"
+combo_opener_source_id = "royal_web"
+combo_approach_source_id = "brood_rush"
+combo_finisher_source_id = "matriarch_fangs"
+phase_preference_bonus = 90.0
+combo_step_bonus = 180.0
+phase_three_reaction_ap_reserve = 0
+status_values = {
+"bleeding": 10.0,
+"poisoned": 34.0,
+"slowed": 24.0,
+"rooted": 55.0,
+"stunned": 45.0,
+"weakened": 24.0
+}

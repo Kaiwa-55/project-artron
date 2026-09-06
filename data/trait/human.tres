@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TraitData" format=3 uid="uid://bigb1oyrju84o"]
+
+[ext_resource type="Script" uid="uid://ctfrx47gl7o1h" path="res://data/trait/trait_data.gd" id="1_trait_data"]
+
+[resource]
+script = ExtResource("1_trait_data")
+id = "human"
+display_name = "Human"
+description = "Marks this character as Human. Required by Human ancestry abilities."
+tags = Array[String](["ancestry", "human"])

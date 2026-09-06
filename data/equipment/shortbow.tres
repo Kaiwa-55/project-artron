@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/attack/shortbow.tres" id="attack"]
+
+[resource]
+script = ExtResource("script")
+id = "shortbow"
+display_name = "Shortbow"
+description = "A two-handed Dexterity bow with 30-foot range. Cannot make melee Opportunity Attacks. Close-range penalty is not implemented yet."
+weapon_attack = ExtResource("attack")

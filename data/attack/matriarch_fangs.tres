@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
+[ext_resource type="Resource" path="res://data/status/poisoned.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = "matriarch_fangs"
+display_name = "Matriarch's Fangs"
+animation_template = ExtResource("2")
+to_hit_bonus = 4
+ap_cost = 1
+base_damage = 7
+damage_type = "pierce"
+range_feet = 8.0
+effects_on_hit = [ExtResource("3")]
+traits = [ExtResource("4"), ExtResource("5"), ExtResource("6")]

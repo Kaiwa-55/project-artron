@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://52710ckhwush"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_alj71"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
+[ext_resource type="Resource" uid="uid://bi23s6k52nyto" path="res://data/reaction/divine_intervention_reaction.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "divine_intervention"
+display_name = "Divine Intervention"
+required_level = 3
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
+reaction_only = true
+ap_cost = 1
+description = "Reaction. When an ally within 30 ft would take Attack damage, spend 1 AP and 2 Faith to reduce it by floor(Faith / 2), minimum 1. Requires line of sight and cannot target yourself."
+granted_reactions = [ExtResource("5")]

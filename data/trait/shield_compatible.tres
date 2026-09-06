@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TraitData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/trait/trait_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "shield_compatible"
+display_name = "Shield Compatible"
+description = "A one-handed weapon that can be used while holding a Shield."

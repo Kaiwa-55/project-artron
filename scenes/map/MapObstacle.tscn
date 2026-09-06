@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b8wxin0kxqjoc"]
+
+[ext_resource type="Script" path="res://entities/map_obstacle.gd" id="1_obstacle"]
+
+[node name="MapObstacle" type="Node2D" unique_id=1360112686]
+script = ExtResource("1_obstacle")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=85416454]

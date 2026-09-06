@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bpe846j2bhgu3"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability_data"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2_effect_data"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_mxrl1"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3_passive"]
+[ext_resource type="Resource" path="res://data/trait/basic.tres" id="4_ic74o"]
+
+[sub_resource type="Resource" id="AbilityEffect_reach"]
+script = ExtResource("2_effect_data")
+effect_type = 2
+passive_value = 2
+
+[resource]
+script = ExtResource("1_ability_data")
+id = "long_reach"
+display_name = "Long Reach"
+traits = [ExtResource("3_passive"), ExtResource("4_ic74o")]
+is_passive = true
+description = "Passive: this weapon gains +2 feet Attack Range."
+effects = [SubResource("AbilityEffect_reach")]

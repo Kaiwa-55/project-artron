@@ -1,0 +1,392 @@
+[gd_scene format=3 uid="uid://q0t3pllpt84x"]
+
+[ext_resource type="Script" path="res://scenes/combat/test_01_with_ui.gd" id="1_root"]
+[ext_resource type="Script" uid="uid://hlnw75obevft" path="res://scenes/combat/control.gd" id="2_control"]
+[ext_resource type="Script" uid="uid://co08kejbik35t" path="res://entities/combatant.gd" id="3_combatant"]
+[ext_resource type="PackedScene" uid="uid://b8wxin0kxqjoc" path="res://scenes/map/MapObstacle.tscn" id="4_obstacle_scene"]
+[ext_resource type="Resource" path="res://data/map/stone_pillar.tres" id="5_stone_pillar"]
+
+[node name="TestArena" type="Node2D" unique_id=280882440]
+script = ExtResource("1_root")
+
+[node name="Control" type="Control" parent="." unique_id=76147029]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_control")
+
+[node name="Header" type="Panel" parent="Control" unique_id=1046892464]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 18.0
+offset_right = 1260.0
+offset_bottom = 76.0
+
+[node name="Title" type="Label" parent="Control/Header" unique_id=768466972]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = 600.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 22
+text = "ARTON - Combat Test Arena"
+
+[node name="Guide" type="Label" parent="Control/Header" unique_id=719580883]
+layout_mode = 0
+offset_left = 610.0
+offset_top = 16.0
+offset_right = 1215.0
+offset_bottom = 42.0
+text = "Equip abilities, then test attacks, movement, effects and turns."
+horizontal_alignment = 2
+
+[node name="Battlefield" type="ColorRect" parent="Control" unique_id=1927146166]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 96.0
+offset_right = 920.0
+offset_bottom = 406.0
+mouse_filter = 2
+color = Color(0.08, 0.14, 0.2, 0.72)
+
+[node name="Label" type="Label" parent="Control/Battlefield" unique_id=1927077787]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 500.0
+offset_bottom = 34.0
+text = "BATTLEFIELD - Click here after selecting Move"
+
+[node name="Player_panel" type="Panel" parent="Control" unique_id=1283851908]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 96.0
+offset_right = 340.0
+offset_bottom = 644.0
+
+[node name="PanelTitle" type="Label" parent="Control/Player_panel" unique_id=2065830200]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 18
+text = "PLAYER"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Player_panel" unique_id=44812364]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 14.0
+offset_top = 48.000008
+offset_right = 153.0
+offset_bottom = 590.0
+theme_override_constants/separation = 5
+
+[node name="Name" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=240930282]
+layout_mode = 2
+text = "Name"
+
+[node name="Ancestry" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=29651366]
+layout_mode = 2
+text = "Ancestry: None"
+
+[node name="Class" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=832334401]
+layout_mode = 2
+text = "Class: None"
+
+[node name="Hp" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=1047571704]
+layout_mode = 2
+text = "HP"
+
+[node name="Ap" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=562601262]
+layout_mode = 2
+text = "AP"
+
+[node name="Mana" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=789398411]
+layout_mode = 2
+text = "Mana"
+
+[node name="Str" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=1806081192]
+layout_mode = 2
+text = "STR"
+
+[node name="Dex" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=155616016]
+layout_mode = 2
+text = "DEX"
+
+[node name="Wis" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=1940351516]
+layout_mode = 2
+text = "WIS"
+
+[node name="Reflex" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=1438685093]
+layout_mode = 2
+text = "Reflex"
+
+[node name="Fortitude" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=259999019]
+layout_mode = 2
+text = "Fortitude"
+
+[node name="Will" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=811211901]
+layout_mode = 2
+text = "Will"
+
+[node name="Position" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=562713690]
+layout_mode = 2
+text = "Position"
+autowrap_mode = 2
+
+[node name="Target" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=562713691]
+layout_mode = 2
+text = "Target: None"
+autowrap_mode = 2
+
+[node name="Effects" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=1621655957]
+layout_mode = 2
+text = "Effects: None"
+autowrap_mode = 2
+
+[node name="Abilities" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=338015704]
+layout_mode = 2
+text = "Abilities: None"
+autowrap_mode = 2
+
+[node name="Traits" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=338015705]
+layout_mode = 2
+text = "Traits: None"
+autowrap_mode = 2
+
+[node name="Equipment" type="Label" parent="Control/Player_panel/VBoxContainer" unique_id=1448878550]
+layout_mode = 2
+text = "Equipment: None"
+autowrap_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/Player_panel" unique_id=874590633]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 130.0
+offset_top = 48.0
+offset_right = 306.0
+offset_bottom = 590.0
+theme_override_constants/separation = 6
+
+[node name="Sword Attack" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=1237670071]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Sword Attack"
+
+[node name="Heavy Attack" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=966345679]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Heavy Attack"
+
+[node name="Unarmed Attack" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=1010071582]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Unarmed Attack"
+
+[node name="Arcane Bolt" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=153864770]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Arcane Bolt (3 Mana)"
+
+[node name="Move" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=870181347]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Move"
+
+[node name="End Turn" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=490032612]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "End Turn"
+
+[node name="Next Turn" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=244219194]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+text = "Next Turn"
+
+[node name="Reset Test" type="Button" parent="Control/Player_panel/VBoxContainer2" unique_id=2082797036]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+text = "Reset Test"
+
+[node name="AbilityLabel" type="Label" parent="Control/Player_panel/VBoxContainer2" unique_id=1492060246]
+layout_mode = 2
+text = "ABILITIES"
+
+[node name="AbilityMenu" type="VBoxContainer" parent="Control/Player_panel/VBoxContainer2" unique_id=877210317]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EquipmentLabel" type="Label" parent="Control/Player_panel/VBoxContainer2" unique_id=1088424900]
+layout_mode = 2
+text = "EQUIPMENT"
+
+[node name="EquipmentMenu" type="VBoxContainer" parent="Control/Player_panel/VBoxContainer2" unique_id=1246534914]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Enemy_panel" type="Panel" parent="Control" unique_id=1099442048]
+layout_mode = 0
+offset_left = 940.0
+offset_top = 96.0
+offset_right = 1151.0
+offset_bottom = 650.0
+
+[node name="PanelTitle" type="Label" parent="Control/Enemy_panel" unique_id=721863910]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 18
+text = "ENEMY"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Enemy_panel" unique_id=1930457242]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 48.0
+offset_right = 300.0
+offset_bottom = 590.0
+theme_override_constants/separation = 6
+
+[node name="Name" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1643155864]
+layout_mode = 2
+text = "Name"
+
+[node name="Hp" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1391254509]
+layout_mode = 2
+text = "HP"
+
+[node name="Ap" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1755163331]
+layout_mode = 2
+text = "AP"
+
+[node name="Str" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=627924244]
+layout_mode = 2
+text = "STR"
+
+[node name="Dex" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=852440045]
+layout_mode = 2
+text = "DEX"
+
+[node name="Wis" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1820270238]
+layout_mode = 2
+text = "WIS"
+
+[node name="Reflex" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=884623526]
+layout_mode = 2
+text = "Reflex"
+
+[node name="Fortitude" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=918678408]
+layout_mode = 2
+text = "Fortitude"
+
+[node name="Will" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1995245469]
+layout_mode = 2
+text = "Will"
+
+[node name="Position" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1037767027]
+layout_mode = 2
+text = "Position"
+autowrap_mode = 2
+
+[node name="Effects" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1650639699]
+layout_mode = 2
+text = "Effects: None"
+autowrap_mode = 2
+
+[node name="Traits" type="Label" parent="Control/Enemy_panel/VBoxContainer" unique_id=1650639700]
+layout_mode = 2
+text = "Traits: None"
+autowrap_mode = 2
+
+[node name="CombatLogPanel" type="Panel" parent="Control" unique_id=1098082648]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 413.0
+offset_right = 920.0
+offset_bottom = 647.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CombatLogPanel" unique_id=907910151]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 546.0
+offset_bottom = 234.0
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="Control/CombatLogPanel/VBoxContainer" unique_id=556437779]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "COMBAT LOG"
+
+[node name="Turn" type="Label" parent="Control/CombatLogPanel/VBoxContainer" unique_id=671867110]
+layout_mode = 2
+text = "Round 1"
+
+[node name="ModeHint" type="Label" parent="Control/CombatLogPanel/VBoxContainer" unique_id=1963566169]
+layout_mode = 2
+text = "Choose an action to test."
+autowrap_mode = 2
+
+[node name="Entries" type="RichTextLabel" parent="Control/CombatLogPanel/VBoxContainer" unique_id=59436113]
+custom_minimum_size = Vector2(0, 135)
+layout_mode = 2
+bbcode_enabled = true
+scroll_following = true
+
+[node name="ReactionPrompt" type="Panel" parent="Control" unique_id=629339134]
+visible = false
+z_index = 10
+layout_mode = 0
+offset_left = 416.0
+offset_top = 166.0
+offset_right = 864.0
+offset_bottom = 335.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ReactionPrompt" unique_id=1522019412]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 430.0
+offset_bottom = 152.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Control/ReactionPrompt/VBoxContainer" unique_id=611116679]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "REACTION AVAILABLE"
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="Control/ReactionPrompt/VBoxContainer" unique_id=174574742]
+layout_mode = 2
+text = "An enemy is attacking you."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Control/ReactionPrompt/VBoxContainer" unique_id=1619632433]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="StonePillar" parent="." unique_id=527603213 instance=ExtResource("4_obstacle_scene")]
+position = Vector2(690, 330)
+obstacle_data = ExtResource("5_stone_pillar")
+
+[node name="PlayerCharacter" type="Node2D" parent="." unique_id=64208072]
+script = ExtResource("3_combatant")
+
+[node name="EnemyCharacter" type="Node2D" parent="." unique_id=900280290]
+script = ExtResource("3_combatant")
+
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Sword Attack" to="." method="test_attack_sword"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Heavy Attack" to="." method="test_attack_Heavy"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Unarmed Attack" to="." method="test_attack_unarmed"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Arcane Bolt" to="." method="cast_arcane_bolt"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Move" to="." method="begin_move"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/End Turn" to="." method="end_turn"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Next Turn" to="." method="next_turn"]
+[connection signal="pressed" from="Control/Player_panel/VBoxContainer2/Reset Test" to="." method="reset_test"]

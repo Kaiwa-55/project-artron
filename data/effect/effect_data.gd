@@ -1,0 +1,84 @@
+class_name EffectData
+extends Resource
+
+enum Type {
+	DAMAGE,
+	HEAL,
+	STAT,
+	RESOURCE,
+	CLEANSE
+}
+
+enum Trigger {
+	ON_APPLY,
+	START_OF_TURN,
+	END_OF_TURN
+}
+
+enum ResourceType {
+	HP,
+	AP,
+	MANA
+}
+
+enum StatusKind {
+	NONE,
+	BLEEDING,
+	BURNING,
+	POISONED,
+	SLOWED,
+	ROOTED,
+	DAZED,
+	STUNNED,
+	SILENCED,
+	FRIGHTENED,
+	WEAKENED,
+	SURPRISE,
+	HIDDEN,
+	HASTE
+}
+
+enum StackMode {
+	REFRESH_DURATION,
+	ADD_STACKS,
+	KEEP_STRONGER
+}
+
+@export var id: String = ""
+@export var display_name: String = ""
+@export var icon_texture: Texture2D
+@export_range(1, 99) var duration_turns: int = 1
+@export var expire_at_start_of_turn: bool = false
+@export var effect_type: Type = Type.STAT
+@export var trigger: Trigger = Trigger.ON_APPLY
+
+@export var amount: int = 0
+@export var damage_type: String = ""
+@export var resource_type: ResourceType = ResourceType.HP
+@export var status_kind: StatusKind = StatusKind.NONE
+@export var stack_mode: StackMode = StackMode.REFRESH_DURATION
+@export_range(0, 99) var potency: int = 0
+
+@export var attack_bonus: int = 0
+@export var damage_bonus: int = 0
+@export var reflex_bonus: int = 0
+@export var fortitude_bonus: int = 0
+@export var will_bonus: int = 0
+@export var speed_penalty_per_stack: float = 0.0
+@export var speed_bonus_per_stack: float = 0.0
+
+# Status rules. Effects do not stack unless their own data explicitly allows it.
+@export var stackable: bool = false
+@export_range(1, 999) var stacks_on_apply: int = 1
+@export_range(1, 999) var max_stacks: int = 1
+@export var status_tags: Array[String] = []
+@export var can_be_cleansed: bool = true
+
+# Control status: reduces the affected Combatant's effective Max AP this turn.
+@export_range(0, 99) var ap_penalty_per_stack: int = 0
+@export_range(0, 99) var max_ap_bonus_per_stack: int = 0
+
+# Cleanse effect targeting. These fields are used when effect_type is CLEANSE.
+@export var cleanse_all: bool = false
+@export var cleanse_status_ids: Array[String] = []
+@export var cleanse_status_tags: Array[String] = []

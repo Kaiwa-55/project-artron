@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" format=3 uid="uid://c1078ee3fraec"]
+
+[ext_resource type="Script" uid="uid://dvlud43lcsdje" path="res://animation/attack_animation_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ckkar2630bshu" path="res://assets/fx/Free Smoke Fx  Pixel 04.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+animation_type = 1
+sprite_sheet = ExtResource("2")
+frames_per_second = 12.0

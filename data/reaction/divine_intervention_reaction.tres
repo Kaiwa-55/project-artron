@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://bi23s6k52nyto"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
+
+[sub_resource type="Resource" id="DamageReduction"]
+script = ExtResource("2")
+effect_type = 9
+target = 2
+faith_divisor = 2
+minimum_amount = 1
+
+[resource]
+script = ExtResource("1")
+id = "divine_intervention_reaction"
+display_name = "Divine Intervention"
+description = "When an ally within 30 ft would take Attack damage, spend 1 AP and 2 Faith to reduce that damage by floor(Faith / 2), minimum 1. Requires line of sight and cannot target yourself."
+traits = [ExtResource("3"), ExtResource("4")]
+trigger = 5
+reach_feet = 30.0
+auto_resolve = false
+faith_cost = 2
+required_trait_id = "devotee"
+effects = [SubResource("DamageReduction")]
+requires_line_of_sight = true
+can_target_self = false

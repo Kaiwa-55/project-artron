@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://bkdigf3b6p2nf"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://becunmdu3ijfn" path="res://assets/icon/skill_icons26.png" id="1_0a12k"]
+
+[resource]
+script = ExtResource("1")
+id = "slowed"
+display_name = "Slowed"
+icon_texture = ExtResource("1_0a12k")
+status_kind = 4
+stack_mode = 1
+speed_penalty_per_stack = 5.0
+stackable = true
+max_stacks = 999
+status_tags = Array[String](["status", "movement"])

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="1_equipment"]
+
+[resource]
+script = ExtResource("1_equipment")
+id = "leather_armor"
+display_name = "Leather Armor"
+description = "Light protection that grants +1 Reflex Defense."
+slot = 1
+reflex_bonus = 1

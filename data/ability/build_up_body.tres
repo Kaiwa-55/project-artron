@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://623hc2j4n3co"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability_data"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_j33vs"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="2_passive"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4_opdtt"]
+
+[resource]
+script = ExtResource("1_ability_data")
+id = "build_up_body"
+display_name = "Build Up Body"
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("2_passive"), ExtResource("4_opdtt")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Passive: gain +1 CON and choose +1 STR or +1 DEX."

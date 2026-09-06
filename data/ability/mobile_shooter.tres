@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bn3f1kwoa8bde"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_rbohh"]
+[ext_resource type="Resource" uid="uid://c3kfwp8x2gwbp" path="res://data/reaction/mobile_shooter_reaction.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "mobile_shooter"
+display_name = "Mobile Shooter"
+required_level = 3
+required_trait_ids = Array[String](["assassin"])
+traits = [ExtResource("3"), ExtResource("4")]
+description = "Reactive. After your first Ranged Attack Hit each Turn, Move up to 5 ft without triggering Reactions. Limit 1/Turn."
+granted_reactions = [ExtResource("2")]

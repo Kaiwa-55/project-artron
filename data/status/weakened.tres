@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://c4i06contdqmt"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cqrm5bbt0j1j4" path="res://assets/icon/skill_icons34.png" id="1_8e6da"]
+
+[resource]
+script = ExtResource("1")
+id = "weakened"
+display_name = "Weakened"
+icon_texture = ExtResource("1_8e6da")
+status_kind = 10
+stack_mode = 2
+potency = 1
+reflex_bonus = -1
+fortitude_bonus = -1
+will_bonus = -1
+status_tags = Array[String](["status", "debuff"])

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="3"]
+[ext_resource type="Resource" path="res://data/status/weakened.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="7"]
+
+[sub_resource type="Resource" id="WeakenOnHit"]
+script = ExtResource("2")
+timing = 1
+recipient = 1
+effect = ExtResource("4")
+
+[resource]
+script = ExtResource("1")
+id = "crushing_palm"
+display_name = "Crushing Palm"
+required_level = 2
+prerequisite_id = "build_up_body"
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("5"), ExtResource("6"), ExtResource("7")]
+auto_equip_on_grant = true
+ap_cost = 1
+cooldown_turns = 1
+description = "Attack with Unarmed Attack. On Hit, gain bonus Damage equal to Level and apply Weakened 1 until the end of the target's next Turn. Requires a free hand."
+target_mode = 0
+target_filter = 0
+attack_source = 2
+attack_data = ExtResource("3")
+required_attack_trait_ids = Array[String](["unarmed"])
+active_attack_damage_bonus_per_level = 1
+use_effects = [SubResource("WeakenOnHit")]
+targeting_range_feet = 5.0
+

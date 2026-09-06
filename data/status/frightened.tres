@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EffectData" format=3 uid="uid://c0lrswft31b16"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cm38y63tsmgcr" path="res://assets/icon/skill_icons13.png" id="1_pfv2e"]
+
+[resource]
+script = ExtResource("1")
+id = "frightened"
+display_name = "Frightened"
+icon_texture = ExtResource("1_pfv2e")
+status_kind = 9
+stack_mode = 1
+attack_bonus = -1
+will_bonus = -1
+stackable = true
+max_stacks = 999
+status_tags = Array[String](["status", "fear", "mental"])

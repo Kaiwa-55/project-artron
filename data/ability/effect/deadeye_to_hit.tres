@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+effect_type = 8
+required_attack_trait_ids = Array[String](["ranged"])
+minimum_target_distance_feet = 20.0
+passive_value = 1
