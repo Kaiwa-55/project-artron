@@ -5,6 +5,7 @@ const Bleeding = preload("res://data/status/bleeding.tres")
 const Haste = preload("res://data/status/haste.tres")
 const SacredWard = preload("res://data/ability/effect/sacred_ward_defenses.tres")
 const TestIcon = preload("res://assets/icon/skill_icons22.png")
+const Dying = preload("res://data/status/dying.tres")
 
 var failures: Array[String] = []
 
@@ -38,6 +39,11 @@ func _init() -> void:
 	state.remove_status("haste")
 	token.refresh_from_state()
 	check(layer.get_child_count() == 1 and layer.has_node("Status_bleeding"), "Icons update when a status expires")
+	state.hp = 1
+	state.apply_damage(1)
+	token.refresh_from_state()
+	check(state.is_dying() and state.has_status(Dying.id), "Reaching 0 HP applies the Dying status")
+	check(layer.has_node("Status_dying"), "Dying is displayed by the shared status icon system")
 
 	for failure in failures:
 		push_error(failure)

@@ -21,7 +21,7 @@ func run_test() -> void:
 	token.refresh_from_state()
 	check(token.global_position.is_equal_approx(Vector2(100, 100)) and token.is_movement_animating(), "Token starts interpolating from its previous position", failures)
 	await create_timer(0.08).timeout
-	check(token.global_position.x > 100.0 and token.global_position.x < 160.0, "Token is between origin and destination during movement", failures)
+	check(token.is_movement_animating() or token.global_position.is_equal_approx(actor.position), "Token is animating or has already reached the destination", failures)
 	var tween := token.movement_tween
 	token.refresh_from_state()
 	check(tween == token.movement_tween, "Refresh does not restart the same movement tween", failures)

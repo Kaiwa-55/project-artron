@@ -1,6 +1,8 @@
 class_name CombatantState
 extends RefCounted
 
+const DyingStatus = preload("res://data/status/dying.tres")
+
 var token_texture: Texture2D
 var token_scale: float = 1.0
 var token_offset: Vector2 = Vector2.ZERO
@@ -155,6 +157,7 @@ func apply_damage(amount: int) -> void:
 
 	if hp == 0:
 		life_state = CombatEnums.LifeState.DYING
+		add_effect(DyingStatus)
 
 
 func heal(amount: int) -> int:

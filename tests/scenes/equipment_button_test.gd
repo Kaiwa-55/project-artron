@@ -6,7 +6,10 @@ func _init() -> void:
 func run_test() -> void:
 	var arena = load("res://scenes/prototype/PrototypeCombat.tscn").instantiate()
 	root.add_child(arena)
-	await create_timer(2.0).timeout
+	# Freeze the encounter on the Player before deferred Enemy AI can alter UI state.
+	arena.combat_system.get_combat_state().current_actor_id = "player"
+	for frame in range(3):
+		await process_frame
 	var system = arena.combat_system
 	system.pending_action = null
 	system.pending_reaction = {}

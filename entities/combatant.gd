@@ -290,6 +290,7 @@ func get_status_abbreviation(status_kind: EffectData.StatusKind) -> String:
 		EffectData.StatusKind.FRIGHTENED: "FR", EffectData.StatusKind.WEAKENED: "WE",
 		EffectData.StatusKind.SURPRISE: "SU", EffectData.StatusKind.HIDDEN: "HI",
 		EffectData.StatusKind.HASTE: "HA",
+		EffectData.StatusKind.DYING: "DY",
 	}
 	return abbreviations.get(status_kind, "?")
 
@@ -303,6 +304,7 @@ func get_status_color(status_kind: EffectData.StatusKind) -> Color:
 		EffectData.StatusKind.FRIGHTENED: Color("581c87"), EffectData.StatusKind.WEAKENED: Color("9f1239"),
 		EffectData.StatusKind.SURPRISE: Color("334155"), EffectData.StatusKind.HIDDEN: Color("0f172a"),
 		EffectData.StatusKind.HASTE: Color("2563eb"),
+		EffectData.StatusKind.DYING: Color("7f1d1d"),
 	}
 	return colors.get(status_kind, Color("64748b"))
 

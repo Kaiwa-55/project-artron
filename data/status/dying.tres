@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icon/skill_icons55.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1")
+id = "dying"
+display_name = "Dying"
+icon_texture = ExtResource("2_icon")
+duration_turns = 99
+status_kind = 15
+status_tags = Array[String](["status", "dying"])
+can_be_cleansed = false

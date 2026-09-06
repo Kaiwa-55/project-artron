@@ -35,7 +35,8 @@ enum StatusKind {
 	WEAKENED,
 	SURPRISE,
 	HIDDEN,
-	HASTE
+	HASTE,
+	DYING
 }
 
 enum StackMode {
