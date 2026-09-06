@@ -119,7 +119,7 @@ func run_tests() -> void:
 	check(not custom.notice.is_empty() and custom.class_choices.is_empty(), "Context changes explain removed choices")
 	custom.select_class(Catalog.classes[0])
 	check(custom.preview.dexterity == 11, "Class switching never retains old bonuses")
-	check(Catalog.base_character.level == 2 and Catalog.base_character.display_name == "Player", "Shared template is untouched")
+	check(Catalog.base_character.level == 3 and Catalog.base_character.display_name == "Player", "Shared template is untouched")
 
 	var wizard = WizardScene.instantiate()
 	wizard.catalog = custom_catalog

@@ -17,9 +17,12 @@ func _init() -> void:
 	character.character_class = DevoteeData
 	character.level = 3
 	character.class_attribute_choices.assign([AttributeTypes.Type.CONSTITUTION])
-	character.available_abilities.append(DivineIntervention)
-	character.selected_ability_ids.append("divine_intervention")
-	character.equipped_abilities.append("divine_intervention")
+	if not character.available_abilities.any(func(ability): return ability != null and ability.id == "divine_intervention"):
+		character.available_abilities.append(DivineIntervention)
+	if not character.selected_ability_ids.has("divine_intervention"):
+		character.selected_ability_ids.append("divine_intervention")
+	if not character.equipped_abilities.has("divine_intervention"):
+		character.equipped_abilities.append("divine_intervention")
 	var devotee: CombatantState = character.create_combatant_state()
 	devotee.position = Vector2.ZERO
 
@@ -43,6 +46,7 @@ func _init() -> void:
 	attack.id = "certain_damage"
 	attack.display_name = "Certain Damage"
 	attack.requires_to_hit = false
+	attack.can_critical = false
 	attack.base_damage = 10
 	attack.ap_cost = 1
 	attack.range_feet = 10.0

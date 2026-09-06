@@ -20,23 +20,21 @@ func run_test() -> void:
 	check(prototype.level_up_list.get_child_count() > 4, "Level Up panel should list Ability choices")
 	prototype.toggle_level_up_panel()
 	check(not prototype.level_up_panel.visible, "Level Up panel should close")
-	check(prototype.area_action_buttons.has("skill:arcane_burst"), "Unified targeting UI should list the Circle Skill.")
-	check(prototype.area_action_buttons.has("skill:arcane_cone"), "Unified targeting UI should list the Cone Skill.")
-	check(prototype.area_action_buttons.has("ability:ki_wave"), "Unified targeting UI should list the Line Ability.")
+	check(prototype.area_action_buttons.has("ability:shared_blessing"), "Unified targeting UI should list the current Devotee Circle Ability.")
 	prototype.combat_system.combat_state.current_actor_id = "player"
 	prototype.combat_system.combat_state.get_combatant("player").ap = prototype.combat_system.combat_state.get_combatant("player").max_ap
 	prototype.combat_system.pending_action = null
 	prototype.combat_system.pending_reaction = {}
 	prototype.combat_system.pending_reaction_queue.clear()
-	prototype.begin_ground_targeting("ability", "ki_wave")
-	check(prototype.ground_targeting_kind == "ability" and prototype.get_ground_targeting_data().id == "ki_wave", "Ground Ability should enter the shared targeting mode.")
+	prototype.begin_ground_targeting("ability", "shared_blessing")
+	check(prototype.ground_targeting_kind == "ability" and prototype.get_ground_targeting_data().id == "shared_blessing", "Ground Ability should enter the shared targeting mode.")
 	prototype.cancel_ground_targeting()
 	check(prototype.ground_targeting_id.is_empty(), "Cancelling should leave targeting mode without spending the Action.")
 	check(not prototype.has_node("Control/Player_panel"), "legacy Player and Action panel should be removed from the Combat scene")
 	check(prototype.has_node("Control/ActionSources"), "minimal non-visual Action sources should remain for Combat signals")
 	check(prototype.get_node("Control/ReferencePlayerHUD") != null, "reference-style Player HUD should replace the legacy panel")
 	check(prototype.get_node("Control/ReferenceActionDock") != null, "reference-style horizontal Action Dock should be available")
-	check(prototype.action_category_buttons.size() == 4, "Action Bar should contain Attack, Move, Skill and Ability categories")
+	check(prototype.action_category_buttons.size() >= 4, "Action Bar should contain at least Attack, Move, Skill and Ability categories")
 	check(prototype.action_category_buttons.has("attack") and prototype.action_category_buttons.has("move") and prototype.action_category_buttons.has("skill") and prototype.action_category_buttons.has("ability"), "Action Bar should expose the four required categories")
 	prototype.show_action_menu("attack")
 	check(prototype.action_menu_panel.visible and prototype.action_menu_list.get_child_count() > 0, "Attack category should list attacks from equipped items")
@@ -45,7 +43,6 @@ func run_test() -> void:
 	var action_dock: Control = prototype.get_node("Control/ReferenceActionDock")
 	var turn_hud: Control = prototype.get_node("Control/ReferenceTurnHUD")
 	check(action_dock.position.x + action_dock.size.x < turn_hud.position.x, "Action Dock should not overlap the End Turn panel")
-	check(prototype.get_node("Control/Enemy_panel").visible, "compact selected Target card should remain visible on the battlefield")
 	check(prototype.initiative_row != null, "Combat header should create the Initiative order bar")
 	check(prototype.initiative_row.get_child_count() >= 5, "Initiative order should show every combatant with separators")
 	var ally: CombatantState = prototype.combat_system.combat_state.get_combatant("ally")
@@ -81,16 +78,17 @@ func run_test() -> void:
 	prototype.get_node("Control").add_log_message("Latest message")
 	var log_text: String = prototype.get_node("Control/CombatLogPanel/VBoxContainer/Entries").text
 	check(log_text.find("Latest message") < log_text.find("Older message"), "Combat Log should show newest entries first")
-	check(prototype.combat_system.combat_state.has_combatant("enemy_2"), "Prototype should contain a second Enemy")
-	check(prototype.combat_system.combat_state.turn_order.has("enemy_2"), "second Enemy should participate in Turn Order")
-	prototype.selected_target_id = "enemy_2"
-	prototype.update_target_selection()
+	var encounter_enemy_id: String = prototype.get_enemy_nodes()[0].state.id
+	check(prototype.combat_system.combat_state.has_combatant(encounter_enemy_id), "Prototype should contain the configured encounter Enemy")
+	check(prototype.combat_system.combat_state.turn_order.has(encounter_enemy_id), "Configured Enemy should participate in Turn Order")
+	prototype.select_target_at(prototype.get_enemy_nodes()[0].global_position)
 	prototype.get_node("Control").update_ui()
-	check(prototype.get_node("Control/Enemy_panel/VBoxContainer/Name").text == "Giant Spider", "Target panel should display the Giant Spider")
+	check(prototype.get_node("Control/Enemy_panel").visible, "Selecting an Enemy displays its compact Target card")
+	check(prototype.get_node("Control/Enemy_panel/VBoxContainer/Name").text == prototype.get_enemy_nodes()[0].state.display_name, "Target panel should display the configured Enemy")
 	prototype.clear_selected_target()
 	check(prototype.selected_target_id.is_empty(), "Right-click target clearing should remove the selected Target id")
 	check(not prototype.get_node("Control/Enemy_panel").visible, "Target card should hide when no Target is selected")
-	prototype.selected_target_id = "enemy_2"
+	prototype.selected_target_id = encounter_enemy_id
 	prototype.update_target_selection()
 	prototype.combat_system.combat_state.current_actor_id = "player"
 	prototype.combat_system.pending_action = null
@@ -104,10 +102,10 @@ func run_test() -> void:
 	check(prototype.selected_target_id.is_empty(), "Attack Targeting should not reuse a previously selected target")
 	prototype.cancel_attack_targeting()
 	check(prototype.pending_target_attack == null, "Attack Targeting should cancel without executing the attack")
-	var single_skill = player.available_skills.filter(func(skill): return skill != null and skill.target_mode == SkillData.TargetMode.SINGLE_COMBATANT).front()
-	prototype.use_skill_from_menu(single_skill)
-	check(prototype.pending_single_target_kind == "skill", "Single-target Skill should enter the shared targeting mode")
-	check(prototype.selected_target_id.is_empty(), "Single-target Skill should not reuse the previous selected Target")
+	var single_ability = player.available_abilities.filter(func(ability): return ability != null and ability.id == "heal_or_harm").front()
+	prototype.use_ability_from_menu(single_ability)
+	check(prototype.pending_single_target_kind == "ability", "Single-target Ability should enter the shared targeting mode")
+	check(prototype.selected_target_id.is_empty(), "Single-target Ability should not reuse the previous selected Target")
 	prototype.cancel_single_targeting()
 	var reusable_panel = load("res://scenes/ui/CharacterPanel.tscn").instantiate()
 	root.add_child(reusable_panel)

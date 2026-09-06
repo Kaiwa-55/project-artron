@@ -12,6 +12,7 @@ func _init() -> void:
 	enemy.id = "enemy"; enemy.team = 1; enemy.position = Vector2(5, 0)
 	var system := CombatSystem.new()
 	system.start_combat([actor, ally, enemy])
+	check(system.active_ability_executor != null, "CombatSystem should own an ActiveAbilityExecutor", failures)
 	system.combat_state.current_actor_id = actor.id
 	actor.ap = 20
 
@@ -35,6 +36,26 @@ func _init() -> void:
 	attack_ability.use_effects = [make_use_effect(hit_effect, AbilityUseEffectDataScript.Timing.ON_HIT, AbilityUseEffectDataScript.Recipient.TARGET)]
 	grant(actor, attack_ability)
 	check(system.use_active_ability(actor.id, enemy.id, attack_ability.id).success and enemy.has_status(hit_effect.id), "Attack Ability should apply On Hit target Effects", failures)
+
+	var reaction_caster: CombatantState = load("res://data/character/enemy.tres").create_combatant_state()
+	var reaction_target: CombatantState = load("res://data/character/player.tres").create_combatant_state()
+	reaction_caster.id = "reaction_caster"; reaction_caster.team = 1; reaction_caster.position = Vector2.ZERO
+	reaction_target.id = "player"; reaction_target.team = 0; reaction_target.position = Vector2(5, 0)
+	var reaction_system := CombatSystem.new()
+	reaction_system.start_combat([reaction_caster, reaction_target])
+	reaction_system.combat_state.current_actor_id = reaction_caster.id
+	reaction_caster.ap = 10
+	reaction_target.active_reactions = [load("res://data/reaction/parry.tres")]
+	var deferred_effect := make_effect("deferred_hit_mark", -1)
+	var deferred_attack := AttackData.new(); deferred_attack.id = "deferred_attack"; deferred_attack.display_name = "Deferred Attack"; deferred_attack.requires_to_hit = false; deferred_attack.base_damage = 1; deferred_attack.range_feet = 10
+	var deferred_ability := make_ability("deferred_effect_ability", AbilityData.TargetMode.SINGLE_COMBATANT, AbilityData.TargetFilter.ENEMIES)
+	deferred_ability.attack_source = AbilityData.AttackSource.CONFIGURED_ATTACK; deferred_ability.attack_data = deferred_attack
+	deferred_ability.use_effects = [make_use_effect(deferred_effect, AbilityUseEffectDataScript.Timing.ON_HIT, AbilityUseEffectDataScript.Recipient.TARGET)]
+	grant(reaction_caster, deferred_ability)
+	var deferred_result := reaction_system.use_active_ability(reaction_caster.id, reaction_target.id, deferred_ability.id)
+	check(deferred_result.requires_reaction_choice and not reaction_target.has_status(deferred_effect.id), "Conditional Ability Effects should wait for the Attack Reaction", failures)
+	var resumed_result := reaction_system.resolve_pending_reaction(-1)
+	check(resumed_result.success and reaction_target.has_status(deferred_effect.id) and reaction_system.pending_active_ability_context.is_empty(), "ActiveAbilityExecutor should apply and clear deferred On Hit Effects after Reaction resolution", failures)
 
 	if failures.is_empty(): print("ACTIVE_ABILITY_EXECUTOR_TEST: PASS"); quit(0)
 	for failure in failures: push_error(failure)

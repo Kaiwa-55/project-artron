@@ -184,7 +184,7 @@ func continue_action(carried_events: Array[CombatEvent] = []) -> ActionResult:
 		var target_events: Array[CombatEvent] = combat_system.action_system.build_attack_result(actor, target, attack, prepared).events
 		result.events.append_array(target_events)
 		if ability != null:
-			combat_system.apply_active_ability_effects(actor, target, ability, target_events, result.events)
+			combat_system.active_ability_executor.apply_effects(actor, target, ability, target_events, result.events)
 		if actor.is_dying():
 			context.cancel(AreaActionContextScript.CancelScope.REMAINING_TARGETS, "The Area Action user became Dying during resolution.")
 			break
@@ -203,5 +203,5 @@ func resume_after_reaction(reactor: CombatantState, prepared: AttackResult, acti
 	if pending_context != null:
 		pending_context.record_target_result(reactor, prepared)
 		if pending_context.ability_data != null:
-			combat_system.apply_active_ability_effects(pending_context.actor, reactor, pending_context.ability_data, action_events, carried_events)
+			combat_system.active_ability_executor.apply_effects(pending_context.actor, reactor, pending_context.ability_data, action_events, carried_events)
 	return continue_action(carried_events)

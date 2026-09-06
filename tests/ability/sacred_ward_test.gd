@@ -22,7 +22,6 @@ func _init() -> void:
 	character.selected_ability_ids.append("sacred_ward")
 	character.equipped_abilities.append("sacred_ward")
 	var devotee: CombatantState = character.create_combatant_state()
-	devotee.wisdom = 14
 	devotee.position = Vector2.ZERO
 	var ally := CombatantState.new()
 	ally.id = "ally"
@@ -39,6 +38,8 @@ func _init() -> void:
 	enemy.position = Vector2(300, 0)
 	var system := CombatSystem.new()
 	system.start_combat([devotee, ally, enemy])
+	# Set the controlled scaling value after combat initialization refreshes character data.
+	devotee.wisdom = 14
 	system.combat_state.current_actor_id = devotee.id
 	devotee.ap = 6
 
@@ -53,6 +54,8 @@ func _init() -> void:
 	check(system.effect_system.get_reflex_bonus(ally) == 2, "Refreshed Sacred Ward does not stack its bonus")
 
 	devotee.ap = 4
+	# End the previous instance so the same non-stacking effect can be tested on the caster.
+	ally.effects.clear()
 	var self_cast := system.use_active_ability(devotee.id, devotee.id, "sacred_ward")
 	check(self_cast.success and system.effect_system.get_will_bonus(devotee) == 2, "Sacred Ward can target its caster")
 

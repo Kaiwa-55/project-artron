@@ -2,6 +2,7 @@ extends SceneTree
 
 const PlayerData = preload("res://data/character/player.tres")
 const EnemyData = preload("res://data/character/enemy.tres")
+const StepBack = preload("res://data/ability/step_back.tres")
 
 var failures: Array[String] = []
 
@@ -9,6 +10,7 @@ var failures: Array[String] = []
 func _init() -> void:
 	var player: CombatantState = PlayerData.create_combatant_state()
 	var enemy: CombatantState = EnemyData.create_combatant_state()
+	player.available_abilities.append(StepBack)
 	player.equipped_abilities.append("step_back")
 	player.active_reactions.clear()
 	var system := CombatSystem.new()

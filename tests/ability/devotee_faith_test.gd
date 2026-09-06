@@ -38,7 +38,7 @@ func _init() -> void:
 	check(devotee.class_id == "devotee" and devotee.get_effective_speed() == 20.0, "Devotee class Speed combines with Human Speed")
 	check(devotee.max_mana == 0 and devotee.faith == 10 and devotee.max_faith == 10, "Devotee starts combat with 10 Faith and no Mana")
 	check(devotee.equipped_abilities.has("belief") and devotee.equipped_abilities.has("pray") and devotee.equipped_abilities.has("heal_or_harm"), "Belief, Pray, and Heal or Harm are granted at Level 1")
-	check(devotee.wisdom == 11 and devotee.constitution == 12, "Belief grants Wisdom and the chosen Constitution bonus")
+	check(devotee.wisdom == 12 and devotee.constitution == 12, "Belief and the current Human ancestry choices grant Wisdom and Constitution")
 
 	var heal := system.use_active_ability(devotee.id, ally.id, "heal_or_harm")
 	check(heal.success and ally.hp == 20, "Heal or Harm heals an ally by current Faith")

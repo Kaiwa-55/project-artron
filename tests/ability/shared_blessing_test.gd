@@ -50,7 +50,7 @@ func _init() -> void:
 	var enemy_hp := enemy.hp
 	var result := system.execute_ground_ability(devotee.id, "shared_blessing", Vector2(60, 0))
 	check(result.success, "Shared Blessing resolves through Area Action Context")
-	check(devotee.hp == devotee.max_hp and ally.hp == 15, "Shared Blessing heals caster and each Ally by floor(pre-cost Faith / 2)")
+	check(devotee.hp == devotee.max_hp and ally.hp == 15, "Shared Blessing heals caster and each Ally by floor(pre-cost Faith / 2); caster=%d/%d ally=%d" % [devotee.hp, devotee.max_hp, ally.hp])
 	check(enemy.hp == enemy_hp and dying_ally.hp == 0, "Shared Blessing ignores Enemies and cannot revive Dying Allies")
 	check(devotee.ap == 2 and devotee.faith == 8, "Shared Blessing costs 2 AP and 2 Faith once")
 	var heal_events := result.events.filter(func(event): return event.type == EventTypes.Type.EFFECT_HEAL_APPLIED)

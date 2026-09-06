@@ -22,7 +22,7 @@ func run_test() -> void:
 	spider.ap = 3
 	prototype.enemy_actions_this_turn = 0
 	prototype.get_node("PlayerCharacter").setup(player)
-	prototype.get_node("EnemyCharacter2").setup(spider)
+	prototype.get_node("EnemyCharacter").setup(spider)
 	prototype.get_node("Control").reset_for_combat()
 	prototype.get_node("Control").setup(prototype.combat_system)
 	prototype.run_enemy_ai_if_needed()

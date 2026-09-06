@@ -11,6 +11,7 @@ script = ExtResource("2")
 timing = 1
 recipient = 1
 dynamic_effect = 4
+faith_divisor = 2
 
 [resource]
 script = ExtResource("1")

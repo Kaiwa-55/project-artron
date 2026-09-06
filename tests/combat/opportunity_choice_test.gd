@@ -2,6 +2,7 @@ extends SceneTree
 
 const PlayerData = preload("res://data/character/player.tres")
 const EnemyData = preload("res://data/character/enemy.tres")
+const OpportunityAttack = preload("res://data/reaction/opportunity_attack.tres")
 
 var failures: Array[String] = []
 
@@ -46,6 +47,8 @@ func build_combat() -> Dictionary:
 	enemy.position = Vector2(195, 100)
 	var system := CombatSystem.new()
 	system.start_combat([player, enemy])
+	# This test targets the choice flow, independent of the current prototype class loadout.
+	player.active_reactions = [OpportunityAttack]
 	system.combat_state.current_actor_id = enemy.id
 	player.ap = player.max_ap
 	enemy.ap = enemy.max_ap
