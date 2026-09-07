@@ -29,7 +29,7 @@
 [ext_resource type="Resource" uid="uid://np27ob6fbg2q" path="res://data/ability/shared_blessing.tres" id="ability_shared_blessing"]
 [ext_resource type="Resource" uid="uid://cw4oh02n2g1fh" path="res://data/ability/smite.tres" id="ability_smite"]
 [ext_resource type="Resource" uid="uid://db77s8trj8lbp" path="res://data/ability/step_back.tres" id="ability_step_back"]
-[ext_resource type="Resource" path="res://data/ability/sweeping_kick.tres" id="ability_sweeping_kick"]
+[ext_resource type="Resource" uid="uid://bevd22gc4a1hd" path="res://data/ability/sweeping_kick.tres" id="ability_sweeping_kick"]
 [ext_resource type="Texture2D" uid="uid://c6rho00y06vft" path="res://assets/character_creation/assassin.png" id="art_assassin"]
 [ext_resource type="Texture2D" uid="uid://ffv7a8il0gnd" path="res://assets/character_creation/devotee.png" id="art_devotee"]
 [ext_resource type="Texture2D" uid="uid://dmpe0tj1w7evo" path="res://assets/character_creation/martial_artist.png" id="art_martial_artist"]

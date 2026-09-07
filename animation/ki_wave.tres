@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" format=3 uid="uid://dd1wjirj7cg05"]
+
+[ext_resource type="Script" uid="uid://dvlud43lcsdje" path="res://animation/attack_animation_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dnu8h1os1xr7c" path="res://assets/fx/Assets_set1/Part 2/69.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+animation_type = 2
+sprite_sheet = ExtResource("2")
+columns = 10
+rows = 9
+first_frame = 20
+last_frame = 29
+frames_per_second = 16.0
+effect_scale = Vector2(1.5, 3.25)
+rotation_offset_degrees = 90.0
+attached_offset_feet = 11.0

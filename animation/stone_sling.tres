@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://animation/attack_animation_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/fx/stone_projectile.svg" id="2"]
+[resource]
+script = ExtResource("1")
+animation_type = 1
+sprite_sheet = ExtResource("2")
+columns = 1
+rows = 1
+first_frame = 0
+last_frame = 0
+frames_per_second = 4.0
+effect_scale = Vector2(0.8, 0.8)
+orient_to_target = true
+

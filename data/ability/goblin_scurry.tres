@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://ddebxsco67ngf"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_xf8f5"]
+[ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+
+[sub_resource type="Resource" id="Movement"]
+script = ExtResource("2")
+effect_type = 5
+movement_distance_feet = 10.0
+movement_triggers_reactions = false
+
+[resource]
+script = ExtResource("1")
+id = "goblin_scurry"
+display_name = "Scurry"
+traits = [ExtResource("3")]
+ap_cost = 1
+cooldown_turns = 2
+description = "Move up to 10 ft without triggering Reactions."
+effects = [SubResource("Movement")]
+target_mode = 1

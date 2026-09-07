@@ -33,7 +33,9 @@ func collect_attack_animations() -> void:
 	while event_cursor < events.event_history.size():
 		var event: CombatEvent = events.event_history[event_cursor]
 		event_cursor += 1
-		if event.type in [EventTypes.Type.ATTACK_HIT, EventTypes.Type.ATTACK_MISS] and (event.data.get("animation_template") != null or is_no_damage_result(event)):
+		var is_attack_result: bool = event.type in [EventTypes.Type.ATTACK_HIT, EventTypes.Type.ATTACK_MISS]
+		var is_animated_ability: bool = event.type == EventTypes.Type.ABILITY_TRIGGERED and event.data.get("animation_template") != null
+		if (is_attack_result and (event.data.get("animation_template") != null or is_no_damage_result(event))) or is_animated_ability:
 			attack_queue.append(event)
 
 
@@ -76,12 +78,14 @@ func sync_movement() -> bool:
 		var event: CombatEvent = attack_queue.pop_front()
 		var attacker := find_token(event.source_id)
 		var target := find_token(event.target_id)
-		if attacker != null and target != null and event.data.get("animation_template") != null:
-			attacker.play_attack_animation(event.data.animation_template, event.data.animation_origin, event.data.animation_target, target.state.collision_radius_feet, arena.combat_system.map_rules.world_units_per_foot)
+		if attacker != null and event.data.get("animation_template") != null:
+			var animation_target: Vector2 = Vector2(event.data.get("animation_target", attacker.state.position))
+			var target_radius: float = target.state.collision_radius_feet if target != null else 0.0
+			attacker.play_attack_animation(event.data.animation_template, Vector2(event.data.get("animation_origin", attacker.state.position)), animation_target, target_radius, arena.combat_system.map_rules.world_units_per_foot)
 			if is_no_damage_result(event):
-				if attacker.is_attack_animating():
+				if target != null and attacker.is_attack_animating():
 					attacker.attack_tween.finished.connect(target.show_no_damage_feedback, CONNECT_ONE_SHOT)
-				else:
+				elif target != null:
 					target.show_no_damage_feedback()
 			moving = true
 		elif target != null and is_no_damage_result(event):

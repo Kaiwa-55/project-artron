@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://cfy68smkbgo62"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+
+[sub_resource type="Resource" id="Reduce"]
+script = ExtResource("2")
+effect_type = 9
+amount = 3
+minimum_amount = 1
+
+[resource]
+script = ExtResource("1")
+id = "goblin_guard_order"
+display_name = "Take the Hit!"
+description = "When a nearby ally would take Attack Damage, order it to brace and reduce that Damage by 3."
+traits = [ExtResource("3")]
+trigger = 5
+effects = [SubResource("Reduce")]
+uses_per_round = 1
+can_target_self = false

@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://bh3g3wu8uiiep"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/goblin_barbed_whip.tres" id="2"]
+[ext_resource type="Resource" uid="uid://bldhi25hi28va" path="res://data/ability/goblin_mark_the_weak.tres" id="3"]
+[ext_resource type="Resource" uid="uid://dvirw6w2e3arb" path="res://data/ability/goblin_pack_command.tres" id="4"]
+[ext_resource type="Resource" uid="uid://cfy68smkbgo62" path="res://data/reaction/goblin_guard_order.tres" id="5"]
+[ext_resource type="Texture2D" uid="uid://x8xpnhmdlgpx" path="res://assets/token/Goblin Taskmaster.png" id="5_iw2lv"]
+[ext_resource type="Resource" path="res://data/trait/goblin.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/humanoid.tres" id="7"]
+[ext_resource type="Resource" path="res://data/ai/goblin_taskmaster_ai_profile.tres" id="8"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="8_7rv4j"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="11_b1vrp"]
+
+[resource]
+script = ExtResource("1")
+id = "goblin_taskmaster"
+display_name = "Goblin Taskmaster"
+portrait = ExtResource("5_iw2lv")
+token_texture = ExtResource("5_iw2lv")
+token_offset = Vector2(0, 70)
+team = 2
+position = Vector2(1100, 360)
+level = 2
+base_max_hp = 16
+base_max_ap = 4
+base_speed = 25.0
+reflex_stat_bonus = 1
+fortitude_stat_bonus = 2
+will_stat_bonus = 1
+strength = 12
+dexterity = 14
+constitution = 14
+intelligence = 12
+charisma = 14
+initiative_bonus = 2
+available_abilities = [ExtResource("3"), ExtResource("4")]
+equipped_abilities = ["goblin_mark_the_weak", "goblin_pack_command"]
+equipped_weapon_attack = ExtResource("2")
+natural_attack = ExtResource("2")
+traits = [ExtResource("6"), ExtResource("7")]
+reactions = [ExtResource("5")]
+ai_profile = ExtResource("8")

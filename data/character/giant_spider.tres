@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
 [ext_resource type="Resource" path="res://data/trait/web_walker.tres" id="7"]
 [ext_resource type="Texture2D" uid="uid://1j04obpn8av3" path="res://assets/token/token_Giant Spider.png" id="7_c3hra"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="11_qfxig"]
 
 [resource]
 script = ExtResource("1")

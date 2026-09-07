@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://bdwt7r2ch6564"]
+
+[node name="ReferenceActionDock" type="PanelContainer" unique_id=1863515548]
+clip_contents = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -59.0
+offset_right = 280.0
+offset_bottom = 59.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 8
+
+[node name="ActionDockMargin" type="MarginContainer" parent="." unique_id=715372809]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 9
+
+[node name="ActionDockColumn" type="VBoxContainer" parent="ActionDockMargin" unique_id=323773723]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ActionButtonGrid" type="GridContainer" parent="ActionDockMargin/ActionDockColumn" unique_id=363983839]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/h_separation = 5
+theme_override_constants/v_separation = 5
+columns = 3
+
+[node name="Attack" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=1316347547]
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ATTACK"
+
+[node name="Move" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=289957765]
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MOVE"
+
+[node name="Skill" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=1825564633]
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SKILL"
+
+[node name="Ability" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=1571891321]
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ABILITY"
+
+[node name="Throw" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=159688356]
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "THROW"
+
+[node name="EmptySlot" type="Control" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=883453693]
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2

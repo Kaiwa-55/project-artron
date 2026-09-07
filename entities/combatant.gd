@@ -77,6 +77,35 @@ func play_sprite_projectile(template: Resource, origin: Vector2, target: Vector2
 		if is_instance_valid(attack_sprite):
 			attack_sprite.frame = mini(last, int(value)), float(first), float(last + 1), duration)
 	attack_tween.chain().tween_callback(clear_attack_sprite)
+
+
+func play_attached_directional(template: Resource, origin: Vector2, target: Vector2, scale_per_foot: float) -> void:
+	if template.sprite_sheet == null:
+		return
+	attack_sprite = Sprite2D.new()
+	add_child(attack_sprite)
+	attack_sprite.top_level = true
+	attack_sprite.z_index = 20
+	attack_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	attack_sprite.texture = template.sprite_sheet
+	attack_sprite.hframes = maxi(1, template.columns)
+	attack_sprite.vframes = maxi(1, template.rows)
+	var maximum := attack_sprite.hframes * attack_sprite.vframes - 1
+	var first := clampi(template.first_frame, 0, maximum)
+	var last := clampi(template.last_frame, first, maximum)
+	attack_sprite.frame = first
+	attack_sprite.scale = template.effect_scale
+	var direction := origin.direction_to(target)
+	if direction.is_zero_approx():
+		direction = Vector2.RIGHT
+	attack_sprite.global_position = origin + direction * template.attached_offset_feet * scale_per_foot
+	attack_sprite.rotation = (origin.angle_to_point(target) if template.orient_to_target else 0.0) + deg_to_rad(template.rotation_offset_degrees)
+	var duration := float(last - first + 1) / maxf(1.0, template.frames_per_second)
+	attack_tween = create_tween()
+	attack_tween.tween_method(func(value: float):
+		if is_instance_valid(attack_sprite):
+			attack_sprite.frame = mini(last, int(value)), float(first), float(last + 1), duration)
+	attack_tween.tween_callback(clear_attack_sprite)
 var visual_offset: Vector2 = Vector2.ZERO:
 	set(value):
 		visual_offset = value
@@ -98,6 +127,9 @@ func play_attack_animation(template: Resource, origin: Vector2, target: Vector2,
 	visual_offset = Vector2.ZERO
 	if template.animation_type == 1:
 		play_sprite_projectile(template, origin, target)
+		return
+	if template.animation_type == 2:
+		play_attached_directional(template, origin, target, scale_per_foot)
 		return
 	var direction := origin.direction_to(target)
 	if direction.is_zero_approx():

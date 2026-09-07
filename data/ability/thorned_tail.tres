@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/thorned_tail_attack.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "thorned_tail"
+display_name = "Thorned Tail"
+required_level = 3
+traits = [ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+ap_cost = 1
+cooldown_turns = 1
+description = "Strike at 10 ft for 5 Slash damage and apply Bleeding 1 on Hit."
+target_mode = 0
+target_filter = 0
+attack_source = 2
+attack_data = ExtResource("2")
+targeting_range_feet = 10.0

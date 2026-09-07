@@ -33,6 +33,7 @@ func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2
 	area_attack.ap_cost = 0
 	pending_context = AreaActionContextScript.new()
 	pending_context.setup_skill(actor, skill, target_point, area_attack, targets)
+	pending_context.repeated_attack_penalty = combat_system.attack_system.declare_attack_action(actor, area_attack)
 	pending_context.costs_consumed = true
 	pending_context.cooldown_started = combat_system.skill_system.get_remaining_cooldown(actor, skill.id) > 0
 	return continue_action()
@@ -63,6 +64,8 @@ func execute_ability(combatant_id: String, ability_id: String, target_point: Vec
 		area_attack.display_name = ability.display_name
 		area_attack.requires_to_hit = false
 		area_attack.base_damage = 0
+	if ability.animation_template != null and ability.animation_template.animation_type != AttackAnimationData.Type.ATTACHED_DIRECTIONAL:
+		area_attack.animation_template = ability.animation_template
 	area_attack.ap_cost = 0
 	if not actor.spend_ap(ability.ap_cost):
 		return ActionResult.failure("Not enough AP.")
@@ -74,6 +77,7 @@ func execute_ability(combatant_id: String, ability_id: String, target_point: Vec
 	var cooldown: int = combat_system.ability_system.start_cooldown(actor, ability)
 	pending_context = AreaActionContextScript.new()
 	pending_context.setup_ability(actor, ability, target_point, area_attack, targets)
+	pending_context.repeated_attack_penalty = combat_system.attack_system.declare_attack_action(actor, area_attack)
 	pending_context.costs_consumed = true
 	pending_context.cooldown_started = cooldown > 0
 	var result := continue_action()
@@ -158,7 +162,8 @@ func continue_action(carried_events: Array[CombatEvent] = []) -> ActionResult:
 			if target != null:
 				context.record_skipped_target(target, "Target is Dying before its Area resolution.")
 			continue
-		var prepared: AttackResult = combat_system.attack_system.resolve_attack(actor, target, attack, true)
+		var area_conditional_bonuses: Array[Dictionary] = []
+		var prepared: AttackResult = combat_system.attack_system.resolve_attack(actor, target, attack, true, area_conditional_bonuses, context.repeated_attack_penalty)
 		var defense_prompt: Dictionary = combat_system.reaction_system.get_post_hit_prompt(actor, target, attack, prepared, combat_system.combat_state.current_round) if attack.requires_to_hit or attack.base_damage > 0 else {}
 		if not defense_prompt.is_empty():
 			if target.id == "player":
@@ -192,7 +197,12 @@ func continue_action(carried_events: Array[CombatEvent] = []) -> ActionResult:
 	if skill != null:
 		result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, actor.id, "", {"skill_name": skill.display_name, "mana_cost": skill.mana_cost, "cooldown": combat_system.skill_system.get_effective_cooldown_turns(actor, skill), "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}))
 	else:
-		result.events.push_front(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, "", {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": ability.cooldown_turns, "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}))
+		var ability_event_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": ability.cooldown_turns, "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}
+		if ability.animation_template != null and ability.animation_template.animation_type == AttackAnimationData.Type.ATTACHED_DIRECTIONAL:
+			ability_event_data["animation_template"] = ability.animation_template
+			ability_event_data["animation_origin"] = actor.position
+			ability_event_data["animation_target"] = context.target_point
+		result.events.push_front(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, "", ability_event_data))
 	pending_context = null
 	combat_system.emit_events(result.events)
 	combat_system.check_for_combat_end()

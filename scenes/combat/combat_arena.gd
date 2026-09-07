@@ -306,6 +306,10 @@ func clear_selected_target() -> void:
 	$UILayer/Control.set_selected_target("None", "")
 
 
+func has_selected_character() -> bool:
+	return false
+
+
 func cast_ground_skill(target_point: Vector2) -> void:
 	confirm_ground_targeting(target_point)
 
@@ -360,7 +364,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		cancel_ground_targeting()
 		get_viewport().set_input_as_handled()
 		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and not selected_target_id.is_empty():
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed \
+		and (not selected_target_id.is_empty() or has_selected_character()):
 		clear_selected_target()
 		get_viewport().set_input_as_handled()
 		return

@@ -79,6 +79,8 @@ func validate_attack(
 		return ActionResult.failure(
 			"Target is out of range."
 		)
+	if is_inside_minimum_range(attacker, target, attack):
+		return ActionResult.failure("Target is too close; this Attack requires at least %.0f ft." % attack.minimum_range_feet)
 
 	return ActionResult.success_result()
 
@@ -97,15 +99,25 @@ func is_in_range(
 
 	return attacker.position.distance_to(target.position) <= attack.range_feet
 
+
+func is_inside_minimum_range(attacker: CombatantState, target: CombatantState, attack: AttackData) -> bool:
+	if attack.minimum_range_feet <= 0.0:
+		return false
+	if map_rules != null:
+		return map_rules.get_edge_distance_world_units(attacker, target) < attack.minimum_range_feet * map_rules.world_units_per_foot
+	return attacker.position.distance_to(target.position) < attack.minimum_range_feet
+
 func resolve_attack(
 	attacker: CombatantState,
 	target: CombatantState,
 	attack: AttackData,
 	defer_damage: bool = false,
-	conditional_damage_bonuses: Array[Dictionary] = []
+	conditional_damage_bonuses: Array[Dictionary] = [],
+	repeated_attack_penalty: int = 0
 ) -> AttackResult:
 
 	var result := AttackResult.new()
+	result.repeated_attack_penalty = repeated_attack_penalty
 	result.conditional_damage_bonuses = conditional_damage_bonuses.duplicate(true)
 	var bonus_sources: PackedStringArray = []
 	for bonus in conditional_damage_bonuses:
@@ -122,7 +134,8 @@ func resolve_attack(
 		var attack_modifier: int = attacker.get_attribute_modifier(
 			attack.attack_attribute
 		) + attack.to_hit_bonus + effect_system.get_attack_bonus(attacker) \
-			+ ability_system.get_to_hit_bonus(attacker, attack, get_target_edge_distance_feet(attacker, target))
+			+ ability_system.get_to_hit_bonus(attacker, attack, get_target_edge_distance_feet(attacker, target)) \
+			+ repeated_attack_penalty
 		result.roll = dice_system.roll_3d8()
 		result.attack_modifier = attack_modifier
 		# Always read Defense from the target before deciding whether the attack
@@ -193,6 +206,18 @@ func resolve_attack(
 		attacker.fortitude_bonus += attack.defense_bonus
 
 	return result
+
+
+func declare_attack_action(attacker: CombatantState, attack: AttackData) -> int:
+	if attacker == null or attack == null or not attack.requires_to_hit:
+		return 0
+	var declaration_index := attacker.attacks_declared_this_turn
+	attacker.attacks_declared_this_turn += 1
+	if declaration_index == 0:
+		return 0
+	if declaration_index == 1:
+		return -2
+	return -4
 
 
 func get_target_edge_distance_feet(attacker: CombatantState, target: CombatantState) -> float:

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AIProfile" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/ai/ai_profile.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "goblin_shiv"
+display_name = "Goblin Shiv"
+damage_weight = 15.0
+position_weight = 20.0
+status_weight = 1.4
+ap_cost_weight = 6.0
+status_values = {"bleeding": 14.0, "burning": 14.0, "poisoned": 18.0, "slowed": 12.0, "weakened": 18.0}
+

@@ -41,6 +41,7 @@ func collect_candidates(system: CombatSystem, context) -> Array:
 	collect_attack_candidates(system, context, candidates)
 	collect_skill_candidates(system, context, candidates)
 	collect_ability_candidates(system, context, candidates)
+	collect_self_area_ability_candidates(system, context, candidates)
 	collect_ground_ability_candidates(system, context, candidates)
 	collect_movement_ability_candidates(system, context, candidates)
 	collect_move_candidates(system, context, candidates)
@@ -157,6 +158,41 @@ func collect_ability_candidates(system: CombatSystem, context, candidates: Array
 			candidate.resource_cost = ability.ap_cost * profile.ap_cost_weight
 			candidate.reason = "Use %s on %s." % [ability.display_name, target.display_name]
 			candidates.append(candidate)
+
+
+func collect_self_area_ability_candidates(system: CombatSystem, context, candidates: Array) -> void:
+	for ability in system.ability_system.get_active_abilities(context.actor):
+		if ability == null or ability.is_passive or ability.reaction_only:
+			continue
+		if ability.target_mode != AbilityData.TargetMode.SELF or ability.area_shape != AbilityData.AreaShape.CIRCLE:
+			continue
+		if not can_spend_for_action(context, ability.ap_cost):
+			continue
+		if not system.ability_system.validate_active_use(context.actor, ability, context.actor).success:
+			continue
+		var affected: Array[CombatantState] = system.targeting_system.collect_targets(
+			context.actor,
+			context.actor.position,
+			ability,
+			context.combat_state,
+			system.map_rules
+		)
+		if affected.is_empty():
+			continue
+		var attack: AttackData = system.ability_system.get_attack_data(context.actor, ability)
+		var candidate = CandidateScript.new()
+		candidate.type = CandidateScript.Type.ABILITY
+		candidate.actor_id = context.actor.id
+		candidate.target_id = context.actor.id
+		candidate.target_position = context.actor.position
+		candidate.source_data = ability
+		candidate.expected_damage = float(attack.base_damage * affected.size()) if attack != null else 0.0
+		for target in affected:
+			candidate.status_value += evaluate_ability_status_value(ability, attack, target)
+		candidate.position_value = float(maxi(0, affected.size() - 1)) * profile.area_target_bonus / maxf(1.0, profile.position_weight)
+		candidate.resource_cost = ability.ap_cost * profile.ap_cost_weight
+		candidate.reason = "Use %s around self, affecting %d target(s)." % [ability.display_name, affected.size()]
+		candidates.append(candidate)
 
 
 func collect_ground_ability_candidates(system: CombatSystem, context, candidates: Array) -> void:

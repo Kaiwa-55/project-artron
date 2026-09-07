@@ -41,6 +41,8 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 	if source_attack != null:
 		var ability_attack: AttackData = source_attack.duplicate()
 		ability_attack.ap_cost = ability.ap_cost
+		if ability.animation_template != null:
+			ability_attack.animation_template = ability.animation_template
 		ability_attack.active_damage_bonus = ability.active_attack_flat_damage_bonus + ability.active_attack_damage_bonus_per_level * actor.level
 		ability_attack.active_damage_bonus_source = ability.display_name
 		var request := ActionRequest.new(combatant_id, ActionTypes.Type.ATTACK)
@@ -71,7 +73,14 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 		}))
 	var defer_conditional: bool = result.requires_reaction_choice and result.reaction_prompt.has("prepared_attack")
 	apply_effects(actor, target, ability, result.events, ability_events, true, not defer_conditional)
-	ability_events.push_front(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, target_id, {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": cooldown}))
+	var trigger_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": cooldown}
+	# Attacking Abilities carry their animation on ATTACK_HIT / ATTACK_MISS so it
+	# resolves after defensive Reactions. Effect-only Abilities animate here.
+	if source_attack == null and ability.animation_template != null:
+		trigger_data["animation_template"] = ability.animation_template
+		trigger_data["animation_origin"] = actor.position
+		trigger_data["animation_target"] = target.position if target != null else actor.position
+	ability_events.push_front(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, target_id, trigger_data))
 	result.events.append_array(ability_events)
 	combat_system.emit_events(ability_events)
 	if defer_conditional:

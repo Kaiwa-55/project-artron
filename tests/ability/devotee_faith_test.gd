@@ -39,9 +39,13 @@ func _init() -> void:
 	check(devotee.max_mana == 0 and devotee.faith == 10 and devotee.max_faith == 10, "Devotee starts combat with 10 Faith and no Mana")
 	check(devotee.equipped_abilities.has("belief") and devotee.equipped_abilities.has("pray") and devotee.equipped_abilities.has("heal_or_harm"), "Belief, Pray, and Heal or Harm are granted at Level 1")
 	check(devotee.wisdom == 12 and devotee.constitution == 12, "Belief and the current Human ancestry choices grant Wisdom and Constitution")
+	var animated_heal = system.ability_system.get_available_ability(devotee, "heal_or_harm")
+	animated_heal.animation_template = load("res://animation/lunge_return.tres")
 
 	var heal := system.use_active_ability(devotee.id, ally.id, "heal_or_harm")
 	check(heal.success and ally.hp == 20, "Heal or Harm heals an ally by current Faith")
+	var heal_trigger = heal.events.filter(func(event): return event.type == EventTypes.Type.ABILITY_TRIGGERED).front()
+	check(heal_trigger.data.get("animation_template") == animated_heal.animation_template and heal_trigger.data.get("animation_target") == ally.position, "Effect-only Ability emits its animation template and target")
 	check(devotee.faith == 10 and devotee.temporary_faith == 0, "Heal or Harm does not consume Faith")
 	devotee.ap = devotee.max_ap
 	var enemy_hp := enemy.hp

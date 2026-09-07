@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "barbed_retaliation_attack"
+display_name = "Barbed Retaliation"
+animation_template = ExtResource("2")
+attack_attribute = 3
+requires_to_hit = false
+can_critical = false
+ap_cost = 0
+base_damage = 4
+range_feet = 5.0
+damage_type = "pierce"
+traits = [ExtResource("3"), ExtResource("4")]

@@ -1,7 +1,7 @@
 class_name AttackAnimationData
 extends Resource
 
-enum Type { LUNGE_RETURN, SPRITE_PROJECTILE }
+enum Type { LUNGE_RETURN, SPRITE_PROJECTILE, ATTACHED_DIRECTIONAL }
 @export var animation_type: Type = Type.LUNGE_RETURN
 @export var sprite_sheet: Texture2D
 @export_range(1, 64) var columns: int = 8
@@ -12,6 +12,9 @@ enum Type { LUNGE_RETURN, SPRITE_PROJECTILE }
 @export var effect_scale: Vector2 = Vector2(1.5, 1.5)
 @export var orient_to_target: bool = true
 @export var rotation_offset_degrees: float = 0.0
+# Used by ATTACHED_DIRECTIONAL. The effect stays at this distance from its
+# user, measured forward along the selected direction.
+@export_range(0.0, 100.0, 0.1) var attached_offset_feet: float = 0.0
 
 @export_range(0.01, 2.0) var approach_seconds: float = 0.15
 @export_range(0.0, 2.0) var impact_seconds: float = 0.06

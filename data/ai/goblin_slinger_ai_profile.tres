@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AIProfile" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/ai/ai_profile.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "goblin_slinger"
+display_name = "Goblin Slinger"
+damage_weight = 10.0
+position_weight = 28.0
+status_weight = 1.8
+reaction_ap_reserve = 1
+status_values = {"slowed": 30.0}
+

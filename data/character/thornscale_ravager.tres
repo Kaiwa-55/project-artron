@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://ds82lj3p3nfhw"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/rending_claw.tres" id="3"]
+[ext_resource type="Resource" path="res://data/ability/thorned_tail.tres" id="4"]
+[ext_resource type="Resource" path="res://data/ability/scalebreaker_charge.tres" id="5"]
+[ext_resource type="Resource" path="res://data/ability/coiling_sweep.tres" id="6"]
+[ext_resource type="Texture2D" uid="uid://lc57x8lf8rla" path="res://assets/token/thornscale_ravager.png" id="6_08of0"]
+[ext_resource type="Resource" uid="uid://b1d2yapa1j2lv" path="res://data/reaction/barbed_retaliation.tres" id="7"]
+[ext_resource type="Resource" path="res://data/trait/beast.tres" id="8"]
+[ext_resource type="Resource" path="res://data/ai/thornscale_ravager_ai_profile.tres" id="9"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="9_08of0"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="11_ebjb1"]
+
+[resource]
+script = ExtResource("1")
+id = "thornscale_ravager"
+display_name = "Thornscale Ravager"
+portrait = ExtResource("6_08of0")
+token_texture = ExtResource("6_08of0")
+team = 2
+collision_radius_feet = 4.0
+level = 3
+base_max_hp = 25
+base_max_ap = 4
+base_speed = 30.0
+reflex_stat_bonus = 1
+fortitude_stat_bonus = 3
+strength = 18
+dexterity = 14
+constitution = 16
+intelligence = 6
+wisdom = 12
+charisma = 6
+initiative_bonus = 2
+damage_resistances = {
+"pierce": 2,
+"slash": 2
+}
+available_abilities = [ExtResource("4"), ExtResource("5"), ExtResource("6")]
+equipped_abilities = ["thorned_tail", "scalebreaker_charge", "coiling_sweep"]
+equipped_weapon_attack = ExtResource("3")
+natural_attack = ExtResource("3")
+traits = [ExtResource("8")]
+reactions = [ExtResource("7")]
+ai_profile = ExtResource("9")

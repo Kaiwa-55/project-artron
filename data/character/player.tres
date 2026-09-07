@@ -1,13 +1,20 @@
 [gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://87olcsmdty3u"]
 
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1_character_data"]
-[ext_resource type="Resource" uid="uid://cc0jbkieew8kx" path="res://data/class/devotee.tres" id="3_oq1jv"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="4_8rcdb"]
 [ext_resource type="Resource" uid="uid://ckrki53jpb51j" path="res://data/equipment/iron_sword.tres" id="8_iron_sword"]
+[ext_resource type="Resource" uid="uid://623hc2j4n3co" path="res://data/ability/build_up_body.tres" id="9_aip0n"]
 [ext_resource type="Resource" uid="uid://cp2oeb5hig86m" path="res://data/equipment/long_spear.tres" id="9_long_spear"]
+[ext_resource type="Resource" uid="uid://dwe3brusekjlm" path="res://data/ability/ki_wave.tres" id="10_hq5ur"]
 [ext_resource type="Resource" path="res://data/equipment/leather_armor.tres" id="10_leather_armor"]
 [ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="11_buckler"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="11_qw8xx"]
+[ext_resource type="Resource" path="res://data/ability/martial_sense.tres" id="12_mgsqb"]
 [ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="13_human"]
+[ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="13_mewtd"]
+[ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="14_mv47j"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="15_aempt"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="22_uvnxd"]
 [ext_resource type="Resource" path="res://data/ability/belief.tres" id="ability_belief"]
 [ext_resource type="Resource" uid="uid://52710ckhwush" path="res://data/ability/divine_intervention.tres" id="ability_divine_intervention"]
 [ext_resource type="Resource" uid="uid://bowe4sdgeblby" path="res://data/ability/heal_or_harm.tres" id="ability_heal_or_harm"]
@@ -21,19 +28,87 @@
 [ext_resource type="Resource" path="res://data/equipment/shortbow.tres" id="item_shortbow"]
 [ext_resource type="Resource" path="res://data/equipment/short_spear.tres" id="item_short_spear"]
 
+[sub_resource type="Resource" id="Progression_L1"]
+script = ExtResource("13_mewtd")
+max_hp_gain = 8
+granted_abilities = Array[ExtResource("11_qw8xx")]([ExtResource("9_aip0n"), ExtResource("12_mgsqb")])
+
+[sub_resource type="Resource" id="Progression_L2"]
+script = ExtResource("13_mewtd")
+level = 2
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L3"]
+script = ExtResource("13_mewtd")
+level = 3
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L4"]
+script = ExtResource("13_mewtd")
+level = 4
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L5"]
+script = ExtResource("13_mewtd")
+level = 5
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L6"]
+script = ExtResource("13_mewtd")
+level = 6
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L7"]
+script = ExtResource("13_mewtd")
+level = 7
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L8"]
+script = ExtResource("13_mewtd")
+level = 8
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L9"]
+script = ExtResource("13_mewtd")
+level = 9
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L10"]
+script = ExtResource("13_mewtd")
+level = 10
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Resource_d8f8g"]
+script = ExtResource("14_mv47j")
+id = "martial_artist"
+display_name = "Martial Artist"
+description = "An unarmed combatant who builds momentum through disciplined technique."
+base_speed_feet = 20.0
+base_mana = 0
+fixed_attribute_bonuses = {
+2: 1
+}
+attribute_choice_count = 1
+attribute_choice_options = Array[int]([0, 1])
+granted_abilities = [ExtResource("9_aip0n"), ExtResource("10_hq5ur")]
+traits = [ExtResource("15_aempt")]
+auto_equipped_ability_ids = Array[String](["build_up_body", "ki_wave"])
+progression_entries = Array[Resource]([SubResource("Progression_L1"), SubResource("Progression_L2"), SubResource("Progression_L3"), SubResource("Progression_L4"), SubResource("Progression_L5"), SubResource("Progression_L6"), SubResource("Progression_L7"), SubResource("Progression_L8"), SubResource("Progression_L9"), SubResource("Progression_L10")])
+
 [resource]
 script = ExtResource("1_character_data")
 id = "player"
 display_name = "Player"
+token_scale = 1.4000000000000001
 team = 1
 position = Vector2(510, 250)
 ancestry = ExtResource("13_human")
 ancestry_attribute_choices = Array[int]([1, 2, 4])
-character_class = ExtResource("3_oq1jv")
+character_class = SubResource("Resource_d8f8g")
 class_attribute_choices = Array[int]([2])
 level = 3
-selected_ability_ids = Array[String](["smite", "sacred_ward", "shared_blessing", "divine_intervention"])
-granted_ability_ids = Array[String](["belief", "pray", "heal_or_harm"])
+selected_ability_ids = Array[String](["smite", "sacred_ward", "shared_blessing", "divine_intervention", "ki_wave"])
+granted_ability_ids = Array[String](["belief", "pray", "heal_or_harm", "ki_wave"])
 base_max_hp = 0
 base_max_ap = 4
 available_abilities = [ExtResource("ability_belief"), ExtResource("ability_pray"), ExtResource("ability_heal_or_harm"), ExtResource("ability_smite"), ExtResource("ability_sacred_ward"), ExtResource("ability_shared_blessing"), ExtResource("ability_divine_intervention")]

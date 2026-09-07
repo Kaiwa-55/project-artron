@@ -102,6 +102,7 @@ var ability_cooldowns: Dictionary = {}
 var ability_cooldown_skip_next_reduction: Dictionary = {}
 var ability_stacks: Dictionary = {}
 var ability_uses_this_turn: Dictionary = {}
+var attacks_declared_this_turn: int = 0
 var active_traits: Array = []
 var active_reactions: Array = []
 var ai_profile: Resource

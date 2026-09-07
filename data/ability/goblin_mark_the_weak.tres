@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bldhi25hi28va"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_o3tbn"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" uid="uid://c4i06contdqmt" path="res://data/status/weakened.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/goblin.tres" id="4"]
+
+[sub_resource type="Resource" id="Apply"]
+script = ExtResource("2")
+recipient = 1
+effect = ExtResource("3")
+
+[resource]
+script = ExtResource("1")
+id = "goblin_mark_the_weak"
+display_name = "Mark the Weak"
+traits = [ExtResource("4")]
+ap_cost = 1
+cooldown_turns = 2
+description = "Apply Weakened 1 to an enemy within 30 ft."
+use_effects = [SubResource("Apply")]
+targeting_range_feet = 30.0

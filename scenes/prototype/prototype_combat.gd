@@ -2,26 +2,25 @@ extends "res://scenes/prototype/prototype_ui_controller.gd"
 
 func start_test_combat() -> void:
 	combat_system = CombatSystem.new()
-	var map_size_world: Vector2 = MAP_SIZE_FEET * combat_system.map_rules.world_units_per_foot
-	combat_system.map_rules.set_playable_bounds(MAP_SIZE_FEET, -map_size_world * 0.5)
+	var active_encounter: Resource = encounter_data if encounter_data != null else DefaultEncounter
+	var map_size_feet: Vector2 = active_encounter.map_size_feet if active_encounter != null else MAP_SIZE_FEET
+	var map_size_world: Vector2 = map_size_feet * combat_system.map_rules.world_units_per_foot
+	combat_system.map_rules.set_playable_bounds(map_size_feet, -map_size_world * 0.5)
+	_configure_encounter_background(active_encounter, map_size_world)
 	$BattlefieldCamera.configure(combat_system.map_rules.playable_bounds, Vector2.ZERO)
-	for obstacle in PROTOTYPE_OBSTACLES:
-		combat_system.map_rules.add_circular_obstacle(obstacle.center, obstacle.radius, obstacle.label)
+	for object_data in _get_encounter_objects(active_encounter):
+		if String(object_data.get("kind", "")) != "obstacle" or not bool(object_data.get("blocks_movement", true)):
+			continue
+		var center: Vector2 = Vector2(object_data.get("position_feet", Vector2.ZERO)) * combat_system.map_rules.world_units_per_foot
+		var radius: float = float(object_data.get("radius_feet", 0.0)) * combat_system.map_rules.world_units_per_foot
+		combat_system.map_rules.add_circular_obstacle(center, radius, String(object_data.get("label", "Obstacle")))
 	move_mode = false
 	selected_target_id = ""
-	var player_data = PlayerData
-	if get_tree().has_meta("created_character_data"):
-		player_data = get_tree().get_meta("created_character_data")
-	var player: CombatantState = player_data.create_combatant_state()
-	var ally: CombatantState = PlayerData.create_combatant_state()
-	ally.id = "ally"
-	ally.display_name = "Ally"
-	ally.position = Vector2(390, 370)
-	$BattlefieldWorld/PlayerCharacter.setup(player)
-	$BattlefieldWorld/AllyCharacter.setup(ally)
-	var enemies: Array[CombatantState] = create_encounter_enemies(encounter_data if encounter_data != null else DefaultEncounter)
+	var party: Array[CombatantState] = create_encounter_player_party(active_encounter)
+	setup_party_nodes(party)
+	var enemies: Array[CombatantState] = create_encounter_enemies(active_encounter)
 	setup_enemy_nodes(enemies)
-	var combatants: Array[CombatantState] = [player, ally]
+	var combatants: Array[CombatantState] = party.duplicate()
 	combatants.append_array(enemies)
 	combat_system.start_combat(combatants)
 	if not enemies.is_empty():
@@ -34,15 +33,93 @@ func start_test_combat() -> void:
 	run_enemy_ai_if_needed()
 
 
+func _configure_encounter_background(data: Resource, map_size_world: Vector2) -> void:
+	var map_sprite: Sprite2D = $BattlefieldWorld/BattlefieldBackground
+	map_sprite.texture = data.battlefield_texture if data != null else null
+	map_sprite.position = Vector2.ZERO
+	if map_sprite.texture == null:
+		map_sprite.scale = Vector2.ONE
+		return
+	var texture_size: Vector2 = map_sprite.texture.get_size()
+	map_sprite.scale = Vector2(
+		map_size_world.x / maxf(1.0, texture_size.x),
+		map_size_world.y / maxf(1.0, texture_size.y)
+	)
+
+
+func _get_encounter_objects(data: Resource) -> Array[Dictionary]:
+	return data.map_objects if data != null else []
+
+
+func create_encounter_player_party(data: Resource) -> Array[CombatantState]:
+	var states: Array[CombatantState] = []
+	var entries: Array[Dictionary] = data.player_party if data != null else []
+	if entries.is_empty():
+		entries = [
+			{"character": PlayerData, "id": "player", "display_name": "Player", "position_feet": Vector2(-40, -83.3333), "use_created_character": true},
+			{"character": PlayerData, "id": "ally", "display_name": "Ally", "position_feet": Vector2(-60, -63.3333)},
+		]
+	var used_ids: Dictionary = {}
+	for index in range(entries.size()):
+		var entry: Dictionary = entries[index]
+		var character_data = entry.get("character")
+		if bool(entry.get("use_created_character", false)) and get_tree().has_meta("created_character_data"):
+			character_data = get_tree().get_meta("created_character_data")
+		if character_data == null:
+			continue
+		var state: CombatantState = character_data.create_combatant_state()
+		var fallback_id := "player" if index == 0 else "ally_%d" % index
+		var requested_id := String(entry.get("id", fallback_id))
+		var unique_id := requested_id
+		var suffix := 2
+		while used_ids.has(unique_id):
+			unique_id = "%s_%d" % [requested_id, suffix]
+			suffix += 1
+		state.id = unique_id
+		state.display_name = String(entry.get("display_name", state.display_name))
+		state.team = data.player_team if data != null else 1
+		state.position = Vector2(entry.get("position_feet", Vector2.ZERO)) * combat_system.map_rules.world_units_per_foot
+		used_ids[unique_id] = true
+		states.append(state)
+	return states
+
+
+func setup_party_nodes(states: Array[CombatantState]) -> void:
+	for node in party_nodes.values():
+		if is_instance_valid(node) and node not in [$BattlefieldWorld/PlayerCharacter, $BattlefieldWorld/AllyCharacter]:
+			node.queue_free()
+	party_nodes.clear()
+	$BattlefieldWorld/PlayerCharacter.visible = states.size() > 0
+	$BattlefieldWorld/AllyCharacter.visible = states.size() > 1
+	for index in range(states.size()):
+		var node: Combatant
+		if index == 0:
+			node = $BattlefieldWorld/PlayerCharacter
+		elif index == 1:
+			node = $BattlefieldWorld/AllyCharacter
+		else:
+			node = CombatantScript.new()
+			node.name = "PartyCharacter%d" % (index + 1)
+			$BattlefieldWorld.add_child(node)
+		node.setup(states[index])
+		party_nodes[states[index].id] = node
+
+
 func create_encounter_enemies(data: Resource) -> Array[CombatantState]:
 	var states: Array[CombatantState] = []
-	var used_ids: Dictionary = {"player": true, "ally": true}
+	var used_ids: Dictionary = {}
+	for party_id in party_nodes:
+		used_ids[party_id] = true
 	if data == null:
 		return states
 	for enemy_data in data.enemies:
 		if enemy_data == null:
 			continue
 		var state: CombatantState = enemy_data.create_combatant_state()
+		# CharacterData positions predate centered encounter coordinates and are
+		# authored from the map's top-left corner. Convert them at the boundary.
+		if state.position != Vector2.ZERO:
+			state.position += combat_system.map_rules.playable_bounds.position
 		var base_id: String = state.id if not state.id.is_empty() else "enemy"
 		var unique_id := base_id
 		var suffix := 2
@@ -75,7 +152,7 @@ func get_enemy_nodes() -> Array:
 
 
 func get_all_combatant_nodes() -> Array:
-	var nodes: Array = [$BattlefieldWorld/PlayerCharacter, $BattlefieldWorld/AllyCharacter]
+	var nodes: Array = party_nodes.values()
 	nodes.append_array(get_enemy_nodes())
 	return nodes
 
@@ -221,12 +298,16 @@ func clear_selected_target() -> void:
 	$UILayer/Control.set_mode_hint("Choose an action or select a target.")
 
 
+func has_selected_character() -> bool:
+	return not selected_character_id.is_empty()
+
+
 func move_player(destination: Vector2) -> void:
 	var was_step_back := combat_system.has_pending_step_back_move()
 	var was_shadow_step := combat_system.has_pending_ability_movement()
 	var acting_enemy_id: String = combat_system.get_combat_state().current_actor_id
 	super.move_player(destination)
-	$BattlefieldWorld/AllyCharacter.refresh_from_state()
+	refresh_combatant_nodes()
 	if was_shadow_step and not combat_system.has_pending_ability_movement():
 		$UILayer/Control.add_log_message("Shadow Step completed without triggering Reactions.")
 	if was_step_back and acting_enemy_id != "player" and not combat_system.has_pending_step_back_move():
@@ -247,9 +328,17 @@ func _ready() -> void:
 
 
 func _build_obstacle_visuals() -> void:
-	for obstacle in PROTOTYPE_OBSTACLES:
+	var active_encounter: Resource = encounter_data if encounter_data != null else DefaultEncounter
+	for object_data in _get_encounter_objects(active_encounter):
+		if String(object_data.get("kind", "")) != "obstacle":
+			continue
+		var obstacle := {
+			"center": Vector2(object_data.get("position_feet", Vector2.ZERO)) * combat_system.map_rules.world_units_per_foot,
+			"radius": float(object_data.get("radius_feet", 0.0)) * combat_system.map_rules.world_units_per_foot,
+			"label": String(object_data.get("label", "Obstacle")),
+		}
 		var visual := ObstacleVisualScript.new()
-		visual.name = String(obstacle.label).replace(" ", "")
+		visual.name = String(object_data.get("id", obstacle.label)).replace(" ", "")
 		$BattlefieldWorld.add_child(visual)
 		visual.setup(float(obstacle.radius), String(obstacle.label))
 		visual.position = Vector2(obstacle.center)
@@ -260,7 +349,6 @@ func _process(_delta: float) -> void:
 		return
 	var state = combat_system.get_combat_state()
 	var reaction_locked: bool = combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
-	inventory_button.disabled = reaction_locked
 	if inventory_drawer != null and inventory_drawer.get_script() == CharacterPanelScript:
 		var displayed_actor := get_displayed_party_member()
 		if displayed_actor != null and inventory_drawer.combatant_id != displayed_actor.id:

@@ -34,12 +34,14 @@ func execute_dual_weapon(actor: CombatantState, target: CombatantState, ability:
 	combat_system.cancel_remaining_movement(actor)
 	actor.ability_uses_this_turn[ability.id] = int(actor.ability_uses_this_turn.get(ability.id, 0)) + 1
 	var cooldown: int = combat_system.ability_system.start_cooldown(actor, ability)
+	var repeated_penalty: int = combat_system.attack_system.declare_attack_action(actor, main_attack)
 	pending_context = {
 		"actor_id": actor.id,
 		"target_id": target.id,
 		"ability": ability,
 		"attacks": [main_attack, off_attack],
 		"index": 0,
+		"repeated_attack_penalty": repeated_penalty,
 	}
 	var opening_events: Array[CombatEvent] = [CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, target.id, {
 		"ability_name": ability.display_name,
@@ -70,6 +72,7 @@ func _continue(carried_events: Array[CombatEvent]) -> ActionResult:
 		request.target_id = target.id
 		request.attack_data = attacks[index]
 		request.attack_sequence_continuation = true
+		request.repeated_attack_penalty = int(pending_context.get("repeated_attack_penalty", 0))
 		pending_context["index"] = index + 1
 		var step: ActionResult = combat_system.combat_action_executor.execute(request)
 		combined.success = step.success

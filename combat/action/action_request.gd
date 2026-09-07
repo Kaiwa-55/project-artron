@@ -16,6 +16,7 @@ var skill_data
 # Internal continuation marker used by multi-attack Actions. Each attack still
 # opens and resolves its own defensive Reaction window.
 var attack_sequence_continuation: bool = false
+var repeated_attack_penalty: int = 0
 
 
 func _init(

@@ -38,6 +38,11 @@ func run_test() -> void:
 	prototype.refresh_action_dock()
 	check(prototype.selected_character_id == "player" and player_node.selected and not ally_node.selected, "Selection frame moves to the latest clicked character")
 	check(not test_button.disabled, "Active character can use Actions")
+	var right_click := InputEventMouseButton.new()
+	right_click.button_index = MOUSE_BUTTON_RIGHT
+	right_click.pressed = true
+	prototype._unhandled_input(right_click)
+	check(prototype.selected_character_id.is_empty() and not player_node.selected, "Right-click clears a selected friendly character")
 
 	var enemy_node = prototype.get_enemy_nodes().front()
 	check(prototype.select_target_at(enemy_node.global_position), "Enemy can be selected for inspection")

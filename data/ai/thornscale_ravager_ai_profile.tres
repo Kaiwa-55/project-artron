@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AIProfile" format=3]
+
+[ext_resource type="Script" path="res://data/ai/ai_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "thornscale_ravager"
+display_name = "Thornscale Ravager"
+damage_weight = 18.0
+position_weight = 18.0
+area_target_bonus = 18.0
+status_weight = 1.2
+reaction_ap_reserve = 1
+status_values = {"bleeding": 10.0, "slowed": 16.0}

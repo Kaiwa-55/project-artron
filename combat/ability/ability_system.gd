@@ -407,6 +407,21 @@ func get_attack_data(combatant, ability) -> AttackData:
 	return null
 
 
+func get_targeting_range(combatant, ability) -> float:
+	if combatant == null or ability == null:
+		return 0.0
+	if ability.execution_mode == AbilityData.ExecutionMode.ATTACK_SEQUENCE:
+		var main_item = combatant.equipped_items.get(EquipmentSystem.WEAPON_SLOT_1)
+		var off_item = combatant.equipped_items.get(EquipmentSystem.WEAPON_SLOT_2)
+		if main_item == null or off_item == null or main_item.weapon_attack == null or off_item.weapon_attack == null:
+			return 0.0
+		return minf(main_item.weapon_attack.range_feet, off_item.weapon_attack.range_feet)
+	if ability.targeting_range_feet > 0.0:
+		return ability.targeting_range_feet
+	var attack: AttackData = get_attack_data(combatant, ability)
+	return attack.range_feet if attack != null else 0.0
+
+
 func target_filter_matches(actor, target, ability) -> bool:
 	if actor == null or target == null or ability == null:
 		return false

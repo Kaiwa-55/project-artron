@@ -190,6 +190,13 @@ func execute_action(
 	return combat_action_executor.execute(request)
 
 
+func is_player_controlled(combatant: CombatantState) -> bool:
+	if combatant == null or combat_state == null:
+		return false
+	var primary_player: CombatantState = combat_state.get_combatant("player")
+	return primary_player != null and combatant.team == primary_player.team
+
+
 func cancel_remaining_movement(combatant: CombatantState) -> void:
 	if combatant == null or not combatant.movement_in_progress:
 		return

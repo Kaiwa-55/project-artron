@@ -28,6 +28,7 @@ extends Resource
 @export var base_damage: int = 0
 
 @export var range_feet: float = 5.0
+@export var minimum_range_feet: float = 0.0
 @export var thrown_range_feet: float = 0.0
 # Runtime-only link on a throw snapshot; never mutate the equipped attack.
 var thrown_item: Resource

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://b1d2yapa1j2lv"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/attack/barbed_retaliation_attack.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="5"]
+
+[sub_resource type="Resource" id="AttackEffect"]
+script = ExtResource("2")
+effect_type = 2
+attack_data = ExtResource("3")
+
+[resource]
+script = ExtResource("1")
+id = "barbed_retaliation"
+display_name = "Barbed Retaliation"
+description = "After a Melee Attack hits, spend 1 AP to deal 2 Pierce damage to the attacker. Once per round."
+traits = [ExtResource("4"), ExtResource("5")]
+trigger = 1
+attack_data = ExtResource("3")
+melee_only = true
+effects = [SubResource("AttackEffect")]
+uses_per_round = 1

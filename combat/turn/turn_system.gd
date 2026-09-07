@@ -19,6 +19,7 @@ func start_turn(
 	actor.movement_remaining_feet = 0.0
 	actor.movement_distance_this_turn = 0.0
 	actor.ability_uses_this_turn.clear()
+	actor.attacks_declared_this_turn = 0
 	# AP reset behavior ยังไม่ได้กำหนดเป็น Rule Lock
 	# จึงไม่เติม logic เอง
 

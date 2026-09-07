@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://bimqa77mj5ila" path="res://data/reaction/opportunity_attack.tres" id="3_opportunity_attack"]
 [ext_resource type="Resource" uid="uid://b6045h54hd0e" path="res://data/attack/enemy_sword.tres" id="4_enemy_sword"]
 [ext_resource type="Resource" path="res://data/equipment/enemy_sword.tres" id="5_enemy_sword_equipment"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="6_4nxah"]
 
 [resource]
 script = ExtResource("1_character_data")

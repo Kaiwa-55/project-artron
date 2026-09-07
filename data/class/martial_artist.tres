@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="1_class_data"]
 [ext_resource type="Resource" uid="uid://623hc2j4n3co" path="res://data/ability/build_up_body.tres" id="2_build_up_body"]
+[ext_resource type="Resource" uid="uid://dwe3brusekjlm" path="res://data/ability/ki_wave.tres" id="2_q4ugs"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_xw4r0"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4_trait"]
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5_progression"]
@@ -69,7 +70,7 @@ fixed_attribute_bonuses = {
 }
 attribute_choice_count = 1
 attribute_choice_options = Array[int]([0, 1])
-granted_abilities = [ExtResource("2_build_up_body")]
+granted_abilities = [ExtResource("2_build_up_body"), ExtResource("2_q4ugs")]
 traits = [ExtResource("4_trait")]
-auto_equipped_ability_ids = Array[String](["build_up_body"])
+auto_equipped_ability_ids = Array[String](["build_up_body", "ki_wave"])
 progression_entries = Array[Resource]([SubResource("Progression_L1"), SubResource("Progression_L2"), SubResource("Progression_L3"), SubResource("Progression_L4"), SubResource("Progression_L5"), SubResource("Progression_L6"), SubResource("Progression_L7"), SubResource("Progression_L8"), SubResource("Progression_L9"), SubResource("Progression_L10")])

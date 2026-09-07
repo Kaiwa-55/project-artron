@@ -65,10 +65,11 @@ func execute(
 				"consume_on_hit": false,
 			})
 		var attacker_was_hidden := attacker.has_status("hidden")
+		var repeated_penalty: int = request.repeated_attack_penalty if request.attack_sequence_continuation else combat_system.attack_system.declare_attack_action(attacker, request.attack_data)
 		# An attack counts as declared before To Hit and Reaction resolution, even
 		# when it later misses, is parried, or is cancelled by a Reaction.
 		target.last_attack_declared_round = combat_system.combat_state.current_round
-		var prepared: AttackResult = combat_system.attack_system.resolve_attack(attacker, target, request.attack_data, true, conditional_damage_bonuses)
+		var prepared: AttackResult = combat_system.attack_system.resolve_attack(attacker, target, request.attack_data, true, conditional_damage_bonuses, repeated_penalty)
 		if request.attack_data.thrown_item != null:
 			var consumed: bool = combat_system.equipment_system.consume_thrown_weapon(attacker, request.attack_data)
 			combat_system.ability_system.sync_granted_reactions(attacker)
@@ -89,7 +90,7 @@ func execute(
 			for reaction in post_prompt["reactions"]:
 				pending_result.events.append(CombatEvent.new(EventTypes.Type.REACTION_AVAILABLE, target.id, attacker.id, {"reaction_name": reaction.display_name}))
 			combat_system.emit_events(pending_result.events)
-			if target.id == "player":
+			if combat_system.is_player_controlled(target):
 				return pending_result
 			# Enemy AI currently selects the first legal defensive Reaction.
 			return combat_system.resolve_pending_reaction(0)
@@ -104,7 +105,7 @@ func execute(
 				for reaction in intervention_prompt["reactions"]:
 					intervention_result.events.append(CombatEvent.new(EventTypes.Type.REACTION_AVAILABLE, intervention_prompt["reactor"].id, target.id, {"reaction_name": reaction.display_name}))
 				combat_system.emit_events(intervention_result.events)
-				if intervention_prompt["reactor"].id == "player":
+				if combat_system.is_player_controlled(intervention_prompt["reactor"]):
 					return intervention_result
 				return combat_system.resolve_pending_reaction(0)
 		combat_system.attack_system.finalize_attack(attacker, target, request.attack_data, prepared)
@@ -127,7 +128,9 @@ func execute(
 		combat_system.cancel_remaining_movement(skill_actor)
 		combat_system.skill_system.consume_skill_costs(skill_actor, request.skill_data)
 		var skill_attack: AttackData = combat_system.skill_system.get_attack_data(request.skill_data)
-		var skill_prepared: AttackResult = combat_system.attack_system.resolve_attack(skill_actor, skill_target, skill_attack, true)
+		var skill_repeated_penalty: int = combat_system.attack_system.declare_attack_action(skill_actor, skill_attack)
+		var skill_conditional_bonuses: Array[Dictionary] = []
+		var skill_prepared: AttackResult = combat_system.attack_system.resolve_attack(skill_actor, skill_target, skill_attack, true, skill_conditional_bonuses, skill_repeated_penalty)
 		combat_system.clear_hidden(skill_actor, "Offensive Skill used")
 		var skill_prompt: Dictionary = combat_system.reaction_system.get_post_hit_prompt(skill_actor, skill_target, skill_attack, skill_prepared, combat_system.combat_state.current_round)
 		if not skill_prompt.is_empty():
@@ -141,7 +144,7 @@ func execute(
 			for reaction in skill_prompt["reactions"]:
 				skill_pending.events.append(CombatEvent.new(EventTypes.Type.REACTION_AVAILABLE, skill_target.id, skill_actor.id, {"reaction_name": reaction.display_name}))
 			combat_system.emit_events(skill_pending.events)
-			if skill_target.id == "player":
+			if combat_system.is_player_controlled(skill_target):
 				return skill_pending
 			return combat_system.resolve_pending_reaction(0)
 		combat_system.attack_system.finalize_attack(skill_actor, skill_target, skill_attack, skill_prepared)

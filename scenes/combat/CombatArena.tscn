@@ -3,41 +3,47 @@
 [ext_resource type="Script" uid="uid://dis0l2w07s6xw" path="res://scenes/combat/combat_arena.gd" id="1_root"]
 [ext_resource type="Script" uid="uid://hlnw75obevft" path="res://scenes/combat/control.gd" id="2_control"]
 [ext_resource type="Script" uid="uid://co08kejbik35t" path="res://entities/combatant.gd" id="3_combatant"]
-[ext_resource type="Script" path="res://scenes/combat/battlefield_camera_controller.gd" id="4_camera"]
-[ext_resource type="Script" path="res://scenes/combat/ui/combat_hud_controller.gd" id="5_hud"]
-[ext_resource type="Script" path="res://scenes/combat/ui/action_bar_controller.gd" id="6_action"]
-[ext_resource type="Script" path="res://scenes/combat/ui/targeting_selection_presentation.gd" id="7_targeting"]
-[ext_resource type="Script" path="res://scenes/combat/ui/reaction_prompt_controller.gd" id="8_reaction"]
-[ext_resource type="Script" path="res://scenes/combat/ui/combat_log_controller.gd" id="9_log"]
+[ext_resource type="Script" uid="uid://dg8whsrripyfo" path="res://scenes/combat/battlefield_camera_controller.gd" id="4_camera"]
+[ext_resource type="Script" uid="uid://bg218b5t8mxfw" path="res://scenes/combat/ui/combat_hud_controller.gd" id="5_hud"]
+[ext_resource type="Script" uid="uid://c0yckj0srngy5" path="res://scenes/combat/ui/action_bar_controller.gd" id="6_action"]
+[ext_resource type="Script" uid="uid://d3m08xgnxkn07" path="res://scenes/combat/ui/targeting_selection_presentation.gd" id="7_targeting"]
+[ext_resource type="Script" uid="uid://c72lxbeugjnj1" path="res://scenes/combat/ui/reaction_prompt_controller.gd" id="8_reaction"]
+[ext_resource type="Script" uid="uid://cviebsnyubsiv" path="res://scenes/combat/ui/combat_log_controller.gd" id="9_log"]
+[ext_resource type="PackedScene" uid="uid://bdwt7r2ch6564" path="res://scenes/combat/ui/CombatActionBar.tscn" id="10_action_bar_scene"]
+[ext_resource type="PackedScene" path="res://scenes/combat/ui/CombatLogPanel.tscn" id="11_combat_log_scene"]
 
 [node name="CombatArena" type="Node2D" unique_id=280882440]
 script = ExtResource("1_root")
 
-[node name="BattlefieldCamera" type="Camera2D" parent="."]
-position = Vector2(0, 0)
-enabled = true
+[node name="BattlefieldCamera" type="Camera2D" parent="." unique_id=1739023486]
 script = ExtResource("4_camera")
 
-[node name="BattlefieldWorld" type="Node2D" parent="."]
+[node name="BattlefieldWorld" type="Node2D" parent="." unique_id=1889654190]
 
-[node name="UILayer" type="CanvasLayer" parent="."]
+[node name="PlayerCharacter" type="Node2D" parent="BattlefieldWorld" unique_id=64208072]
+script = ExtResource("3_combatant")
+
+[node name="EnemyCharacter" type="Node2D" parent="BattlefieldWorld" unique_id=900280290]
+script = ExtResource("3_combatant")
+
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=1483961762]
 layer = 20
 
-[node name="Controllers" type="Node" parent="UILayer"]
+[node name="Controllers" type="Node" parent="UILayer" unique_id=739065859]
 
-[node name="CombatHUD" type="Node" parent="UILayer/Controllers"]
+[node name="CombatHUD" type="Node" parent="UILayer/Controllers" unique_id=393532831]
 script = ExtResource("5_hud")
 
-[node name="ActionBar" type="Node" parent="UILayer/Controllers"]
+[node name="ActionBar" type="Node" parent="UILayer/Controllers" unique_id=1823142538]
 script = ExtResource("6_action")
 
-[node name="TargetingSelection" type="Node" parent="UILayer/Controllers"]
+[node name="TargetingSelection" type="Node" parent="UILayer/Controllers" unique_id=640925454]
 script = ExtResource("7_targeting")
 
-[node name="ReactionPrompt" type="Node" parent="UILayer/Controllers"]
+[node name="ReactionPrompt" type="Node" parent="UILayer/Controllers" unique_id=50241136]
 script = ExtResource("8_reaction")
 
-[node name="CombatLog" type="Node" parent="UILayer/Controllers"]
+[node name="CombatLog" type="Node" parent="UILayer/Controllers" unique_id=1058401878]
 script = ExtResource("9_log")
 
 [node name="Control" type="Control" parent="UILayer" unique_id=76147029]
@@ -57,41 +63,6 @@ offset_top = 18.0
 offset_right = 1260.0
 offset_bottom = 76.0
 
-[node name="Title" type="Label" parent="UILayer/Control/Header" unique_id=768466972]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 10.0
-offset_right = 600.0
-offset_bottom = 44.0
-theme_override_font_sizes/font_size = 22
-text = "ARTON - Combat Test Arena"
-
-[node name="Guide" type="Label" parent="UILayer/Control/Header" unique_id=719580883]
-layout_mode = 0
-offset_left = 610.0
-offset_top = 16.0
-offset_right = 1215.0
-offset_bottom = 42.0
-text = "Equip abilities, then test attacks, movement, effects and turns."
-horizontal_alignment = 2
-
-[node name="Battlefield" type="ColorRect" parent="UILayer/Control" unique_id=1927146166]
-layout_mode = 0
-offset_left = 360.0
-offset_top = 96.0
-offset_right = 920.0
-offset_bottom = 406.0
-mouse_filter = 2
-color = Color(0.08, 0.14, 0.2, 0.72)
-
-[node name="Label" type="Label" parent="UILayer/Control/Battlefield" unique_id=1927077787]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 10.0
-offset_right = 500.0
-offset_bottom = 34.0
-text = "BATTLEFIELD - Click here after selecting Move"
-
 [node name="ActionSources" type="Control" parent="UILayer/Control" unique_id=1754361818]
 visible = false
 anchors_preset = 0
@@ -110,6 +81,17 @@ text = "Move"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 0
 text = "End Turn"
+
+[node name="ReferenceActionDock" parent="UILayer/Control" unique_id=1169074384 instance=ExtResource("10_action_bar_scene")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -319.0
+offset_top = -138.0
+offset_right = 320.0
+offset_bottom = -20.0
+grow_vertical = 0
 
 [node name="Enemy_panel" type="Panel" parent="UILayer/Control" unique_id=1099442048]
 layout_mode = 0
@@ -143,83 +125,13 @@ text = "Name"
 layout_mode = 2
 text = "HP"
 
-[node name="Ap" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1755163331]
-layout_mode = 2
-text = "AP"
-
-[node name="Str" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=627924244]
-layout_mode = 2
-text = "STR"
-
-[node name="Dex" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=852440045]
-layout_mode = 2
-text = "DEX"
-
-[node name="Wis" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1820270238]
-layout_mode = 2
-text = "WIS"
-
-[node name="Reflex" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=884623526]
-layout_mode = 2
-text = "Reflex"
-
-[node name="Fortitude" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=918678408]
-layout_mode = 2
-text = "Fortitude"
-
-[node name="Will" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1995245469]
-layout_mode = 2
-text = "Will"
-
-[node name="Position" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1037767027]
-layout_mode = 2
-text = "Position"
-autowrap_mode = 2
-
 [node name="Effects" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1650639699]
 layout_mode = 2
 text = "Effects: None"
 autowrap_mode = 2
 
-[node name="Traits" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1650639700]
-layout_mode = 2
-text = "Traits: None"
-autowrap_mode = 2
-
-[node name="CombatLogPanel" type="Panel" parent="UILayer/Control" unique_id=1098082648]
+[node name="CombatLogPanel" parent="UILayer/Control" unique_id=928194718 instance=ExtResource("11_combat_log_scene")]
 layout_mode = 0
-offset_left = 360.0
-offset_top = 413.0
-offset_right = 920.0
-offset_bottom = 647.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control/CombatLogPanel" unique_id=907910151]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 12.0
-offset_right = 546.0
-offset_bottom = 234.0
-theme_override_constants/separation = 5
-
-[node name="Title" type="Label" parent="UILayer/Control/CombatLogPanel/VBoxContainer" unique_id=556437779]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "COMBAT LOG"
-
-[node name="Turn" type="Label" parent="UILayer/Control/CombatLogPanel/VBoxContainer" unique_id=671867110]
-layout_mode = 2
-text = "Round 1"
-
-[node name="ModeHint" type="Label" parent="UILayer/Control/CombatLogPanel/VBoxContainer" unique_id=1963566169]
-layout_mode = 2
-text = "Choose an action to test."
-autowrap_mode = 2
-
-[node name="Entries" type="RichTextLabel" parent="UILayer/Control/CombatLogPanel/VBoxContainer" unique_id=59436113]
-custom_minimum_size = Vector2(0, 135)
-layout_mode = 2
-bbcode_enabled = true
-scroll_following = true
 
 [node name="ReactionPrompt" type="Panel" parent="UILayer/Control" unique_id=629339134]
 visible = false
@@ -254,12 +166,6 @@ autowrap_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
-
-[node name="PlayerCharacter" type="Node2D" parent="BattlefieldWorld" unique_id=64208072]
-script = ExtResource("3_combatant")
-
-[node name="EnemyCharacter" type="Node2D" parent="BattlefieldWorld" unique_id=900280290]
-script = ExtResource("3_combatant")
 
 [connection signal="pressed" from="UILayer/Control/ActionSources/Sword Attack" to="." method="test_attack_sword"]
 [connection signal="pressed" from="UILayer/Control/ActionSources/Move" to="." method="begin_move"]

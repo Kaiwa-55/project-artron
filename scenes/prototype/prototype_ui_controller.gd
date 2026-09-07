@@ -11,7 +11,6 @@ const LevelUpAbilities: Array = [
 	preload("res://data/ability/long_reach.tres"),
 	preload("res://data/ability/defensive_stance.tres")
 ]
-const CharacterPanelScene := preload("res://scenes/ui/CharacterPanel.tscn")
 const CharacterPanelScript := preload("res://scenes/ui/character_panel.gd")
 const CombatActionIconAtlas := preload("res://assets/ui/combat_action_icons.png")
 const DevoteeFallbackPortrait := preload("res://assets/character_creation/devotee.png")
@@ -22,13 +21,8 @@ const DefaultEncounter := preload("res://data/encounter/prototype_encounter.tres
 const EncounterDataScript := preload("res://data/encounter/encounter_data.gd")
 const MAP_SIZE_FEET := Vector2(250.0, 250.0)
 
-const PROTOTYPE_OBSTACLES: Array[Dictionary] = [
-	{"center": Vector2(590, 365), "radius": 34.0, "label": "Stone Pillar"}
-]
-
 var inventory_drawer: PanelContainer
 var inventory_list: VBoxContainer
-var inventory_button: Button
 var inventory_status: Label
 var character_summary: VBoxContainer
 var character_page_title: Label
@@ -48,7 +42,6 @@ var level_up_summary: Label
 var combat_round_label: Label
 var initiative_row: HBoxContainer
 var initiative_signature: String = ""
-var action_dock_links: Dictionary = {}
 var reference_player_panel: PanelContainer
 var reference_player_portrait: TextureRect
 var reference_turn_panel: PanelContainer
@@ -61,6 +54,7 @@ var enemy_ai = EnemyAIScript.new()
 var enemy_actions_this_turn: int = 0
 @export var encounter_data: Resource
 var enemy_nodes: Dictionary = {}
+var party_nodes: Dictionary = {}
 var selected_character_id: String = ""
 
 # Coordinator extension points. PrototypeCombat overrides these with combat
@@ -77,10 +71,7 @@ func _apply_prototype_layout() -> void:
 	RenderingServer.set_default_clear_color(Color("090e12"))
 	$UILayer/Control/Header.position = Vector2.ZERO
 	$UILayer/Control/Header.size = Vector2(1280, 60)
-	$UILayer/Control/Header/Title.visible = false
-	$UILayer/Control/Header/Guide.visible = false
-	$UILayer/Control/Battlefield/Label.text = "BATTLEFIELD  |  Select Move, then click a destination"
-	$UILayer/Control/CombatLogPanel/VBoxContainer/ModeHint.add_theme_color_override("font_color", Color("7dd3fc"))
+	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/ModeHint.add_theme_color_override("font_color", Color("7dd3fc"))
 	$UILayer/Control/Enemy_panel/PanelTitle.text = "TARGET"
 	$UILayer/Control/Enemy_panel.visible = true
 	$UILayer/Control/Enemy_panel.position = Vector2(1008, 392)
@@ -88,19 +79,8 @@ func _apply_prototype_layout() -> void:
 	$UILayer/Control/Enemy_panel/PanelTitle.text = "SELECTED TARGET"
 	$UILayer/Control/Enemy_panel/VBoxContainer.position = Vector2(14, 42)
 	$UILayer/Control/Enemy_panel/VBoxContainer.size = Vector2(224, 96)
-	for child in $UILayer/Control/Enemy_panel/VBoxContainer.get_children():
-		child.visible = child.name in ["Name", "Hp", "Effects"]
-	$UILayer/Control/Battlefield.position = Vector2.ZERO
-	$UILayer/Control/Battlefield.size = Vector2(1280, 720)
-	$UILayer/Control/Battlefield.color = Color.TRANSPARENT
-	$UILayer/Control/Battlefield/Label.visible = false
-	$UILayer/Control/CombatLogPanel.position = Vector2(20, 84)
-	$UILayer/Control/CombatLogPanel.size = Vector2(445, 610)
 	$UILayer/Control/CombatLogPanel.z_index = 18
 	$UILayer/Control/CombatLogPanel.visible = false
-	$UILayer/Control/CombatLogPanel/VBoxContainer.position = Vector2(14, 12)
-	$UILayer/Control/CombatLogPanel/VBoxContainer.size = Vector2(417, 580)
-	$UILayer/Control/CombatLogPanel/VBoxContainer/Entries.custom_minimum_size = Vector2(0, 465)
 	$UILayer/Control/ReactionPrompt.z_index = 30
 	$UILayer/Control/Header.z_index = 10
 	$UILayer/Control/Enemy_panel.z_index = 10
@@ -120,27 +100,8 @@ func _apply_prototype_layout() -> void:
 
 
 func _build_initiative_bar() -> void:
-	var timeline := HBoxContainer.new()
-	timeline.name = "InitiativeTimeline"
-	timeline.position = Vector2(94, 5)
-	timeline.size = Vector2(1092, 48)
-	timeline.alignment = BoxContainer.ALIGNMENT_CENTER
-	timeline.add_theme_constant_override("separation", 8)
-	$UILayer/Control/Header.add_child(timeline)
-	combat_round_label = Label.new()
-	combat_round_label.custom_minimum_size = Vector2(220, 42)
-	combat_round_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	combat_round_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	combat_round_label.add_theme_color_override("font_color", Color("d5a84c"))
-	combat_round_label.add_theme_font_size_override("font_size", 16)
-	timeline.add_child(combat_round_label)
-	var separator := VSeparator.new()
-	separator.custom_minimum_size = Vector2(1, 36)
-	timeline.add_child(separator)
-	initiative_row = HBoxContainer.new()
-	initiative_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	initiative_row.add_theme_constant_override("separation", 5)
-	timeline.add_child(initiative_row)
+	combat_round_label = $UILayer/Control/Header/InitiativeTimeline/RoundLabel
+	initiative_row = $UILayer/Control/Header/InitiativeTimeline/InitiativeRow
 	refresh_initiative_bar(true)
 
 
@@ -191,7 +152,6 @@ func style_initiative_chip(button: Button, current: bool, enemy: bool) -> void:
 
 func _apply_combat_typography() -> void:
 	$UILayer/Control/Enemy_panel/PanelTitle.add_theme_color_override("font_color", Color("d5a84c"))
-	$UILayer/Control/Battlefield/Label.add_theme_color_override("font_color", Color("a99d8b"))
 	$UILayer/Control/ReactionPrompt/VBoxContainer/Title.add_theme_color_override("font_color", Color("d5a84c"))
 
 
@@ -291,67 +251,28 @@ func refresh_shadow_step_button() -> void:
 
 
 func _build_combat_log_toggle() -> void:
-	combat_log_button = Button.new()
-	combat_log_button.text = "COMBAT LOG"
-	combat_log_button.position = Vector2(0, 286)
-	combat_log_button.size = Vector2(142, 38)
-	combat_log_button.z_index = 20
+	combat_log_button = $UILayer/Control/CombatLogButton
 	style_action_button(combat_log_button)
-	combat_log_button.pressed.connect(toggle_combat_log)
-	$UILayer/Control.add_child(combat_log_button)
+	if not combat_log_button.pressed.is_connected(toggle_combat_log):
+		combat_log_button.pressed.connect(toggle_combat_log)
+	var close_button: Button = $UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Header/Close
+	style_action_button(close_button)
+	if not close_button.pressed.is_connected(toggle_combat_log):
+		close_button.pressed.connect(toggle_combat_log)
 
 
 func _build_level_up_panel() -> void:
-	level_up_button = Button.new()
-	level_up_button.name = "LevelUpButton"
-	level_up_button.position = Vector2(20, 526)
-	level_up_button.size = Vector2(130, 30)
-	level_up_button.z_index = 20
-	level_up_button.visible = false
-	level_up_button.pressed.connect(toggle_level_up_panel)
+	level_up_button = $UILayer/Control/LevelUpButton
+	if not level_up_button.pressed.is_connected(toggle_level_up_panel):
+		level_up_button.pressed.connect(toggle_level_up_panel)
 	style_action_button(level_up_button)
-	$UILayer/Control.add_child(level_up_button)
-
-	level_up_panel = PanelContainer.new()
-	level_up_panel.name = "LevelUpPanel"
-	level_up_panel.position = Vector2(300, 76)
-	level_up_panel.size = Vector2(650, 620)
-	level_up_panel.z_index = 40
-	level_up_panel.visible = false
+	level_up_panel = $UILayer/Control/LevelUpPanel
 	style_panel(level_up_panel, Color("101a2a"), Color("a78bfa"), 14)
-	$UILayer/Control.add_child(level_up_panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 20)
-	margin.add_theme_constant_override("margin_right", 20)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_bottom", 16)
-	level_up_panel.add_child(margin)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 10)
-	margin.add_child(column)
-	var header := HBoxContainer.new()
-	column.add_child(header)
-	var title := Label.new()
-	title.text = "LEVEL UP CHOICES"
-	title.add_theme_font_size_override("font_size", 22)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(title)
-	var close := Button.new()
-	close.text = "Close"
-	close.pressed.connect(toggle_level_up_panel)
-	header.add_child(close)
-	level_up_summary = Label.new()
-	level_up_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	level_up_summary.add_theme_color_override("font_color", Color("ddd6fe"))
-	column.add_child(level_up_summary)
-	column.add_child(HSeparator.new())
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	column.add_child(scroll)
-	level_up_list = VBoxContainer.new()
-	level_up_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	level_up_list.add_theme_constant_override("separation", 8)
-	scroll.add_child(level_up_list)
+	var close: Button = $UILayer/Control/LevelUpPanel/Margin/Column/Header/Close
+	if not close.pressed.is_connected(toggle_level_up_panel):
+		close.pressed.connect(toggle_level_up_panel)
+	level_up_summary = $UILayer/Control/LevelUpPanel/Margin/Column/Summary
+	level_up_list = $UILayer/Control/LevelUpPanel/Margin/Column/Scroll/List
 	refresh_level_up_button()
 
 
@@ -476,162 +397,51 @@ func toggle_combat_log() -> void:
 func _build_essential_hud() -> void:
 	_build_reference_player_panel()
 	_build_reference_turn_panel()
-	return
-	@warning_ignore("unreachable_code")
-	var panel := PanelContainer.new()
-	panel.position = Vector2(20, 515)
-	panel.size = Vector2(965, 120)
-	style_panel(panel, Color("101c2d"), Color("31557c"), 10)
-	$UILayer/Control.add_child(panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
-	panel.add_child(margin)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 28)
-	margin.add_child(row)
-	essential_player_status = Label.new()
-	essential_player_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	essential_player_status.add_theme_font_size_override("font_size", 17)
-	row.add_child(essential_player_status)
-	essential_target_status = Label.new()
-	essential_target_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	essential_target_status.add_theme_font_size_override("font_size", 17)
-	row.add_child(essential_target_status)
-	essential_turn_status = Label.new()
-	essential_turn_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	essential_turn_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	essential_turn_status.add_theme_color_override("font_color", Color("7dd3fc"))
-	row.add_child(essential_turn_status)
-	refresh_essential_hud()
 
 
 func _build_reference_player_panel() -> void:
-	reference_player_panel = PanelContainer.new()
-	reference_player_panel.z_index = 10
-	reference_player_panel.name = "ReferencePlayerHUD"
-	reference_player_panel.position = Vector2(20, 566)
-	reference_player_panel.size = Vector2(318, 134)
-	reference_player_panel.clip_contents = true
+	reference_player_panel = $UILayer/Control/ReferencePlayerHUD
 	style_panel(reference_player_panel, Color("151d23"), Color("5797aa"), 2)
-	$UILayer/Control.add_child(reference_player_panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_top", 11)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	reference_player_panel.add_child(margin)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	margin.add_child(row)
-	reference_player_portrait = TextureRect.new()
-	reference_player_portrait.name = "CharacterPortrait"
-	reference_player_portrait.custom_minimum_size = Vector2(92, 108)
-	reference_player_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	reference_player_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	reference_player_portrait.tooltip_text = "Click to open Character"
-	reference_player_portrait.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	reference_player_portrait.mouse_filter = Control.MOUSE_FILTER_STOP
+	reference_player_portrait = $UILayer/Control/ReferencePlayerHUD/Margin/Row/CharacterPortrait
 	reference_player_portrait.gui_input.connect(func(event: InputEvent):
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			reference_player_portrait.accept_event()
 			open_character_from_portrait()
 	)
-	row.add_child(reference_player_portrait)
-	essential_player_status = Label.new()
-	essential_player_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	essential_player_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	essential_player_status.clip_text = true
-	essential_player_status.add_theme_font_size_override("font_size", 14)
-	row.add_child(essential_player_status)
+	essential_player_status = $UILayer/Control/ReferencePlayerHUD/Margin/Row/PlayerStatus
 
 
 func _build_reference_turn_panel() -> void:
-	reference_turn_panel = PanelContainer.new()
-	reference_turn_panel.z_index = 10
-	reference_turn_panel.name = "ReferenceTurnHUD"
-	reference_turn_panel.position = Vector2(1010, 586)
-	reference_turn_panel.size = Vector2(250, 104)
+	reference_turn_panel = $UILayer/Control/ReferenceTurnHUD
 	style_panel(reference_turn_panel, Color("151d23"), Color("806027"), 2)
-	$UILayer/Control.add_child(reference_turn_panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	reference_turn_panel.add_child(margin)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 7)
-	margin.add_child(column)
-	essential_turn_status = Label.new()
-	essential_turn_status.add_theme_color_override("font_color", Color("d5a84c"))
-	column.add_child(essential_turn_status)
+	essential_turn_status = $UILayer/Control/ReferenceTurnHUD/Margin/Column/TurnStatus
 	@warning_ignore("shadowed_variable_base_class")
-	reference_end_turn_button = Button.new()
-	reference_end_turn_button.text = "END TURN"
-	reference_end_turn_button.custom_minimum_size = Vector2(0, 40)
+	reference_end_turn_button = $UILayer/Control/ReferenceTurnHUD/Margin/Column/EndTurn
 	reference_end_turn_button.pressed.connect(func():
 		refresh_end_turn_lock()
 		if not reference_end_turn_button.disabled:
 			$"UILayer/Control/ActionSources/End Turn".pressed.emit()
 	)
 	style_action_button(reference_end_turn_button)
-	column.add_child(reference_end_turn_button)
-	essential_target_status = Label.new()
-	essential_target_status.visible = false
-	column.add_child(essential_target_status)
+	essential_target_status = $UILayer/Control/ReferenceTurnHUD/Margin/Column/TargetStatus
 
 
 func _build_action_dock() -> void:
-	var dock := PanelContainer.new()
+	var dock: PanelContainer = $UILayer/Control/ReferenceActionDock
 	dock.z_index = 10
-	dock.name = "ReferenceActionDock"
-	dock.position = Vector2(385, 582)
-	dock.size = Vector2(510, 118)
-	dock.clip_contents = true
 	style_panel(dock, Color(0.035, 0.045, 0.048, 0.96), Color("b58a3a"), 2)
-	$UILayer/Control.add_child(dock)
-	var margin := MarginContainer.new()
-	margin.name = "ActionDockMargin"
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_top", 9)
-	margin.add_theme_constant_override("margin_bottom", 9)
-	dock.add_child(margin)
-	var column := VBoxContainer.new()
-	column.name = "ActionDockColumn"
-	column.add_theme_constant_override("separation", 6)
-	margin.add_child(column)
-	var title := Label.new()
-	title.text = "ACTION BAR"
-	title.visible = false
-	title.add_theme_color_override("font_color", Color("a99d8b"))
-	title.add_theme_font_size_override("font_size", 11)
-	column.add_child(title)
-	var action_grid := GridContainer.new()
-	action_grid.name = "ActionButtonGrid"
-	action_grid.columns = 3
-	action_grid.add_theme_constant_override("h_separation", 5)
-	action_grid.add_theme_constant_override("v_separation", 5)
-	action_grid.clip_contents = true
-	column.add_child(action_grid)
+	var action_grid: GridContainer = dock.get_node("ActionDockMargin/ActionDockColumn/ActionButtonGrid")
+	action_category_buttons.clear()
 	for category in ["attack", "move", "skill", "ability", "throw"]:
-		var button := Button.new()
-		button.text = category.to_upper()
-		button.custom_minimum_size = Vector2(150, 42)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var button: Button = action_grid.get_node(category.capitalize())
 		button.icon = _get_action_category_icon(category)
 		button.expand_icon = true
 		button.tooltip_text = "Choose %s" % category.capitalize()
-		button.pressed.connect(_on_action_category_pressed.bind(category))
+		var callback := _on_action_category_pressed.bind(category)
+		if not button.pressed.is_connected(callback):
+			button.pressed.connect(callback)
 		style_action_button(button)
-		action_grid.add_child(button)
 		action_category_buttons[category] = button
-	var empty_slot := Control.new()
-	empty_slot.custom_minimum_size = Vector2(150, 42)
-	action_grid.add_child(empty_slot)
 	_build_action_menu()
 
 
@@ -654,41 +464,12 @@ func _get_action_category_icon(category: String) -> AtlasTexture:
 
 
 func _build_action_menu() -> void:
-	action_menu_panel = PanelContainer.new()
-	action_menu_panel.name = "ActionMenu"
-	action_menu_panel.position = Vector2(445, 306)
-	action_menu_panel.size = Vector2(390, 250)
-	action_menu_panel.z_index = 24
-	action_menu_panel.visible = false
+	action_menu_panel = $UILayer/Control/ActionMenu
 	style_panel(action_menu_panel, Color("151d23"), Color("d5a84c"), 3)
-	$UILayer/Control.add_child(action_menu_panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
-	action_menu_panel.add_child(margin)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 7)
-	margin.add_child(column)
-	var header := HBoxContainer.new()
-	column.add_child(header)
-	action_menu_title = Label.new()
-	action_menu_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_menu_title.add_theme_font_size_override("font_size", 18)
-	action_menu_title.add_theme_color_override("font_color", Color("d5a84c"))
-	header.add_child(action_menu_title)
-	var close := Button.new()
-	close.text = "Close"
+	action_menu_title = $UILayer/Control/ActionMenu/Margin/Column/Header/Title
+	var close: Button = $UILayer/Control/ActionMenu/Margin/Column/Header/Close
 	close.pressed.connect(func(): action_menu_panel.visible = false)
-	header.add_child(close)
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	column.add_child(scroll)
-	action_menu_list = VBoxContainer.new()
-	action_menu_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_menu_list.add_theme_constant_override("separation", 6)
-	scroll.add_child(action_menu_list)
+	action_menu_list = $UILayer/Control/ActionMenu/Margin/Column/Scroll/List
 
 
 func _on_action_category_pressed(category: String) -> void:
@@ -920,11 +701,8 @@ func begin_single_targeting(kind: String, source) -> void:
 func get_single_target_range(kind: String, source) -> float:
 	if kind == "skill":
 		return source.attack_data.range_feet if source.attack_data != null else 0.0
-	if source.targeting_range_feet > 0.0:
-		return source.targeting_range_feet
 	var player: CombatantState = get_player_controlled_actor()
-	var attack: AttackData = combat_system.ability_system.get_attack_data(player, source)
-	return attack.range_feet if attack != null else 0.0
+	return combat_system.ability_system.get_targeting_range(player, source)
 
 
 func draw_single_targeting() -> void:
@@ -1007,19 +785,6 @@ func handle_menu_action_result(result: ActionResult) -> void:
 	refresh_combatant_nodes()
 
 
-func _add_action_dock_button(row: HBoxContainer, original: Button) -> void:
-	var proxy := Button.new()
-	proxy.custom_minimum_size = Vector2(68, 66)
-	proxy.clip_text = true
-	proxy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	proxy.text = original.text
-	proxy.tooltip_text = original.tooltip_text
-	proxy.pressed.connect(func(): original.pressed.emit())
-	style_action_button(proxy)
-	row.add_child(proxy)
-	action_dock_links[proxy] = original
-
-
 func refresh_action_dock() -> void:
 	if combat_system != null and combat_system.get_combat_state() != null:
 		var state = combat_system.get_combat_state()
@@ -1028,14 +793,6 @@ func refresh_action_dock() -> void:
 			action_category_buttons[category].disabled = locked
 		if locked and action_menu_panel != null:
 			action_menu_panel.visible = false
-	for proxy in action_dock_links:
-		var original: Button = action_dock_links[proxy]
-		if not is_instance_valid(proxy) or not is_instance_valid(original):
-			continue
-		proxy.text = original.text
-		proxy.tooltip_text = original.tooltip_text
-		proxy.disabled = original.disabled
-		proxy.visible = original.visible
 
 
 func refresh_essential_hud() -> void:
@@ -1060,7 +817,7 @@ func refresh_essential_hud() -> void:
 		return
 	essential_player_status.text = "PLAYER\nHP  %d / %d\nAP  %d / %d   |   %s" % [player.hp, player.max_hp, player.ap, player.effective_max_ap, get_combat_resource_text(player)]
 	essential_target_status.text = "TARGET\n%s\nHP  %d / %d" % [target.display_name, target.hp, target.max_hp] if target != null else "TARGET\nNone"
-	essential_turn_status.text = "ROUND %d\n%s's Turn\n%s" % [state.current_round, state.current_actor_id.capitalize(), $UILayer/Control/CombatLogPanel/VBoxContainer/ModeHint.text]
+	essential_turn_status.text = "ROUND %d\n%s's Turn\n%s" % [state.current_round, state.current_actor_id.capitalize(), $UILayer/Control/CombatLogPanel/Margin/VBoxContainer/ModeHint.text]
 
 
 func get_combat_resource_text(player: CombatantState) -> String:
@@ -1070,26 +827,8 @@ func get_combat_resource_text(player: CombatantState) -> String:
 
 
 func _build_inventory_drawer() -> void:
-	inventory_button = Button.new()
-	inventory_button.name = "InventoryButton"
-	inventory_button.text = "CHARACTER"
-	inventory_button.tooltip_text = "Open character, abilities, equipment and inventory"
-	inventory_button.position = Vector2(1090, 29)
-	inventory_button.size = Vector2(145, 38)
-	inventory_button.z_index = 20
-	inventory_button.visible = false
-	style_action_button(inventory_button)
-	inventory_button.pressed.connect(toggle_inventory)
-	$UILayer/Control.add_child(inventory_button)
-
-	inventory_drawer = CharacterPanelScene.instantiate()
-	inventory_drawer.name = "CharacterPanel"
-	inventory_drawer.position = Vector2(65, 82)
-	inventory_drawer.size = Vector2(1175, 610)
-	inventory_drawer.z_index = 19
-	inventory_drawer.visible = false
+	inventory_drawer = $UILayer/Control/CharacterPanel
 	inventory_drawer.equipment_change_requested.connect(change_inventory_item)
-	$UILayer/Control.add_child(inventory_drawer)
 	inventory_drawer.setup(combat_system, "player")
 	inventory_list = inventory_drawer.content_list
 	inventory_status = inventory_drawer.status_label

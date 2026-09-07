@@ -1,19 +1,59 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvus305vq1ew2"]
+[gd_scene format=3 uid="uid://cvus305vq1ew2"]
 
 [ext_resource type="PackedScene" uid="uid://dmr3mcqoxlyp4" path="res://scenes/combat/CombatArena.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://dnjnuja1pg5o4" path="res://scenes/prototype/prototype_combat.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://co08kejbik35t" path="res://entities/combatant.gd" id="3_combatant"]
-[ext_resource type="Resource" path="res://data/encounter/prototype_encounter.tres" id="4_encounter"]
-[ext_resource type="Texture2D" path="res://assets/Map/Desert 1.png" id="5_desert"]
+[ext_resource type="Resource" uid="uid://dx2vhg2qs2l04" path="res://data/encounter/prototype_encounter.tres" id="4_encounter"]
+[ext_resource type="PackedScene" path="res://scenes/ui/CharacterPanel.tscn" id="5_character_panel"]
 
 [node name="PrototypeCombat" unique_id=1293345908 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 encounter_data = ExtResource("4_encounter")
 
-[node name="DesertMap" type="Sprite2D" parent="BattlefieldWorld"]
+[node name="BattlefieldBackground" type="Sprite2D" parent="BattlefieldWorld" parent_id_path=PackedInt32Array(1889654190) index="2" unique_id=1546539301]
 z_index = -20
-texture = ExtResource("5_desert")
 scale = Vector2(2.34375, 2.34375)
+
+[node name="AllyCharacter" type="Node2D" parent="BattlefieldWorld" parent_id_path=PackedInt32Array(1889654190) index="3" unique_id=954509704]
+script = ExtResource("3_combatant")
+
+[node name="Header" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="0" unique_id=1046892464]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+
+[node name="InitiativeTimeline" type="HBoxContainer" parent="UILayer/Control/Header" index="0" unique_id=2084050599]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 5.0
+offset_right = 1186.0
+offset_bottom = 53.0
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="RoundLabel" type="Label" parent="UILayer/Control/Header/InitiativeTimeline" index="0" unique_id=212905687]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
+theme_override_font_sizes/font_size = 16
+text = "ROUND 1    TURN: PLAYER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Separator" type="VSeparator" parent="UILayer/Control/Header/InitiativeTimeline" index="1" unique_id=1465020998]
+custom_minimum_size = Vector2(1, 36)
+layout_mode = 2
+
+[node name="InitiativeRow" type="HBoxContainer" parent="UILayer/Control/Header/InitiativeTimeline" index="2" unique_id=1681340896]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
 
 [node name="Sword Attack" parent="UILayer/Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="0" unique_id=1237670071]
 offset_right = 8.0
@@ -27,5 +67,235 @@ offset_bottom = 42.0
 offset_right = 8.0
 offset_bottom = 42.0
 
-[node name="AllyCharacter" type="Node2D" parent="BattlefieldWorld" unique_id=954509704]
-script = ExtResource("3_combatant")
+[node name="ReferenceActionDock" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="2" unique_id=1169074384]
+offset_left = -280.0
+offset_right = 280.0
+
+[node name="Enemy_panel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="3" unique_id=1099442048]
+clip_contents = true
+offset_bottom = 267.0
+
+[node name="VBoxContainer" parent="UILayer/Control/Enemy_panel" index="1" unique_id=1930457242]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CombatLogPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="4" unique_id=928194718]
+custom_minimum_size = Vector2(340, 631)
+layout_mode = 1
+offset_left = 10.0
+offset_top = 70.0
+offset_right = 350.0
+offset_bottom = 780.0
+
+[node name="CombatLogButton" type="Button" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="6" unique_id=1669097033]
+z_index = 20
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 152.0
+offset_bottom = 48.0
+text = "COMBAT LOG"
+flat = true
+
+[node name="ReferencePlayerHUD" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="7" unique_id=1471552592]
+z_index = 10
+clip_contents = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -273.0
+offset_top = -272.0
+offset_right = -20.0
+offset_bottom = -138.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Control/ReferencePlayerHUD" index="0" unique_id=1760101268]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 11
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Row" type="HBoxContainer" parent="UILayer/Control/ReferencePlayerHUD/Margin" index="0" unique_id=633567976]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CharacterPortrait" type="TextureRect" parent="UILayer/Control/ReferencePlayerHUD/Margin/Row" index="0" unique_id=96160317]
+custom_minimum_size = Vector2(92, 108)
+layout_mode = 2
+tooltip_text = "Click to open Character"
+mouse_default_cursor_shape = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerStatus" type="Label" parent="UILayer/Control/ReferencePlayerHUD/Margin/Row" index="1" unique_id=1685222132]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "PLAYER STATUS"
+vertical_alignment = 1
+clip_text = true
+
+[node name="ReferenceTurnHUD" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="8" unique_id=1206569473]
+z_index = 10
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -270.0
+offset_top = -124.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Control/ReferenceTurnHUD" index="0" unique_id=788150050]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Column" type="VBoxContainer" parent="UILayer/Control/ReferenceTurnHUD/Margin" index="0" unique_id=1148135780]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="TurnStatus" type="Label" parent="UILayer/Control/ReferenceTurnHUD/Margin/Column" index="0" unique_id=1091826297]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
+text = "ACTION POINTS"
+
+[node name="EndTurn" type="Button" parent="UILayer/Control/ReferenceTurnHUD/Margin/Column" index="1" unique_id=262984086]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "END TURN"
+
+[node name="TargetStatus" type="Label" parent="UILayer/Control/ReferenceTurnHUD/Margin/Column" index="2" unique_id=19126729]
+visible = false
+layout_mode = 2
+
+[node name="ActionMenu" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="9" unique_id=167381762]
+visible = false
+z_index = 24
+layout_mode = 0
+offset_left = 445.0
+offset_top = 306.0
+offset_right = 835.0
+offset_bottom = 556.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Control/ActionMenu" index="0" unique_id=1355231415]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Column" type="VBoxContainer" parent="UILayer/Control/ActionMenu/Margin" index="0" unique_id=249638481]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Header" type="HBoxContainer" parent="UILayer/Control/ActionMenu/Margin/Column" index="0" unique_id=964408423]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UILayer/Control/ActionMenu/Margin/Column/Header" index="0" unique_id=947667612]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
+theme_override_font_sizes/font_size = 18
+text = "ACTION"
+
+[node name="Close" type="Button" parent="UILayer/Control/ActionMenu/Margin/Column/Header" index="1" unique_id=1525902286]
+layout_mode = 2
+text = "Close"
+
+[node name="Scroll" type="ScrollContainer" parent="UILayer/Control/ActionMenu/Margin/Column" index="1" unique_id=797015290]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="UILayer/Control/ActionMenu/Margin/Column/Scroll" index="0" unique_id=767403274]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="LevelUpButton" type="Button" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="10" unique_id=879313747]
+visible = false
+z_index = 20
+layout_mode = 0
+offset_left = 20.0
+offset_top = 526.0
+offset_right = 150.0
+offset_bottom = 556.0
+text = "PROGRESSION"
+
+[node name="LevelUpPanel" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="11" unique_id=862772397]
+visible = false
+z_index = 40
+layout_mode = 0
+offset_left = 300.0
+offset_top = 76.0
+offset_right = 950.0
+offset_bottom = 696.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Control/LevelUpPanel" index="0" unique_id=1227661930]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="Column" type="VBoxContainer" parent="UILayer/Control/LevelUpPanel/Margin" index="0" unique_id=592390589]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="0" unique_id=1552821861]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UILayer/Control/LevelUpPanel/Margin/Column/Header" index="0" unique_id=1214136240]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "LEVEL UP CHOICES"
+
+[node name="Close" type="Button" parent="UILayer/Control/LevelUpPanel/Margin/Column/Header" index="1" unique_id=840934253]
+layout_mode = 2
+text = "Close"
+
+[node name="Summary" type="Label" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="1" unique_id=205954329]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.867, 0.839, 0.996, 1)
+autowrap_mode = 2
+
+[node name="Separator" type="HSeparator" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="2" unique_id=2127931125]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="3" unique_id=697744710]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="UILayer/Control/LevelUpPanel/Margin/Column/Scroll" index="0" unique_id=1078678115]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="12" unique_id=530167356 instance=ExtResource("5_character_panel")]
+visible = false
+z_index = 19
+layout_mode = 0
+offset_left = 65.0
+offset_top = 82.0
+offset_right = 1240.0
+offset_bottom = 692.0

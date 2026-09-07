@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://wfevisfrxbhy"]
+
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/goblin_rusty_shiv.tres" id="2"]
+[ext_resource type="Resource" uid="uid://crfqff7yw8h6i" path="res://data/ability/goblin_cowardly_jab.tres" id="3"]
+[ext_resource type="Resource" uid="uid://ddebxsco67ngf" path="res://data/ability/goblin_scurry.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/goblin.tres" id="5"]
+[ext_resource type="Texture2D" uid="uid://baabp6lsttosk" path="res://assets/token/goblin shiv.png" id="5_hbe17"]
+[ext_resource type="Resource" path="res://data/trait/humanoid.tres" id="6"]
+[ext_resource type="Resource" path="res://data/ai/goblin_shiv_ai_profile.tres" id="7"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="7_jdpgy"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="10_gev85"]
+
+[resource]
+script = ExtResource("1")
+id = "goblin_shiv"
+display_name = "Goblin Shiv"
+portrait = ExtResource("5_hbe17")
+token_texture = ExtResource("5_hbe17")
+token_scale = 1.8
+token_offset = Vector2(0, 20)
+team = 2
+position = Vector2(960, 350)
+base_max_hp = 10
+base_max_ap = 3
+base_speed = 30.0
+reflex_stat_bonus = 2
+will_stat_bonus = -1
+dexterity = 14
+wisdom = 8
+charisma = 8
+initiative_bonus = 2
+available_abilities = [ExtResource("3"), ExtResource("4")]
+equipped_abilities = ["goblin_cowardly_jab", "goblin_scurry"]
+equipped_weapon_attack = ExtResource("2")
+natural_attack = ExtResource("2")
+traits = [ExtResource("5"), ExtResource("6")]
+ai_profile = ExtResource("7")

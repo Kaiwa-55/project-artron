@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/effect/scalebreaker_charge_movement.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "scalebreaker_charge"
+display_name = "Scalebreaker Charge"
+required_level = 3
+traits = [ExtResource("3")]
+auto_equip_on_grant = true
+ap_cost = 1
+cooldown_turns = 2
+description = "Rush up to 20 ft without passing through obstacles or creatures."
+effects = [ExtResource("2")]
+target_mode = 1

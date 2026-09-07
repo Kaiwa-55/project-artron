@@ -125,7 +125,7 @@ func continue_queue(carried_events: Array[CombatEvent] = []) -> ActionResult:
 		var trigger_actor: CombatantState = item.get("trigger_actor")
 		if reaction == null or reactor == null or trigger_actor == null or reactor.is_dying() or trigger_actor.is_dying():
 			continue
-		if reactor.id == "player" and not item.get("approved", false):
+		if combat_system.is_player_controlled(reactor) and not item.get("approved", false):
 			item["approved"] = true
 			var opportunity_prompt := {"opportunity_choice": true, "reaction": reaction, "reactor": reactor, "attacker": trigger_actor, "queue_item": item}
 			if not open_prompt(pending_action, opportunity_prompt):
@@ -138,11 +138,26 @@ func continue_queue(carried_events: Array[CombatEvent] = []) -> ActionResult:
 		var reaction_attack: AttackData = combat_system.reaction_system.get_reaction_attack_data(reaction, reactor)
 		var reaction_movement = combat_system.reaction_system.get_effect(reaction, ReactionEffectDataScript.Type.MOVEMENT)
 		if reaction_movement != null and reaction_attack == null:
+			if reaction.uses_per_round > 0 and int(reactor.reaction_last_used_round.get(reaction.id, 0)) == combat_system.combat_state.current_round:
+				continue
+			var reaction_distance_feet: float = reaction_movement.distance_feet if reaction_movement.distance_mode == ReactionEffectDataScript.DistanceMode.FIXED_FEET else reactor.get_effective_speed() * reaction_movement.speed_multiplier
+			if not combat_system.is_player_controlled(reactor):
+				var destination := choose_ai_destination(reactor, trigger_actor, reaction_distance_feet)
+				if destination == reactor.position or not reactor.spend_ap(reaction.ap_cost):
+					continue
+				var origin := reactor.position
+				reactor.position = destination
+				reactor.reaction_last_used_round[reaction.id] = combat_system.combat_state.current_round
+				combat_system.clear_hidden(reactor, "Reactive Ability used")
+				result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, trigger_actor.id, {"reaction_name": reaction.display_name, "distance_feet": origin.distance_to(destination) / combat_system.map_rules.world_units_per_foot, "resolved_from_queue": true, "selected_by_ai": true}))
+				result.events.append(CombatEvent.new(EventTypes.Type.POSITION_CHANGED, reactor.id, "", {"from": origin, "to": destination, "distance_feet": origin.distance_to(destination) / combat_system.map_rules.world_units_per_foot, "reaction_name": reaction.display_name}))
+				continue
 			if not reactor.spend_ap(reaction.ap_cost):
 				continue
 			combat_system.clear_hidden(reactor, "Reactive Ability used")
+			reactor.reaction_last_used_round[reaction.id] = combat_system.combat_state.current_round
 			move_actor_id = reactor.id
-			move_distance_feet = reaction_movement.distance_feet if reaction_movement.distance_mode == ReactionEffectDataScript.DistanceMode.FIXED_FEET else reactor.get_effective_speed() * reaction_movement.speed_multiplier
+			move_distance_feet = reaction_distance_feet
 			move_name = reaction.display_name
 			move_resumes_action = true
 			result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, trigger_actor.id, {"reaction_name": reaction.display_name, "distance_feet": move_distance_feet, "resolved_from_queue": true}))
@@ -156,7 +171,7 @@ func continue_queue(carried_events: Array[CombatEvent] = []) -> ActionResult:
 		result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, trigger_actor.id, {"reaction_name": reaction.display_name, "resolved_from_queue": true}))
 		var defense_prompt: Dictionary = combat_system.reaction_system.get_post_hit_prompt(reactor, trigger_actor, reaction_attack, prepared, combat_system.combat_state.current_round)
 		if not defense_prompt.is_empty():
-			if trigger_actor.id == "player":
+			if combat_system.is_player_controlled(trigger_actor):
 				defense_prompt["reaction_queue_continuation"] = true
 				if not open_prompt(pending_action, defense_prompt):
 					combat_system.attack_system.finalize_attack(reactor, trigger_actor, reaction_attack, prepared)
@@ -222,6 +237,20 @@ func apply_ai_defensive(prompt: Dictionary, reaction_index: int, result: ActionR
 	if not reactor.spend_ap(reaction.ap_cost):
 		return
 	reactor.reaction_last_used_round[reaction.id] = combat_system.combat_state.current_round
+	var reaction_attack: AttackData = reaction.attack_data
+	if reaction_attack == null:
+		reaction_attack = combat_system.reaction_system.get_reaction_attack_data(reaction, reactor)
+	if reaction_attack != null:
+		var attacker: CombatantState = prompt.get("attacker")
+		# Availability already validates the retaliation's reach before AP is spent.
+		# Resolve here without normal-turn validation so a Reaction can attack while
+		# another combatant owns the active turn.
+		if attacker != null and not attacker.is_dying():
+			var retaliation: AttackResult = combat_system.attack_system.resolve_attack(reactor, attacker, reaction_attack)
+			combat_system.attack_system.finalize_attack(reactor, attacker, reaction_attack, retaliation)
+			result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, attacker.id, {"reaction_name": reaction.display_name, "selected_by_ai": true}))
+			result.events.append_array(combat_system.action_system.build_attack_result(reactor, attacker, reaction_attack, retaliation).events)
+		return
 	var defense_bonus: int = combat_system.reaction_system.get_defense_bonus(reaction)
 	if combat_system.reaction_system.get_effect(reaction, ReactionEffectDataScript.Type.TURN_HIT_TO_MISS) != null:
 		prepared.hit = false
@@ -282,7 +311,7 @@ func offer_step_back(request: ActionRequest, attacker: CombatantState, target: C
 
 
 func offer_mobile_shooter(request: ActionRequest, attacker: CombatantState, attack: AttackData, attack_result: AttackResult, result: ActionResult) -> void:
-	if request == null or attacker == null or attacker.id != "player" or result.requires_reaction_choice:
+	if request == null or attacker == null or not combat_system.is_player_controlled(attacker) or result.requires_reaction_choice:
 		return
 	var reactions: Array = combat_system.reaction_system.get_post_ranged_hit_reactions(attacker, attack, attack_result.hit)
 	if reactions.is_empty():
@@ -355,6 +384,7 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 	var movement_applied := false
 	var defense_bonus: int = combat_system.reaction_system.get_defense_bonus(reaction)
 	var movement_effect = combat_system.reaction_system.get_effect(reaction, ReactionEffectDataScript.Type.MOVEMENT)
+	var reaction_attack: AttackData = reaction.attack_data if reaction != null else null
 	var movement_completed: bool = bool(prompt.get("movement_completed", false))
 	if movement_completed:
 		reaction = prompt.get("resolved_reaction")
@@ -363,7 +393,7 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 
 	if movement_completed:
 		pass
-	elif reaction != null and reactor != null and reactor.id == "player" and not reactor.is_dying() and movement_effect != null:
+	elif reaction != null and reactor != null and combat_system.is_player_controlled(reactor) and not reactor.is_dying() and movement_effect != null:
 		if not reactor.spend_ap(reaction.ap_cost):
 			return ActionResult.failure("Not enough AP.")
 		combat_system.clear_hidden(reactor, "Reactive Ability used")
@@ -375,7 +405,7 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 		result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, request.actor_id, {"reaction_name": reaction.display_name, "distance_feet": move_distance_feet}))
 		combat_system.emit_events(result.events)
 		return result
-	elif reaction != null and reactor != null and reactor.id != "player" and not reactor.is_dying() and movement_effect != null:
+	elif reaction != null and reactor != null and not combat_system.is_player_controlled(reactor) and not reactor.is_dying() and movement_effect != null:
 		var reaction_attacker: CombatantState = prompt.get("attacker")
 		var distance_feet: float = movement_effect.distance_feet if movement_effect.distance_mode == ReactionEffectDataScript.DistanceMode.FIXED_FEET else reactor.get_effective_speed() * movement_effect.speed_multiplier
 		var destination := choose_ai_destination(reactor, reaction_attacker, distance_feet)
@@ -390,14 +420,22 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 	elif reaction != null and reactor != null and not reactor.is_dying() and reactor.spend_ap(reaction.ap_cost):
 		if combat_system.ability_system.ability_has_trait(reaction, "reactive") or combat_system.reaction_has_trait(reaction, "reactive"):
 			combat_system.clear_hidden(reactor, "Reactive Ability used")
-		reactor.defense_bonus += defense_bonus
-		bonus_applied = true
-		result.events.append(CombatEvent.new(
-			EventTypes.Type.REACTION_TRIGGERED,
-			reactor.id,
-			request.actor_id,
-			{"reaction_name": reaction.display_name, "defense_bonus": defense_bonus}
-		))
+		if reaction_attack != null:
+			var counter_target: CombatantState = prompt.get("attacker")
+			if counter_target != null and not counter_target.is_dying():
+				var counter_result: AttackResult = combat_system.attack_system.resolve_attack(reactor, counter_target, reaction_attack)
+				combat_system.attack_system.finalize_attack(reactor, counter_target, reaction_attack, counter_result)
+				result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, counter_target.id, {"reaction_name": reaction.display_name}))
+				result.events.append_array(combat_system.action_system.build_attack_result(reactor, counter_target, reaction_attack, counter_result).events)
+		else:
+			reactor.defense_bonus += defense_bonus
+			bonus_applied = true
+			result.events.append(CombatEvent.new(
+				EventTypes.Type.REACTION_TRIGGERED,
+				reactor.id,
+				request.actor_id,
+				{"reaction_name": reaction.display_name, "defense_bonus": defense_bonus}
+			))
 	else:
 		var declined_name := "all reactions"
 		if reactions.size() == 1:

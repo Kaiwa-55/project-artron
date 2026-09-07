@@ -1,5 +1,7 @@
 extends Control
 
+const CombatLogActionCardScene := preload("res://scenes/combat/ui/CombatLogActionCard.tscn")
+
 signal reaction_choice_selected(reaction_index: int)
 
 var combat_system: CombatSystem
@@ -19,7 +21,7 @@ func reset_for_combat() -> void:
 
 
 func set_mode_hint(message: String) -> void:
-	$CombatLogPanel/VBoxContainer/ModeHint.text = message
+	$CombatLogPanel/Margin/VBoxContainer/ModeHint.text = message
 
 
 func set_selected_target(target_name: String, target_id: String = "enemy") -> void:
@@ -42,23 +44,14 @@ func update_ui() -> void:
 
 	if enemy != null:
 		$Enemy_panel/VBoxContainer/Hp.text = "HP: %d / %d" % [enemy.hp, enemy.max_hp]
-		$Enemy_panel/VBoxContainer/Ap.text = "AP: %d / %d" % [enemy.ap, enemy.effective_max_ap]
-		$Enemy_panel/VBoxContainer/Str.text = "STR: %d" % enemy.strength
-		$Enemy_panel/VBoxContainer/Dex.text = "DEX: %d" % enemy.dexterity
-		$Enemy_panel/VBoxContainer/Wis.text = "WIS: %d" % enemy.wisdom
-		$Enemy_panel/VBoxContainer/Reflex.text = "Reflex: %d" % (enemy.reflex + combat_system.effect_system.get_reflex_bonus(enemy))
-		$Enemy_panel/VBoxContainer/Fortitude.text = "Fortitude: %d" % (enemy.fortitude + combat_system.effect_system.get_fortitude_bonus(enemy))
-		$Enemy_panel/VBoxContainer/Will.text = "Will: %d" % (enemy.will + combat_system.effect_system.get_will_bonus(enemy))
-		$Enemy_panel/VBoxContainer/Position.text = "Position: (%.0f, %.0f)" % [enemy.position.x, enemy.position.y]
 		$Enemy_panel/VBoxContainer/Effects.text = "Effects: %s" % get_effect_names(enemy)
-		$Enemy_panel/VBoxContainer/Traits.text = "Traits: %s" % get_trait_names(enemy)
-	$CombatLogPanel/VBoxContainer/Turn.text = "Round %d - %s's turn" % [
+	$CombatLogPanel/Margin/VBoxContainer/Turn.text = "ROUND %d  •  %s TURN" % [
 		state.current_round,
-		state.current_actor_id.capitalize()
+		state.current_actor_id.to_upper()
 	]
 	if state.is_finished():
-		$CombatLogPanel/VBoxContainer/Turn.text = "Combat ended - %s" % (
-			"Victory" if state.combat_result == CombatEnums.CombatResult.VICTORY else "Defeat"
+		$CombatLogPanel/Margin/VBoxContainer/Turn.text = "COMBAT ENDED  •  %s" % (
+			"VICTORY" if state.combat_result == CombatEnums.CombatResult.VICTORY else "DEFEAT"
 		)
 		set_action_buttons_enabled(false)
 	else:
@@ -386,16 +379,110 @@ func activate_weapon_slot(target_slot: int) -> void:
 
 
 func update_combat_log() -> void:
-	var lines: PackedStringArray = local_log_entries.duplicate()
+	var entries: Array[Dictionary] = []
+	for message in local_log_entries:
+		if is_player_relevant_log_message(message):
+			entries.append({"action": "Action Error", "type": "WARNING", "actor": "System", "outcome": "FAILED", "details": message, "tone": "damage"})
 
 	for event in combat_system.event_system.get_history():
+		if not should_show_combat_event(event):
+			continue
 		var line := format_combat_event(event)
 		if not line.is_empty():
-			lines.append(line)
+			entries.append(create_combat_log_card_data(event, line))
+	entries.reverse()
+	var list: VBoxContainer = $CombatLogPanel/Margin/VBoxContainer/Scroll/Entries
+	for child in list.get_children():
+		list.remove_child(child)
+		child.queue_free()
+	for entry in entries:
+		var card = CombatLogActionCardScene.instantiate()
+		list.add_child(card)
+		card.setup(entry)
 
-	lines.reverse()
-	$CombatLogPanel/VBoxContainer/Entries.text = "\n".join(lines)
-	$CombatLogPanel/VBoxContainer/Entries.scroll_to_line(0)
+
+func is_player_relevant_log_message(message: String) -> bool:
+	var normalized := message.to_lower()
+	return normalized.contains("failed") or normalized.contains("cannot") or normalized.contains("unavailable")
+
+
+func should_show_combat_event(event: CombatEvent) -> bool:
+	match event.type:
+		EventTypes.Type.ATTACK_HIT, \
+		EventTypes.Type.ATTACK_MISS, \
+		EventTypes.Type.EFFECT_APPLIED, \
+		EventTypes.Type.EFFECT_EXPIRED, \
+		EventTypes.Type.EFFECT_DAMAGE_APPLIED, \
+		EventTypes.Type.EFFECT_HEAL_APPLIED, \
+		EventTypes.Type.REACTION_AVAILABLE, \
+		EventTypes.Type.REACTION_TRIGGERED, \
+		EventTypes.Type.COMBAT_VICTORY, \
+		EventTypes.Type.COMBAT_DEFEAT, \
+		EventTypes.Type.SKILL_CAST:
+			return true
+		EventTypes.Type.DAMAGE_APPLIED:
+			# Weapon attacks already include final damage in ATTACK_HIT.
+			return event.data.has("ability_name") or event.data.has("damage_type")
+		EventTypes.Type.ABILITY_TRIGGERED:
+			# Active abilities matter; passive stack bookkeeping does not.
+			return int(event.data.get("ap_cost", 0)) > 0 and not event.data.has("stacks")
+	return false
+
+
+func create_combat_log_card_data(event: CombatEvent, details: String) -> Dictionary:
+	var action_name: String = event.data.get("attack_name", event.data.get("ability_name", event.data.get("skill_name", event.data.get("reaction_name", event.data.get("effect_name", "Combat Event")))))
+	var type_name := "EVENT"
+	var outcome := "RESOLVED"
+	var tone := "neutral"
+	var roll_text := ""
+	var damage_text := ""
+	match event.type:
+		EventTypes.Type.ATTACK_HIT, EventTypes.Type.DAMAGE_APPLIED, EventTypes.Type.EFFECT_DAMAGE_APPLIED:
+			type_name = "ATTACK" if event.type == EventTypes.Type.ATTACK_HIT else "DAMAGE"
+			outcome = "HIT" if event.type == EventTypes.Type.ATTACK_HIT else "DAMAGED"
+			tone = "damage"
+		EventTypes.Type.ATTACK_MISS:
+			type_name = "ATTACK"
+			outcome = "MISS"
+		EventTypes.Type.EFFECT_HEAL_APPLIED:
+			type_name = "HEAL"
+			outcome = "HEALED"
+			tone = "heal"
+		EventTypes.Type.EFFECT_APPLIED, EventTypes.Type.EFFECT_EXPIRED:
+			type_name = "STATUS"
+			outcome = "APPLIED" if event.type == EventTypes.Type.EFFECT_APPLIED else "EXPIRED"
+			tone = "status"
+		EventTypes.Type.REACTION_AVAILABLE, EventTypes.Type.REACTION_TRIGGERED, EventTypes.Type.REACTION_DECLINED, EventTypes.Type.INTERRUPTION_STARTED, EventTypes.Type.INTERRUPTION_ENDED:
+			type_name = "REACTION"
+			outcome = "TRIGGERED" if event.type == EventTypes.Type.REACTION_TRIGGERED else "PENDING"
+			tone = "reaction"
+		EventTypes.Type.TURN_STARTED, EventTypes.Type.TURN_ENDED, EventTypes.Type.COMBAT_STARTED:
+			type_name = "TURN"
+			outcome = "START" if event.type != EventTypes.Type.TURN_ENDED else "END"
+			tone = "turn"
+		EventTypes.Type.COMBAT_VICTORY:
+			type_name = "COMBAT"
+			outcome = "VICTORY"
+			tone = "heal"
+		EventTypes.Type.COMBAT_DEFEAT:
+			type_name = "COMBAT"
+			outcome = "DEFEAT"
+			tone = "damage"
+	if event.data.has("attack_total"):
+		roll_text = "%d vs DEF %d" % [event.data.get("attack_total", 0), event.data.get("defense", 0)]
+	if event.data.has("final_damage") or event.data.has("damage"):
+		damage_text = "%d %s damage" % [event.data.get("final_damage", event.data.get("damage", 0)), event.data.get("damage_type", "")]
+	return {
+		"action": action_name,
+		"type": type_name,
+		"actor": event.source_id.capitalize(),
+		"target": event.target_id.capitalize(),
+		"outcome": outcome,
+		"roll": roll_text,
+		"damage": damage_text,
+		"details": details,
+		"tone": tone,
+	}
 
 
 func record_action_result(result: ActionResult) -> void:
@@ -467,25 +554,27 @@ func format_combat_event(event: CombatEvent) -> String:
 			]
 
 		EventTypes.Type.ATTACK_HIT:
-			return "%s hit %s — Roll %d + %d = %d vs DEF %d. Damage: %d." % [
+			return "%s hit %s — Roll %d + %d = %d vs DEF %d. Damage: %d.%s" % [
 				event.source_id.capitalize(),
 				event.target_id.capitalize(),
 				event.data.get("roll", 0),
 				event.data.get("attack_modifier", 0),
 				event.data.get("attack_total", 0),
 				event.data.get("defense", 0),
-				event.data.get("final_damage", 0)
+				event.data.get("final_damage", 0),
+				format_repeated_attack_penalty(event)
 			]
 
 		EventTypes.Type.ATTACK_MISS:
-			return "%s used %s on %s but missed - Roll %d + %d = %d vs DEF %d." % [
+			return "%s used %s on %s but missed - Roll %d + %d = %d vs DEF %d.%s" % [
 				event.source_id.capitalize(),
 				event.data.get("attack_name", "Attack"),
 				event.target_id.capitalize(),
 				event.data.get("roll", 0),
 				event.data.get("attack_modifier", 0),
 				event.data.get("attack_total", 0),
-				event.data.get("defense", 0)
+				event.data.get("defense", 0),
+				format_repeated_attack_penalty(event)
 			]
 
 		EventTypes.Type.EFFECT_APPLIED:
@@ -606,6 +695,7 @@ func format_attack_hit(event: CombatEvent) -> String:
 		event.data.get("attack_total", 0),
 		event.data.get("defense", 0)
 	]
+	attack_text += format_repeated_attack_penalty(event)
 
 	if event.data.get("immune", false):
 		return "%s %s is immune to %s damage." % [
@@ -632,3 +722,8 @@ func format_attack_hit(event: CombatEvent) -> String:
 		event.data.get("resistance", 0),
 		event.data.get("final_damage", 0)
 	]
+
+
+func format_repeated_attack_penalty(event: CombatEvent) -> String:
+	var penalty: int = int(event.data.get("repeated_attack_penalty", 0))
+	return " Repeated Attack Penalty: %d." % penalty if penalty < 0 else ""

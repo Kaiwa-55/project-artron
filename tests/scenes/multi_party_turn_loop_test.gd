@@ -64,15 +64,17 @@ func run_test() -> void:
 			attacks[event.source_id] += 1
 		if event.source_id == "giant_spider" and event.data.get("attack_id", "") == "venomous_bite":
 			giant_bites += 1
-	var obstacle_ready: bool = prototype.combat_system.map_rules.obstacles.size() == 1 \
-		and prototype.get_node("UILayer/Control/Battlefield").has_node("StonePillar")
+	# A custom EncounterData is authoritative: an empty map_objects list must not
+	# inherit the prototype encounter's obstacle.
+	var encounter_objects_respected: bool = prototype.combat_system.map_rules.obstacles.is_empty() \
+		and not prototype.get_node("BattlefieldWorld").has_node("StonePillar")
 	var circular_enemy_tokens := true
 	for enemy_node in prototype.get_enemy_nodes():
 		var texture: Texture2D = enemy_node.state.token_texture
 		var image: Image = texture.get_image() if texture != null else null
 		if image == null or image.get_pixel(0, 0).a > 0.01:
 			circular_enemy_tokens = false
-	var success: bool = obstacle_ready and circular_enemy_tokens and moved_then_ended and ally_passed_without_moving and attacks.spider > 0 and attacks.giant_spider > 0 and attacks.velkaria > 0 and royal_web_uses > 0
+	var success: bool = encounter_objects_respected and circular_enemy_tokens and moved_then_ended and ally_passed_without_moving and attacks.spider > 0 and attacks.giant_spider > 0 and attacks.velkaria > 0 and royal_web_uses > 0
 	if not success:
 		push_error("Every Spider enemy must act and Velkaria must use Royal Web in the multi-party scene.")
 		print("AI LOG: " + str(prototype.get_node("UILayer/Control").local_log_entries))

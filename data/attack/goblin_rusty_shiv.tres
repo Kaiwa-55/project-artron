@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AttackData" load_steps=6 format=3]
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/simple.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="5"]
+[resource]
+script = ExtResource("1")
+id = "goblin_rusty_shiv"
+display_name = "Rusty Shiv"
+animation_template = ExtResource("2")
+attack_attribute = 1
+to_hit_bonus = 2
+ap_cost = 1
+base_damage = 3
+range_feet = 5.0
+damage_type = "pierce"
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+

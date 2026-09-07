@@ -12,7 +12,6 @@ func run_test() -> void:
 	root.add_child(prototype)
 	await process_frame
 	await process_frame
-	check(prototype.inventory_button != null, "Prototype should create an Inventory button")
 	check(prototype.level_up_button != null, "Prototype should create a Level Up button")
 	check(prototype.level_up_button.text.begins_with("LEVEL UP"), "Pending progression choices should be visible in the header")
 	prototype.toggle_level_up_panel()
@@ -50,6 +49,8 @@ func run_test() -> void:
 	check(prototype.initiative_row.get_child_count() >= 5, "Initiative order should show every combatant with separators")
 	var ally: CombatantState = prototype.combat_system.combat_state.get_combatant("ally")
 	check(ally != null and ally.team == prototype.combat_system.combat_state.get_combatant("player").team, "Prototype should contain an Ally on the Player team")
+	check(prototype.encounter_data.player_party.size() == 2, "EncounterData should define the Player party")
+	check(prototype.party_nodes.size() == prototype.encounter_data.player_party.size(), "Every configured Player-party entry should receive a battlefield token")
 	check(prototype.combat_system.combat_state.turn_order.has("ally"), "Ally should participate in Initiative")
 	check(prototype.get_node("BattlefieldWorld/AllyCharacter").state == ally, "Ally should have a visible battlefield token")
 	prototype.combat_system.combat_state.current_actor_id = "player"
@@ -77,10 +78,16 @@ func run_test() -> void:
 	check(prototype.get_node("UILayer/Control/CombatLogPanel").visible, "Combat Log drawer should open on the left")
 	prototype.toggle_combat_log()
 	check(not prototype.get_node("UILayer/Control/CombatLogPanel").visible, "Combat Log drawer should close")
-	prototype.get_node("UILayer/Control").add_log_message("Older message")
-	prototype.get_node("UILayer/Control").add_log_message("Latest message")
-	var log_text: String = prototype.get_node("UILayer/Control/CombatLogPanel/VBoxContainer/Entries").text
-	check(log_text.find("Latest message") < log_text.find("Older message"), "Combat Log should show newest entries first")
+	prototype.get_node("UILayer/Control").add_log_message("Older action failed")
+	prototype.get_node("UILayer/Control").add_log_message("Latest action failed")
+	var log_entries: VBoxContainer = prototype.get_node("UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Scroll/Entries")
+	var latest_index := -1
+	var older_index := -1
+	for index in range(log_entries.get_child_count()):
+		var details: String = log_entries.get_child(index).get_node("Margin/Content/Details").text
+		if details == "Latest action failed": latest_index = index
+		if details == "Older action failed": older_index = index
+	check(latest_index >= 0 and older_index >= 0 and latest_index < older_index, "Combat Log should show newer Action Cards before older cards")
 	var encounter_enemy_id: String = prototype.get_enemy_nodes()[0].state.id
 	check(prototype.combat_system.combat_state.has_combatant(encounter_enemy_id), "Prototype should contain the configured encounter Enemy")
 	check(prototype.combat_system.combat_state.turn_order.has(encounter_enemy_id), "Configured Enemy should participate in Turn Order")

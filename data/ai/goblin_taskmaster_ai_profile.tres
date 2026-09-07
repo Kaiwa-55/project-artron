@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AIProfile" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/ai/ai_profile.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "goblin_taskmaster"
+display_name = "Goblin Taskmaster"
+damage_weight = 8.0
+position_weight = 16.0
+area_target_bonus = 24.0
+status_weight = 2.0
+reaction_ap_reserve = 1
+status_values = {"weakened": 34.0, "goblin_pack_command": 22.0}
+

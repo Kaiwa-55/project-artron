@@ -17,6 +17,7 @@ var current_target: CombatantState
 var target_results: Array[Dictionary] = []
 var costs_consumed: bool = false
 var cooldown_started: bool = false
+var repeated_attack_penalty: int = 0
 var cancelled: bool = false
 var cancel_scope: int = CancelScope.NONE
 var cancellation_reason: String = ""

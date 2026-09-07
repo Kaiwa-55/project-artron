@@ -19,6 +19,7 @@ func _init() -> void:
 	ability.area_shape = AbilityData.AreaShape.CIRCLE
 	ability.targeting_range_feet = 20.0; ability.area_radius_feet = 8.0
 	ability.attack_source = AbilityData.AttackSource.CONFIGURED_ATTACK
+	ability.animation_template = load("res://animation/lunge_return.tres")
 	var attack := AttackData.new(); attack.id = "ground_ability_attack"; attack.display_name = "Ground Ability Attack"; attack.requires_to_hit = false; attack.base_damage = 0
 	ability.attack_data = attack
 	var mark := EffectData.new(); mark.id = "ground_ability_mark"; mark.display_name = "Ground Ability Mark"
@@ -35,6 +36,8 @@ func _init() -> void:
 	check(enemy_a.has_status(mark.id) and enemy_b.has_status(mark.id), "On Hit Effect should resolve separately for every Area target", failures)
 	var ability_events := result.events.filter(func(event): return event.type == EventTypes.Type.ABILITY_TRIGGERED)
 	check(ability_events.size() == 1 and ability_events[0].data.get("area_target_count", 0) == 2, "Area Ability should produce one summary event", failures)
+	var attack_events := result.events.filter(func(event): return event.type in [EventTypes.Type.ATTACK_HIT, EventTypes.Type.ATTACK_MISS])
+	check(attack_events.size() == 2 and attack_events.all(func(event): return event.data.get("animation_template") == ability.animation_template), "Area Ability animation should be attached to every resolved target", failures)
 	check(not system.execute_ground_ability(actor.id, ability.id, Vector2(235, 100)).success, "Ground Ability should respect shared cooldown", failures)
 	check(system.validate_ground_ability_start(actor.id, ability.id).failure_reason.contains("cooldown"), "Ability targeting should explain active Cooldown", failures)
 

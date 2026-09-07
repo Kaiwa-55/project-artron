@@ -24,6 +24,9 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 # Zero means that the Ability has no per-turn use limit.
 @export_range(0, 10) var uses_per_turn: int = 0
 @export var description: String = ""
+# Uses the shared AttackAnimationData templates. Attack Abilities override the
+# source Attack animation; non-Attack Abilities play this presentation directly.
+@export var animation_template: Resource
 @export var effects: Array = []
 # Legacy self-effects remain supported while data is migrated to use_effects.
 @export var effects_on_use: Array[EffectData] = []

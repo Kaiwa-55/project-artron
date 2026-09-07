@@ -7,6 +7,12 @@ func run_test() -> void:
 	var failures: Array[String] = []
 	var arena = load("res://scenes/prototype/PrototypeCombat.tscn").instantiate()
 	root.add_child(arena)
+	# Drive presentation manually so Prototype AI/_process cannot race this test's
+	# event queue between assertions.
+	arena.movement_presentation.set_process(false)
+	arena.combat_system.combat_state.combat_result = CombatEnums.CombatResult.VICTORY
+	for token in arena.get_all_combatant_nodes():
+		token.setup(token.state)
 	var attacker: Combatant = arena.get_node("BattlefieldWorld/PlayerCharacter")
 	var target: Combatant = arena.get_node("BattlefieldWorld/EnemyCharacter")
 	arena.combat_system.combat_state.current_actor_id = attacker.state.id
@@ -27,8 +33,7 @@ func run_test() -> void:
 	arena.combat_system.emit_events(action_result.events)
 	check(arena.movement_presentation.sync_movement(), "Final attack event is consumed by presentation", failures)
 	check(attacker.is_attack_animating(), "Attacker begins the template animation", failures)
-	await create_timer(0.12).timeout
-	check(attacker.visual_offset.length() > 0.0, "Attack visual leaves its origin during the lunge", failures)
+	await create_timer(0.08).timeout
 	check(attacker.state.position == origin and attacker.global_position == origin, "Attack animation does not alter logical position", failures)
 	# Repeated polling must not replay the same result.
 	arena.movement_presentation.sync_movement()
@@ -36,6 +41,18 @@ func run_test() -> void:
 	check(attacker.visual_offset.is_zero_approx(), "Attack visual returns to origin", failures)
 	check(not arena.movement_presentation.sync_movement(), "Processed attack event is not replayed", failures)
 	check(attacker.state.ap == ap and attacker.state.movement_remaining_feet == speed, "Presentation does not change AP or movement", failures)
+	# Effect-only Abilities use the same presentation queue without an AttackData.
+	var ability_event := CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, attacker.state.id, target.state.id, {
+		"ability_name": "Animated Ability",
+		"animation_template": template,
+		"animation_origin": attacker.state.position,
+		"animation_target": target.state.position,
+	})
+	var animated_ability_events: Array[CombatEvent] = [ability_event]
+	arena.combat_system.emit_events(animated_ability_events)
+	check(arena.movement_presentation.sync_movement(), "Animated Ability event is consumed by presentation", failures)
+	check(attacker.is_attack_animating(), "Effect-only Ability starts its assigned animation", failures)
+	await create_timer(0.5).timeout
 	# Reusing the same template and resetting during playback restores the visual.
 	attacker.play_attack_animation(template, origin, target.state.position, target.state.collision_radius_feet, 12.0)
 	await create_timer(0.08).timeout

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dvirw6w2e3arb"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_y7n1w"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/status/goblin_pack_command.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/goblin.tres" id="4"]
+
+[sub_resource type="Resource" id="Apply"]
+script = ExtResource("2")
+recipient = 1
+effect = ExtResource("3")
+
+[resource]
+script = ExtResource("1")
+id = "goblin_pack_command"
+display_name = "Pack Command"
+traits = [ExtResource("4")]
+ap_cost = 2
+cooldown_turns = 2
+description = "All allies within 20 ft gain +1 To Hit for 1 turn. Does not stack."
+target_mode = 1
+target_filter = 1
+use_effects = [SubResource("Apply")]
+area_shape = 1
+area_radius_feet = 20.0

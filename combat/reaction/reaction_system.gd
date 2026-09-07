@@ -92,6 +92,8 @@ func collect_interruptions(request: ActionRequest, combat_state: CombatState) ->
 				continue
 			if reactor.has_status("surprise") and reaction_has_trait(reaction, "reactive"):
 				continue
+			if reaction.uses_per_round > 0 and int(reactor.reaction_last_used_round.get(reaction.id, 0)) == combat_state.current_round:
+				continue
 			if should_interrupt_movement(reaction, reactor, moving_actor, request.target_position):
 				queue.append({"reaction": reaction, "reactor": reactor, "trigger_actor": moving_actor})
 	return queue
@@ -103,14 +105,15 @@ func get_player_reaction_prompt(request: ActionRequest, combat_state: CombatStat
 
 	var attacker := combat_state.get_combatant(request.actor_id)
 	var target := combat_state.get_combatant(request.target_id)
-	return get_player_reaction_prompt_for_attack(attacker, target)
+	return get_player_reaction_prompt_for_attack(attacker, target, combat_state)
 
 
-func get_player_reaction_prompt_for_attack(attacker, target) -> Dictionary:
+func get_player_reaction_prompt_for_attack(attacker, target, combat_state: CombatState) -> Dictionary:
 	if attacker == null or target == null or target.is_dying() or attacker.team == target.team:
 		return {}
-	# Player-facing choices are deliberately limited to the player's character.
-	if target.id != "player":
+	# Every member of the player's party is controlled by the player.
+	var primary_player: CombatantState = combat_state.get_combatant("player") if combat_state != null else null
+	if primary_player == null or target.team != primary_player.team:
 		return {}
 
 	for reaction in target.active_reactions:
@@ -152,6 +155,7 @@ func get_post_hit_prompt(attacker, target, attack: AttackData, attack_result, cu
 		var defense_effect = get_effect(reaction, ReactionEffectDataScript.Type.DEFENSE_BONUS)
 		var miss_effect = get_effect(reaction, ReactionEffectDataScript.Type.TURN_HIT_TO_MISS)
 		var movement_effect = get_effect(reaction, ReactionEffectDataScript.Type.MOVEMENT)
+		var attack_effect = get_effect(reaction, ReactionEffectDataScript.Type.ATTACK)
 		if defense_effect != null:
 			# Parry is available whenever the incoming attack hits. The player
 			# may still choose it even when its bonus will not turn the hit into a miss.
@@ -161,10 +165,14 @@ func get_post_hit_prompt(attacker, target, attack: AttackData, attack_result, cu
 			# decides how much farther above Defense the reaction can stop.
 			if attack_result.margin < miss_effect.minimum_margin or attack_result.margin > miss_effect.maximum_margin:
 				continue
-		elif movement_effect == null:
+		elif movement_effect == null and attack_effect == null:
 			continue
-		elif movement_effect.uses_margin_range and (attack_result.margin < movement_effect.minimum_margin or attack_result.margin > movement_effect.maximum_margin):
+		elif movement_effect != null and movement_effect.uses_margin_range and (attack_result.margin < movement_effect.minimum_margin or attack_result.margin > movement_effect.maximum_margin):
 			continue
+		if attack_effect != null:
+			var reaction_attack: AttackData = get_reaction_attack_data(reaction, target)
+			if reaction_attack == null or not map_rules.is_target_in_range(target, attacker, reaction_attack.range_feet):
+				continue
 		available_reactions.append(reaction)
 	if available_reactions.is_empty():
 		return {}
@@ -289,7 +297,7 @@ func attack_has_trait(attack: AttackData, trait_id: String) -> bool:
 
 
 func should_interrupt_movement(reaction, reactor, moving_actor, destination: Vector2) -> bool:
-	if reaction.trigger != ReactionDataScript.Trigger.ENEMY_LEAVES_REACH:
+	if reaction.trigger not in [ReactionDataScript.Trigger.ENEMY_LEAVES_REACH, ReactionDataScript.Trigger.ENEMY_ENTERS_REACH]:
 		return false
 	if reactor.ap < reaction.ap_cost:
 		return false
@@ -307,6 +315,8 @@ func should_interrupt_movement(reaction, reactor, moving_actor, destination: Vec
 	var combined_radii: float = map_rules.get_combatant_radius_world_units(reactor) + map_rules.get_combatant_radius_world_units(moving_actor)
 	var origin_distance: float = maxf(0.0, reactor.position.distance_to(moving_actor.position) - combined_radii)
 	var destination_distance: float = maxf(0.0, reactor.position.distance_to(destination) - combined_radii)
+	if reaction.trigger == ReactionDataScript.Trigger.ENEMY_ENTERS_REACH:
+		return origin_distance > reach_world_units and destination_distance <= reach_world_units
 	return origin_distance <= reach_world_units and destination_distance > reach_world_units
 
 

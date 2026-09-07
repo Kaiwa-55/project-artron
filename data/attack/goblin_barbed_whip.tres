@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AttackData" load_steps=5 format=3]
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/advanced.tres" id="4"]
+[resource]
+script = ExtResource("1")
+id = "goblin_barbed_whip"
+display_name = "Barbed Whip"
+animation_template = ExtResource("2")
+attack_attribute = 1
+to_hit_bonus = 3
+ap_cost = 1
+base_damage = 4
+range_feet = 10.0
+damage_type = "slash"
+traits = [ExtResource("3"), ExtResource("4")]

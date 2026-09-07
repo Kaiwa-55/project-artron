@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://4adtv8r7kth4"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.035, 0.055, 0.065, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.39, 0.42, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="CombatLogPanel" type="PanelContainer" unique_id=33874264]
+z_index = 18
+clip_contents = true
+offset_left = 20.0
+offset_top = 80.0
+offset_right = 300.0
+offset_bottom = 680.0
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1186814513]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin" unique_id=99852878]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBoxContainer" unique_id=1645762272]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margin/VBoxContainer/Header" unique_id=1085225255]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
+theme_override_font_sizes/font_size = 20
+text = "COMBAT HISTORY"
+
+[node name="Close" type="Button" parent="Margin/VBoxContainer/Header" unique_id=829866699]
+custom_minimum_size = Vector2(42, 36)
+layout_mode = 2
+tooltip_text = "Close combat history"
+text = "×"
+
+[node name="Turn" type="Label" parent="Margin/VBoxContainer" unique_id=1664849816]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.73, 0.82, 0.88, 1)
+theme_override_font_sizes/font_size = 15
+text = "ROUND 1  •  PLAYER TURN"
+
+[node name="ModeHint" type="Label" parent="Margin/VBoxContainer" unique_id=1059950058]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49, 0.83, 0.98, 1)
+text = "Choose an action."
+autowrap_mode = 2
+
+[node name="Separator" type="HSeparator" parent="Margin/VBoxContainer" unique_id=1585847870]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBoxContainer" unique_id=807965195]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Entries" type="VBoxContainer" parent="Margin/VBoxContainer/Scroll" unique_id=1585595250]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
