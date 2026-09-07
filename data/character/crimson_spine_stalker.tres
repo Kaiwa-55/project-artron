@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/rending_talon.tres" id="2"]
+[ext_resource type="Resource" path="res://data/ability/blood_claw.tres" id="3"]
+[ext_resource type="Resource" path="res://data/ability/predator_rush.tres" id="4"]
+[ext_resource type="Resource" path="res://data/reaction/skitter_dodge.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/demon.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = "crimson_spine_stalker"
+display_name = "Crimson Spine Stalker"
+team = 2
+position = Vector2(760, 300)
+level = 4
+base_max_hp = 30
+base_max_ap = 4
+base_speed = 35.0
+reflex_stat_bonus = 3
+fortitude_stat_bonus = 1
+will_stat_bonus = 0
+strength = 16
+dexterity = 18
+constitution = 14
+intelligence = 8
+wisdom = 12
+charisma = 8
+initiative_bonus = 4
+available_abilities = [ExtResource("3"), ExtResource("4")]
+equipped_abilities = ["blood_claw", "predator_rush"]
+equipped_weapon_attack = ExtResource("2")
+natural_attack = ExtResource("2")
+traits = [ExtResource("6")]
+reactions = [ExtResource("5")]

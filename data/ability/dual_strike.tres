@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dpepfmcue5b01"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_l47if"]
+[ext_resource type="Resource" path="res://data/trait/basic.tres" id="2"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "dual_strike"
+display_name = "Dual Strike"
+traits = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+execution_mode = 1
+ap_cost = 1
+description = "Attack one enemy with both held weapons. Each attack rolls, triggers Reactions, deals damage, and resolves critical effects separately. The off-hand takes -2 To Hit unless it has Light."

@@ -14,8 +14,8 @@ func run_test() -> void:
 	await process_frame
 	var state = prototype.combat_system.get_combat_state()
 	state.current_actor_id = "player"
-	var ally_node = prototype.get_node("AllyCharacter")
-	var player_node = prototype.get_node("PlayerCharacter")
+	var ally_node = prototype.get_node("BattlefieldWorld/AllyCharacter")
+	var player_node = prototype.get_node("BattlefieldWorld/PlayerCharacter")
 	var test_button := Button.new()
 	prototype.action_category_buttons = {"test": test_button}
 
@@ -41,9 +41,9 @@ func run_test() -> void:
 
 	var enemy_node = prototype.get_enemy_nodes().front()
 	check(prototype.select_target_at(enemy_node.global_position), "Enemy can be selected for inspection")
-	prototype.get_node("Control").update_ui()
-	check(prototype.get_node("Control/Enemy_panel").visible, "Enemy selection opens enemy information")
-	check(prototype.get_node("Control/Enemy_panel/VBoxContainer/Name").text == enemy_node.state.display_name, "Enemy information belongs to the selected enemy")
+	prototype.get_node("UILayer/Control").update_ui()
+	check(prototype.get_node("UILayer/Control/Enemy_panel").visible, "Enemy selection opens enemy information")
+	check(prototype.get_node("UILayer/Control/Enemy_panel/VBoxContainer/Name").text == enemy_node.state.display_name, "Enemy information belongs to the selected enemy")
 
 	prototype.queue_free()
 	for failure in failures:

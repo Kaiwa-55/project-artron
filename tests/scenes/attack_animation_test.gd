@@ -7,8 +7,8 @@ func run_test() -> void:
 	var failures: Array[String] = []
 	var arena = load("res://scenes/prototype/PrototypeCombat.tscn").instantiate()
 	root.add_child(arena)
-	var attacker: Combatant = arena.get_node("PlayerCharacter")
-	var target: Combatant = arena.get_node("EnemyCharacter")
+	var attacker: Combatant = arena.get_node("BattlefieldWorld/PlayerCharacter")
+	var target: Combatant = arena.get_node("BattlefieldWorld/EnemyCharacter")
 	arena.combat_system.combat_state.current_actor_id = attacker.state.id
 	# Ignore setup/AI events so this test observes only the event emitted below.
 	arena.movement_presentation.collect_attack_animations()

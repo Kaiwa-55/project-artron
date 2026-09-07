@@ -1,27 +1,28 @@
-[gd_resource type="Resource" script_class="AttackData" format=3]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://jycf4ut8cg20"]
 
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="script"]
-[ext_resource type="Resource" path="res://data/trait/simple.tres" id="simple"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="melee"]
-[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="pierce"]
-[ext_resource type="Resource" path="res://data/trait/light.tres" id="light"]
-[ext_resource type="Resource" path="res://data/trait/finesse.tres" id="finesse"]
-[ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="dual_weapon"]
-[ext_resource type="Resource" path="res://data/trait/shield_compatible.tres" id="shield_compatible"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_p01ub"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_3pbl2"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
+[ext_resource type="Resource" path="res://data/ability/dual_strike.tres" id="dual_strike"]
+[ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="dual_weapon"]
+[ext_resource type="Resource" path="res://data/trait/finesse.tres" id="finesse"]
+[ext_resource type="Resource" path="res://data/trait/light.tres" id="light"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="melee"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="pierce"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/trait/shield_compatible.tres" id="shield_compatible"]
+[ext_resource type="Resource" path="res://data/trait/simple.tres" id="simple"]
 
 [resource]
 script = ExtResource("script")
 id = "dagger_attack"
 display_name = "Dagger"
+animation_template = ExtResource("animation")
 attack_attribute = 1
 defense_type = 0
 to_hit_bonus = 1
-ap_cost = 1
+critical_chance = 15
 base_damage = 3
 damage_type = "pierce"
-range_feet = 5.0
-can_critical = true
-critical_chance = 15
 traits = [ExtResource("simple"), ExtResource("melee"), ExtResource("pierce"), ExtResource("light"), ExtResource("finesse"), ExtResource("dual_weapon"), ExtResource("shield_compatible")]
-animation_template = ExtResource("animation")
+granted_abilities = Array[ExtResource("3_3pbl2")]([ExtResource("dual_strike")])

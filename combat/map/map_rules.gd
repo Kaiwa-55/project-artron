@@ -4,6 +4,18 @@ extends RefCounted
 # Gridless map scale. Positions, collision radii, and obstacles use world units.
 var world_units_per_foot: float = 12.0
 var obstacles: Array[Dictionary] = []
+var playable_bounds: Rect2 = Rect2()
+
+
+func set_playable_bounds(size_feet: Vector2, origin: Vector2 = Vector2.ZERO) -> void:
+	playable_bounds = Rect2(origin, Vector2(
+		maxf(0.0, size_feet.x) * world_units_per_foot,
+		maxf(0.0, size_feet.y) * world_units_per_foot
+	))
+
+
+func has_playable_bounds() -> bool:
+	return playable_bounds.size.x > 0.0 and playable_bounds.size.y > 0.0
 
 
 func add_circular_obstacle(center: Vector2, radius_world_units: float, label: String = "Obstacle") -> void:
@@ -51,6 +63,11 @@ func has_line_of_sight(start: Vector2, finish: Vector2) -> bool:
 
 
 func validate_movement_path(actor, destination: Vector2, combatants: Dictionary) -> ActionResult:
+	if has_playable_bounds():
+		var actor_radius := get_combatant_radius_world_units(actor)
+		var safe_bounds := playable_bounds.grow(-actor_radius)
+		if safe_bounds.size.x <= 0.0 or safe_bounds.size.y <= 0.0 or not safe_bounds.has_point(destination):
+			return ActionResult.failure("Destination is outside the playable map.")
 	for other in combatants.values():
 		if other == actor or other.is_dying():
 			continue

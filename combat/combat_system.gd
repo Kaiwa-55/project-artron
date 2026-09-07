@@ -20,6 +20,7 @@ const TurnCoordinatorScript = preload("res://combat/turn/turn_coordinator.gd")
 const CombatActionExecutorScript = preload("res://combat/action/combat_action_executor.gd")
 const ReactionResolverScript = preload("res://combat/reaction/reaction_resolver.gd")
 const AreaActionExecutorScript = preload("res://combat/targeting/area_action_executor.gd")
+const AttackSequenceExecutorScript = preload("res://combat/attack/attack_sequence_executor.gd")
 const ProgressionSystemScript = preload("res://combat/progression/progression_system.gd")
 
 var combat_state: CombatState
@@ -102,6 +103,7 @@ var ability_move_id: String:
 	set(value):
 		if ability_movement_executor != null: ability_movement_executor.ability_id = value
 var active_ability_executor
+var attack_sequence_executor
 var pending_active_ability_context: Dictionary:
 	get:
 		return active_ability_executor.pending_context if active_ability_executor != null else {}
@@ -170,6 +172,7 @@ func _init() -> void:
 	event_system = EventSystem.new()
 	reaction_resolver = ReactionResolverScript.new(self)
 	active_ability_executor = ActiveAbilityExecutorScript.new(self)
+	attack_sequence_executor = AttackSequenceExecutorScript.new(self)
 	ability_movement_executor = AbilityMovementExecutorScript.new(self)
 	area_action_executor = AreaActionExecutorScript.new(self)
 	equipment_action_executor = EquipmentActionExecutorScript.new(self)

@@ -1,25 +1,31 @@
-[gd_scene format=3 uid="uid://cvus305vq1ew2"]
+[gd_scene load_steps=6 format=3 uid="uid://cvus305vq1ew2"]
 
 [ext_resource type="PackedScene" uid="uid://dmr3mcqoxlyp4" path="res://scenes/combat/CombatArena.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://dnjnuja1pg5o4" path="res://scenes/prototype/prototype_combat.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://co08kejbik35t" path="res://entities/combatant.gd" id="3_combatant"]
 [ext_resource type="Resource" path="res://data/encounter/prototype_encounter.tres" id="4_encounter"]
+[ext_resource type="Texture2D" path="res://assets/Map/Desert 1.png" id="5_desert"]
 
 [node name="PrototypeCombat" unique_id=1293345908 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 encounter_data = ExtResource("4_encounter")
 
-[node name="Sword Attack" parent="Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="0" unique_id=1237670071]
+[node name="DesertMap" type="Sprite2D" parent="BattlefieldWorld"]
+z_index = -20
+texture = ExtResource("5_desert")
+scale = Vector2(2.34375, 2.34375)
+
+[node name="Sword Attack" parent="UILayer/Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="0" unique_id=1237670071]
 offset_right = 8.0
 offset_bottom = 42.0
 
-[node name="Move" parent="Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="1" unique_id=870181347]
+[node name="Move" parent="UILayer/Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="1" unique_id=870181347]
 offset_right = 8.0
 offset_bottom = 42.0
 
-[node name="End Turn" parent="Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="2" unique_id=490032612]
+[node name="End Turn" parent="UILayer/Control/ActionSources" parent_id_path=PackedInt32Array(1754361818) index="2" unique_id=490032612]
 offset_right = 8.0
 offset_bottom = 42.0
 
-[node name="AllyCharacter" type="Node2D" parent="." index="1" unique_id=954509704]
+[node name="AllyCharacter" type="Node2D" parent="BattlefieldWorld" unique_id=954509704]
 script = ExtResource("3_combatant")

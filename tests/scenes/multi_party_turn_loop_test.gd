@@ -65,7 +65,7 @@ func run_test() -> void:
 		if event.source_id == "giant_spider" and event.data.get("attack_id", "") == "venomous_bite":
 			giant_bites += 1
 	var obstacle_ready: bool = prototype.combat_system.map_rules.obstacles.size() == 1 \
-		and prototype.get_node("Control/Battlefield").has_node("StonePillar")
+		and prototype.get_node("UILayer/Control/Battlefield").has_node("StonePillar")
 	var circular_enemy_tokens := true
 	for enemy_node in prototype.get_enemy_nodes():
 		var texture: Texture2D = enemy_node.state.token_texture
@@ -75,7 +75,7 @@ func run_test() -> void:
 	var success: bool = obstacle_ready and circular_enemy_tokens and moved_then_ended and ally_passed_without_moving and attacks.spider > 0 and attacks.giant_spider > 0 and attacks.velkaria > 0 and royal_web_uses > 0
 	if not success:
 		push_error("Every Spider enemy must act and Velkaria must use Royal Web in the multi-party scene.")
-		print("AI LOG: " + str(prototype.get_node("Control").local_log_entries))
+		print("AI LOG: " + str(prototype.get_node("UILayer/Control").local_log_entries))
 	print("MULTI_PARTY_TURN_LOOP_TEST: " + ("PASS" if success else "FAIL") + " " + str(attacks) + " giant_bites=" + str(giant_bites) + " royal_web=" + str(royal_web_uses))
 	prototype.queue_free()
 	quit(0 if success else 1)

@@ -6,7 +6,7 @@ func _init() -> void:
 func run_test() -> void:
 	var arena = load("res://scenes/prototype/PrototypeCombat.tscn").instantiate()
 	root.add_child(arena)
-	var target: Combatant = arena.get_node("PlayerCharacter")
+	var target: Combatant = arena.get_node("BattlefieldWorld/PlayerCharacter")
 	var presenter = arena.movement_presentation
 	var success := true
 	for type in [EventTypes.Type.ATTACK_MISS, EventTypes.Type.ATTACK_HIT]:

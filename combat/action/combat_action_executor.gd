@@ -78,6 +78,8 @@ func execute(
 			combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.EFFECT_EXPIRED, attacker.id, "", {"effect_name": "Hidden", "reason": "Attack declared"}))
 		var post_prompt: Dictionary = combat_system.reaction_system.get_post_hit_prompt(attacker, target, request.attack_data, prepared, combat_system.combat_state.current_round)
 		if not post_prompt.is_empty():
+			if request.attack_sequence_continuation:
+				post_prompt["attack_sequence_continuation"] = true
 			if not combat_system.open_reaction_prompt(request, post_prompt):
 				combat_system.attack_system.finalize_attack(attacker, target, request.attack_data, prepared)
 				return combat_system.action_system.build_attack_result(attacker, target, request.attack_data, prepared)
@@ -93,6 +95,8 @@ func execute(
 			return combat_system.resolve_pending_reaction(0)
 		var intervention_prompt: Dictionary = combat_system.reaction_system.get_ally_damage_reaction_prompt(attacker, target, request.attack_data, prepared, combat_system.combat_state)
 		if not intervention_prompt.is_empty():
+			if request.attack_sequence_continuation:
+				intervention_prompt["attack_sequence_continuation"] = true
 			if combat_system.open_reaction_prompt(request, intervention_prompt):
 				var intervention_result := ActionResult.success_result()
 				intervention_result.requires_reaction_choice = true

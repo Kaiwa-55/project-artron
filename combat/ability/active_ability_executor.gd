@@ -26,6 +26,8 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 	var validation: ActionResult = combat_system.ability_system.validate_active_use(actor, ability, target)
 	if not validation.success:
 		return validation
+	if ability.execution_mode == AbilityData.ExecutionMode.ATTACK_SEQUENCE:
+		return combat_system.attack_sequence_executor.execute_dual_weapon(actor, target, ability)
 	if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT \
 		and ability.targeting_range_feet > 0.0 \
 		and not combat_system.map_rules.is_target_in_range(actor, target, ability.targeting_range_feet):

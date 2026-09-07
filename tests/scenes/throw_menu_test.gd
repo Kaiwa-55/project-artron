@@ -34,7 +34,7 @@ func run_test() -> void:
 	for button in arena.action_menu_list.get_children():
 		success = success and button.disabled
 	await process_frame
-	var dock: Control = arena.get_node("Control/ReferenceActionDock")
+	var dock: Control = arena.get_node("UILayer/Control/ReferenceActionDock")
 	for button in arena.action_category_buttons.values():
 		success = success and dock.get_global_rect().encloses(button.get_global_rect())
 	arena.queue_free()

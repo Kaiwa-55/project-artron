@@ -38,7 +38,8 @@ func collect_attack_animations() -> void:
 
 
 func find_token(actor_id: String) -> Combatant:
-	for child in arena.get_children():
+	var candidates: Array = arena.get_all_combatant_nodes() if arena.has_method("get_all_combatant_nodes") else arena.get_children()
+	for child in candidates:
 		if child is Combatant and child.state != null and child.state.id == actor_id:
 			return child
 	return null
@@ -66,7 +67,8 @@ func _ready() -> void:
 func sync_movement() -> bool:
 	collect_attack_animations()
 	var moving := false
-	for child in arena.get_children():
+	var candidates: Array = arena.get_all_combatant_nodes() if arena.has_method("get_all_combatant_nodes") else arena.get_children()
+	for child in candidates:
 		if child is Combatant:
 			child.refresh_from_state()
 			moving = moving or child.is_movement_animating() or child.is_attack_animating()
@@ -112,7 +114,7 @@ func _process(_delta: float) -> void:
 	var system = arena.combat_system
 	if system != null and not moving and not system.has_pending_reaction() and arena.move_mode:
 		var hovered := get_viewport().gui_get_hovered_control()
-		if hovered == null or hovered == arena.get_node("Control"):
+		if hovered == null or hovered == arena.get_node("UILayer/Control"):
 			preview = build_preview(get_global_mouse_position())
 	tooltip.visible = not preview.is_empty()
 	if tooltip.visible:

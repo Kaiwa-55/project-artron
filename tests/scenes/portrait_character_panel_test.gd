@@ -12,7 +12,7 @@ func run_test() -> void:
 	arena.combat_system.pending_reaction = {}
 	arena.combat_system.step_back_move_actor_id = ""
 	arena.combat_system.ability_move_actor_id = ""
-	var portrait: Control = arena.get_node("Control/ReferencePlayerHUD").find_child("CharacterPortrait", true, false)
+	var portrait: Control = arena.get_node("UILayer/Control/ReferencePlayerHUD").find_child("CharacterPortrait", true, false)
 	var event := InputEventMouseButton.new()
 	event.button_index = MOUSE_BUTTON_LEFT
 	event.pressed = true

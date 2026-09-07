@@ -428,6 +428,8 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 		if prepared.hit:
 			var intervention_prompt: Dictionary = combat_system.reaction_system.get_ally_damage_reaction_prompt(prepared_attacker, reactor, prepared_attack, prepared, combat_system.combat_state)
 			if not intervention_prompt.is_empty() and open_prompt(request, intervention_prompt):
+				if prompt.get("attack_sequence_continuation", false):
+					intervention_prompt["attack_sequence_continuation"] = true
 				result.requires_reaction_choice = true
 				result.reaction_prompt = intervention_prompt
 				for available_reaction in intervention_prompt["reactions"]:
@@ -438,7 +440,7 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 		else:
 			prepared.deferred = false
 		action_result = combat_system.action_system.build_attack_result(prepared_attacker, reactor, prepared_attack, prepared)
-		if prompt.has("skill_data") and not prompt.get("area_skill_continuation", false) and not prompt.get("area_action_continuation", false):
+		if prompt.has("skill_data") and not prompt.get("area_skill_continuation", false) and not prompt.get("area_action_continuation", false) and not prompt.get("attack_sequence_continuation", false):
 			var resolved_skill = prompt["skill_data"]
 			action_result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, prepared_attacker.id, reactor.id, {"skill_name": resolved_skill.display_name, "mana_cost": resolved_skill.mana_cost, "cooldown": combat_system.skill_system.get_effective_cooldown_turns(prepared_attacker, resolved_skill)}))
 		if prompt.has("opportunity_attack") and not reactor.is_dying():
@@ -460,7 +462,7 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 	result.success = action_result.success
 	result.failure_reason = action_result.failure_reason
 	result.events.append_array(action_result.events)
-	if prompt.has("prepared_attack") and not prompt.get("area_skill_continuation", false) and not prompt.get("area_action_continuation", false):
+	if prompt.has("prepared_attack") and not prompt.get("area_skill_continuation", false) and not prompt.get("area_action_continuation", false) and not prompt.get("attack_sequence_continuation", false):
 		offer_step_back(request, prompt.get("attacker"), reactor, result)
 		offer_mobile_shooter(request, prompt.get("attacker"), prompt.get("prepared_attack_data"), prompt.get("prepared_attack"), result)
 	if prompt.get("reaction_queue_continuation", false):
@@ -468,6 +470,8 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 		return continue_queue(result.events)
 	if prompt.get("area_action_continuation", false) or prompt.get("area_skill_continuation", false):
 		return combat_system.area_action_executor.resume_after_reaction(reactor, prompt.get("prepared_attack"), action_result.events, result.events)
+	if prompt.get("attack_sequence_continuation", false):
+		return combat_system.attack_sequence_executor.resume_after_reaction(result.events)
 	if not combat_system.pending_active_ability_context.is_empty():
 		var ability_events: Array[CombatEvent] = []
 		combat_system.active_ability_executor.apply_pending_conditional_effects(result.events, ability_events)
@@ -504,6 +508,8 @@ func resolve_damage_intervention_choice(request: ActionRequest, prompt: Dictiona
 		result.events.append(CombatEvent.new(EventTypes.Type.REACTION_DECLINED, reactor.id, target.id, {"reaction_name": reaction.display_name if reaction != null else "Divine Intervention"}))
 	combat_system.attack_system.finalize_attack(attacker, target, attack, prepared)
 	result.events.append_array(combat_system.action_system.build_attack_result(attacker, target, attack, prepared).events)
+	if prompt.get("attack_sequence_continuation", false):
+		return combat_system.attack_sequence_executor.resume_after_reaction(result.events)
 	if not combat_system.pending_active_ability_context.is_empty():
 		var ability_events: Array[CombatEvent] = []
 		combat_system.active_ability_executor.apply_pending_conditional_effects(result.events, ability_events)

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/blood_claw_attack.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "blood_claw"
+display_name = "Blood Claw"
+required_level = 4
+traits = [ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+ap_cost = 2
+cooldown_turns = 2
+description = "Strike at 8 ft for 9 Pierce damage. On Hit, apply Bleeding 5."
+target_mode = 0
+target_filter = 0
+attack_source = 2
+attack_data = ExtResource("2")
+required_attack_trait_ids = Array[String](["unarmed"])
+targeting_range_feet = 8.0

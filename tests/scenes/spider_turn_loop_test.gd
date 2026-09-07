@@ -21,10 +21,10 @@ func run_test() -> void:
 	prototype.combat_system.combat_state.current_actor_id = spider.id
 	spider.ap = 3
 	prototype.enemy_actions_this_turn = 0
-	prototype.get_node("PlayerCharacter").setup(player)
-	prototype.get_node("EnemyCharacter").setup(spider)
-	prototype.get_node("Control").reset_for_combat()
-	prototype.get_node("Control").setup(prototype.combat_system)
+	prototype.get_node("BattlefieldWorld/PlayerCharacter").setup(player)
+	prototype.get_node("BattlefieldWorld/EnemyCharacter").setup(spider)
+	prototype.get_node("UILayer/Control").reset_for_combat()
+	prototype.get_node("UILayer/Control").setup(prototype.combat_system)
 	prototype.run_enemy_ai_if_needed()
 	for frame in range(100):
 		await create_timer(0.05).timeout

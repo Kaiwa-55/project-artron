@@ -435,6 +435,10 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 		return ActionResult.failure("%s is on cooldown." % ability.display_name)
 	if ability.uses_per_turn > 0 and int(combatant.ability_uses_this_turn.get(ability.id, 0)) >= ability.uses_per_turn:
 		return ActionResult.failure("%s has already been used this turn." % ability.display_name)
+	if ability.execution_mode == AbilityData.ExecutionMode.ATTACK_SEQUENCE:
+		var sequence_validation: ActionResult = EquipmentSystem.new().validate_dual_weapon_setup(combatant)
+		if not sequence_validation.success:
+			return sequence_validation
 	for trait_id in ability.required_trait_ids:
 		if not combatant_has_trait(combatant, trait_id):
 			return ActionResult.failure("Requires the %s trait." % trait_id)

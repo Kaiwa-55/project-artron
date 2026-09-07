@@ -2,16 +2,10 @@
 
 [ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="1_class_data"]
 [ext_resource type="Resource" uid="uid://623hc2j4n3co" path="res://data/ability/build_up_body.tres" id="2_build_up_body"]
-[ext_resource type="Resource" uid="uid://dvojdlcrghdp6" path="res://data/ability/combo_techniques.tres" id="3_combo_techniques"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_xw4r0"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4_trait"]
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5_progression"]
-[ext_resource type="Resource" uid="uid://dwe3brusekjlm" path="res://data/ability/ki_wave.tres" id="6_ki_wave"]
-[ext_resource type="Resource" path="res://data/ability/crushing_palm.tres" id="7_crushing_palm"]
-[ext_resource type="Resource" path="res://data/ability/flowing_guard.tres" id="8_flowing_guard"]
-[ext_resource type="Resource" path="res://data/ability/sweeping_kick.tres" id="9_sweeping_kick"]
 [ext_resource type="Resource" path="res://data/ability/martial_sense.tres" id="10_martial_sense"]
-[ext_resource type="Resource" path="res://data/ability/redirect_force.tres" id="11_redirect_force"]
 
 [sub_resource type="Resource" id="Progression_L1"]
 script = ExtResource("5_progression")
@@ -22,13 +16,11 @@ granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("2_build_up_body"
 script = ExtResource("5_progression")
 level = 2
 max_hp_gain = 7
-granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("3_combo_techniques"), ExtResource("6_ki_wave"), ExtResource("7_crushing_palm"), ExtResource("8_flowing_guard")])
 
 [sub_resource type="Resource" id="Progression_L3"]
 script = ExtResource("5_progression")
 level = 3
 max_hp_gain = 7
-granted_abilities = Array[ExtResource("3_xw4r0")]([ExtResource("9_sweeping_kick"), ExtResource("11_redirect_force")])
 
 [sub_resource type="Resource" id="Progression_L4"]
 script = ExtResource("5_progression")

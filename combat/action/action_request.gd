@@ -13,6 +13,9 @@ var target_position: Vector2 = Vector2.ZERO
 var attack_data: AttackData
 var movement_data: MovementData
 var skill_data
+# Internal continuation marker used by multi-attack Actions. Each attack still
+# opens and resolves its own defensive Reaction window.
+var attack_sequence_continuation: bool = false
 
 
 func _init(

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://b4pdb0x8d6gnk"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/move.tres" id="4"]
+
+[sub_resource type="Resource" id="Movement"]
+script = ExtResource("2")
+effect_type = 3
+distance_feet = 5.0
+movement_triggers_reactions = false
+
+[resource]
+script = ExtResource("1")
+id = "skitter_dodge"
+display_name = "Skitter Dodge"
+description = "When attacked, spend 1 AP to move up to 5 ft before the attack resolves. Once per round."
+traits = [ExtResource("3"), ExtResource("4")]
+trigger = 1
+effects = [SubResource("Movement")]
+uses_per_round = 1

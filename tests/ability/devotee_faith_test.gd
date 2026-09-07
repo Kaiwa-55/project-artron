@@ -62,7 +62,7 @@ func _init() -> void:
 	check(system.use_active_ability(devotee.id, devotee.id, "pray").success and devotee.temporary_faith == 2, "Pray creates Temporary Faith above 10")
 	system.combat_state.current_actor_id = devotee.id
 	system.advance_turn()
-	check(devotee.temporary_faith == 0, "Temporary Faith decreases by 2 at end of turn")
+	check(devotee.temporary_faith == 1, "Temporary Faith decreases by 1 at end of turn")
 
 	# Verify the real Character Creation handoff, not only a manually prepared character.
 	var draft = Draft.new()

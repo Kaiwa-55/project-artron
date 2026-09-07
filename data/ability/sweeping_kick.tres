@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bevd22gc4a1hd"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/attack/sweeping_kick_attack.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_nrq31"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
 
 [resource]
@@ -14,18 +15,12 @@ required_level = 3
 prerequisite_id = "build_up_body"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
-auto_equip_on_grant = true
 ap_cost = 2
 cooldown_turns = 2
 description = "Attack every enemy within 5 feet against the higher of Reflex or Fortitude. On Hit, deal Unarmed Attack damage once to each target. Requires a free hand."
 target_mode = 1
-target_filter = 0
 attack_source = 2
 attack_data = ExtResource("2")
 required_attack_trait_ids = Array[String](["unarmed"])
 area_shape = 1
 area_radius_feet = 5.0
-targeting_range_feet = 0.0
-requires_line_of_sight = true
-area_blocked_by_obstacles = true
-include_caster = false

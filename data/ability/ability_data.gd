@@ -5,6 +5,7 @@ enum TargetMode { SINGLE_COMBATANT, SELF, GROUND }
 enum TargetFilter { ENEMIES, ALLIES, ALL_COMBATANTS }
 enum AttackSource { NONE, EQUIPPED_WEAPON, CONFIGURED_ATTACK }
 enum AreaShape { NONE, CIRCLE, LINE, CONE }
+enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 
 @export var id: String = ""
 @export var display_name: String = ""
@@ -16,6 +17,7 @@ enum AreaShape { NONE, CIRCLE, LINE, CONE }
 @export var auto_equip_on_grant: bool = false
 @export var is_passive: bool = false
 @export var reaction_only: bool = false
+@export var execution_mode: ExecutionMode = ExecutionMode.STANDARD
 @export_range(0, 10) var ap_cost: int = 0
 @export_range(0, 99) var faith_cost: int = 0
 @export_range(0, 99) var cooldown_turns: int = 0

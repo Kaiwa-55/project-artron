@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dboxuxa5pw8uu" path="res://assets/icon/skill_icons17.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "bleeding"
+display_name = "Bleeding"
+icon_texture = ExtResource("2")
+effect_type = 0
+trigger = 2
+amount = 1
+damage_type = "bleeding"
+status_kind = 1
+stack_mode = 1
+stackable = true
+stacks_on_apply = 5
+max_stacks = 999
+status_tags = Array[String](["status", "physical"])

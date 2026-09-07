@@ -18,6 +18,23 @@ func validate_unarmed_attack(combatant: CombatantState, attack: AttackData) -> A
 	return ActionResult.success_result()
 
 
+func validate_dual_weapon_setup(combatant: CombatantState) -> ActionResult:
+	if combatant == null:
+		return ActionResult.failure("Character does not exist.")
+	var main_item = combatant.equipped_items.get(WEAPON_SLOT_1)
+	var off_item = combatant.equipped_items.get(WEAPON_SLOT_2)
+	if main_item == null or off_item == null or main_item == off_item:
+		return ActionResult.failure("Dual Strike requires two one-handed weapons.")
+	if main_item.slot != EquipmentDataScript.Slot.WEAPON or off_item.slot != EquipmentDataScript.Slot.WEAPON:
+		return ActionResult.failure("A Shield cannot be used for Dual Strike.")
+	if main_item.weapon_attack == null or off_item.weapon_attack == null or is_two_handed(main_item) or is_two_handed(off_item):
+		return ActionResult.failure("Dual Strike requires two one-handed weapons.")
+	var traits := TraitSystem.new()
+	if not traits.attack_has_trait(main_item.weapon_attack, "dual_weapon") or not traits.attack_has_trait(off_item.weapon_attack, "dual_weapon"):
+		return ActionResult.failure("Both weapons require the Dual Weapon trait.")
+	return ActionResult.success_result()
+
+
 func create_throw_attack(item) -> AttackData:
 	if item == null or item.weapon_attack == null:
 		return null

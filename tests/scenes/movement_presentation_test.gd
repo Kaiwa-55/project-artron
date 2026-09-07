@@ -13,7 +13,7 @@ func run_test() -> void:
 	actor.ap = 3
 	actor.movement_in_progress = true
 	actor.movement_remaining_feet = 5.0
-	var token: Combatant = arena.get_node("PlayerCharacter")
+	var token: Combatant = arena.get_node("BattlefieldWorld/PlayerCharacter")
 	token.setup(actor)
 	var preview: Dictionary = arena.movement_presentation.build_preview(Vector2(100, 1000))
 	check(preview.endpoint.is_equal_approx(Vector2(100, 160)) and preview.text.contains("5.0 / 5.0 ft"), "Preview clamps to remaining 5 ft", failures)

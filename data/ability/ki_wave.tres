@@ -12,7 +12,6 @@ display_name = "Ki Wave"
 required_level = 2
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3_trait")]
-auto_equip_on_grant = true
 ap_cost = 1
 cooldown_turns = 1
 uses_per_turn = 1
