@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://xetjc8rsswyk"]
+
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/frost_shard.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "frost_shard"
+display_name = "Frost Shard"
+description = "Attack one enemy within 30 feet for 3 Cold damage and apply Slowed 5 ft on Hit."
+mana_cost = 1
+attack_data = ExtResource("2")
+targeting_range_feet = 30.0

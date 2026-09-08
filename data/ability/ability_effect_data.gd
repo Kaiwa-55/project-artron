@@ -23,7 +23,9 @@ enum Type {
 	AFTER_MOVE_APPLY_STATUS,
 	PASSIVE_SKILL_DAMAGE_BONUS,
 	PASSIVE_SKILL_MANA_DISCOUNT,
-	PASSIVE_SKILL_RANGE_BONUS_FEET
+	PASSIVE_SKILL_RANGE_BONUS_FEET,
+	PASSIVE_SPEED_BONUS_FEET,
+	PASSIVE_DAMAGE_RESISTANCE
 }
 
 enum ConditionMode {
@@ -76,3 +78,9 @@ enum ConditionMode {
 @export_range(0, 99) var minimum_skill_base_mana_cost: int = 0
 @export var first_skill_per_turn: bool = false
 @export var skill_range_bonus_feet: float = 0.0
+
+# Generic passive Resistance. When divide_by_level is enabled, passive_value
+# is divided by the owner's current Level before the minimum is applied.
+@export var resistance_damage_type_ids: Array[String] = []
+@export var resistance_divide_by_level: bool = false
+@export var minimum_resistance: int = 0

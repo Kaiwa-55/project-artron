@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TraitData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/trait/trait_data.gd" id="1_trait"]
+
+[resource]
+script = ExtResource("1_trait")
+id = "stance"
+display_name = "Stance"
+description = "A character cannot have more than one Stance Ability active at the same time."
+

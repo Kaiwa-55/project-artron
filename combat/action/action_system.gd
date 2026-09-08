@@ -267,6 +267,16 @@ func build_attack_result(
 			)
 		)
 
+		for effect_name in attack_result.applied_effects:
+			result.events.append(
+				CombatEvent.new(
+					EventTypes.Type.EFFECT_APPLIED,
+					attacker.id,
+					target.id,
+					{"effect_name": effect_name}
+				)
+			)
+
 	for triggered_ability in attack_result.triggered_abilities:
 		result.events.append(
 			CombatEvent.new(

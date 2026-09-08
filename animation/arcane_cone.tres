@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" format=3 uid="uid://d1qnbn5ptc6h2"]
+
+[ext_resource type="Script" uid="uid://dvlud43lcsdje" path="res://animation/attack_animation_data.gd" id="1_8svjy"]
+[ext_resource type="Texture2D" uid="uid://crnacoigh0bvw" path="res://assets/fx/Assets_set1/Part 12/576.png" id="2_8svjy"]
+
+[resource]
+script = ExtResource("1_8svjy")
+animation_type = 3
+sprite_sheet = ExtResource("2_8svjy")
+columns = 14
+rows = 9
+first_frame = 28
+last_frame = 41
+frames_per_second = 12.0
+effect_scale = Vector2(3, 3)
+rotation_offset_degrees = -45.0
+cone_fill_color = Color(0.38039216, 0.2, 1, 0.30588236)
+cone_edge_color = Color(0.72, 0.62, 1, 0.95)
+cone_duration_seconds = 0.5
+cone_fit_sprite_to_area = false

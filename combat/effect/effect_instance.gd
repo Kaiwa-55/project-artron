@@ -5,9 +5,15 @@ extends RefCounted
 var data: EffectData
 var remaining_turns: int = 0
 var stack_count: int = 1
+var source_ability_id: String = ""
+var source_ability_name: String = ""
+var is_stance: bool = false
 
 
-func _init(p_data: EffectData) -> void:
+func _init(p_data: EffectData, p_source_ability_id: String = "", p_source_ability_name: String = "", p_is_stance: bool = false) -> void:
 	data = p_data
 	remaining_turns = p_data.duration_turns
 	stack_count = mini(p_data.max_stacks, p_data.stacks_on_apply)
+	source_ability_id = p_source_ability_id
+	source_ability_name = p_source_ability_name
+	is_stance = p_is_stance

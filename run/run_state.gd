@@ -20,6 +20,13 @@ var applied_party_ability_point_bonuses: Dictionary = {}
 var party_character_data: Array[CharacterData] = []
 
 
+static func generate_restart_seed(previous_seed: int = 0) -> int:
+	var fresh_seed := int(Time.get_ticks_usec() & 0x7fffffff)
+	if fresh_seed == previous_seed:
+		fresh_seed = (fresh_seed + 1) & 0x7fffffff
+	return fresh_seed
+
+
 func setup(p_seed: int, generated_nodes: Array[MapNodeData]) -> void:
 	seed = p_seed
 	nodes = generated_nodes

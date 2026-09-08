@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=5 format=3]
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/skill/ember_bolt.tres" id="4"]
+[resource]
+script = ExtResource("1")
+id = "spell_training_ember_bolt"
+display_name = "Spell Training: Ember Bolt"
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("2"), ExtResource("3")]
+is_passive = true
+description = "Add Ember Bolt to your available Skills."
+granted_skills = Array[SkillData]([ExtResource("4")])

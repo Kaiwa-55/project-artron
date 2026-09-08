@@ -10,14 +10,14 @@
 [sub_resource type="Resource" id="AbilityEffect_combo"]
 script = ExtResource("2_effect_data")
 requires_unarmed_attack = true
+to_hit_bonus_per_stack = 2
 
 [resource]
 script = ExtResource("1_ability_data")
 id = "combo_techniques"
 display_name = "Combo Techniques"
-required_level = 2
 prerequisite_id = "build_up_body"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("4_cickv"), ExtResource("3_ykeoi")]
-description = "After an Unarmed Attack, gain +1 To Hit. Stacks until End Turn."
+description = "After an Unarmed Attack, gain +2 To Hit. Stacks until End Turn."
 effects = [SubResource("AbilityEffect_combo")]

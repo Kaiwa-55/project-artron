@@ -1,10 +1,13 @@
-[gd_resource type="Resource" script_class="AttackData" format=3]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://dbv4juslqjb0k"]
 
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_7poyp"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_hofnd"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/blunt.tres" id="5"]
+[ext_resource type="Resource" uid="uid://bm7e73pueqb80" path="res://data/trait/light.tres" id="8_2e4mp"]
 
 [resource]
 script = ExtResource("1")
@@ -12,9 +15,6 @@ id = "unarmed_attack"
 display_name = "Unarmed Attack"
 animation_template = ExtResource("2")
 is_unarmed = true
-ap_cost = 1
 base_damage = 1
 damage_type = "blunt"
-range_feet = 5.0
-traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
-
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("8_2e4mp")]

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" format=3 uid="uid://tkoppy0q22ep"]
+
+[ext_resource type="Script" uid="uid://dvlud43lcsdje" path="res://animation/attack_animation_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://yffj8qn456xs" path="res://assets/fx/Assets_set1/Part 2/78.png" id="2_hwl31"]
+
+[resource]
+script = ExtResource("1")
+animation_type = 4
+sprite_sheet = ExtResource("2_hwl31")
+columns = 11
+rows = 9
+first_frame = 22
+last_frame = 33
+frames_per_second = 12.0
+effect_scale = Vector2(1.3, 1.3)
+circle_fill_color = Color(0.1, 0.65, 1, 0.22)
+circle_edge_color = Color(0.55, 0.9, 1, 0.95)
+circle_duration_seconds = 0.95

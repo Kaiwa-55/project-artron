@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://dpepfmcue5b01" path="res://data/ability/dual_strike.tres" id="dual_strike"]
 [ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="dual_weapon"]
 [ext_resource type="Resource" path="res://data/trait/finesse.tres" id="finesse"]
-[ext_resource type="Resource" path="res://data/trait/light.tres" id="light"]
+[ext_resource type="Resource" uid="uid://bm7e73pueqb80" path="res://data/trait/light.tres" id="light"]
 [ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="melee"]
 [ext_resource type="Resource" path="res://data/trait/pierce.tres" id="pierce"]
 [ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="script"]
@@ -20,10 +20,9 @@ id = "dagger_attack"
 display_name = "Dagger"
 animation_template = ExtResource("animation")
 attack_attribute = 1
-defense_type = 0
-to_hit_bonus = 1
 critical_chance = 15
 base_damage = 3
+thrown_range_feet = 15.0
 damage_type = "pierce"
 traits = [ExtResource("simple"), ExtResource("melee"), ExtResource("pierce"), ExtResource("light"), ExtResource("finesse"), ExtResource("dual_weapon"), ExtResource("shield_compatible"), ExtResource("13_3pbl2")]
 granted_abilities = Array[ExtResource("3_3pbl2")]([ExtResource("dual_strike")])

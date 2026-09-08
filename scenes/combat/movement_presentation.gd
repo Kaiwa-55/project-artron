@@ -19,6 +19,14 @@ func is_no_damage_result(event: CombatEvent) -> bool:
 	return event.type == EventTypes.Type.ATTACK_HIT and float(event.data.get("final_damage", 0)) <= 0.0
 
 
+func is_combat_value_event(event: CombatEvent) -> bool:
+	return event.type in [EventTypes.Type.DAMAGE_APPLIED, EventTypes.Type.EFFECT_DAMAGE_APPLIED, EventTypes.Type.EFFECT_HEAL_APPLIED]
+
+
+func get_combat_value(event: CombatEvent) -> int:
+	return int(event.data.get("amount", event.data.get("damage", event.data.get("final_damage", 0))))
+
+
 func collect_attack_animations() -> void:
 	if arena.combat_system == null:
 		return
@@ -34,8 +42,8 @@ func collect_attack_animations() -> void:
 		var event: CombatEvent = events.event_history[event_cursor]
 		event_cursor += 1
 		var is_attack_result: bool = event.type in [EventTypes.Type.ATTACK_HIT, EventTypes.Type.ATTACK_MISS]
-		var is_animated_ability: bool = event.type == EventTypes.Type.ABILITY_TRIGGERED and event.data.get("animation_template") != null
-		if (is_attack_result and (event.data.get("animation_template") != null or is_no_damage_result(event))) or is_animated_ability:
+		var is_animated_action: bool = event.type in [EventTypes.Type.ABILITY_TRIGGERED, EventTypes.Type.SKILL_CAST] and event.data.get("animation_template") != null
+		if (is_attack_result and (event.data.get("animation_template") != null or is_no_damage_result(event))) or is_animated_action or (is_combat_value_event(event) and get_combat_value(event) > 0):
 			attack_queue.append(event)
 
 
@@ -78,10 +86,22 @@ func sync_movement() -> bool:
 		var event: CombatEvent = attack_queue.pop_front()
 		var attacker := find_token(event.source_id)
 		var target := find_token(event.target_id)
-		if attacker != null and event.data.get("animation_template") != null:
+		if is_combat_value_event(event):
+			if target != null:
+				target.show_combat_value_feedback(get_combat_value(event), event.type == EventTypes.Type.EFFECT_HEAL_APPLIED)
+		elif attacker != null and event.data.get("animation_template") != null:
 			var animation_target: Vector2 = Vector2(event.data.get("animation_target", attacker.state.position))
 			var target_radius: float = target.state.collision_radius_feet if target != null else 0.0
-			attacker.play_attack_animation(event.data.animation_template, Vector2(event.data.get("animation_origin", attacker.state.position)), animation_target, target_radius, arena.combat_system.map_rules.world_units_per_foot)
+			attacker.play_attack_animation(
+				event.data.animation_template,
+				Vector2(event.data.get("animation_origin", attacker.state.position)),
+				animation_target,
+				target_radius,
+				arena.combat_system.map_rules.world_units_per_foot,
+				float(event.data.get("area_length_feet", 0.0)),
+				float(event.data.get("cone_angle_degrees", 90.0)),
+				float(event.data.get("area_radius_feet", 0.0))
+			)
 			if is_no_damage_result(event):
 				if target != null and attacker.is_attack_animating():
 					attacker.attack_tween.finished.connect(target.show_no_damage_feedback, CONNECT_ONE_SHOT)

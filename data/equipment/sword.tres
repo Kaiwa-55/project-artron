@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://ckrki53jpb51j"]
+
+[ext_resource type="Script" uid="uid://cng3y0g4b8i0c" path="res://data/equipment/equipment_data.gd" id="1_dfo8w"]
+[ext_resource type="Resource" uid="uid://pxmfobghjq0f" path="res://data/attack/sword.tres" id="2_i8noj"]
+
+[resource]
+script = ExtResource("1_dfo8w")
+id = "sword"
+display_name = "Sword"
+description = "A balanced one-handed sword."
+weapon_attack = ExtResource("2_i8noj")

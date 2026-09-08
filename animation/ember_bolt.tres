@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" format=3 uid="uid://x4a0ge3gj2i"]
+
+[ext_resource type="Script" uid="uid://dvlud43lcsdje" path="res://animation/attack_animation_data.gd" id="1_2t6ms"]
+[ext_resource type="Texture2D" uid="uid://cpdbgjwc3piea" path="res://assets/fx/Assets_set1/Part 12/579.png" id="2_2t6ms"]
+
+[resource]
+script = ExtResource("1_2t6ms")
+animation_type = 1
+sprite_sheet = ExtResource("2_2t6ms")
+columns = 14
+rows = 9
+last_frame = 13
+impact_seconds = 0.0

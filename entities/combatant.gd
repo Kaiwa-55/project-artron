@@ -10,9 +10,10 @@ var selected: bool = false
 var movement_tween: Tween
 var movement_target: Vector2
 var attack_tween: Tween
-var attack_sprite: Sprite2D
+var attack_sprite: Node2D
 var no_damage_icon: Sprite2D
 var no_damage_tween: Tween
+var floating_value_labels: Array[Label] = []
 var status_icon_layer: Control
 var status_icon_signature: String = ""
 var selection_frame: Sprite2D
@@ -46,6 +47,45 @@ func show_no_damage_feedback() -> void:
 		no_damage_icon = null)
 
 
+func clear_combat_value_feedback() -> void:
+	for label in floating_value_labels:
+		if is_instance_valid(label):
+			label.queue_free()
+	floating_value_labels.clear()
+
+
+func show_combat_value_feedback(amount: int, is_heal: bool) -> void:
+	if amount <= 0 or state == null:
+		return
+	floating_value_labels = floating_value_labels.filter(func(label: Label): return is_instance_valid(label))
+	var label := Label.new()
+	label.name = "HealNumber" if is_heal else "DamageNumber"
+	label.text = ("+%d" if is_heal else "-%d") % amount
+	label.custom_minimum_size = Vector2(112.0, 40.0)
+	label.size = label.custom_minimum_size
+	label.position = Vector2(-56.0, -state.collision_radius_feet * 12.0 - 54.0 - floating_value_labels.size() * 18.0)
+	label.pivot_offset = label.size * 0.5
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.z_index = 40
+	label.add_theme_font_size_override("font_size", 26)
+	label.add_theme_color_override("font_color", Color("62e6a7") if is_heal else Color("ff626e"))
+	label.add_theme_color_override("font_outline_color", Color(0.03, 0.04, 0.05, 0.95))
+	label.add_theme_constant_override("outline_size", 6)
+	add_child(label)
+	floating_value_labels.append(label)
+	label.scale = Vector2(0.55, 0.55)
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(label, "position:y", label.position.y - 54.0, 0.9).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(label, "scale", Vector2.ONE, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(label, "modulate:a", 0.0, 0.35).set_delay(0.55)
+	tween.chain().tween_callback(func():
+		floating_value_labels.erase(label)
+		if is_instance_valid(label):
+			label.queue_free())
+
+
 func clear_attack_sprite() -> void:
 	if is_instance_valid(attack_sprite):
 		attack_sprite.queue_free()
@@ -63,7 +103,7 @@ func play_sprite_projectile(template: Resource, origin: Vector2, target: Vector2
 	attack_sprite.texture = template.sprite_sheet
 	attack_sprite.hframes = maxi(1, template.columns)
 	attack_sprite.vframes = maxi(1, template.rows)
-	var maximum := attack_sprite.hframes * attack_sprite.vframes - 1
+	var maximum: int = int(attack_sprite.hframes * attack_sprite.vframes - 1)
 	var first := clampi(template.first_frame, 0, maximum)
 	var last := clampi(template.last_frame, first, maximum)
 	attack_sprite.frame = first
@@ -90,7 +130,7 @@ func play_attached_directional(template: Resource, origin: Vector2, target: Vect
 	attack_sprite.texture = template.sprite_sheet
 	attack_sprite.hframes = maxi(1, template.columns)
 	attack_sprite.vframes = maxi(1, template.rows)
-	var maximum := attack_sprite.hframes * attack_sprite.vframes - 1
+	var maximum: int = int(attack_sprite.hframes * attack_sprite.vframes - 1)
 	var first := clampi(template.first_frame, 0, maximum)
 	var last := clampi(template.last_frame, first, maximum)
 	attack_sprite.frame = first
@@ -106,6 +146,168 @@ func play_attached_directional(template: Resource, origin: Vector2, target: Vect
 		if is_instance_valid(attack_sprite):
 			attack_sprite.frame = mini(last, int(value)), float(first), float(last + 1), duration)
 	attack_tween.tween_callback(clear_attack_sprite)
+
+
+func play_cone_burst(template: Resource, origin: Vector2, target: Vector2, length_feet: float, angle_degrees: float, scale_per_foot: float) -> void:
+	var cone := Node2D.new()
+	add_child(cone)
+	cone.top_level = true
+	cone.z_index = 20
+	var direction := origin.direction_to(target)
+	if direction.is_zero_approx():
+		direction = Vector2.RIGHT
+	cone.global_position = origin + direction * template.attached_offset_feet * scale_per_foot
+	cone.rotation = origin.angle_to_point(target)
+	var radius := maxf(0.1, length_feet) * scale_per_foot
+	var half_angle := deg_to_rad(clampf(angle_degrees, 1.0, 360.0) * 0.5)
+	var segments := maxi(4, template.cone_arc_segments)
+	var points := PackedVector2Array([Vector2.ZERO])
+	for index in range(segments + 1):
+		var weight := float(index) / float(segments)
+		points.append(Vector2.RIGHT.rotated(lerpf(-half_angle, half_angle, weight)) * radius)
+	var fill := Polygon2D.new()
+	fill.polygon = points
+	fill.color = template.cone_fill_color
+	cone.add_child(fill)
+	var outline := Line2D.new()
+	outline.width = 3.0
+	outline.default_color = template.cone_edge_color
+	outline.antialiased = true
+	outline.points = points
+	outline.add_point(Vector2.ZERO)
+	cone.add_child(outline)
+	var frame_sprite: Sprite2D
+	var first := 0
+	var last := 0
+	var frame_duration := 0.0
+	if template.sprite_sheet != null:
+		frame_sprite = Sprite2D.new()
+		frame_sprite.name = "SpriteFrames"
+		frame_sprite.texture = template.sprite_sheet
+		frame_sprite.hframes = maxi(1, template.columns)
+		frame_sprite.vframes = maxi(1, template.rows)
+		frame_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		var maximum: int = frame_sprite.hframes * frame_sprite.vframes - 1
+		first = clampi(template.first_frame, 0, maximum)
+		last = clampi(template.last_frame, first, maximum)
+		frame_sprite.frame = first
+		frame_sprite.position = Vector2(radius * 0.5, 0.0)
+		frame_sprite.rotation = deg_to_rad(template.rotation_offset_degrees)
+		if template.cone_fit_sprite_to_area:
+			var frame_size := Vector2(
+				float(template.sprite_sheet.get_width()) / float(frame_sprite.hframes),
+				float(template.sprite_sheet.get_height()) / float(frame_sprite.vframes)
+			)
+			var cone_width := radius * 2.0 * tan(minf(half_angle, deg_to_rad(89.0)))
+			frame_sprite.scale = Vector2(
+				radius / maxf(1.0, frame_size.x),
+				cone_width / maxf(1.0, frame_size.y)
+			) * template.effect_scale
+		else:
+			frame_sprite.scale = template.effect_scale
+		cone.add_child(frame_sprite)
+		frame_duration = float(last - first + 1) / maxf(1.0, template.frames_per_second)
+	attack_sprite = cone
+	cone.scale = Vector2(0.18, 0.18)
+	cone.modulate.a = 0.0
+	var duration := maxf(0.05, frame_duration if frame_sprite != null and template.cone_play_once else template.cone_duration_seconds)
+	var appear_time := duration * 0.35
+	var fade_time := duration * 0.45
+	attack_tween = create_tween().set_parallel(true)
+	attack_tween.tween_property(cone, "scale", Vector2.ONE, appear_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	attack_tween.tween_property(cone, "modulate:a", 1.0, appear_time)
+	attack_tween.tween_property(cone, "modulate:a", 0.0, fade_time).set_delay(duration - fade_time)
+	attack_tween.tween_property(cone, "scale", Vector2(1.08, 1.08), fade_time).set_delay(duration - fade_time)
+	if frame_sprite != null:
+		attack_tween.tween_method(func(value: float):
+			if is_instance_valid(frame_sprite):
+				if template.cone_play_once:
+					frame_sprite.frame = mini(last, int(value))
+				else:
+					var frame_count := last - first + 1
+					frame_sprite.frame = first + (int(value) % frame_count),
+			float(first),
+			float(last + 1) if template.cone_play_once else float(first) + duration * template.frames_per_second,
+			duration)
+	attack_tween.chain().tween_callback(clear_attack_sprite)
+
+
+func play_circle_ground(template: Resource, target: Vector2, radius_feet: float, scale_per_foot: float) -> void:
+	var circle := Node2D.new()
+	add_child(circle)
+	circle.top_level = true
+	circle.z_index = 20
+	circle.global_position = target
+	var radius := maxf(0.1, radius_feet) * scale_per_foot
+	var segments := maxi(8, template.circle_segments)
+	var points := PackedVector2Array()
+	for index in range(segments):
+		var angle := TAU * float(index) / float(segments)
+		points.append(Vector2.RIGHT.rotated(angle) * radius)
+	var fill := Polygon2D.new()
+	fill.polygon = points
+	fill.color = template.circle_fill_color
+	circle.add_child(fill)
+	var outline := Line2D.new()
+	outline.width = 3.0
+	outline.default_color = template.circle_edge_color
+	outline.antialiased = true
+	outline.points = points
+	outline.add_point(points[0])
+	circle.add_child(outline)
+	var frame_sprite: Sprite2D
+	var first := 0
+	var last := 0
+	var frame_duration := 0.0
+	if template.sprite_sheet != null:
+		frame_sprite = Sprite2D.new()
+		frame_sprite.name = "SpriteFrames"
+		frame_sprite.texture = template.sprite_sheet
+		frame_sprite.hframes = maxi(1, template.columns)
+		frame_sprite.vframes = maxi(1, template.rows)
+		frame_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		var maximum: int = frame_sprite.hframes * frame_sprite.vframes - 1
+		first = clampi(template.first_frame, 0, maximum)
+		last = clampi(template.last_frame, first, maximum)
+		frame_sprite.frame = first
+		frame_sprite.rotation = deg_to_rad(template.rotation_offset_degrees)
+		if template.circle_fit_sprite_to_area:
+			var frame_size := Vector2(
+				float(template.sprite_sheet.get_width()) / float(frame_sprite.hframes),
+				float(template.sprite_sheet.get_height()) / float(frame_sprite.vframes)
+			)
+			var diameter := radius * 2.0
+			frame_sprite.scale = Vector2(
+				diameter / maxf(1.0, frame_size.x),
+				diameter / maxf(1.0, frame_size.y)
+			) * template.effect_scale
+		else:
+			frame_sprite.scale = template.effect_scale
+		circle.add_child(frame_sprite)
+		frame_duration = float(last - first + 1) / maxf(1.0, template.frames_per_second)
+	attack_sprite = circle
+	circle.scale = Vector2(0.15, 0.15)
+	circle.modulate.a = 0.0
+	var duration := maxf(0.05, frame_duration if frame_sprite != null and template.circle_play_once else template.circle_duration_seconds)
+	var appear_time := duration * 0.25
+	var fade_time := duration * 0.35
+	attack_tween = create_tween().set_parallel(true)
+	attack_tween.tween_property(circle, "scale", Vector2.ONE, appear_time).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	attack_tween.tween_property(circle, "modulate:a", 1.0, appear_time)
+	attack_tween.tween_property(circle, "modulate:a", 0.0, fade_time).set_delay(duration - fade_time)
+	attack_tween.tween_property(circle, "scale", Vector2(1.06, 1.06), fade_time).set_delay(duration - fade_time)
+	if frame_sprite != null:
+		attack_tween.tween_method(func(value: float):
+			if is_instance_valid(frame_sprite):
+				if template.circle_play_once:
+					frame_sprite.frame = mini(last, int(value))
+				else:
+					var frame_count := last - first + 1
+					frame_sprite.frame = first + (int(value) % frame_count),
+			float(first),
+			float(last + 1) if template.circle_play_once else float(first) + duration * template.frames_per_second,
+			duration)
+	attack_tween.chain().tween_callback(clear_attack_sprite)
 var visual_offset: Vector2 = Vector2.ZERO:
 	set(value):
 		visual_offset = value
@@ -120,7 +322,7 @@ func is_attack_animating() -> bool:
 	return attack_tween != null and attack_tween.is_running()
 
 
-func play_attack_animation(template: Resource, origin: Vector2, target: Vector2, target_radius: float, scale_per_foot: float) -> void:
+func play_attack_animation(template: Resource, origin: Vector2, target: Vector2, target_radius: float, scale_per_foot: float, area_length_feet: float = 0.0, cone_angle_degrees: float = 90.0, area_radius_feet: float = 0.0) -> void:
 	if attack_tween != null:
 		attack_tween.kill()
 	clear_attack_sprite()
@@ -130,6 +332,12 @@ func play_attack_animation(template: Resource, origin: Vector2, target: Vector2,
 		return
 	if template.animation_type == 2:
 		play_attached_directional(template, origin, target, scale_per_foot)
+		return
+	if template.animation_type == 3:
+		play_cone_burst(template, origin, target, area_length_feet, cone_angle_degrees, scale_per_foot)
+		return
+	if template.animation_type == 4:
+		play_circle_ground(template, target, area_radius_feet, scale_per_foot)
 		return
 	var direction := origin.direction_to(target)
 	if direction.is_zero_approx():
@@ -149,6 +357,7 @@ func is_movement_animating() -> bool:
 
 func setup(p_state: CombatantState) -> void:
 	clear_no_damage_feedback()
+	clear_combat_value_feedback()
 	if attack_tween != null:
 		attack_tween.kill()
 	clear_attack_sprite()

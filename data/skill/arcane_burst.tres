@@ -2,11 +2,14 @@
 
 [ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/attack/arcane_burst.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/arcane.tres" id="3_arcane"]
 
 [resource]
 script = ExtResource("1")
 id = "arcane_burst"
 display_name = "Arcane Burst"
+spell_level = 3
+traits = [ExtResource("3_arcane")]
 description = "Choose a point within 25 feet. Attack every enemy in a 7.5-foot circle."
 mana_cost = 3
 cooldown_turns = 2

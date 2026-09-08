@@ -7,6 +7,8 @@ enum TargetFilter { ENEMIES, ALLIES, ALL_COMBATANTS }
 
 @export var id: String = ""
 @export var display_name: String = ""
+@export_range(1, 10) var spell_level: int = 1
+@export var traits: Array = []
 @export_multiline var description: String = ""
 @export_range(0, 99) var mana_cost: int = 0
 @export_range(0, 99) var ap_cost: int = 1

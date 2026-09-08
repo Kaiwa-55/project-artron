@@ -2,7 +2,7 @@ class_name EffectSystem
 extends RefCounted
 
 
-func apply_effect(target: CombatantState, effect: EffectData) -> bool:
+func apply_effect(target: CombatantState, effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false) -> bool:
 	if target == null or effect == null or effect.id.is_empty():
 		return false
 
@@ -14,7 +14,7 @@ func apply_effect(target: CombatantState, effect: EffectData) -> bool:
 			effect.cleanse_all
 		) > 0
 
-	target.add_effect(effect)
+	target.add_effect(effect, source_ability_id, source_ability_name, is_stance)
 	if target.movement_in_progress:
 		target.movement_remaining_feet = minf(target.movement_remaining_feet, target.get_effective_speed())
 	return true
@@ -24,8 +24,27 @@ func get_attack_bonus(combatant: CombatantState) -> int:
 	return get_total_bonus(combatant, "attack_bonus")
 
 
-func get_damage_bonus(combatant: CombatantState) -> int:
-	return get_total_bonus(combatant, "damage_bonus")
+func get_damage_bonus(combatant: CombatantState, attack: AttackData = null) -> int:
+	if combatant == null:
+		return 0
+	var total := 0
+	for effect_instance in combatant.effects:
+		var effect: EffectData = effect_instance.data
+		if effect == null or not effect_matches_attack(effect, attack):
+			continue
+		total += effect.damage_bonus * effect_instance.stack_count
+	return total
+
+
+func effect_matches_attack(effect: EffectData, attack: AttackData) -> bool:
+	if effect.required_attack_trait_ids.is_empty():
+		return true
+	if attack == null:
+		return false
+	for required_trait_id in effect.required_attack_trait_ids:
+		if not attack.traits.any(func(trait_data): return trait_data != null and trait_data.id == required_trait_id):
+			return false
+	return true
 
 
 func get_reflex_bonus(combatant: CombatantState) -> int:
@@ -104,7 +123,7 @@ func expire_turn_end_effects(combatant: CombatantState) -> Array[EffectInstance]
 
 	for index in range(combatant.effects.size() - 1, -1, -1):
 		var effect := combatant.effects[index]
-		if effect.data.expire_at_start_of_turn:
+		if effect.data.expire_at_start_of_turn or effect.data.persists_until_combat_end:
 			continue
 		effect.remaining_turns -= 1
 
@@ -121,7 +140,7 @@ func expire_start_turn_effects(combatant: CombatantState) -> Array[EffectInstanc
 		return expired
 	for index in range(combatant.effects.size() - 1, -1, -1):
 		var effect := combatant.effects[index]
-		if not effect.data.expire_at_start_of_turn:
+		if not effect.data.expire_at_start_of_turn or effect.data.persists_until_combat_end:
 			continue
 		expired.append(effect)
 		combatant.effects.remove_at(index)

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/stance.tres" id="4"]
+[ext_resource type="Resource" path="res://data/effect/heavy_stance.tres" id="5"]
+
+[sub_resource type="Resource" id="UseEffect_heavy_stance"]
+script = ExtResource("2")
+effect = ExtResource("5")
+
+[resource]
+script = ExtResource("1")
+id = "heavy_stance"
+display_name = "Heavy Stance"
+required_level = 1
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("3"), ExtResource("4")]
+ap_cost = 1
+description = "Enter a Heavy Stance. Your Unarmed Attacks deal +2 Damage and your Speed is reduced by 5 ft. You cannot use another Stance while this Stance is active."
+target_mode = 1
+use_effects = [SubResource("UseEffect_heavy_stance")]

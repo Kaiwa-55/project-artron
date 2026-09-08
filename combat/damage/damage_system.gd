@@ -22,7 +22,7 @@ func get_buff_damage_bonus(
 
 	# Phase 1:
 	# Buff System ยังไม่ได้ Implement
-	return effect_system.get_damage_bonus(attacker)
+	return effect_system.get_damage_bonus(attacker, attack)
 
 
 func get_resistance(

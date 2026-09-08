@@ -159,6 +159,7 @@ func resolve_attack(
 
 	# Miss
 	if not result.hit:
+		apply_miss_effects(target, attack, result)
 		return result
 
 	# Damage
@@ -227,7 +228,11 @@ func get_target_edge_distance_feet(attacker: CombatantState, target: CombatantSt
 
 
 func finalize_attack(attacker: CombatantState, target: CombatantState, attack: AttackData, result: AttackResult) -> AttackResult:
-	if not result.deferred or not result.hit:
+	if not result.deferred:
+		return result
+	if not result.hit:
+		result.deferred = false
+		apply_miss_effects(target, attack, result)
 		return result
 	result.deferred = false
 	result.critical_roll = dice_system.roll_percent()
@@ -248,6 +253,14 @@ func finalize_attack(attacker: CombatantState, target: CombatantState, attack: A
 			if effect_system.apply_effect(target, effect): result.applied_effects.append(effect.display_name)
 	apply_passive_on_hit_statuses(attacker, target, attack, result)
 	return result
+
+
+func apply_miss_effects(target: CombatantState, attack: AttackData, result: AttackResult) -> void:
+	if target == null or attack == null:
+		return
+	for effect in attack.effects_on_miss:
+		if effect_system.apply_effect(target, effect):
+			result.applied_effects.append(effect.display_name)
 
 
 func apply_passive_on_hit_statuses(attacker: CombatantState, target: CombatantState, attack: AttackData, result: AttackResult) -> void:

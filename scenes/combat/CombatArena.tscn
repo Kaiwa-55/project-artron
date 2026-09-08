@@ -88,6 +88,7 @@ text = "End Turn"
 [node name="BottomActionRow" type="HBoxContainer" parent="UILayer/Control" unique_id=198765432]
 layout_mode = 1
 anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0

@@ -2,6 +2,7 @@ class_name CombatantState
 extends RefCounted
 
 const DyingStatus = preload("res://data/status/dying.tres")
+const AbilityEffectDataScript = preload("res://data/ability/ability_effect_data.gd")
 
 var token_texture: Texture2D
 var token_scale: float = 1.0
@@ -236,7 +237,7 @@ func clear_temporary_defense() -> void:
 	fortitude_bonus = 0
 
 
-func add_effect(effect: EffectData) -> EffectInstance:
+func add_effect(effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false) -> EffectInstance:
 	for active_effect in effects:
 		if active_effect.data.id == effect.id:
 			match effect.stack_mode:
@@ -252,9 +253,13 @@ func add_effect(effect: EffectData) -> EffectInstance:
 						active_effect.remaining_turns = maxi(active_effect.remaining_turns, effect.duration_turns)
 				_:
 					active_effect.remaining_turns = maxi(active_effect.remaining_turns, effect.duration_turns)
+			if not source_ability_id.is_empty():
+				active_effect.source_ability_id = source_ability_id
+				active_effect.source_ability_name = source_ability_name
+				active_effect.is_stance = is_stance
 			return active_effect
 
-	var instance := EffectInstance.new(effect)
+	var instance := EffectInstance.new(effect, source_ability_id, source_ability_name, is_stance)
 	effects.append(instance)
 	return instance
 
@@ -276,16 +281,69 @@ func remove_status(status_id: String) -> bool:
 
 func get_effective_speed() -> float:
 	var penalty := 0.0
-	var bonus := 0.0
+	var bonus := get_passive_speed_bonus()
 	for effect_instance in effects:
 		penalty += effect_instance.data.speed_penalty_per_stack * effect_instance.stack_count
 		bonus += effect_instance.data.speed_bonus_per_stack * effect_instance.stack_count
 	return maxf(0.0, speed + bonus - penalty)
 
 
+func get_passive_speed_bonus() -> float:
+	var total := 0.0
+	var counted_ids: Array[String] = []
+	for ability in available_abilities:
+		if ability == null or not equipped_abilities.has(ability.id) or counted_ids.has(ability.id):
+			continue
+		counted_ids.append(ability.id)
+		for ability_effect in ability.effects:
+			if ability_effect != null and ability_effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_SPEED_BONUS_FEET:
+				total += float(ability_effect.passive_value)
+	if equipped_weapon_attack != null:
+		for ability in equipped_weapon_attack.granted_abilities:
+			if ability == null or counted_ids.has(ability.id):
+				continue
+			counted_ids.append(ability.id)
+			for ability_effect in ability.effects:
+				if ability_effect != null and ability_effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_SPEED_BONUS_FEET:
+					total += float(ability_effect.passive_value)
+	return total
+
+
 func get_damage_resistance(damage_type: String) -> int:
 	var key := damage_type.strip_edges().to_lower()
-	return max(0, int(damage_resistances.get(key, 0)) + int(equipment_damage_resistances.get(key, 0)))
+	return max(0, int(damage_resistances.get(key, 0)) + int(equipment_damage_resistances.get(key, 0)) + get_passive_damage_resistance(key))
+
+
+func get_passive_damage_resistance(damage_type: String) -> int:
+	var total := 0
+	var counted_ids: Array[String] = []
+	for ability in available_abilities:
+		if ability == null or level < ability.required_level or not equipped_abilities.has(ability.id) or counted_ids.has(ability.id):
+			continue
+		counted_ids.append(ability.id)
+		total += get_ability_damage_resistance(ability, damage_type)
+	if equipped_weapon_attack != null:
+		for ability in equipped_weapon_attack.granted_abilities:
+			if ability == null or level < ability.required_level or counted_ids.has(ability.id):
+				continue
+			counted_ids.append(ability.id)
+			total += get_ability_damage_resistance(ability, damage_type)
+	return total
+
+
+func get_ability_damage_resistance(ability, damage_type: String) -> int:
+	var total := 0
+	var key := damage_type.strip_edges().to_lower()
+	for ability_effect in ability.effects:
+		if ability_effect == null or ability_effect.effect_type != AbilityEffectDataScript.Type.PASSIVE_DAMAGE_RESISTANCE:
+			continue
+		if not ability_effect.resistance_damage_type_ids.any(func(type_id): return String(type_id).strip_edges().to_lower() == key):
+			continue
+		var amount: int = ability_effect.passive_value
+		if ability_effect.resistance_divide_by_level:
+			amount = floori(float(amount) / maxf(1.0, float(level)))
+		total += maxi(ability_effect.minimum_resistance, amount)
+	return total
 
 
 func is_immune_to_damage(damage_type: String) -> bool:

@@ -229,8 +229,8 @@ func begin_move() -> void:
 	if is_movement_animating():
 		return
 	var actor := get_player_controlled_actor()
-	if actor == null or combat_system.movement_system.get_available_distance_feet(actor) <= 0.001:
-		$UILayer/Control.set_mode_hint("Cannot Move: no Speed remaining this Turn.")
+	if actor == null or not combat_system.movement_system.can_begin_or_continue_move(actor, 1):
+		$UILayer/Control.set_mode_hint("Cannot Move: no Speed or AP available.")
 		return
 	pending_target_attack = null
 	pending_single_target_kind = ""

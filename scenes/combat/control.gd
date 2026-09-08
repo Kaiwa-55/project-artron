@@ -248,8 +248,8 @@ func find_skill(combatant: CombatantState, skill_id: String):
 func set_action_buttons_enabled(enabled: bool) -> void:
 	$"ActionSources/Sword Attack".disabled = not enabled
 	var actor: CombatantState = combat_system.get_combat_state().get_current_actor() if combat_system != null else null
-	var no_speed_remaining := actor == null or combat_system.movement_system.get_available_distance_feet(actor) <= 0.001
-	$ActionSources/Move.disabled = not enabled or no_speed_remaining
+	var cannot_move := actor == null or not combat_system.movement_system.can_begin_or_continue_move(actor, 1)
+	$ActionSources/Move.disabled = not enabled or cannot_move
 	$"ActionSources/End Turn".disabled = not enabled
 
 

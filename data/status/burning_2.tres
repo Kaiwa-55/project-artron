@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EffectData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icon/skill_icons15.png" id="2"]
+[resource]
+script = ExtResource("1")
+id = "burning"
+display_name = "Burning 2"
+icon_texture = ExtResource("2")
+effect_type = 0
+trigger = 1
+amount = 2
+damage_type = "fire"
+status_kind = 2
+stack_mode = 2
+potency = 2
+status_tags = Array[String](["status", "fire"])

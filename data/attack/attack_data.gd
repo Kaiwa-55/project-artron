@@ -39,5 +39,6 @@ var active_damage_bonus_source: String = ""
 @export var damage_type: String = "slash"
 
 @export var effects_on_hit: Array[EffectData] = []
+@export var effects_on_miss: Array[EffectData] = []
 @export var traits: Array = []
 @export var granted_abilities: Array[AbilityData] = []

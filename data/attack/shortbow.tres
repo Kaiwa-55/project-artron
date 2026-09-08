@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AttackData" format=3]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://dqqa8u7ig8p6a"]
 
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="script"]
-[ext_resource type="Resource" path="res://data/trait/simple.tres" id="simple"]
-[ext_resource type="Resource" path="res://data/trait/ranged.tres" id="ranged"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_6polw"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="2_m1auf"]
 [ext_resource type="Resource" path="res://data/trait/pierce.tres" id="pierce"]
+[ext_resource type="Resource" path="res://data/trait/ranged.tres" id="ranged"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/trait/simple.tres" id="simple"]
 [ext_resource type="Resource" path="res://data/trait/two_handed.tres" id="two_handed"]
 
 [resource]
@@ -11,12 +13,7 @@ script = ExtResource("script")
 id = "shortbow_attack"
 display_name = "Shortbow"
 attack_attribute = 1
-defense_type = 0
-to_hit_bonus = 0
-ap_cost = 1
 base_damage = 4
-damage_type = "pierce"
 range_feet = 30.0
-can_critical = true
-critical_chance = 5
+damage_type = "pierce"
 traits = [ExtResource("simple"), ExtResource("ranged"), ExtResource("pierce"), ExtResource("two_handed")]

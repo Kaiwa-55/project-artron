@@ -21,6 +21,7 @@ const DEFAULT_PARTY_ENCOUNTER := preload("res://data/encounter/prototype_encount
 var run_state: RunState
 var node_buttons: Dictionary = {}
 var selected_node_id: String = ""
+var reset_party_to_level_one_on_start: bool = false
 
 
 func _ready() -> void:
@@ -28,7 +29,12 @@ func _ready() -> void:
 	continue_button.pressed.connect(confirm_selected_node)
 	level_up_button.pressed.connect(open_level_up)
 	level_up_panel.choices_committed.connect(on_level_up_committed)
-	if get_tree().has_meta("active_run_state"):
+	if get_tree().has_meta("restart_run_seed"):
+		var restart_seed := int(get_tree().get_meta("restart_run_seed"))
+		get_tree().remove_meta("restart_run_seed")
+		get_tree().remove_meta("restart_run_at_level_one")
+		start_run(restart_seed, true)
+	elif get_tree().has_meta("active_run_state"):
 		run_state = get_tree().get_meta("active_run_state") as RunState
 		seed_input.text = str(run_state.seed)
 		seed_label.text = "RUN SEED  %d" % run_state.seed
@@ -46,7 +52,8 @@ func start_from_input() -> void:
 	start_run(int(requested_seed) if requested_seed.is_valid_int() else int(Time.get_unix_time_from_system()))
 
 
-func start_run(seed_value: int) -> void:
+func start_run(seed_value: int, reset_party_to_level_one: bool = false) -> void:
+	reset_party_to_level_one_on_start = reset_party_to_level_one
 	run_state = RunState.new()
 	# Keep the generator instance separate. Chaining new().generate() can make
 	# Godot's external-class resolver report generate as missing after a rescan.
@@ -66,6 +73,7 @@ func start_run(seed_value: int) -> void:
 	ensure_player_progression_state()
 	refresh_level_up_button()
 	build_party_inventory_buttons()
+	reset_party_to_level_one_on_start = false
 
 
 func ensure_player_progression_state() -> void:
@@ -78,6 +86,8 @@ func ensure_player_progression_state() -> void:
 			if bool(entry.get("use_created_character", false)):
 				source = get_tree().get_meta("created_character_data", source)
 			var state: CombatantState = source.create_combatant_state()
+			if reset_party_to_level_one_on_start:
+				prepare_level_one_restart_state(state)
 			state.id = member_id
 			state.display_name = String(entry.get("display_name", state.display_name))
 			run_state.party_progression_states[member_id] = state
@@ -96,6 +106,27 @@ func ensure_player_progression_state() -> void:
 			run_state.applied_party_ability_point_bonuses[member_id] = applied + unapplied
 	run_state.player_progression_state = run_state.party_progression_states.get("player")
 	run_state.applied_party_ability_point_bonus = int(run_state.applied_party_ability_point_bonuses.get("player", 0))
+
+
+func prepare_level_one_restart_state(state: CombatantState) -> void:
+	state.level = 1
+	state.experience = 0
+	state.ability_points = 0
+	state.attribute_points = 0
+	state.progression_rewards_granted_through_level = 0
+	state.pending_level_up_choices.clear()
+	state.selected_level_attributes.clear()
+	state.selected_ability_costs_applied = false
+	var catalog = load("res://data/creation/default_creation_catalog.tres")
+	var retained_selected: Array[String] = []
+	for ability_id in state.selected_ability_ids:
+		var ability = catalog.find_ability(ability_id)
+		if ability != null and ability.required_level <= 1:
+			retained_selected.append(ability_id)
+	state.selected_ability_ids = retained_selected
+	state.granted_ability_ids.clear()
+	state.available_abilities = state.available_abilities.filter(func(ability): return ability != null and retained_selected.has(ability.id))
+	state.equipped_abilities = state.equipped_abilities.filter(func(ability_id): return retained_selected.has(ability_id))
 
 
 func get_party_entries() -> Array[Dictionary]:

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "heavy_stance"
+display_name = "Heavy Stance"
+persists_until_combat_end = true
+damage_bonus = 2
+required_attack_trait_ids = Array[String](["unarmed"])
+speed_penalty_per_stack = 5.0
+can_be_cleansed = false

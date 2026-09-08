@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttackAnimationData" format=3 uid="uid://ce3txaxt1bf61"]
+
+[ext_resource type="Script" uid="uid://dvlud43lcsdje" path="res://animation/attack_animation_data.gd" id="1_kydky"]
+[ext_resource type="Texture2D" uid="uid://b1jvq7y4ynnak" path="res://assets/fx/Ice_Fx/Ice VFX 1 192x192.png" id="2_kydky"]
+
+[resource]
+script = ExtResource("1_kydky")
+animation_type = 1
+sprite_sheet = ExtResource("2_kydky")
+columns = 5
+rows = 4
+last_frame = 19
+frames_per_second = 24.0
+effect_scale = Vector2(1.8, 1.8)

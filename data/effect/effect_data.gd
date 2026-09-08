@@ -50,6 +50,9 @@ enum StackMode {
 @export var icon_texture: Texture2D
 @export_range(1, 99) var duration_turns: int = 1
 @export var expire_at_start_of_turn: bool = false
+# Persistent Stances and similar effects remain until explicitly removed or the
+# Combat ends instead of consuming a turn-based duration.
+@export var persists_until_combat_end: bool = false
 @export var effect_type: Type = Type.STAT
 @export var trigger: Trigger = Trigger.ON_APPLY
 
@@ -62,6 +65,9 @@ enum StackMode {
 
 @export var attack_bonus: int = 0
 @export var damage_bonus: int = 0
+# Optional Attack Trait filter for bonuses granted by temporary effects such as
+# Stances. Empty means the bonus applies to every Attack.
+@export var required_attack_trait_ids: Array[String] = []
 @export var reflex_bonus: int = 0
 @export var fortitude_bonus: int = 0
 @export var will_bonus: int = 0

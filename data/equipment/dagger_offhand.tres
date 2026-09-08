@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="EquipmentData" format=3]
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dy5ai2cdwi0dj"]
 
-[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="script"]
-[ext_resource type="Resource" path="res://data/attack/dagger.tres" id="attack"]
+[ext_resource type="Resource" uid="uid://jycf4ut8cg20" path="res://data/attack/dagger.tres" id="attack"]
+[ext_resource type="Script" uid="uid://cng3y0g4b8i0c" path="res://data/equipment/equipment_data.gd" id="script"]
 
 [resource]
 script = ExtResource("script")

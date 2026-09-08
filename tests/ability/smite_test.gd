@@ -4,7 +4,7 @@ const PlayerTemplate = preload("res://data/character/player.tres")
 const EnemyTemplate = preload("res://data/character/enemy.tres")
 const DevoteeData = preload("res://data/class/devotee.tres")
 const Smite = preload("res://data/ability/smite.tres")
-const IronSwordAttack = preload("res://data/attack/iron_sword.tres")
+const SwordAttack = preload("res://data/attack/sword.tres")
 const ShortbowAttack = preload("res://data/attack/shortbow.tres")
 const Catalog = preload("res://data/creation/default_creation_catalog.tres")
 
@@ -33,17 +33,18 @@ func _init() -> void:
 	system.combat_state.current_actor_id = devotee.id
 	devotee.ap = devotee.max_ap
 
-	var certain_sword: AttackData = IronSwordAttack.duplicate(true)
+	var certain_sword: AttackData = SwordAttack.duplicate(true)
 	certain_sword.requires_to_hit = false
 	devotee.equipped_weapon_attack = certain_sword
 	var hp_before := enemy.hp
+	var faith_before := devotee.get_total_faith()
 	var hit := system.use_active_ability(devotee.id, enemy.id, "smite")
 	check(hit.success, "Smite can attack with an equipped Melee weapon")
-	check(enemy.hp < hp_before and get_smite_damage(hit.events) == 5, "Smite adds floor(Faith / 2) Light Damage on Hit")
-	check(devotee.faith == 9 and devotee.ap == devotee.max_ap - 1, "Smite costs 1 AP and 1 Faith")
-	check(hit.events.any(func(event): return event.type == EventTypes.Type.FAITH_CHANGED and event.data.get("faith_spent", 0) == 1), "Smite reports its Faith cost to the Combat Log")
+	check(enemy.hp < hp_before and get_smite_damage(hit.events) == faith_before, "Smite adds Light Damage equal to Faith on Hit")
+	check(devotee.get_total_faith() == faith_before - Smite.faith_cost and devotee.ap == devotee.max_ap - Smite.ap_cost, "Smite pays its configured AP and Faith costs")
+	check(hit.events.any(func(event): return event.type == EventTypes.Type.FAITH_CHANGED and event.data.get("faith_spent", 0) == Smite.faith_cost), "Smite reports its Faith cost to the Combat Log")
 
-	var missing_sword: AttackData = IronSwordAttack.duplicate(true)
+	var missing_sword: AttackData = SwordAttack.duplicate(true)
 	missing_sword.requires_to_hit = true
 	missing_sword.to_hit_bonus = -1000
 	devotee.equipped_weapon_attack = missing_sword
@@ -57,7 +58,7 @@ func _init() -> void:
 	devotee.ap = devotee.max_ap
 	var ranged := system.use_active_ability(devotee.id, enemy.id, "smite")
 	check(not ranged.success and devotee.ap == devotee.max_ap, "Smite rejects a Ranged weapon before spending AP")
-	check(Smite.required_level == 2 and Smite.ap_cost == 1 and Smite.faith_cost == 1, "Smite is a Level 2 Ability costing 1 AP and 1 Faith")
+	check(Smite.required_level == 2 and Smite.use_effects[0].faith_divisor == 1, "Smite is a Level 2 Ability that scales at full Faith")
 	check(Catalog.abilities.any(func(ability): return ability != null and ability.id == "smite"), "Smite is available in Character Creation")
 
 	for failure in failures:

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://bgdxui81ypnb5"]
+
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://d1qlwtjypsyfh" path="res://data/attack/ember_bolt.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "ember_bolt"
+display_name = "Ember Bolt"
+description = "Attack one enemy within 30 feet for 4 Fire damage and apply Burning 1 on Hit."
+mana_cost = 1
+attack_data = ExtResource("2")
+targeting_range_feet = 30.0

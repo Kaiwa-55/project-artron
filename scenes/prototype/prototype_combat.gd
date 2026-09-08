@@ -1,6 +1,7 @@
 extends "res://scenes/prototype/prototype_ui_controller.gd"
 
 const REWARD_SCENE := "res://scenes/run/RewardSelection.tscn"
+const RUN_MAP_SCENE := "res://scenes/run/RunMap.tscn"
 
 var post_combat_transition_started: bool = false
 
@@ -397,6 +398,8 @@ func _ready() -> void:
 	_apply_prototype_layout()
 	_build_obstacle_visuals()
 	_build_inventory_drawer()
+	$UILayer/Control/DefeatOverlay/Panel/Margin/Column/RestartButton.pressed.connect(restart_run_after_defeat)
+	$UILayer/Control/DefeatOverlay.hide()
 	$UILayer/Control.update_ui()
 
 
@@ -424,6 +427,7 @@ func _process(_delta: float) -> void:
 	if state.is_finished() and state.combat_result == CombatEnums.CombatResult.VICTORY and get_tree().has_meta("active_run_state") and not post_combat_transition_started:
 		post_combat_transition_started = true
 		open_reward_after_victory()
+	$UILayer/Control/DefeatOverlay.visible = state.is_finished() and state.combat_result == CombatEnums.CombatResult.DEFEAT
 	var reaction_locked: bool = combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
 	if inventory_drawer != null and inventory_drawer.get_script() == CharacterPanelScript:
 		var displayed_actor := get_displayed_party_member()
@@ -447,6 +451,24 @@ func open_reward_after_victory() -> void:
 	if change_error != OK:
 		post_combat_transition_started = false
 		$UILayer/Control.add_log_message("Could not open Reward Selection: %s" % error_string(change_error))
+
+
+func restart_run_after_defeat() -> void:
+	var previous_seed := 0
+	if get_tree().has_meta("active_run_state"):
+		var previous_run = get_tree().get_meta("active_run_state")
+		if previous_run is RunState:
+			previous_seed = previous_run.seed
+			if not previous_run.party_character_data.is_empty():
+				get_tree().set_meta("active_party_characters", previous_run.party_character_data.duplicate())
+	get_tree().remove_meta("active_run_state")
+	get_tree().remove_meta("active_run_node_id")
+	get_tree().remove_meta("active_encounter_data")
+	get_tree().set_meta("restart_run_seed", RunState.generate_restart_seed(previous_seed))
+	get_tree().set_meta("restart_run_at_level_one", true)
+	var change_error := get_tree().change_scene_to_file(RUN_MAP_SCENE)
+	if change_error != OK:
+		$UILayer/Control.add_log_message("Could not restart Run: %s" % error_string(change_error))
 
 
 func refresh_end_turn_lock() -> void:

@@ -1,9 +1,15 @@
-[gd_resource type="Resource" script_class="AttackData" load_steps=2 format=3]
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://y0ibs5qrcsnr"]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/arcane_circle.tres" id="1_mwxot"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_mwiln"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_hh5na"]
+
 [resource]
 script = ExtResource("1")
 id = "arcane_burst_attack"
 display_name = "Arcane Burst"
+animation_template = ExtResource("1_mwxot")
 attack_attribute = 3
 defense_type = 0
 ap_cost = 0

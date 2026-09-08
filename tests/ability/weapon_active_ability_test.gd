@@ -14,6 +14,8 @@ func _init() -> void:
 	system.start_combat([player, enemy])
 	system.combat_state.current_actor_id = player.id
 	player.ap = 10
+	# Keep this test independent from the player's current prototype loadout.
+	player.equipped_weapon_attack = load("res://data/attack/iron_sword.tres")
 
 	var devotee_data = load("res://data/character/player.tres").duplicate(true)
 	var devotee: CombatantState = devotee_data.create_combatant_state()
@@ -24,7 +26,8 @@ func _init() -> void:
 	check(not devotee_system.use_weapon_ability(devotee.id, devotee_enemy.id, "defensive_stance").success, "A filtered Weapon Ability cannot be activated directly", failures)
 
 	var result := system.use_weapon_ability(player.id, enemy.id, "defensive_stance")
-	check(result.success, "Defensive Stance should execute", failures)
+	check(result.success, "Defensive Stance should execute: %s" % result.failure_reason, failures)
+	check(system.ability_system.ability_has_trait(load("res://data/ability/defensive_stance.tres"), "stance"), "Defensive Stance should have the shared Stance Trait", failures)
 	check(player.has_status("defensive_stance_reflex"), "Defensive Stance should apply its shared EffectData", failures)
 	check(system.effect_system.get_reflex_bonus(player) == 1, "Defensive Stance should grant +1 Reflex", failures)
 	check(system.ability_system.get_remaining_cooldown(player, "defensive_stance") == 1, "Defensive Stance should start cooldown", failures)

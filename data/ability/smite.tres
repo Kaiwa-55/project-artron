@@ -14,6 +14,7 @@ timing = 1
 recipient = 1
 dynamic_effect = 3
 damage_type = "light"
+faith_divisor = 1
 
 [resource]
 script = ExtResource("1")
@@ -22,9 +23,9 @@ display_name = "Smite"
 required_level = 2
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("3_nfpxk"), ExtResource("3"), ExtResource("4")]
-ap_cost = 1
-faith_cost = 1
-description = "Attack one enemy with your equipped Melee weapon. On Hit, deal additional Light Damage equal to floor(current Faith / 2). Cannot be used with a Ranged weapon."
+ap_cost = 3
+faith_cost = 2
+description = "Attack one enemy with your equipped Melee weapon. On Hit, deal additional Light Damage equal to current Faith before paying this Ability's cost. Cannot be used with a Ranged weapon."
 uses_equipped_weapon_attack = true
 attack_source = 1
 required_attack_trait_ids = Array[String](["melee"])

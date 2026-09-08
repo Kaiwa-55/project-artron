@@ -63,7 +63,36 @@ offset_bottom = 42.0
 offset_right = 8.0
 offset_bottom = 42.0
 
-[node name="ReferenceActionDock" parent="UILayer/Control/BottomActionRow" parent_id_path=PackedInt32Array(76147029, 198765432) index="0" unique_id=1169074384]
+[node name="ReferenceTurnHUD" type="PanelContainer" parent="UILayer/Control/BottomActionRow" parent_id_path=PackedInt32Array(198765432) index="1" unique_id=1206569473]
+z_index = 10
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD" index="0" unique_id=788150050]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Column" type="VBoxContainer" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin" index="0" unique_id=1148135780]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="TurnStatus" type="Label" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="0" unique_id=1091826297]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
+text = "ACTION POINTS"
+
+[node name="EndTurn" type="Button" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="1" unique_id=262984086]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "END TURN"
+
+[node name="TargetStatus" type="Label" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="2" unique_id=19126729]
+visible = false
+layout_mode = 2
 
 [node name="Enemy_panel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="3" unique_id=1099442048]
 clip_contents = true
@@ -140,38 +169,7 @@ text = "PLAYER STATUS"
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="ReferenceTurnHUD" type="PanelContainer" parent="UILayer/Control/BottomActionRow" parent_id_path=PackedInt32Array(76147029, 198765432) index="1" unique_id=1206569473]
-z_index = 10
-layout_mode = 2
-custom_minimum_size = Vector2(300, 0)
-size_flags_vertical = 3
-
-[node name="Margin" type="MarginContainer" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD" index="0" unique_id=788150050]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 10
-
-[node name="Column" type="VBoxContainer" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin" index="0" unique_id=1148135780]
-layout_mode = 2
-theme_override_constants/separation = 7
-
-[node name="TurnStatus" type="Label" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="0" unique_id=1091826297]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
-text = "ACTION POINTS"
-
-[node name="EndTurn" type="Button" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="1" unique_id=262984086]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-text = "END TURN"
-
-[node name="TargetStatus" type="Label" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="2" unique_id=19126729]
-visible = false
-layout_mode = 2
-
-[node name="ActionMenu" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="9" unique_id=167381762]
+[node name="ActionMenu" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="8" unique_id=167381762]
 visible = false
 z_index = 24
 layout_mode = 1
@@ -221,7 +219,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="10" unique_id=530167356 instance=ExtResource("5_character_panel")]
+[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="9" unique_id=530167356 instance=ExtResource("5_character_panel")]
 visible = false
 z_index = 19
 layout_mode = 1
@@ -234,3 +232,58 @@ offset_right = -40.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="DefeatOverlay" type="ColorRect" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="10" unique_id=1043847456]
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.022, 0.035, 0.82)
+
+[node name="Panel" type="PanelContainer" parent="UILayer/Control/DefeatOverlay" index="0" unique_id=1513091069]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -125.0
+offset_right = 230.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Control/DefeatOverlay/Panel" index="0" unique_id=1918865136]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="Column" type="VBoxContainer" parent="UILayer/Control/DefeatOverlay/Panel/Margin" index="0" unique_id=910410799]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Title" type="Label" parent="UILayer/Control/DefeatOverlay/Panel/Margin/Column" index="0" unique_id=1694954611]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91, 0.42, 0.38, 1)
+theme_override_font_sizes/font_size = 28
+text = "RUN DEFEATED"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="UILayer/Control/DefeatOverlay/Panel/Margin/Column" index="1" unique_id=2127906973]
+layout_mode = 2
+text = "Restart at Level 1 with a new map Seed.
+Run progress and rewards will be reset."
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="UILayer/Control/DefeatOverlay/Panel/Margin/Column" index="2" unique_id=150978144]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "RESTART RUN"

@@ -26,6 +26,10 @@ func run_test() -> void:
 	system.start_combat([player, target])
 	system.combat_state.current_actor_id = player.id
 	system.start_current_turn()
+	# The prototype Player currently starts with two Daggers. Prepare the free-hand
+	# state explicitly so this test does not depend on that changing loadout.
+	player.equipped_items.erase(EquipmentSystem.WEAPON_SLOT_2)
+	system.equipment_system.refresh_equipment(player)
 	var attack: AttackData = player.unarmed_attack.duplicate(true)
 	attack.requires_to_hit = false
 	check(system.trait_system.attack_has_trait(attack, "melee") and system.trait_system.attack_has_trait(attack, "unarmed"), "Unarmed Attack has Melee and Unarmed traits")
@@ -36,8 +40,8 @@ func run_test() -> void:
 	check(system.execute_action(request).success, "Unarmed Attack can execute with a free hand")
 
 	player.ap = player.effective_max_ap
-	player.equipped_items[0] = RefCounted.new()
-	player.equipped_items[3] = RefCounted.new()
+	player.equipped_items[EquipmentSystem.WEAPON_SLOT_1] = RefCounted.new()
+	player.equipped_items[EquipmentSystem.WEAPON_SLOT_2] = RefCounted.new()
 	check(not system.equipment_system.has_free_hand(player), "Two occupied hands disable Unarmed Attack")
 	var blocked: ActionResult = system.execute_action(request)
 	check(not blocked.success and blocked.failure_reason.contains("free hand"), "Combat validation rejects Unarmed Attack with no free hand")

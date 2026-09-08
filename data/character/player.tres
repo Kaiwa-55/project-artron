@@ -2,20 +2,26 @@
 
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1_character_data"]
 [ext_resource type="Resource" uid="uid://dxh6wswhj882n" path="res://data/class/martial_artist.tres" id="2_xo044"]
+[ext_resource type="Resource" uid="uid://ckrki53jpb51j" path="res://data/equipment/sword.tres" id="3_xo044"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="4_8rcdb"]
-[ext_resource type="Resource" uid="uid://ckrki53jpb51j" path="res://data/equipment/iron_sword.tres" id="8_iron_sword"]
 [ext_resource type="Resource" uid="uid://cp2oeb5hig86m" path="res://data/equipment/long_spear.tres" id="9_long_spear"]
 [ext_resource type="Resource" path="res://data/equipment/leather_armor.tres" id="10_leather_armor"]
 [ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="11_buckler"]
 [ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="13_human"]
-[ext_resource type="Resource" uid="uid://bkdigf3b6p2nf" path="res://data/status/slowed.tres" id="15_nwyka"]
-[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="22_uvnxd"]
-[ext_resource type="Resource" path="res://data/equipment/club.tres" id="item_club"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="22_uvnxd"]
+[ext_resource type="Resource" uid="uid://mwn86gfa6f6d" path="res://data/equipment/club.tres" id="item_club"]
 [ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="item_dagger"]
-[ext_resource type="Resource" path="res://data/equipment/dagger_offhand.tres" id="item_dagger_offhand"]
-[ext_resource type="Resource" path="res://data/equipment/hand_axe.tres" id="item_hand_axe"]
-[ext_resource type="Resource" path="res://data/equipment/shortbow.tres" id="item_shortbow"]
-[ext_resource type="Resource" path="res://data/equipment/short_spear.tres" id="item_short_spear"]
+[ext_resource type="Resource" uid="uid://dy5ai2cdwi0dj" path="res://data/equipment/dagger_offhand.tres" id="item_dagger_offhand"]
+[ext_resource type="Resource" uid="uid://y0eqxm0uunff" path="res://data/equipment/hand_axe.tres" id="item_hand_axe"]
+[ext_resource type="Resource" uid="uid://dn48gsppkugs0" path="res://data/equipment/shortbow.tres" id="item_shortbow"]
+[ext_resource type="Resource" uid="uid://qi8e4p706jhp" path="res://data/equipment/short_spear.tres" id="item_short_spear"]
+[ext_resource type="Resource" uid="uid://c1tpa53aw63r" path="res://data/skill/arcane_bolt.tres" id="skill_arcane_bolt"]
+[ext_resource type="Resource" uid="uid://dsgkcvrpmemcm" path="res://data/skill/arcane_burst.tres" id="skill_arcane_burst"]
+[ext_resource type="Resource" uid="uid://k6apocdyw1ee" path="res://data/skill/arcane_cone.tres" id="skill_arcane_cone"]
+[ext_resource type="Resource" uid="uid://bgdxui81ypnb5" path="res://data/skill/ember_bolt.tres" id="skill_ember_bolt"]
+[ext_resource type="Resource" uid="uid://ld6omfqnqxcv" path="res://data/skill/flame_wave.tres" id="skill_flame_wave"]
+[ext_resource type="Resource" path="res://data/skill/frost_shard.tres" id="skill_frost_shard"]
+[ext_resource type="Resource" path="res://data/skill/frozen_ground.tres" id="skill_frozen_ground"]
 
 [resource]
 script = ExtResource("1_character_data")
@@ -31,10 +37,11 @@ class_attribute_choices = Array[int]([2])
 level = 3
 base_max_hp = 0
 base_max_ap = 4
-starting_effects = Array[ExtResource("4_8rcdb")]([ExtResource("15_nwyka")])
-equipment_inventory = [ExtResource("8_iron_sword"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_dagger_offhand"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")]
+max_mana_bonus = 10
+equipment_inventory = [ExtResource("3_xo044"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_dagger_offhand"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")]
 starting_equipment = [ExtResource("item_dagger"), ExtResource("item_dagger_offhand")]
 starting_equipment_slots = {
 "dagger": 0,
 "dagger_offhand": 3
 }
+skills = [ExtResource("skill_arcane_bolt"), ExtResource("skill_arcane_burst"), ExtResource("skill_arcane_cone"), ExtResource("skill_ember_bolt"), ExtResource("skill_flame_wave"), ExtResource("skill_frost_shard"), ExtResource("skill_frozen_ground")]

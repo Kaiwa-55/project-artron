@@ -15,11 +15,15 @@ func get_available_distance_feet(actor: CombatantState) -> float:
 		return 0.0
 	if actor.movement_in_progress:
 		return actor.movement_remaining_feet
-	# A completed or forfeited Move must not start a second movement allowance
-	# during the same Turn. start_turn() resets this distance to zero.
-	if actor.movement_distance_this_turn > 0.001:
-		return 0.0
+	# Each new Move action grants a fresh Speed allowance. Continuing an
+	# unfinished Move reuses the remaining allowance without spending AP again.
 	return actor.get_effective_speed() + (ability_system.get_first_move_distance_bonus(actor) if ability_system != null else 0.0)
+
+
+func can_begin_or_continue_move(actor: CombatantState, ap_cost: int = 1) -> bool:
+	if actor == null or get_available_distance_feet(actor) <= 0.001:
+		return false
+	return actor.movement_in_progress or actor.ap >= ap_cost
 
 
 func clamp_destination_to_remaining_speed(

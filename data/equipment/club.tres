@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="EquipmentData" format=3]
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://mwn86gfa6f6d"]
 
-[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="script"]
-[ext_resource type="Resource" path="res://data/attack/club.tres" id="attack"]
+[ext_resource type="Resource" uid="uid://bpvl2xvcv3cvl" path="res://data/attack/club.tres" id="attack"]
+[ext_resource type="Script" uid="uid://cng3y0g4b8i0c" path="res://data/equipment/equipment_data.gd" id="script"]
 
 [resource]
 script = ExtResource("script")
 id = "club"
 display_name = "Club"
-description = "A one-handed Strength weapon targeting Fortitude. Cannot critically hit."
+description = "A one-handed Strength weapon targeting Reflex. Cannot critically hit."
 weapon_attack = ExtResource("attack")

@@ -31,6 +31,8 @@ func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2
 	combat_system.cancel_remaining_movement(actor)
 	combat_system.clear_hidden(actor, "Offensive Skill used")
 	var area_attack: AttackData = combat_system.skill_system.get_attack_data(skill, actor)
+	if uses_single_area_animation(area_attack.animation_template):
+		area_attack.animation_template = null
 	area_attack.ap_cost = 0
 	pending_context = AreaActionContextScript.new()
 	pending_context.setup_skill(actor, skill, target_point, area_attack, targets)
@@ -65,7 +67,7 @@ func execute_ability(combatant_id: String, ability_id: String, target_point: Vec
 		area_attack.display_name = ability.display_name
 		area_attack.requires_to_hit = false
 		area_attack.base_damage = 0
-	if ability.animation_template != null and ability.animation_template.animation_type != AttackAnimationData.Type.ATTACHED_DIRECTIONAL:
+	if ability.animation_template != null and not uses_single_area_animation(ability.animation_template):
 		area_attack.animation_template = ability.animation_template
 	area_attack.ap_cost = 0
 	if not actor.spend_ap(ability.ap_cost):
@@ -197,18 +199,35 @@ func continue_action(carried_events: Array[CombatEvent] = []) -> ActionResult:
 			break
 	context.finish()
 	if skill != null:
-		result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, actor.id, "", {"skill_name": skill.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(actor, skill), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(actor, skill), "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}))
+		var skill_event_data := {"skill_name": skill.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(actor, skill), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(actor, skill), "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}
+		var skill_animation = skill.attack_data.animation_template if skill.attack_data != null else null
+		if uses_single_area_animation(skill_animation):
+			append_area_animation_data(skill_event_data, skill_animation, actor, context.target_point, skill)
+		result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, actor.id, "", skill_event_data))
 	else:
 		var ability_event_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": ability.cooldown_turns, "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}
-		if ability.animation_template != null and ability.animation_template.animation_type == AttackAnimationData.Type.ATTACHED_DIRECTIONAL:
-			ability_event_data["animation_template"] = ability.animation_template
-			ability_event_data["animation_origin"] = actor.position
-			ability_event_data["animation_target"] = context.target_point
+		if uses_single_area_animation(ability.animation_template):
+			append_area_animation_data(ability_event_data, ability.animation_template, actor, context.target_point, ability)
 		result.events.push_front(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, "", ability_event_data))
 	pending_context = null
 	combat_system.emit_events(result.events)
 	combat_system.check_for_combat_end()
 	return result
+
+
+func uses_single_area_animation(template) -> bool:
+	return template != null and template.animation_type in [AttackAnimationData.Type.ATTACHED_DIRECTIONAL, AttackAnimationData.Type.CONE_BURST, AttackAnimationData.Type.CIRCLE_GROUND]
+
+
+func append_area_animation_data(event_data: Dictionary, template, actor: CombatantState, target_point: Vector2, source) -> void:
+	event_data["animation_template"] = template
+	event_data["animation_origin"] = actor.position
+	event_data["animation_target"] = target_point
+	if source.area_shape == source.AreaShape.CONE:
+		event_data["area_length_feet"] = source.targeting_range_feet
+		event_data["cone_angle_degrees"] = source.cone_angle_degrees
+	elif source.area_shape == source.AreaShape.CIRCLE:
+		event_data["area_radius_feet"] = source.area_radius_feet
 
 
 func resume_after_reaction(reactor: CombatantState, prepared: AttackResult, action_events: Array[CombatEvent], carried_events: Array[CombatEvent]) -> ActionResult:

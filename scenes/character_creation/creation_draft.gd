@@ -159,6 +159,35 @@ func get_spell_choices_remaining() -> int:
 	return maxi(0, get_spell_choice_capacity() - learned_spell_ids.size())
 
 
+func get_active_spell_grantors() -> Array:
+	var grantors: Array = []
+	if preview == null:
+		return grantors
+	for ability in preview.available_abilities:
+		if ability != null and ability.spell_choices_granted > 0 \
+			and (preview.granted_ability_ids.has(ability.id) or preview.selected_ability_ids.has(ability.id)):
+			grantors.append(ability)
+	return grantors
+
+
+func spell_training_matches_grantor(training: AbilityData, grantor: AbilityData) -> bool:
+	if training == null or training.granted_skills.is_empty() or grantor == null or grantor.spell_choices_granted <= 0:
+		return false
+	var skill = training.granted_skills[0]
+	if skill == null or skill.spell_level < grantor.spell_min_level:
+		return false
+	if grantor.spell_max_level > 0 and skill.spell_level > grantor.spell_max_level:
+		return false
+	for trait_id in grantor.spell_required_trait_ids:
+		if not skill.traits.any(func(trait_data): return trait_data != null and trait_data.id == trait_id):
+			return false
+	return true
+
+
+func is_spell_training_allowed(training: AbilityData) -> bool:
+	return get_active_spell_grantors().any(func(grantor): return spell_training_matches_grantor(training, grantor))
+
+
 func get_spell_learning_failure_reason(training: AbilityData) -> String:
 	if training == null or training.granted_skills.is_empty():
 		return "Spell Training is invalid."
@@ -166,6 +195,8 @@ func get_spell_learning_failure_reason(training: AbilityData) -> String:
 		return "This spell is not available to the selected class."
 	if level < training.required_level:
 		return "%s requires Level %d." % [training.granted_skills[0].display_name, training.required_level]
+	if not is_spell_training_allowed(training):
+		return "%s does not match the Trait or Spell Level allowed by your Spell-granting Ability." % training.granted_skills[0].display_name
 	if learned_spell_ids.has(training.id):
 		return "%s is already learned." % training.granted_skills[0].display_name
 	if get_spell_choices_remaining() <= 0:
@@ -195,7 +226,7 @@ func _rebuild_spell_choices() -> void:
 		var training: AbilityData = catalog.find_ability(training_id)
 		if training == null or training.granted_skills.is_empty() or level < training.required_level:
 			continue
-		if character_class == null or not training.required_trait_ids.has(character_class.id):
+		if character_class == null or not training.required_trait_ids.has(character_class.id) or not is_spell_training_allowed(training):
 			continue
 		retained.append(training_id)
 		for skill in training.granted_skills:

@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_v1vw7"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3_hbych"]
 [ext_resource type="Resource" path="res://data/effect/defensive_stance_reflex.tres" id="3_reflex"]
+[ext_resource type="Resource" path="res://data/trait/stance.tres" id="3_stance"]
 [ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="4_use_effect"]
 
 [sub_resource type="Resource" id="UseEffect_defense"]
@@ -16,7 +17,7 @@ script = ExtResource("1_ability")
 id = "defensive_stance"
 display_name = "Defensive Stance"
 required_trait_ids = Array[String](["martial_artist"])
-traits = [ExtResource("3_hbych")]
+traits = [ExtResource("3_hbych"), ExtResource("3_stance")]
 ap_cost = 1
 cooldown_turns = 1
 description = "Attack with the equipped Iron Sword, then gain +1 Reflex until the start of your next turn."

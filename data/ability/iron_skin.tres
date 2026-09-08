@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="4"]
+
+[sub_resource type="Resource" id="AbilityEffect_iron_skin"]
+script = ExtResource("2")
+effect_type = 16
+passive_value = 2
+resistance_damage_type_ids = Array[String](["slash", "slashing", "pierce", "blunt", "bludgeoning"])
+resistance_divide_by_level = true
+minimum_resistance = 1
+
+[resource]
+script = ExtResource("1")
+id = "iron_skin"
+display_name = "Iron Skin"
+required_level = 2
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("3"), ExtResource("4")]
+is_passive = true
+description = "Passive. Gain Slashing, Pierce, and Bludgeoning Resistance equal to floor(2 / Level), minimum 1."
+effects = [SubResource("AbilityEffect_iron_skin")]

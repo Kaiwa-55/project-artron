@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_l41en"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
 [ext_resource type="Resource" path="res://data/trait/blunt.tres" id="blunt"]
-[ext_resource type="Resource" path="res://data/ability/dual_strike.tres" id="dual_strike"]
+[ext_resource type="Resource" uid="uid://dpepfmcue5b01" path="res://data/ability/dual_strike.tres" id="dual_strike"]
 [ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="dual_weapon"]
 [ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="melee"]
 [ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="script"]
@@ -16,7 +16,7 @@ script = ExtResource("script")
 id = "club_attack"
 display_name = "Club"
 animation_template = ExtResource("animation")
-defense_type = 1
+defense_type = 0
 can_critical = false
 critical_chance = 0
 base_damage = 5

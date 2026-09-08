@@ -415,8 +415,9 @@ func show_action_menu(category: String) -> void:
 		return
 	match category:
 		"move":
-			add_action_menu_note("Speed %.1f ft · Move remaining %.1f ft" % [player.get_effective_speed(), player.movement_remaining_feet])
-			add_action_menu_note("This character can Move during their Turn.")
+			var available_move := combat_system.movement_system.get_available_distance_feet(player)
+			add_action_menu_note("Speed %.1f ft · Available %.1f ft" % [player.get_effective_speed(), available_move])
+			add_action_menu_note("Continuing an unfinished Move is free. A new Move costs 1 AP.")
 		"attack":
 			var listed_items: Array = []
 			for slot in [0, 3]:
@@ -734,7 +735,7 @@ func refresh_action_dock() -> void:
 			action_category_buttons[category].disabled = locked
 		var current_actor: CombatantState = state.get_current_actor()
 		if action_category_buttons.has("move") and current_actor != null and is_player_party_turn():
-			action_category_buttons["move"].disabled = locked or combat_system.movement_system.get_available_distance_feet(current_actor) <= 0.001
+			action_category_buttons["move"].disabled = locked or not combat_system.movement_system.can_begin_or_continue_move(current_actor, 1)
 		if locked and action_menu_panel != null:
 			action_menu_panel.visible = false
 
@@ -750,12 +751,13 @@ func refresh_essential_hud() -> void:
 	if player == null:
 		return
 	if reference_player_panel != null:
+		var available_move := combat_system.movement_system.get_available_distance_feet(player)
 		if reference_player_portrait != null:
 			reference_player_portrait.texture = player.token_texture if player.token_texture != null else DevoteeFallbackPortrait
 		if player.max_faith > 0:
-			essential_player_status.text = "%s\n%s · Lv %d\nHP %d/%d · Faith %d/%d\nTemp +%d · Move %.1f ft" % [player.display_name, player.class_display_name, player.level, player.hp, player.max_hp, player.faith, player.max_faith, player.temporary_faith, player.movement_remaining_feet]
+			essential_player_status.text = "%s\n%s · Lv %d\nHP %d/%d · Faith %d/%d\nTemp +%d · Move %.1f ft" % [player.display_name, player.class_display_name, player.level, player.hp, player.max_hp, player.faith, player.max_faith, player.temporary_faith, available_move]
 		else:
-			essential_player_status.text = "%s\n%s · Lv %d\nHP %d/%d · Mana %d/%d\nMove %.1f ft" % [player.display_name, player.class_display_name, player.level, player.hp, player.max_hp, player.mana, player.max_mana, player.movement_remaining_feet]
+			essential_player_status.text = "%s\n%s · Lv %d\nHP %d/%d · Mana %d/%d\nMove %.1f ft" % [player.display_name, player.class_display_name, player.level, player.hp, player.max_hp, player.mana, player.max_mana, available_move]
 		essential_turn_status.text = "ACTION POINTS   %d / %d" % [player.ap, player.effective_max_ap]
 		essential_target_status.text = "REACTION READY" if player.ap > 0 and not player.has_status("surprise") else "REACTION UNAVAILABLE"
 		return

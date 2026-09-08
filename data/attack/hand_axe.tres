@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_vyloj"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_38vym"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
-[ext_resource type="Resource" path="res://data/ability/dual_strike.tres" id="dual_strike"]
+[ext_resource type="Resource" uid="uid://dpepfmcue5b01" path="res://data/ability/dual_strike.tres" id="dual_strike"]
 [ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="dual_weapon"]
 [ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="melee"]
 [ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="script"]
@@ -17,7 +17,6 @@ script = ExtResource("script")
 id = "hand_axe_attack"
 display_name = "Hand Axe"
 animation_template = ExtResource("animation")
-defense_type = 0
 base_damage = 5
 thrown_range_feet = 15.0
 traits = [ExtResource("simple"), ExtResource("melee"), ExtResource("thrown"), ExtResource("slash"), ExtResource("dual_weapon"), ExtResource("shield_compatible")]

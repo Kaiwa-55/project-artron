@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="AbilityEffectData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+effect_type = 15
+passive_value = 5

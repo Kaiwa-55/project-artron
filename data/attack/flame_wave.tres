@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://dwf16hm13plve"]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_es5lk"]
+[ext_resource type="Resource" path="res://data/status/burning_2.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/fire.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_wq1w4"]
+[ext_resource type="Resource" path="res://data/trait/cone.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/elemental.tres" id="5"]
+[ext_resource type="Resource" path="res://animation/flame_cone.tres" id="6_animation"]
+
+[resource]
+script = ExtResource("1")
+id = "flame_wave_attack"
+display_name = "Flame Wave"
+animation_template = ExtResource("6_animation")
+attack_attribute = 3
+defense_type = 0
+ap_cost = 0
+base_damage = 5
+range_feet = 15.0
+damage_type = "fire"
+effects_on_hit = Array[ExtResource("1_es5lk")]([ExtResource("2")])
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]

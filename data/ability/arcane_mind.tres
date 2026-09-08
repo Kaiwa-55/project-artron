@@ -16,3 +16,5 @@ auto_equip_on_grant = true
 is_passive = true
 description = "Passive. Your class grants Intelligence +1 and a choice of Wisdom or Dexterity +1. Choose two Arcane Skills for your spellbook without spending Ability Points."
 spell_choices_granted = 2
+spell_required_trait_ids = Array[String](["arcane"])
+spell_max_level = 1

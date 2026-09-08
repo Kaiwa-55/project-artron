@@ -107,7 +107,8 @@ func apply_effects(actor: CombatantState, target: CombatantState, ability, attac
 			continue
 		var recipient: CombatantState = actor if entry.recipient == AbilityUseEffectDataScript.Recipient.CASTER else target
 		var applied_effect: EffectData = build_scaled_effect(actor, entry)
-		if applied_effect != null and recipient != null and combat_system.effect_system.apply_effect(recipient, applied_effect):
+		var applies_stance: bool = recipient == actor and combat_system.ability_system.ability_has_trait(ability, "stance")
+		if applied_effect != null and recipient != null and combat_system.effect_system.apply_effect(recipient, applied_effect, ability.id, ability.display_name, applies_stance):
 			output_events.append(CombatEvent.new(EventTypes.Type.EFFECT_APPLIED, actor.id, recipient.id, {"effect_name": applied_effect.display_name, "ability_name": ability.display_name}))
 
 
@@ -151,7 +152,7 @@ func apply_dynamic_effect(actor: CombatantState, target: CombatantState, ability
 			if target == null:
 				return
 			var faith_power: int = actor.get_total_faith() + int(ability.faith_cost)
-			var smite_power := floori(float(faith_power) / 2.0)
+			var smite_power := floori(float(faith_power) / float(maxi(1, entry.faith_divisor)))
 			var immune := target.is_immune_to_damage(entry.damage_type)
 			var resistance := target.get_damage_resistance(entry.damage_type)
 			var damage := 0 if immune else maxi(0, smite_power - resistance)

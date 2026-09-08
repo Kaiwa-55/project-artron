@@ -56,7 +56,12 @@ func run_test() -> void:
 	player.movement_remaining_feet = 0.0
 	player.movement_distance_this_turn = player.get_effective_speed()
 	scene.refresh_action_dock()
-	check(scene.action_category_buttons["move"].disabled, "Move button is disabled after all Speed has been used")
+	check(not scene.action_category_buttons["move"].disabled, "Move button stays enabled for another Move action when AP remains")
+	var saved_ap := player.ap
+	player.ap = 0
+	scene.refresh_action_dock()
+	check(scene.action_category_buttons["move"].disabled, "Move button is disabled when a new Move cannot pay its AP cost")
+	player.ap = saved_ap
 	player.movement_distance_this_turn = 0.0
 	var slowed = load("res://data/status/slowed.tres").duplicate(true)
 	slowed.stacks_on_apply = 100

@@ -320,10 +320,12 @@ func build_spells(host) -> void:
 		UI.line(content)
 		UI.label(content, "CHOOSE A SPELL", 14, UI.GOLD, true)
 		for training in choices:
+			if not host.draft.spell_training_matches_grantor(training, grantor):
+				continue
 			var skill = training.granted_skills[0]
 			var learned: bool = host.draft.learned_spell_ids.has(training.id)
 			var range_feet: float = skill.targeting_range_feet if skill.targeting_range_feet > 0.0 else (skill.attack_data.range_feet if skill.attack_data != null else 0.0)
-			var spell_button := UI.button(content, "%s%s\n%d AP · %d Mana · %.0f ft · CD %d" % ["✓ " if learned else "", skill.display_name, skill.ap_cost, skill.mana_cost, range_feet, skill.cooldown_turns], func():
+			var spell_button := UI.button(content, "%s%s · Lv.%d\n%d AP · %d Mana · %.0f ft · CD %d" % ["✓ " if learned else "", skill.display_name, skill.spell_level, skill.ap_cost, skill.mana_cost, range_feet, skill.cooldown_turns], func():
 				host.draft.toggle_spell(training)
 				host.refresh(), learned)
 			var reason: String = host.draft.get_spell_learning_failure_reason(training)

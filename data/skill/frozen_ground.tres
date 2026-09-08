@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=6 format=3]
+[ext_resource type="Script" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/frozen_ground.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/cold.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/circle.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/elemental.tres" id="5"]
+[resource]
+script = ExtResource("1")
+id = "frozen_ground"
+display_name = "Frozen Ground"
+spell_level = 2
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+description = "Choose a point within 30 feet. Attack enemies in a 10-foot circle: Rooted on Hit, Slowed 5 ft on Miss."
+mana_cost = 2
+ap_cost = 2
+cooldown_turns = 2
+attack_data = ExtResource("2")
+target_mode = 2
+area_shape = 1
+targeting_range_feet = 30.0
+area_radius_feet = 10.0
+area_blocked_by_obstacles = true

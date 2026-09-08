@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://ld6omfqnqxcv"]
+
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://dwf16hm13plve" path="res://data/attack/flame_wave.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "flame_wave"
+display_name = "Flame Wave"
+description = "Attack every enemy in a 15-foot, 90-degree cone for 5 Fire damage and apply Burning 2 on Hit."
+mana_cost = 2
+ap_cost = 2
+cooldown_turns = 1
+attack_data = ExtResource("2")
+target_mode = 2
+area_shape = 3
+targeting_range_feet = 15.0

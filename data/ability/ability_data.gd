@@ -55,3 +55,8 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 # The number of spells this learned/granted Ability lets the character choose.
 # Spell choices are separate from Ability Points.
 @export_range(0, 99) var spell_choices_granted: int = 0
+# Optional restrictions for spells selected through this Ability. Empty Traits
+# and zero maximum keep the grant unrestricted for future classes.
+@export var spell_required_trait_ids: Array[String] = []
+@export_range(1, 10) var spell_min_level: int = 1
+@export_range(0, 10) var spell_max_level: int = 0

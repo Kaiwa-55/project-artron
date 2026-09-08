@@ -501,6 +501,13 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 		return ActionResult.failure("Passive abilities cannot be activated.")
 	if ability.reaction_only:
 		return ActionResult.failure("Reaction abilities can only be used when their trigger occurs.")
+	if ability_has_trait(ability, "stance"):
+		for effect_instance in combatant.effects:
+			if effect_instance != null and effect_instance.is_stance and effect_instance.source_ability_id != ability.id:
+				var active_name: String = effect_instance.source_ability_name
+				if active_name.is_empty():
+					active_name = effect_instance.source_ability_id
+				return ActionResult.failure("End %s before using another Stance." % active_name)
 	if combatant.level < ability.required_level:
 		return ActionResult.failure("Requires level %d." % ability.required_level)
 	if combatant.ap < ability.ap_cost:

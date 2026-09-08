@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://d1qnbn5ptc6h2" path="res://animation/arcane_cone.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "arcane_cone_attack"
+display_name = "Arcane Cone"
+animation_template = ExtResource("2")
+attack_attribute = 3
+defense_type = 0
+ap_cost = 0
+base_damage = 4
+range_feet = 20.0
+damage_type = "arcane"

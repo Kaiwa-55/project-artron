@@ -16,7 +16,6 @@ script = ExtResource("1_attack_data")
 id = "long_spear_attack"
 display_name = "Long Spear"
 animation_template = ExtResource("1_v7jxm")
-defense_type = 0
 base_damage = 4
 range_feet = 8.0
 damage_type = "pierce"
