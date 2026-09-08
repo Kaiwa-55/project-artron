@@ -10,6 +10,10 @@ func get_available_distance_feet(actor: CombatantState) -> float:
 		return 0.0
 	if actor.movement_in_progress:
 		return actor.movement_remaining_feet
+	# A completed or forfeited Move must not start a second movement allowance
+	# during the same Turn. start_turn() resets this distance to zero.
+	if actor.movement_distance_this_turn > 0.001:
+		return 0.0
 	return actor.get_effective_speed() + (ability_system.get_first_move_distance_bonus(actor) if ability_system != null else 0.0)
 
 
@@ -62,6 +66,8 @@ func validate_move(
 	)
 
 	var available_distance_feet: float = get_available_distance_feet(actor)
+	if available_distance_feet <= 0.001:
+		return ActionResult.failure("No Speed remaining this Turn.")
 	if distance > available_distance_feet * movement.world_units_per_foot + 0.01:
 		return ActionResult.failure(
 			"Destination exceeds remaining Speed."

@@ -228,6 +228,10 @@ func reset_test() -> void:
 func begin_move() -> void:
 	if is_movement_animating():
 		return
+	var actor := get_player_controlled_actor()
+	if actor == null or combat_system.movement_system.get_available_distance_feet(actor) <= 0.001:
+		$UILayer/Control.set_mode_hint("Cannot Move: no Speed remaining this Turn.")
+		return
 	pending_target_attack = null
 	pending_single_target_kind = ""
 	pending_single_target_source = null

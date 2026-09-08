@@ -42,7 +42,8 @@ func _init() -> void:
 	check(system.movement_system.get_available_distance_feet(player) == speed, "Continuation uses remaining boosted movement")
 	player.movement_in_progress = false
 	player.movement_remaining_feet = 0.0
-	check(system.movement_system.get_available_distance_feet(player) == speed, "Second Move gains no bonus")
+	check(system.movement_system.get_available_distance_feet(player) == 0.0, "A completed or forfeited Move cannot start again this Turn")
+	check(not system.movement_system.validate_move(player, player.position + Vector2.ONE, movement, system.combat_state).success, "Move is rejected when no Speed remains")
 	system.turn_system.start_turn(system.combat_state)
 	check(system.movement_system.get_available_distance_feet(player) == speed + 5.0, "New Turn restores Quick Step")
 	# Special movement does not consume the passive.

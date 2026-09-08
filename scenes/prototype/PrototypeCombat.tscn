@@ -19,14 +19,10 @@ script = ExtResource("3_combatant")
 
 [node name="Header" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="0" unique_id=1046892464]
 custom_minimum_size = Vector2(0, 58)
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
-grow_horizontal = 2
 
 [node name="InitiativeTimeline" type="HBoxContainer" parent="UILayer/Control/Header" index="0" unique_id=2084050599]
 layout_mode = 0
@@ -73,23 +69,25 @@ offset_right = 280.0
 
 [node name="Enemy_panel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="3" unique_id=1099442048]
 clip_contents = true
+anchors_preset = -1
+anchor_top = 0.5
 offset_bottom = 267.0
 
 [node name="VBoxContainer" parent="UILayer/Control/Enemy_panel" index="1" unique_id=1930457242]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="CombatLogPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="4" unique_id=928194718]
-custom_minimum_size = Vector2(280, 0)
 layout_mode = 1
+anchors_preset = 0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 280.0
+offset_bottom = 0.0
+grow_vertical = 1
 
 [node name="CombatLogButton" type="Button" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="6" unique_id=1669097033]
 z_index = 20
@@ -234,7 +232,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="12" unique_id=530167356 instance=ExtResource("5_character_panel")]
+[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="10" unique_id=530167356 instance=ExtResource("5_character_panel")]
 visible = false
 z_index = 19
 layout_mode = 1

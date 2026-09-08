@@ -23,7 +23,7 @@ player_party = Array[Dictionary]([{
 "character": ExtResource("5_player"),
 "display_name": "Player",
 "id": "player",
-"position_feet": Vector2(0, 0),
+"position_feet": Vector2(20, 20),
 "use_created_character": true
 }])
 enemies = Array[ExtResource("1_53d28")]([ExtResource("3_rpcl3")])

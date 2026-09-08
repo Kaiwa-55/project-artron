@@ -36,6 +36,14 @@ func run_test() -> void:
 			var control: Control = ui.get_node(path)
 			check(rect_fits(control, logical_size), "%s (%s, %s) must fit inside the %dx%d layout" % [path, control.position, control.size, int(logical_size.x), int(logical_size.y)])
 		check(ui.get_node("ReferenceActionDock").position.y + ui.get_node("ReferenceActionDock").size.y <= logical_size.y, "Action Bar stays attached to the bottom safe area")
+	var state = scene.combat_system.get_combat_state()
+	var player: CombatantState = state.get_combatant("player")
+	state.current_actor_id = player.id
+	player.movement_in_progress = false
+	player.movement_remaining_feet = 0.0
+	player.movement_distance_this_turn = player.get_effective_speed()
+	scene.refresh_action_dock()
+	check(scene.action_category_buttons["move"].disabled, "Move button is disabled after all Speed has been used")
 	scene.queue_free()
 	for failure in failures:
 		push_error(failure)

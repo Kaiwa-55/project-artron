@@ -730,6 +730,9 @@ func refresh_action_dock() -> void:
 		var locked: bool = state.is_finished() or not is_player_party_turn() or combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
 		for category in action_category_buttons:
 			action_category_buttons[category].disabled = locked
+		var current_actor: CombatantState = state.get_current_actor()
+		if action_category_buttons.has("move") and current_actor != null and is_player_party_turn():
+			action_category_buttons["move"].disabled = locked or combat_system.movement_system.get_available_distance_feet(current_actor) <= 0.001
 		if locked and action_menu_panel != null:
 			action_menu_panel.visible = false
 
