@@ -1,6 +1,7 @@
 [gd_resource type="Resource" format=3 uid="uid://b4br4v5l4gsrr"]
 
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_l33ud"]
+[ext_resource type="Resource" uid="uid://u0ne8pf7yoej" path="res://data/ability/arcane_mind.tres" id="ability_arcane_mind"]
 [ext_resource type="Resource" path="res://data/ability/belief.tres" id="ability_belief"]
 [ext_resource type="Resource" uid="uid://jkg0msioo4fc" path="res://data/ability/brutal_strike.tres" id="ability_brutal_strike"]
 [ext_resource type="Resource" uid="uid://623hc2j4n3co" path="res://data/ability/build_up_body.tres" id="ability_build_up_body"]
@@ -9,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://vo3lrtxum5q6" path="res://data/ability/deadeye.tres" id="ability_deadeye"]
 [ext_resource type="Resource" uid="uid://b5nsiidwu4f4s" path="res://data/ability/defensive_stance.tres" id="ability_defensive_stance"]
 [ext_resource type="Resource" uid="uid://52710ckhwush" path="res://data/ability/divine_intervention.tres" id="ability_divine_intervention"]
+[ext_resource type="Resource" uid="uid://beja16wnhgbq8" path="res://data/ability/efficient_casting.tres" id="ability_efficient_casting"]
 [ext_resource type="Resource" uid="uid://b4ccqc2bpxidv" path="res://data/ability/flowing_guard.tres" id="ability_flowing_guard"]
 [ext_resource type="Resource" uid="uid://bowe4sdgeblby" path="res://data/ability/heal_or_harm.tres" id="ability_heal_or_harm"]
 [ext_resource type="Resource" uid="uid://bvlc47pxwgove" path="res://data/ability/human_adapt.tres" id="ability_human_adapt"]
@@ -19,17 +21,24 @@
 [ext_resource type="Resource" uid="uid://c1dtcv1hjugm7" path="res://data/ability/martial_training.tres" id="ability_martial_training"]
 [ext_resource type="Resource" uid="uid://bn3f1kwoa8bde" path="res://data/ability/mobile_shooter.tres" id="ability_mobile_shooter"]
 [ext_resource type="Resource" uid="uid://cge8hvgoarwat" path="res://data/ability/open_wound.tres" id="ability_open_wound"]
+[ext_resource type="Resource" uid="uid://rhole0fa05qx" path="res://data/ability/potent_casting.tres" id="ability_potent_casting"]
 [ext_resource type="Resource" uid="uid://c4p6h14djslvg" path="res://data/ability/pray.tres" id="ability_pray"]
 [ext_resource type="Resource" uid="uid://bmkgpflgxkva0" path="res://data/ability/precise_strike.tres" id="ability_precise_strike"]
 [ext_resource type="Resource" uid="uid://1od2i052wuwj" path="res://data/ability/pursuit.tres" id="ability_pursuit"]
 [ext_resource type="Resource" uid="uid://bmsphy7wisk4b" path="res://data/ability/quick_step.tres" id="ability_quick_step"]
+[ext_resource type="Resource" uid="uid://c1715pfvn8361" path="res://data/ability/rapid_formula.tres" id="ability_rapid_formula"]
 [ext_resource type="Resource" path="res://data/ability/redirect_force.tres" id="ability_redirect_force"]
 [ext_resource type="Resource" uid="uid://bbs04rtl6gm2j" path="res://data/ability/sacred_ward.tres" id="ability_sacred_ward"]
 [ext_resource type="Resource" uid="uid://cddlaqs06xle3" path="res://data/ability/shadow_step.tres" id="ability_shadow_step"]
 [ext_resource type="Resource" uid="uid://np27ob6fbg2q" path="res://data/ability/shared_blessing.tres" id="ability_shared_blessing"]
 [ext_resource type="Resource" uid="uid://cw4oh02n2g1fh" path="res://data/ability/smite.tres" id="ability_smite"]
+[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_bolt.tres" id="ability_spell_bolt"]
+[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_burst.tres" id="ability_spell_burst"]
+[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_cone.tres" id="ability_spell_cone"]
+[ext_resource type="Resource" uid="uid://bi71gw77qqnom" path="res://data/ability/spell_reach.tres" id="ability_spell_reach"]
 [ext_resource type="Resource" uid="uid://db77s8trj8lbp" path="res://data/ability/step_back.tres" id="ability_step_back"]
 [ext_resource type="Resource" uid="uid://bevd22gc4a1hd" path="res://data/ability/sweeping_kick.tres" id="ability_sweeping_kick"]
+[ext_resource type="Resource" uid="uid://ctr38p0r37cjp" path="res://data/class/arcanist.tres" id="arcanist"]
 [ext_resource type="Texture2D" uid="uid://c6rho00y06vft" path="res://assets/character_creation/assassin.png" id="art_assassin"]
 [ext_resource type="Texture2D" uid="uid://ffv7a8il0gnd" path="res://assets/character_creation/devotee.png" id="art_devotee"]
 [ext_resource type="Texture2D" uid="uid://dmpe0tj1w7evo" path="res://assets/character_creation/martial_artist.png" id="art_martial_artist"]
@@ -71,14 +80,20 @@ display_name = "The Devout"
 subtitle = "Faith / Support"
 artwork = ExtResource("art_devotee")
 
+[sub_resource type="Resource" id="Visual_arcanist"]
+script = ExtResource("visual")
+source_id = "arcanist"
+display_name = "The Arcanist"
+subtitle = "Mana / Spellcraft"
+
 [resource]
 script = ExtResource("catalog")
 base_character = ExtResource("base")
 ancestries = Array[Resource]([ExtResource("human")])
-classes = Array[Resource]([ExtResource("assassin"), ExtResource("martial_artist"), ExtResource("devotee")])
-abilities = Array[ExtResource("1_l33ud")]([ExtResource("ability_human_adapt"), ExtResource("ability_build_up_body"), ExtResource("ability_killer_instinct"), ExtResource("ability_belief"), ExtResource("ability_pray"), ExtResource("ability_heal_or_harm"), ExtResource("ability_smite"), ExtResource("ability_sacred_ward"), ExtResource("ability_shared_blessing"), ExtResource("ability_divine_intervention"), ExtResource("ability_precise_strike"), ExtResource("ability_brutal_strike"), ExtResource("ability_deadeye"), ExtResource("ability_quick_step"), ExtResource("ability_pursuit"), ExtResource("ability_mobile_shooter"), ExtResource("ability_open_wound"), ExtResource("ability_combo_techniques"), ExtResource("ability_crushing_palm"), ExtResource("ability_flowing_guard"), ExtResource("ability_sweeping_kick"), ExtResource("ability_martial_sense"), ExtResource("ability_redirect_force"), ExtResource("ability_step_back"), ExtResource("ability_shadow_step"), ExtResource("ability_martial_training"), ExtResource("ability_long_reach"), ExtResource("ability_defensive_stance"), ExtResource("ability_ki_wave")])
+classes = Array[Resource]([ExtResource("assassin"), ExtResource("martial_artist"), ExtResource("devotee"), ExtResource("arcanist")])
+abilities = Array[ExtResource("1_l33ud")]([ExtResource("ability_human_adapt"), ExtResource("ability_build_up_body"), ExtResource("ability_killer_instinct"), ExtResource("ability_belief"), ExtResource("ability_pray"), ExtResource("ability_heal_or_harm"), ExtResource("ability_smite"), ExtResource("ability_sacred_ward"), ExtResource("ability_shared_blessing"), ExtResource("ability_divine_intervention"), ExtResource("ability_precise_strike"), ExtResource("ability_brutal_strike"), ExtResource("ability_deadeye"), ExtResource("ability_quick_step"), ExtResource("ability_pursuit"), ExtResource("ability_mobile_shooter"), ExtResource("ability_open_wound"), ExtResource("ability_combo_techniques"), ExtResource("ability_crushing_palm"), ExtResource("ability_flowing_guard"), ExtResource("ability_sweeping_kick"), ExtResource("ability_martial_sense"), ExtResource("ability_redirect_force"), ExtResource("ability_step_back"), ExtResource("ability_shadow_step"), ExtResource("ability_martial_training"), ExtResource("ability_long_reach"), ExtResource("ability_defensive_stance"), ExtResource("ability_ki_wave"), ExtResource("ability_arcane_mind"), ExtResource("ability_spell_bolt"), ExtResource("ability_spell_burst"), ExtResource("ability_spell_cone"), ExtResource("ability_potent_casting"), ExtResource("ability_efficient_casting"), ExtResource("ability_spell_reach"), ExtResource("ability_rapid_formula")])
 equipment = Array[Resource]([ExtResource("item_iron_sword"), ExtResource("item_long_spear"), ExtResource("item_leather_armor"), ExtResource("item_buckler"), ExtResource("item_dagger"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")])
-visuals = Array[Resource]([SubResource("Visual_assassin"), SubResource("Visual_martial_artist"), SubResource("Visual_devotee")])
+visuals = Array[Resource]([SubResource("Visual_assassin"), SubResource("Visual_martial_artist"), SubResource("Visual_devotee"), SubResource("Visual_arcanist")])
 steps = Array[Dictionary]([{
 "id": "identity",
 "title": "IDENTITY"
@@ -94,6 +109,9 @@ steps = Array[Dictionary]([{
 }, {
 "id": "abilities",
 "title": "ABILITIES"
+}, {
+"id": "spells",
+"title": "SPELLS"
 }, {
 "id": "equipment",
 "title": "EQUIPMENT"

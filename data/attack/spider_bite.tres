@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AttackData" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://co00u5hedviyg"]
 
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
-[ext_resource type="Resource" path="res://data/status/poisoned.tres" id="3"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_fblqj"]
+[ext_resource type="Resource" uid="uid://digjbueytlfmk" path="res://data/status/poisoned.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="4_6f5b4"]
 [ext_resource type="Resource" path="res://data/trait/simple.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/pierce.tres" id="6"]
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="7"]
@@ -16,8 +18,7 @@ animation_template = ExtResource("2")
 attack_attribute = 1
 defense_type = 0
 to_hit_bonus = 1
-ap_cost = 1
 base_damage = 3
 damage_type = "pierce"
-effects_on_hit = [ExtResource("3")]
+effects_on_hit = Array[ExtResource("2_fblqj")]([ExtResource("3")])
 traits = [ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7")]

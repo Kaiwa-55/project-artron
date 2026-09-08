@@ -18,9 +18,11 @@ func _init() -> void:
 	check(DefaultProgression.get_xp_to_next_level(4, 850) == 150, "850 XP at Level 4 should need 150 XP.", failures)
 	check(DefaultProgression.get_xp_to_next_level(10, 4500) == 0, "Maximum Level should need no more XP.", failures)
 	check(DefaultProgression.get_ability_points_for_level(1) == 1, "Level 1 should grant 1 Ability Point.", failures)
-	check(DefaultProgression.get_ability_points_for_level(3) == 0, "Level 3 should not grant an Ability Point.", failures)
-	check(DefaultProgression.get_attribute_points_for_level(4) == 1, "Level 4 should grant 1 Attribute Point.", failures)
-	check(DefaultProgression.get_attribute_points_for_level(8) == 1, "Level 8 should grant 1 Attribute Point.", failures)
+	for level in range(1, DefaultProgression.max_level + 1):
+		check(DefaultProgression.get_ability_points_for_level(level) == 1, "Level %d should grant exactly 1 Ability Point." % level, failures)
+	for level in range(1, DefaultProgression.max_level + 1):
+		var expected_attribute_points := 2 if level in [3, 5, 7, 9] else 0
+		check(DefaultProgression.get_attribute_points_for_level(level) == expected_attribute_points, "Level %d should grant %d Attribute Improve point(s)." % [level, expected_attribute_points], failures)
 
 	for failure in failures:
 		push_error(failure)

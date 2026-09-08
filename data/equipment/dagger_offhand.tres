@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/attack/dagger.tres" id="attack"]
+
+[resource]
+script = ExtResource("script")
+id = "dagger_offhand"
+display_name = "Dagger"
+description = "A precise Dexterity weapon: +1 To Hit and 15% critical chance, but only 3 base damage."
+weapon_attack = ExtResource("attack")

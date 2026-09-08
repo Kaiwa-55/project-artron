@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://bvwn0wvra7y2r"]
+
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="3"]
+[ext_resource type="Resource" uid="uid://cfka8kbn040md" path="res://data/character/velkaria.tres" id="4"]
+[ext_resource type="Resource" uid="uid://cwpas6877a5rx" path="res://data/character/spider.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "run_boss_velkaria_brood"
+display_name = "Velkaria and Her Brood"
+battlefield_texture = ExtResource("3")
+enemies = Array[ExtResource("2")]([ExtResource("4"), ExtResource("5")])

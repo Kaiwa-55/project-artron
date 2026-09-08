@@ -480,7 +480,7 @@ func resolve_choice(reaction_index: int) -> ActionResult:
 		action_result = combat_system.action_system.build_attack_result(prepared_attacker, reactor, prepared_attack, prepared)
 		if prompt.has("skill_data") and not prompt.get("area_skill_continuation", false) and not prompt.get("area_action_continuation", false) and not prompt.get("attack_sequence_continuation", false):
 			var resolved_skill = prompt["skill_data"]
-			action_result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, prepared_attacker.id, reactor.id, {"skill_name": resolved_skill.display_name, "mana_cost": resolved_skill.mana_cost, "cooldown": combat_system.skill_system.get_effective_cooldown_turns(prepared_attacker, resolved_skill)}))
+			action_result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, prepared_attacker.id, reactor.id, {"skill_name": resolved_skill.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(prepared_attacker, resolved_skill), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(prepared_attacker, resolved_skill)}))
 		if prompt.has("opportunity_attack") and not reactor.is_dying():
 			var move_result: ActionResult = combat_system.action_system.execute(request, combat_system.combat_state)
 			action_result.events.append_array(move_result.events)

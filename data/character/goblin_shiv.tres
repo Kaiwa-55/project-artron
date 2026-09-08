@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://wfevisfrxbhy"]
 
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/goblin_rusty_shiv.tres" id="2"]
+[ext_resource type="Resource" uid="uid://w6ddirhnssn3" path="res://data/attack/goblin_rusty_shiv.tres" id="2"]
 [ext_resource type="Resource" uid="uid://crfqff7yw8h6i" path="res://data/ability/goblin_cowardly_jab.tres" id="3"]
 [ext_resource type="Resource" uid="uid://ddebxsco67ngf" path="res://data/ability/goblin_scurry.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/goblin.tres" id="5"]
@@ -23,7 +23,7 @@ team = 2
 position = Vector2(960, 350)
 base_max_hp = 10
 base_max_ap = 3
-base_speed = 30.0
+base_speed = 15.0
 reflex_stat_bonus = 2
 will_stat_bonus = -1
 dexterity = 14

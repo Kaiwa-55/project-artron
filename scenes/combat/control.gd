@@ -219,14 +219,15 @@ func update_skill_button(player: CombatantState, state) -> void:
 		return
 	var cooldown: int = int(player.skill_cooldowns.get(skill.id, 0))
 	var effective_cooldown: int = combat_system.skill_system.get_effective_cooldown_turns(player, skill)
-	button.text = "%s (%d Mana)" % [skill.display_name, skill.mana_cost]
+	var mana_cost: int = combat_system.skill_system.get_effective_mana_cost(player, skill)
+	button.text = "%s (%d Mana)" % [skill.display_name, mana_cost]
 	if cooldown > 0:
 		button.text += " - CD %d" % cooldown
 	button.tooltip_text = "%s\nMana: %d | AP: %d | Cooldown: %d turn(s)" % [
-		skill.description, skill.mana_cost, skill.ap_cost, effective_cooldown
+		skill.description, mana_cost, skill.ap_cost, effective_cooldown
 	]
 	button.disabled = state.is_finished() or state.current_actor_id != "player" \
-		or player.mana < skill.mana_cost or cooldown > 0
+		or player.mana < mana_cost or cooldown > 0
 
 
 func update_weapon_button(player: CombatantState, state) -> void:

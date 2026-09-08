@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_e3s77"]
 [ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_q5ljt"]
 [ext_resource type="Resource" uid="uid://c4i06contdqmt" path="res://data/status/weakened.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="5"]
 [ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="6"]

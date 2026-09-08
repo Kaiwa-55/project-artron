@@ -1,16 +1,5 @@
 extends "res://scenes/combat/combat_arena.gd"
 
-const LevelUpAbilities: Array = [
-	preload("res://data/ability/human_adapt.tres"),
-	preload("res://data/ability/build_up_body.tres"),
-	preload("res://data/ability/killer_instinct.tres"),
-	preload("res://data/ability/combo_techniques.tres"),
-	preload("res://data/ability/step_back.tres"),
-	preload("res://data/ability/shadow_step.tres"),
-	preload("res://data/ability/martial_training.tres"),
-	preload("res://data/ability/long_reach.tres"),
-	preload("res://data/ability/defensive_stance.tres")
-]
 const CharacterPanelScript := preload("res://scenes/ui/character_panel.gd")
 const CombatActionIconAtlas := preload("res://assets/ui/combat_action_icons.png")
 const DevoteeFallbackPortrait := preload("res://assets/character_creation/devotee.png")
@@ -35,10 +24,6 @@ var essential_turn_status: Label
 var shadow_step_button: Button
 var area_skill_button: Button
 var area_action_buttons: Dictionary = {}
-var level_up_button: Button
-var level_up_panel: PanelContainer
-var level_up_list: VBoxContainer
-var level_up_summary: Label
 var combat_round_label: Label
 var initiative_row: HBoxContainer
 var initiative_signature: String = ""
@@ -69,16 +54,10 @@ func get_all_combatant_nodes() -> Array: return []
 
 func _apply_prototype_layout() -> void:
 	RenderingServer.set_default_clear_color(Color("090e12"))
-	$UILayer/Control/Header.position = Vector2.ZERO
-	$UILayer/Control/Header.size = Vector2(1280, 60)
 	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/ModeHint.add_theme_color_override("font_color", Color("7dd3fc"))
 	$UILayer/Control/Enemy_panel/PanelTitle.text = "TARGET"
 	$UILayer/Control/Enemy_panel.visible = true
-	$UILayer/Control/Enemy_panel.position = Vector2(1008, 392)
-	$UILayer/Control/Enemy_panel.size = Vector2(252, 150)
 	$UILayer/Control/Enemy_panel/PanelTitle.text = "SELECTED TARGET"
-	$UILayer/Control/Enemy_panel/VBoxContainer.position = Vector2(14, 42)
-	$UILayer/Control/Enemy_panel/VBoxContainer.size = Vector2(224, 96)
 	$UILayer/Control/CombatLogPanel.z_index = 18
 	$UILayer/Control/CombatLogPanel.visible = false
 	$UILayer/Control/ReactionPrompt.z_index = 30
@@ -97,6 +76,75 @@ func _apply_prototype_layout() -> void:
 	$UILayer/Controllers/CombatHUD.build()
 	$UILayer/Controllers/ActionBar.build()
 	_apply_combat_typography()
+	_apply_responsive_layout()
+	if not $UILayer/Control.resized.is_connected(_apply_responsive_layout):
+		$UILayer/Control.resized.connect(_apply_responsive_layout)
+
+
+func _apply_responsive_layout() -> void:
+	var viewport_size: Vector2 = $UILayer/Control.size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+	var compact := viewport_size.x < 1050.0 or viewport_size.y < 650.0
+	var edge := 10.0 if compact else 20.0
+	var header_height := 52.0 if compact else 60.0
+	var bottom_gap := 8.0 if compact else 20.0
+	var dock_height := 104.0 if compact else 118.0
+	var dock_width := minf(640.0, viewport_size.x - edge * 2.0)
+	var dock: Control = $UILayer/Control/ReferenceActionDock
+	dock.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	dock.offset_left = -dock_width * 0.5
+	dock.offset_top = -dock_height - bottom_gap
+	dock.offset_right = dock_width * 0.5
+	dock.offset_bottom = -bottom_gap
+	var header: Control = $UILayer/Control/Header
+	header.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	header.offset_left = edge
+	header.offset_top = edge
+	header.offset_right = -edge
+	header.offset_bottom = edge + header_height
+	var side_width := 218.0 if compact else 252.0
+	var player_height := 112.0 if compact else 134.0
+	var player_panel: Control = $UILayer/Control/ReferencePlayerHUD
+	player_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	player_panel.offset_left = edge
+	player_panel.offset_top = -dock_height - bottom_gap - player_height - 8.0
+	player_panel.offset_right = edge + side_width
+	player_panel.offset_bottom = -dock_height - bottom_gap - 8.0
+	var turn_height := 96.0 if compact else 104.0
+	var turn_panel: Control = $UILayer/Control/ReferenceTurnHUD
+	turn_panel.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	turn_panel.offset_left = -edge - side_width
+	turn_panel.offset_top = -dock_height - bottom_gap - turn_height - 8.0
+	turn_panel.offset_right = -edge
+	turn_panel.offset_bottom = -dock_height - bottom_gap - 8.0
+	var enemy_panel: Control = $UILayer/Control/Enemy_panel
+	enemy_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	enemy_panel.offset_left = -edge - side_width
+	enemy_panel.offset_top = edge + header_height + 10.0
+	enemy_panel.offset_right = -edge
+	enemy_panel.offset_bottom = edge + header_height + 160.0
+	var log_panel: Control = $UILayer/Control/CombatLogPanel
+	var log_width := minf(340.0, viewport_size.x - edge * 2.0)
+	log_panel.set_anchors_preset(Control.PRESET_LEFT_WIDE)
+	log_panel.offset_left = edge
+	log_panel.offset_top = edge + header_height + 10.0
+	log_panel.offset_right = edge + log_width
+	log_panel.offset_bottom = -dock_height - bottom_gap - 8.0
+	var action_menu: Control = $UILayer/Control/ActionMenu
+	action_menu.set_anchors_preset(Control.PRESET_CENTER)
+	var menu_width := minf(390.0, viewport_size.x - edge * 2.0)
+	var menu_height := minf(300.0, viewport_size.y - header_height - dock_height - edge * 3.0)
+	action_menu.offset_left = -menu_width * 0.5
+	action_menu.offset_top = -menu_height * 0.5
+	action_menu.offset_right = menu_width * 0.5
+	action_menu.offset_bottom = menu_height * 0.5
+	var character_panel: Control = $UILayer/Control/CharacterPanel
+	character_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	character_panel.offset_left = edge * 2.0
+	character_panel.offset_top = edge + header_height + 8.0
+	character_panel.offset_right = -edge * 2.0
+	character_panel.offset_bottom = -edge * 2.0
 
 
 func _build_initiative_bar() -> void:
@@ -261,134 +309,6 @@ func _build_combat_log_toggle() -> void:
 		close_button.pressed.connect(toggle_combat_log)
 
 
-func _build_level_up_panel() -> void:
-	level_up_button = $UILayer/Control/LevelUpButton
-	if not level_up_button.pressed.is_connected(toggle_level_up_panel):
-		level_up_button.pressed.connect(toggle_level_up_panel)
-	style_action_button(level_up_button)
-	level_up_panel = $UILayer/Control/LevelUpPanel
-	style_panel(level_up_panel, Color("101a2a"), Color("a78bfa"), 14)
-	var close: Button = $UILayer/Control/LevelUpPanel/Margin/Column/Header/Close
-	if not close.pressed.is_connected(toggle_level_up_panel):
-		close.pressed.connect(toggle_level_up_panel)
-	level_up_summary = $UILayer/Control/LevelUpPanel/Margin/Column/Summary
-	level_up_list = $UILayer/Control/LevelUpPanel/Margin/Column/Scroll/List
-	refresh_level_up_button()
-
-
-func toggle_level_up_panel() -> void:
-	if level_up_panel == null:
-		return
-	level_up_panel.visible = not level_up_panel.visible
-	if level_up_panel.visible:
-		if inventory_drawer != null:
-			inventory_drawer.visible = false
-		refresh_level_up_panel()
-
-
-func refresh_level_up_button() -> void:
-	if level_up_button == null or combat_system == null or combat_system.get_combat_state() == null:
-		return
-	var player: CombatantState = get_player_controlled_actor()
-	if player == null:
-		return
-	var pending: bool = combat_system.progression_system.has_pending_choices(player)
-	level_up_button.text = "LEVEL UP (%d)" % (player.ability_points + player.attribute_points) if pending else "PROGRESSION"
-	level_up_button.disabled = combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
-
-
-func refresh_level_up_panel() -> void:
-	if level_up_list == null:
-		return
-	for child in level_up_list.get_children():
-		child.queue_free()
-	var player: CombatantState = combat_system.get_combat_state().get_combatant("player")
-	if player == null:
-		return
-	level_up_summary.text = "Level %d   |   XP %d   |   Ability Points %d   |   Attribute Points %d" % [player.level, player.experience, player.ability_points, player.attribute_points]
-	add_level_up_heading("LEARN ABILITY")
-	for ability in LevelUpAbilities:
-		add_level_up_ability(player, ability)
-	add_level_up_heading("INCREASE ATTRIBUTE")
-	if player.attribute_points <= 0:
-		add_level_up_note("No Attribute Points available.")
-	else:
-		var attributes := [
-			["Strength", AttributeTypes.Type.STRENGTH, player.strength],
-			["Dexterity", AttributeTypes.Type.DEXTERITY, player.dexterity],
-			["Constitution", AttributeTypes.Type.CONSTITUTION, player.constitution],
-			["Intelligence", AttributeTypes.Type.INTELLIGENCE, player.intelligence],
-			["Wisdom", AttributeTypes.Type.WISDOM, player.wisdom],
-			["Charisma", AttributeTypes.Type.CHARISMA, player.charisma]
-		]
-		for entry in attributes:
-			var button := Button.new()
-			button.text = "%s %d  →  %d" % [entry[0], entry[2], entry[2] + 1]
-			button.pressed.connect(choose_level_up_attribute.bind(entry[1]))
-			level_up_list.add_child(button)
-
-
-func add_level_up_heading(text: String) -> void:
-	var label := Label.new()
-	label.text = text
-	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", Color("c4b5fd"))
-	level_up_list.add_child(label)
-
-
-func add_level_up_note(text: String) -> void:
-	var label := Label.new()
-	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_color_override("font_color", Color("94a3b8"))
-	level_up_list.add_child(label)
-
-
-func add_level_up_ability(player: CombatantState, ability: AbilityData) -> void:
-	var card := VBoxContainer.new()
-	var learned := player.selected_ability_ids.has(ability.id) or player.granted_ability_ids.has(ability.id)
-	var reason: String = combat_system.progression_system.get_learn_ability_failure_reason(player, ability)
-	var button := Button.new()
-	button.text = "%s — %d Point%s" % [ability.display_name, ability.ability_point_cost, "s" if ability.ability_point_cost != 1 else ""]
-	button.disabled = not reason.is_empty()
-	if learned:
-		button.text = "%s — Learned" % ability.display_name
-	button.tooltip_text = ability.description if reason.is_empty() else reason
-	button.pressed.connect(learn_level_up_ability.bind(ability))
-	card.add_child(button)
-	var details := Label.new()
-	details.text = ability.description if reason.is_empty() else reason
-	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	details.add_theme_color_override("font_color", Color("94a3b8") if not reason.is_empty() else Color("fda4af"))
-	card.add_child(details)
-	level_up_list.add_child(card)
-
-
-func learn_level_up_ability(ability: AbilityData) -> void:
-	var player: CombatantState = get_player_controlled_actor()
-	var result = combat_system.progression_system.learn_ability(player, ability)
-	if result.success:
-		$UILayer/Control.add_log_message("Learned %s. %d Ability Point(s) remain." % [result.ability_name, result.remaining_ability_points])
-		combat_system.ability_system.sync_granted_reactions(player)
-	else:
-		$UILayer/Control.add_log_message("Cannot learn Ability: %s" % result.failure_reason)
-	$UILayer/Control.update_ui()
-	refresh_level_up_panel()
-	refresh_level_up_button()
-
-
-func choose_level_up_attribute(attribute: AttributeTypes.Type) -> void:
-	var player: CombatantState = get_player_controlled_actor()
-	var result = combat_system.progression_system.increase_attribute(player, attribute)
-	if result.success:
-		$UILayer/Control.add_log_message("Attribute increased to %d." % result.new_value)
-	else:
-		$UILayer/Control.add_log_message("Cannot increase Attribute: %s" % result.failure_reason)
-	$UILayer/Control.update_ui()
-	refresh_level_up_panel()
-	refresh_level_up_button()
-
-
 func toggle_combat_log() -> void:
 	$UILayer/Controllers/CombatLog.toggle()
 	combat_log_button.text = "CLOSE LOG" if $UILayer/Control/CombatLogPanel.visible else "COMBAT LOG"
@@ -536,15 +456,23 @@ func show_action_menu(category: String) -> void:
 		"skill":
 			for skill in player.available_skills:
 				if skill != null:
-					add_action_menu_button("%s · %d AP · %d Mana" % [skill.display_name, skill.ap_cost, skill.mana_cost], skill.description, use_skill_from_menu.bind(skill))
+					var mana_cost: int = combat_system.skill_system.get_effective_mana_cost(player, skill)
+					add_action_menu_button("%s · %d AP · %d Mana" % [skill.display_name, skill.ap_cost, mana_cost], skill.description, use_skill_from_menu.bind(skill))
 			if player.available_skills.is_empty():
 				add_action_menu_note("No Skills available.")
 		"ability":
 			var abilities: Array = combat_system.ability_system.get_active_abilities(player)
 			for ability in abilities:
 				if ability != null and not ability.is_passive and not ability.reaction_only:
+					var ability_target: CombatantState = player
+					if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT:
+						ability_target = get_first_valid_ability_target(player, ability)
+					var validation: ActionResult = combat_system.ability_system.validate_active_use(player, ability, ability_target)
 					var faith_text := " · %d Faith" % ability.faith_cost if ability.faith_cost > 0 else ""
-					add_action_menu_button("%s · %d AP%s" % [ability.display_name, ability.ap_cost, faith_text], ability.description, use_ability_from_menu.bind(ability))
+					var tooltip: String = ability.description if validation.success else "%s\nUnavailable: %s" % [ability.description, validation.failure_reason]
+					add_action_menu_button("%s · %d AP%s" % [ability.display_name, ability.ap_cost, faith_text], tooltip, use_ability_from_menu.bind(ability))
+					var ability_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
+					ability_button.disabled = not validation.success
 			if action_menu_list.get_child_count() == 0:
 				add_action_menu_note("No Active Abilities available.")
 	var current_actor: CombatantState = combat_system.get_combat_state().get_current_actor()
@@ -555,6 +483,15 @@ func show_action_menu(category: String) -> void:
 				child.disabled = true
 				child.tooltip_text = "This character can only use Actions during their Turn."
 	action_menu_panel.visible = true
+
+
+func get_first_valid_ability_target(actor: CombatantState, ability: AbilityData) -> CombatantState:
+	if actor == null or ability == null or combat_system == null:
+		return null
+	for candidate in combat_system.get_combat_state().combatants.values():
+		if candidate != null and not candidate.is_dying() and combat_system.ability_system.target_filter_matches(actor, candidate, ability):
+			return candidate
+	return null
 
 
 func add_action_menu_button(text: String, tooltip: String, action: Callable) -> void:
@@ -700,7 +637,7 @@ func begin_single_targeting(kind: String, source) -> void:
 
 func get_single_target_range(kind: String, source) -> float:
 	if kind == "skill":
-		return source.attack_data.range_feet if source.attack_data != null else 0.0
+		return combat_system.skill_system.get_effective_range_feet(get_player_controlled_actor(), source)
 	var player: CombatantState = get_player_controlled_actor()
 	return combat_system.ability_system.get_targeting_range(player, source)
 
@@ -780,6 +717,8 @@ func cancel_single_targeting() -> void:
 func handle_menu_action_result(result: ActionResult) -> void:
 	sync_move_mode_from_state()
 	$UILayer/Control.record_action_result(result)
+	if not result.success:
+		$UILayer/Control.set_mode_hint("Action failed: %s" % result.failure_reason)
 	if result.requires_reaction_choice:
 		$UILayer/Control.show_reaction_prompt(result.reaction_prompt)
 	refresh_combatant_nodes()
@@ -933,8 +872,6 @@ func _build_inventory_drawer() -> void:
 func toggle_inventory() -> void:
 	inventory_drawer.visible = not inventory_drawer.visible
 	if inventory_drawer.visible:
-		if level_up_panel != null:
-			level_up_panel.visible = false
 		refresh_inventory()
 
 
@@ -943,8 +880,6 @@ func open_character_from_portrait() -> void:
 		return
 	if combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement():
 		return
-	if level_up_panel != null:
-		level_up_panel.hide()
 	if action_menu_panel != null:
 		action_menu_panel.hide()
 	inventory_drawer.show()

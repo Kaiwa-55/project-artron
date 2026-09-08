@@ -7,8 +7,8 @@
 [ext_resource type="Resource" path="res://data/trait/simple.tres" id="3_simple"]
 [ext_resource type="Resource" path="res://data/trait/slash.tres" id="4_slash"]
 [ext_resource type="Resource" path="res://data/trait/shield_compatible.tres" id="5_shield"]
-[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
 [ext_resource type="Resource" uid="uid://b5nsiidwu4f4s" path="res://data/ability/defensive_stance.tres" id="ability_defensive_stance"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
 
 [resource]
 script = ExtResource("1_attack_data")

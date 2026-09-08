@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bnxusllc77c18"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/ability/effect/scalebreaker_charge_movement.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_u8ari"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_6jn5j"]
 
 [resource]
 script = ExtResource("1")

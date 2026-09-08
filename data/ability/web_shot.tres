@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_r525n"]
 [ext_resource type="Resource" uid="uid://c7ccix64o16w0" path="res://data/attack/web_shot.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_ktily"]
 [ext_resource type="Resource" uid="uid://bkdigf3b6p2nf" path="res://data/status/slowed.tres" id="4"]
 
 [sub_resource type="Resource" id="UseEffect_slow_on_miss"]

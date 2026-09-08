@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_22jba"]
 [ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_1hxwd"]
 [ext_resource type="Resource" path="res://data/ability/effect/sacred_ward_defenses.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/divine.tres" id="5"]

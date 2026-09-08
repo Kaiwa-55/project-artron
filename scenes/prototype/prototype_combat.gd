@@ -1,8 +1,12 @@
 extends "res://scenes/prototype/prototype_ui_controller.gd"
 
+const REWARD_SCENE := "res://scenes/run/RewardSelection.tscn"
+
+var post_combat_transition_started: bool = false
+
 func start_test_combat() -> void:
 	combat_system = CombatSystem.new()
-	var active_encounter: Resource = encounter_data if encounter_data != null else DefaultEncounter
+	var active_encounter: Resource = get_active_encounter_data()
 	var map_size_feet: Vector2 = active_encounter.map_size_feet if active_encounter != null else MAP_SIZE_FEET
 	var map_size_world: Vector2 = map_size_feet * combat_system.map_rules.world_units_per_foot
 	combat_system.map_rules.set_playable_bounds(map_size_feet, -map_size_world * 0.5)
@@ -47,6 +51,14 @@ func _configure_encounter_background(data: Resource, map_size_world: Vector2) ->
 	)
 
 
+func get_active_encounter_data() -> Resource:
+	if get_tree().has_meta("active_encounter_data"):
+		var run_encounter = get_tree().get_meta("active_encounter_data")
+		if run_encounter is EncounterDataScript:
+			return run_encounter
+	return encounter_data if encounter_data != null else DefaultEncounter
+
+
 func _get_encounter_objects(data: Resource) -> Array[Dictionary]:
 	return data.map_objects if data != null else []
 
@@ -54,6 +66,13 @@ func _get_encounter_objects(data: Resource) -> Array[Dictionary]:
 func create_encounter_player_party(data: Resource) -> Array[CombatantState]:
 	var states: Array[CombatantState] = []
 	var entries: Array[Dictionary] = data.player_party if data != null else []
+	if get_tree().has_meta("active_run_state"):
+		var active_run = get_tree().get_meta("active_run_state")
+		if active_run is RunState and not active_run.party_character_data.is_empty():
+			entries = []
+			for index in range(active_run.party_character_data.size()):
+				var member: CharacterData = active_run.party_character_data[index]
+				entries.append({"character": member, "id": "player" if index == 0 else "ally_%d" % index, "display_name": member.display_name, "position_feet": Vector2(-40 - index * 16, -83.3333 + index * 18), "use_created_character": false})
 	if entries.is_empty():
 		entries = [
 			{"character": PlayerData, "id": "player", "display_name": "Player", "position_feet": Vector2(-40, -83.3333), "use_created_character": true},
@@ -78,10 +97,64 @@ func create_encounter_player_party(data: Resource) -> Array[CombatantState]:
 		state.id = unique_id
 		state.display_name = String(entry.get("display_name", state.display_name))
 		state.team = data.player_team if data != null else 1
+		apply_active_run_bonuses(state)
 		state.position = Vector2(entry.get("position_feet", Vector2.ZERO)) * combat_system.map_rules.world_units_per_foot
 		used_ids[unique_id] = true
 		states.append(state)
 	return states
+
+
+func apply_active_run_bonuses(state: CombatantState) -> void:
+	if state == null or not get_tree().has_meta("active_run_state"):
+		return
+	var active_run = get_tree().get_meta("active_run_state")
+	if not active_run is RunState:
+		return
+	state.max_hp_bonus += active_run.party_max_hp_bonus
+	var progression_state: CombatantState = active_run.party_progression_states.get(state.id)
+	if progression_state == null and state.id == "player":
+		progression_state = active_run.player_progression_state
+	if progression_state != null:
+		apply_run_progression_state(state, progression_state)
+	combat_system.refresh_stats(state)
+	state.hp = state.max_hp
+
+
+func apply_run_progression_state(target: CombatantState, source: CombatantState) -> void:
+	target.level = source.level
+	target.experience = source.experience
+	target.ability_points = source.ability_points
+	target.attribute_points = source.attribute_points
+	target.progression_rewards_granted_through_level = source.progression_rewards_granted_through_level
+	target.pending_level_up_choices = source.pending_level_up_choices.duplicate(true)
+	target.selected_ability_ids = source.selected_ability_ids.duplicate()
+	target.selected_level_attributes = source.selected_level_attributes.duplicate()
+	target.strength = source.strength
+	target.dexterity = source.dexterity
+	target.constitution = source.constitution
+	target.intelligence = source.intelligence
+	target.wisdom = source.wisdom
+	target.charisma = source.charisma
+	target.base_max_hp = source.base_max_hp
+	target.base_max_mana = source.base_max_mana
+	target.max_faith = source.max_faith
+	target.base_speed = source.base_speed
+	target.ancestry_id = source.ancestry_id
+	target.ancestry_display_name = source.ancestry_display_name
+	target.class_id = source.class_id
+	target.class_display_name = source.class_display_name
+	target.active_traits = source.active_traits.duplicate()
+	target.granted_ability_ids = source.granted_ability_ids.duplicate()
+	target.available_abilities = source.available_abilities.duplicate()
+	target.equipped_abilities = source.equipped_abilities.duplicate()
+	target.set_meta("creation_rules_applied", true)
+	var catalog = load("res://data/creation/default_creation_catalog.tres")
+	for ability_id in target.selected_ability_ids:
+		var ability = catalog.find_ability(ability_id)
+		if ability != null and not target.available_abilities.has(ability):
+			target.available_abilities.append(ability)
+		if ability != null and not target.equipped_abilities.has(ability_id):
+			target.equipped_abilities.append(ability_id)
 
 
 func setup_party_nodes(states: Array[CombatantState]) -> void:
@@ -323,12 +396,11 @@ func _ready() -> void:
 	_apply_prototype_layout()
 	_build_obstacle_visuals()
 	_build_inventory_drawer()
-	_build_level_up_panel()
 	$UILayer/Control.update_ui()
 
 
 func _build_obstacle_visuals() -> void:
-	var active_encounter: Resource = encounter_data if encounter_data != null else DefaultEncounter
+	var active_encounter: Resource = get_active_encounter_data()
 	for object_data in _get_encounter_objects(active_encounter):
 		if String(object_data.get("kind", "")) != "obstacle":
 			continue
@@ -348,6 +420,9 @@ func _process(_delta: float) -> void:
 	if combat_system == null or combat_system.get_combat_state() == null:
 		return
 	var state = combat_system.get_combat_state()
+	if state.is_finished() and state.combat_result == CombatEnums.CombatResult.VICTORY and get_tree().has_meta("active_run_state") and not post_combat_transition_started:
+		post_combat_transition_started = true
+		open_reward_after_victory()
 	var reaction_locked: bool = combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
 	if inventory_drawer != null and inventory_drawer.get_script() == CharacterPanelScript:
 		var displayed_actor := get_displayed_party_member()
@@ -361,9 +436,16 @@ func _process(_delta: float) -> void:
 	$UILayer/Controllers/CombatHUD.refresh()
 	refresh_shadow_step_button()
 	refresh_area_skill_button()
-	refresh_level_up_button()
 	$UILayer/Controllers/ActionBar.refresh()
 	queue_redraw()
+
+
+func open_reward_after_victory() -> void:
+	await get_tree().create_timer(0.75).timeout
+	var change_error := get_tree().change_scene_to_file(REWARD_SCENE)
+	if change_error != OK:
+		post_combat_transition_started = false
+		$UILayer/Control.add_log_message("Could not open Reward Selection: %s" % error_string(change_error))
 
 
 func refresh_end_turn_lock() -> void:
@@ -399,7 +481,8 @@ func _draw() -> void:
 		return
 	var center := get_global_mouse_position()
 	var scale_per_foot: float = combat_system.map_rules.world_units_per_foot
-	var preview: Dictionary = combat_system.targeting_system.get_targeting_preview(player, center, source, combat_system.get_combat_state(), combat_system.map_rules)
+	var effective_range: float = combat_system.skill_system.get_effective_range_feet(player, source) if ground_targeting_kind == "skill" else source.targeting_range_feet
+	var preview: Dictionary = combat_system.targeting_system.get_targeting_preview(player, center, source, combat_system.get_combat_state(), combat_system.map_rules, effective_range)
 	var outline := Color("c084fc") if preview.valid else Color("fb7185")
 	var fill := Color(0.45, 0.2, 0.9, 0.18) if preview.valid else Color(0.9, 0.15, 0.2, 0.12)
 	match source.area_shape:
@@ -409,12 +492,12 @@ func _draw() -> void:
 			draw_arc(center, radius, 0.0, TAU, 64, outline, 2.0)
 		SkillData.AreaShape.LINE:
 			var direction: Vector2 = player.position.direction_to(center)
-			var finish: Vector2 = player.position + direction * source.line_length_feet * scale_per_foot
+			var finish: Vector2 = player.position + direction * effective_range * scale_per_foot
 			draw_line(player.position, finish, outline, source.line_width_feet * scale_per_foot, true)
 		SkillData.AreaShape.CONE:
 			var direction_angle: float = player.position.direction_to(center).angle()
 			var half_angle := deg_to_rad(source.cone_angle_degrees * 0.5)
-			var radius: float = source.targeting_range_feet * scale_per_foot
+			var radius: float = effective_range * scale_per_foot
 			var points := PackedVector2Array([player.position])
 			for step in range(25):
 				var angle := lerpf(direction_angle - half_angle, direction_angle + half_angle, step / 24.0)
@@ -424,5 +507,5 @@ func _draw() -> void:
 	for target in preview.targets:
 		var target_radius: float = combat_system.map_rules.get_combatant_radius_world_units(target) + 6.0
 		draw_arc(target.position, target_radius, 0.0, TAU, 32, Color("facc15"), 4.0)
-	draw_arc(player.position, source.targeting_range_feet * scale_per_foot, 0.0, TAU, 96, Color(0.22, 0.75, 1.0, 0.65), 2.0)
+	draw_arc(player.position, effective_range * scale_per_foot, 0.0, TAU, 96, Color(0.22, 0.75, 1.0, 0.65), 2.0)
 	$UILayer/Control.set_mode_hint("%s | %s | %d target(s) | Left-click confirm, right-click/Esc cancel" % [source.display_name, preview.failure_reason if not preview.valid else "Valid target point", preview.targets.size()])

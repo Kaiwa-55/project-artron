@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_hbych"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_v1vw7"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3_hbych"]
 [ext_resource type="Resource" path="res://data/effect/defensive_stance_reflex.tres" id="3_reflex"]
 [ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="4_use_effect"]

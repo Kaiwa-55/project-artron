@@ -33,8 +33,12 @@ func _init() -> void:
 	player.position = Vector2.ZERO
 	enemy.position = Vector2(180, 0)
 	var ranged: AttackData = load("res://data/attack/shortbow.tres").duplicate(true)
+	var mobile_ability = load("res://data/ability/mobile_shooter.tres")
 	var mobile = player.active_reactions.filter(func(reaction): return reaction != null and reaction.id == "mobile_shooter")
 	check(mobile.size() == 1 and mobile[0].ap_cost == 0, "Assassin gains free Mobile Shooter Reaction")
+	check(mobile_ability.reaction_only, "Mobile Shooter is marked Reaction-only")
+	check(not mobile_ability.granted_reactions.is_empty(), "Mobile Shooter still grants its Reaction data")
+	check(not system.ability_system.validate_active_use(player, mobile_ability).success, "Mobile Shooter cannot be activated from the Action Bar")
 	var effect = system.reaction_system.get_effect(mobile[0], ReactionEffectData.Type.MOVEMENT)
 	check(effect.distance_feet == 5.0 and not effect.movement_triggers_reactions, "Movement is 5 ft and does not trigger Reactions")
 	# Miss does not trigger or consume it.

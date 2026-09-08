@@ -57,11 +57,14 @@ mouse_filter = 2
 script = ExtResource("2_control")
 
 [node name="Header" type="Panel" parent="UILayer/Control" unique_id=1046892464]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
 offset_left = 20.0
 offset_top = 18.0
-offset_right = 1260.0
+offset_right = -20.0
 offset_bottom = 76.0
+grow_horizontal = 2
 
 [node name="ActionSources" type="Control" parent="UILayer/Control" unique_id=1754361818]
 visible = false
@@ -94,11 +97,17 @@ offset_bottom = -20.0
 grow_vertical = 0
 
 [node name="Enemy_panel" type="Panel" parent="UILayer/Control" unique_id=1099442048]
-layout_mode = 0
-offset_left = 940.0
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
 offset_top = 96.0
-offset_right = 1151.0
-offset_bottom = 650.0
+offset_right = -20.0
+offset_bottom = -158.0
+grow_horizontal = 0
+grow_vertical = 2
 
 [node name="PanelTitle" type="Label" parent="UILayer/Control/Enemy_panel" unique_id=721863910]
 layout_mode = 0
@@ -110,11 +119,16 @@ theme_override_font_sizes/font_size = 18
 text = "ENEMY"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control/Enemy_panel" unique_id=1930457242]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 14.0
 offset_top = 48.0
-offset_right = 300.0
-offset_bottom = 590.0
+offset_right = -14.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 6
 
 [node name="Name" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1643155864]
@@ -136,18 +150,30 @@ layout_mode = 0
 [node name="ReactionPrompt" type="Panel" parent="UILayer/Control" unique_id=629339134]
 visible = false
 z_index = 10
-layout_mode = 0
-offset_left = 416.0
-offset_top = 166.0
-offset_right = 864.0
-offset_bottom = 335.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -224.0
+offset_top = -84.5
+offset_right = 224.0
+offset_bottom = 84.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control/ReactionPrompt" unique_id=1522019412]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 18.0
 offset_top = 16.0
-offset_right = 430.0
-offset_bottom = 152.0
+offset_right = -18.0
+offset_bottom = -17.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="UILayer/Control/ReactionPrompt/VBoxContainer" unique_id=611116679]

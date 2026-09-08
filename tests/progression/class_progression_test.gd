@@ -35,7 +35,8 @@ func _init() -> void:
 	check(martial_artist.experience == 100, "A Level 2 character should normalize to the Level 2 XP threshold.", failures)
 	check(martial_initial.max_hp_gained == 15 and martial_artist.base_max_hp == 16, "Martial Artist Levels 1-2 should add 15 HP.", failures)
 	check(martial_initial.granted_ability_ids.has("build_up_body"), "Martial Artist Level 1 should grant Build Up Body.", failures)
-	check(martial_initial.granted_ability_ids.has("combo_techniques"), "Martial Artist Level 2 should grant Combo Techniques.", failures)
+	check(not martial_initial.granted_ability_ids.has("combo_techniques"), "Martial Artist Level 2 should learn optional Abilities by spending Ability Points, not receive Combo Techniques automatically.", failures)
+	check(martial_artist.ability_points == 2, "A Level 2 Martial Artist should receive 1 Ability Point for each Level.", failures)
 
 	var repeated := system.initialize_character(martial_artist)
 	check(repeated.max_hp_gained == 0 and repeated.granted_ability_ids.is_empty(), "Class rewards must not be granted twice.", failures)

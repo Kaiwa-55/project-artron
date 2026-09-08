@@ -89,12 +89,19 @@ func learn_ability(character: CombatantState, ability: AbilityData) -> RefCounte
 		character.available_abilities.append(ability)
 	if not character.equipped_abilities.has(ability.id):
 		character.equipped_abilities.append(ability.id)
+	_grant_ability_skills(character, ability)
 	result.success = true
 	result.ability_id = ability.id
 	result.ability_name = ability.display_name
 	result.points_spent = ability.ability_point_cost
 	result.remaining_ability_points = character.ability_points
 	return result
+
+
+func _grant_ability_skills(character: CombatantState, ability: AbilityData) -> void:
+	for skill in ability.granted_skills:
+		if skill != null and not character.available_skills.has(skill):
+			character.available_skills.append(skill)
 
 
 func can_learn_ability(character: CombatantState, ability: AbilityData) -> bool:
@@ -106,6 +113,8 @@ func get_learn_ability_failure_reason(character: CombatantState, ability: Abilit
 		return "Character is required."
 	if ability == null or ability.id.is_empty():
 		return "Ability is invalid."
+	if not ability.granted_skills.is_empty():
+		return "%s must be selected through a Spell Choice." % ability.display_name
 	if character.selected_ability_ids.has(ability.id) or character.granted_ability_ids.has(ability.id):
 		return "%s is already learned." % ability.display_name
 	if ability.auto_equip_on_grant:
@@ -221,6 +230,7 @@ func _grant_class_rewards(character: CombatantState, level: int, result: Progres
 			character.granted_ability_ids.append(ability.id)
 		if ability.auto_equip_on_grant and not character.equipped_abilities.has(ability.id):
 			character.equipped_abilities.append(ability.id)
+		_grant_ability_skills(character, ability)
 		if not result.granted_ability_ids.has(ability.id):
 			result.granted_ability_ids.append(ability.id)
 		if not rewards.granted_ability_ids.has(ability.id):
@@ -275,6 +285,7 @@ func _apply_preselected_ability_costs(character: CombatantState) -> String:
 		if ability == null:
 			return "Selected Ability %s is not available." % ability_id
 		total_cost += ability.ability_point_cost
+		_grant_ability_skills(character, ability)
 	if total_cost > character.ability_points:
 		return "Selected Abilities require %d Ability Points, but only %d are available." % [total_cost, character.ability_points]
 	character.ability_points -= total_cost

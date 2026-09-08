@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_n28se"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3_trait"]
 [ext_resource type="Resource" uid="uid://dd1wjirj7cg05" path="res://animation/ki_wave.tres" id="4_animation"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="4_sen5u"]
 
 [resource]
 script = ExtResource("1_ability")
@@ -14,6 +15,7 @@ required_level = 2
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3_trait")]
 ap_cost = 1
+cooldown_turns = 1
 description = "Release a 20-foot line of force that strikes every enemy along its path."
 animation_template = ExtResource("4_animation")
 target_mode = 2

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Project Artron"
-run/main_scene="res://scenes/character_creation/CharacterCreation.tscn"
+run/main_scene="uid://cki04qqhvvxl7"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -19,7 +19,8 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/mode=3
+window/size/window_width_override=1280
+window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

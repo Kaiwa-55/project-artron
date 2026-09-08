@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://ce2jcgrcyh5cd"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/thorned_tail_attack.tres" id="2"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://46vxwoh1nmay" path="res://data/attack/thorned_tail_attack.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_0ekm6"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_fknet"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
 
 [resource]
@@ -15,8 +17,6 @@ auto_equip_on_grant = true
 ap_cost = 1
 cooldown_turns = 1
 description = "Strike at 10 ft for 5 Slash damage and apply Bleeding 1 on Hit."
-target_mode = 0
-target_filter = 0
 attack_source = 2
 attack_data = ExtResource("2")
 targeting_range_feet = 10.0

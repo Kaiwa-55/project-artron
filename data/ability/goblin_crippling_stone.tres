@@ -1,7 +1,11 @@
-[gd_resource type="Resource" script_class="AbilityData" load_steps=4 format=3]
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cv0448n1o0qkg"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/attack/goblin_crippling_stone.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_3e3c1"]
 [ext_resource type="Resource" path="res://data/trait/goblin.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_4x0uu"]
+
 [resource]
 script = ExtResource("1")
 id = "goblin_crippling_stone"
@@ -13,4 +17,3 @@ description = "Make a ranged attack. On Hit, apply Slowed 5 until the end of the
 attack_source = 2
 attack_data = ExtResource("2")
 targeting_range_feet = 40.0
-

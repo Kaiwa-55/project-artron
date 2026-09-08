@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bi71gw77qqnom"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_owskr"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_ix3pt"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4"]
+
+[sub_resource type="Resource" id="Range"]
+script = ExtResource("2")
+effect_type = 14
+skill_range_bonus_feet = 5.0
+
+[resource]
+script = ExtResource("1")
+id = "spell_reach"
+display_name = "Spell Reach"
+required_level = 3
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("3"), ExtResource("4")]
+is_passive = true
+description = "Increase the casting and attack range of your Skills by 5 ft. This does not enlarge a Circle's radius or a Cone's angle."
+effects = [SubResource("Range")]

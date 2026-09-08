@@ -20,7 +20,10 @@ enum Type {
 	CONDITIONAL_TO_HIT_BONUS,
 	PASSIVE_FIRST_MOVE_DISTANCE_BONUS,
 	ON_HIT_APPLY_STATUS,
-	AFTER_MOVE_APPLY_STATUS
+	AFTER_MOVE_APPLY_STATUS,
+	PASSIVE_SKILL_DAMAGE_BONUS,
+	PASSIVE_SKILL_MANA_DISCOUNT,
+	PASSIVE_SKILL_RANGE_BONUS_FEET
 }
 
 enum ConditionMode {
@@ -64,3 +67,12 @@ enum ConditionMode {
 # Active movement Ability data. Path blocking still uses MapRules.
 @export var movement_distance_feet: float = 0.0
 @export var movement_triggers_reactions: bool = true
+
+# Generic spellcasting modifiers. They apply to Skills, never weapon Attacks or
+# Active Abilities, so spell selection and class scaling remain separate.
+@export var skill_damage_bonus: int = 0
+@export var skill_mana_discount: int = 0
+@export_range(0, 99) var minimum_skill_mana_cost: int = 0
+@export_range(0, 99) var minimum_skill_base_mana_cost: int = 0
+@export var first_skill_per_turn: bool = false
+@export var skill_range_bonus_feet: float = 0.0

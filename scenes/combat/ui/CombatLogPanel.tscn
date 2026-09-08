@@ -15,10 +15,14 @@ corner_radius_bottom_left = 10
 [node name="CombatLogPanel" type="PanelContainer" unique_id=33874264]
 z_index = 18
 clip_contents = true
+custom_minimum_size = Vector2(280, 0)
+anchors_preset = 6
+anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 80.0
 offset_right = 300.0
-offset_bottom = 680.0
+offset_bottom = -158.0
+grow_vertical = 2
 theme_override_styles/panel = SubResource("PanelStyle")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=1186814513]

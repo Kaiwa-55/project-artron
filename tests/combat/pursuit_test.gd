@@ -23,12 +23,16 @@ func _init() -> void:
 	var system := CombatSystem.new()
 	system.start_combat([player, enemy])
 	var pursuit = null
+	var pursuit_ability = load("res://data/ability/pursuit.tres")
 	for reaction in player.active_reactions:
 		if reaction != null and reaction.id == "pursuit":
 			pursuit = reaction
 	player.active_reactions = [pursuit]
 	check(pursuit != null and pursuit.ap_cost == 1, "Assassin gains Pursuit at 1 AP")
 	check(system.ability_system.ability_has_trait(pursuit, "reactive"), "Pursuit is Reactive")
+	check(pursuit_ability.reaction_only, "Pursuit is marked Reaction-only")
+	check(not pursuit_ability.granted_reactions.is_empty(), "Pursuit still grants its Reaction data")
+	check(not system.ability_system.validate_active_use(player, pursuit_ability).success, "Pursuit cannot be activated from the Action Bar")
 	var combined: float = system.map_rules.get_combatant_radius_world_units(player) + system.map_rules.get_combatant_radius_world_units(enemy)
 	player.position = Vector2.ZERO
 	enemy.position = Vector2(combined + 4.0 * 12.0, 0)

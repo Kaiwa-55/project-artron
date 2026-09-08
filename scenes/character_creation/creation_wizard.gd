@@ -22,11 +22,15 @@ var footer_message: Label
 var next_button: Button
 var back_button: Button
 var focused_ability_id: String = ""
+var focused_spell_id: String = ""
 var focused_item
 var ability_filter: int = 0
 var ability_search: String = ""
 
 func _ready() -> void:
+	if get_tree().has_meta("party_creation_return_scene"):
+		auto_start_combat = false
+		creation_cancelled.connect(return_to_party_setup)
 	theme = UI.make_theme()
 	draft = draft_script.new()
 	draft.setup(catalog)
@@ -162,6 +166,7 @@ func go_back() -> void:
 			draft.setup(catalog)
 			furthest_step = 0
 			focused_ability_id = ""
+			focused_spell_id = ""
 			focused_item = null
 			show_step(0)
 			confirm.queue_free())
@@ -208,6 +213,8 @@ func refresh_summary() -> void:
 	UI.label(summary_column, "REF %d    FORT %d    WILL %d" % [state.reflex, state.fortitude, state.will], 13, UI.MUTED)
 	UI.line(summary_column)
 	UI.label(summary_column, "%d ABILITY POINT(S) LEFT" % state.ability_points, 14, UI.GOLD)
+	if draft.get_spell_choice_capacity() > 0:
+		UI.label(summary_column, "%d SPELL CHOICE(S) LEFT" % draft.get_spell_choices_remaining(), 14, UI.GOLD)
 	var reason: String = draft.step_error("attributes")
 	UI.label(summary_column, "Attribute choices complete" if reason.is_empty() else "Attribute choices pending", 14, UI.MUTED)
 	var traits: PackedStringArray = []
@@ -217,8 +224,17 @@ func refresh_summary() -> void:
 	var names: PackedStringArray = []
 	for ability in state.available_abilities:
 		if state.granted_ability_ids.has(ability.id) or state.selected_ability_ids.has(ability.id):
+			if not ability.granted_skills.is_empty():
+				continue
 			names.append(ability.display_name)
 	UI.label(summary_column, "\n".join(names), 14)
+	if not state.available_skills.is_empty():
+		var spell_names: PackedStringArray = []
+		for skill in state.available_skills:
+			if skill != null:
+				spell_names.append(skill.display_name)
+		UI.label(summary_column, "SPELLBOOK", 13, UI.GOLD, true)
+		UI.label(summary_column, "\n".join(spell_names), 14)
 
 func confirm_character() -> void:
 	var character: CharacterData = draft.finish()
@@ -226,8 +242,21 @@ func confirm_character() -> void:
 		refresh_navigation()
 		return
 	character_created.emit(character)
+	if get_tree().has_meta("party_creation_return_scene"):
+		var party_state: PartySetupState = get_tree().get_meta("party_setup_state", PartySetupState.new()) as PartySetupState
+		party_state.set_member(int(get_tree().get_meta("party_creation_slot", 0)), character)
+		get_tree().set_meta("party_setup_state", party_state)
+		return_to_party_setup()
+		return
 	if auto_start_combat:
 		get_tree().set_meta("created_character_data", character)
 		var error := get_tree().change_scene_to_file(destination_scene)
 		if error != OK:
 			footer_message.text = "Could not open the destination scene (%d)." % error
+
+
+func return_to_party_setup() -> void:
+	var return_scene := String(get_tree().get_meta("party_creation_return_scene", "res://scenes/run/CreateParty.tscn"))
+	get_tree().remove_meta("party_creation_return_scene")
+	get_tree().remove_meta("party_creation_slot")
+	get_tree().change_scene_to_file(return_scene)

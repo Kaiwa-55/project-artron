@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://ds82lj3p3nfhw"]
 
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/rending_claw.tres" id="3"]
-[ext_resource type="Resource" path="res://data/ability/thorned_tail.tres" id="4"]
-[ext_resource type="Resource" path="res://data/ability/scalebreaker_charge.tres" id="5"]
-[ext_resource type="Resource" path="res://data/ability/coiling_sweep.tres" id="6"]
+[ext_resource type="Resource" uid="uid://xehxsgw5ediy" path="res://data/attack/rending_claw.tres" id="3"]
+[ext_resource type="Resource" uid="uid://ce2jcgrcyh5cd" path="res://data/ability/thorned_tail.tres" id="4"]
+[ext_resource type="Resource" uid="uid://bnxusllc77c18" path="res://data/ability/scalebreaker_charge.tres" id="5"]
+[ext_resource type="Resource" uid="uid://cgtyl8ucp6hoh" path="res://data/ability/coiling_sweep.tres" id="6"]
 [ext_resource type="Texture2D" uid="uid://lc57x8lf8rla" path="res://assets/token/thornscale_ravager.png" id="6_08of0"]
 [ext_resource type="Resource" uid="uid://b1d2yapa1j2lv" path="res://data/reaction/barbed_retaliation.tres" id="7"]
 [ext_resource type="Resource" path="res://data/trait/beast.tres" id="8"]
@@ -23,10 +23,10 @@ collision_radius_feet = 4.0
 level = 3
 base_max_hp = 25
 base_max_ap = 4
-base_speed = 30.0
+base_speed = 15.0
 reflex_stat_bonus = 1
 fortitude_stat_bonus = 3
-strength = 18
+strength = 16
 dexterity = 14
 constitution = 16
 intelligence = 6

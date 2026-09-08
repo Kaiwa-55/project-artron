@@ -1,0 +1,78 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/run/party_member_card.gd" id="1"]
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.067, 0.114, 0.161, 1)
+border_width_left = 1
+border_width_top = 4
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.82, 0.65, 0.27, 1)
+
+[node name="PartyMemberCard" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 390)
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("Panel")
+script = ExtResource("1")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Leader" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.77, 0.38, 1)
+text = "PARTY LEADER"
+
+[node name="Portrait" type="TextureRect" parent="Margin/Content"]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "EMPTY CHARACTER SLOT"
+
+[node name="Class" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.37, 1)
+text = "Create a hero"
+
+[node name="Stats" type="Label" parent="Margin/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
+text = "You may begin the Run without filling every slot."
+autowrap_mode = 2
+
+[node name="Ready" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43, 0.84, 0.65, 1)
+
+[node name="Actions" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Create" type="Button" parent="Margin/Content/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CREATE CHARACTER"
+
+[node name="Edit" type="Button" parent="Margin/Content/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "EDIT"
+
+[node name="Remove" type="Button" parent="Margin/Content/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "REMOVE"

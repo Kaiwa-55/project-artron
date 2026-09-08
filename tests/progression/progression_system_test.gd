@@ -22,13 +22,24 @@ func _init() -> void:
 	var multi_level := system.add_experience(character, 501)
 	check(multi_level.levels_gained == [2, 3, 4], "A large XP reward should process Levels 2, 3, and 4 in order.", failures)
 	check(character.level == 4 and character.experience == 600, "The character should reach Level 4 at 600 total XP.", failures)
-	check(multi_level.ability_points_gained == 2, "Levels 2-4 should grant 2 Ability Points.", failures)
-	check(multi_level.attribute_points_gained == 1, "Level 4 should grant 1 Attribute Point.", failures)
-	check(character.ability_points == 3 and character.attribute_points == 1, "All earned points should remain on the character.", failures)
+	check(multi_level.ability_points_gained == 3, "Levels 2-4 should grant 3 Ability Points.", failures)
+	check(multi_level.attribute_points_gained == 2, "Level 3 Attribute Improve should grant 2 Attribute Points.", failures)
+	check(character.ability_points == 4 and character.attribute_points == 2, "All earned points should remain on the character.", failures)
 	var constitution_before := character.constitution
 	var attribute_choice = system.increase_attribute(character, AttributeTypes.Type.CONSTITUTION)
 	check(attribute_choice.success and character.constitution == constitution_before + 1, "A pending Attribute Point should increase the chosen Attribute.", failures)
-	check(character.attribute_points == 0 and character.selected_level_attributes == [AttributeTypes.Type.CONSTITUTION], "Attribute choice should be recorded and consume its point.", failures)
+	var repeated_attribute_choice = system.increase_attribute(character, AttributeTypes.Type.CONSTITUTION)
+	check(repeated_attribute_choice.success and character.constitution == constitution_before + 2, "Attribute Improve should allow increasing one Attribute by 2.", failures)
+	check(character.attribute_points == 0 and character.selected_level_attributes == [AttributeTypes.Type.CONSTITUTION, AttributeTypes.Type.CONSTITUTION], "Both Attribute Improve points should be recorded and consumed.", failures)
+
+	var split_character := CombatantState.new()
+	split_character.level = 3
+	system.initialize_character(split_character)
+	var strength_before := split_character.strength
+	var dexterity_before := split_character.dexterity
+	system.increase_attribute(split_character, AttributeTypes.Type.STRENGTH)
+	system.increase_attribute(split_character, AttributeTypes.Type.DEXTERITY)
+	check(split_character.strength == strength_before + 1 and split_character.dexterity == dexterity_before + 1, "Attribute Improve should allow increasing two different Attributes by 1 each.", failures)
 
 	var maximum := system.add_experience(character, 999999)
 	check(maximum.current_level == 10 and character.experience == 4500, "Progression should clamp at Level 10 and its XP threshold.", failures)

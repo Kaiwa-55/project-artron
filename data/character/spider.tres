@@ -1,11 +1,12 @@
 [gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://cwpas6877a5rx"]
 
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/spider_bite.tres" id="2"]
+[ext_resource type="Resource" uid="uid://co00u5hedviyg" path="res://data/attack/spider_bite.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://dnvwp821pyb57" path="res://assets/token/Spider.jpg" id="2_p7wvw"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="4_8emkp"]
 [ext_resource type="Resource" path="res://data/trait/beast.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="7_8emkp"]
 
 [resource]
 script = ExtResource("1")
@@ -17,7 +18,7 @@ team = 2
 position = Vector2(570, 250)
 base_max_hp = 8
 base_max_ap = 3
-base_speed = 25.0
+base_speed = 15.0
 reflex_stat_bonus = 1
 will_stat_bonus = -1
 dexterity = 14

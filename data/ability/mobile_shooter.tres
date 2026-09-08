@@ -13,5 +13,6 @@ display_name = "Mobile Shooter"
 required_level = 3
 required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("3"), ExtResource("4")]
+reaction_only = true
 description = "Reactive. After your first Ranged Attack Hit each Turn, Move up to 5 ft without triggering Reactions. Limit 1/Turn."
 granted_reactions = [ExtResource("2")]

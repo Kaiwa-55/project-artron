@@ -13,8 +13,10 @@ func start_combat(combatants: Array[CombatantState]) -> void:
 	for combatant in combatants:
 		combatant.last_attack_declared_round = 0
 		combatant.last_step_back_round = 0
-		combat_system.ancestry_system.apply_ancestry(combatant)
-		combat_system.class_system.apply_class(combatant)
+		if not combatant.has_meta("creation_rules_applied"):
+			combat_system.ancestry_system.apply_ancestry(combatant)
+			combat_system.class_system.apply_class(combatant)
+			combatant.set_meta("creation_rules_applied", true)
 		if combatant.has_meta("class_data"):
 			combat_system.progression_system.initialize_character(combatant)
 		combat_system.ability_system.sync_granted_reactions(combatant)

@@ -12,13 +12,8 @@ func run_test() -> void:
 	root.add_child(prototype)
 	await process_frame
 	await process_frame
-	check(prototype.level_up_button != null, "Prototype should create a Level Up button")
-	check(prototype.level_up_button.text.begins_with("LEVEL UP"), "Pending progression choices should be visible in the header")
-	prototype.toggle_level_up_panel()
-	check(prototype.level_up_panel.visible, "Level Up panel should open")
-	check(prototype.level_up_list.get_child_count() > 4, "Level Up panel should list Ability choices")
-	prototype.toggle_level_up_panel()
-	check(not prototype.level_up_panel.visible, "Level Up panel should close")
+	check(not prototype.has_node("UILayer/Control/LevelUpButton"), "Combat must not expose Level Up controls")
+	check(not prototype.has_node("UILayer/Control/LevelUpPanel"), "Combat must not contain the legacy Level Up panel")
 	check(prototype.area_action_buttons.has("ability:shared_blessing"), "Unified targeting UI should list the current Devotee Circle Ability.")
 	prototype.combat_system.combat_state.current_actor_id = "player"
 	prototype.combat_system.combat_state.get_combatant("player").ap = prototype.combat_system.combat_state.get_combatant("player").max_ap

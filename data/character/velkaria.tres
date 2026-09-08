@@ -12,6 +12,7 @@
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="9"]
 [ext_resource type="Resource" path="res://data/trait/web_walker.tres" id="10"]
 [ext_resource type="Resource" path="res://data/ai/velkaria_boss_profile.tres" id="11"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="13_dpjg4"]
 
 [resource]
 script = ExtResource("1")
@@ -25,7 +26,7 @@ collision_radius_feet = 5.0
 level = 5
 base_max_hp = 48
 base_max_ap = 4
-base_speed = 25.0
+base_speed = 15.0
 reflex_stat_bonus = 2
 fortitude_stat_bonus = 2
 strength = 16

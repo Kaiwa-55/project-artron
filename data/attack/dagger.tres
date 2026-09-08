@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_p01ub"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_3pbl2"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
-[ext_resource type="Resource" path="res://data/ability/dual_strike.tres" id="dual_strike"]
+[ext_resource type="Resource" uid="uid://dpepfmcue5b01" path="res://data/ability/dual_strike.tres" id="dual_strike"]
 [ext_resource type="Resource" path="res://data/trait/dual_weapon.tres" id="dual_weapon"]
 [ext_resource type="Resource" path="res://data/trait/finesse.tres" id="finesse"]
 [ext_resource type="Resource" path="res://data/trait/light.tres" id="light"]

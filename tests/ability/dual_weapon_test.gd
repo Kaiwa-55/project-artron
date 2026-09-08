@@ -3,6 +3,11 @@ extends SceneTree
 
 func _init() -> void:
 	var failures: Array[String] = []
+	var starting_player: CombatantState = load("res://data/character/player.tres").create_combatant_state()
+	var starting_system := CombatSystem.new()
+	starting_system.start_combat([starting_player])
+	check(starting_system.equipment_system.validate_dual_weapon_setup(starting_player).success, "The default Player should start with two distinct Daggers equipped.", failures)
+	check(starting_player.equipped_items.get(EquipmentSystem.WEAPON_SLOT_1) != starting_player.equipped_items.get(EquipmentSystem.WEAPON_SLOT_2), "The two starting Daggers must be separate item resources.", failures)
 	var actor: CombatantState = load("res://data/character/player.tres").create_combatant_state()
 	var target: CombatantState = load("res://data/character/enemy.tres").create_combatant_state()
 	actor.id = "dual_actor"
@@ -10,7 +15,9 @@ func _init() -> void:
 	actor.position = Vector2.ZERO
 	target.id = "dual_target"
 	target.team = 1
-	target.position = Vector2(5, 0)
+	# Exercise the real gridless range calculation instead of overlapping the
+	# tokens. With two 2.5 ft radii, 10 ft centre distance is exactly 5 ft reach.
+	target.position = Vector2(10.0 * 12.0, 0)
 	actor.starting_equipment = [load("res://data/equipment/dagger.tres"), load("res://data/equipment/hand_axe.tres")]
 	actor.starting_equipment_slots = {"dagger": EquipmentSystem.WEAPON_SLOT_1, "hand_axe": EquipmentSystem.WEAPON_SLOT_2}
 	var system := CombatSystem.new()
@@ -25,7 +32,9 @@ func _init() -> void:
 	var result := system.use_active_ability(actor.id, target.id, "dual_strike")
 	check(result.success, "Dual Strike should execute.", failures)
 	check(actor.ap == 4 - dual_strike.ap_cost, "Dual Strike should spend its configured AP cost once.", failures)
-	check(target.hp < before_hp, "Dual Strike should deal weapon damage.", failures)
+	var attack_results := result.events.filter(func(event): return event.type == EventTypes.Type.ATTACK_HIT or event.type == EventTypes.Type.ATTACK_MISS)
+	check(attack_results.size() == 2, "Dual Strike should resolve both weapon attacks.", failures)
+	check(target.hp <= before_hp, "Dual Strike must never restore target HP.", failures)
 
 	var shield_actor: CombatantState = load("res://data/character/player.tres").create_combatant_state()
 	shield_actor.equipped_items[EquipmentSystem.WEAPON_SLOT_1] = load("res://data/equipment/dagger.tres")

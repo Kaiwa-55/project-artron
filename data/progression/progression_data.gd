@@ -7,10 +7,10 @@ extends Resource
 	0, 0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500
 ])
 @export var ability_points_by_level: PackedInt32Array = PackedInt32Array([
-	0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0
+	0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 ])
 @export var attribute_points_by_level: PackedInt32Array = PackedInt32Array([
-	0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
+	0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0
 ])
 
 

@@ -20,6 +20,7 @@ var level: int = 1
 var ancestry_choices: Array[int] = []
 var class_choices: Array[int] = []
 var learned_ids: Array[String] = []
+var learned_spell_ids: Array[String] = []
 var equipment_slots: Dictionary = {}
 var preview: CombatantState
 var notice: String = ""
@@ -30,7 +31,9 @@ func setup(source_catalog) -> void:
 	catalog = source_catalog
 	ancestry = catalog.ancestries[0] if not catalog.ancestries.is_empty() else null
 	character_class = catalog.classes[0] if not catalog.classes.is_empty() else null
-	portrait_id = catalog.visuals[0].source_id if not catalog.visuals.is_empty() else ""
+	# Portrait presets are class presentation only. A created character uses an
+	# image explicitly chosen from the computer.
+	portrait_id = ""
 	var initial: CombatantState = catalog.base_character.create_combatant_state()
 	equipment_rules.initialize_combatant(initial)
 	equipment_slots = initial.equipped_items.duplicate()
@@ -49,6 +52,7 @@ func select_class(value) -> void:
 		return
 	character_class = value
 	class_choices.clear()
+	learned_spell_ids.clear()
 	notice = "Class changed. Choose its Attributes again."
 	rebuild()
 
@@ -94,6 +98,7 @@ func raw_character() -> CharacterData:
 	if result.has_meta("selected_class_attribute_choices"):
 		result.remove_meta("selected_class_attribute_choices")
 	result.available_abilities = []
+	result.skills = []
 	result.equipped_abilities = []
 	result.selected_ability_ids = []
 	result.granted_ability_ids = []
@@ -136,7 +141,67 @@ func rebuild() -> void:
 	learned_ids = retained
 	if not removed.is_empty():
 		notice = "Selections removed and points refunded: " + ", ".join(removed)
+	_rebuild_spell_choices()
 	Stats.new().initialize_combatant(preview)
+
+
+func get_spell_choice_capacity() -> int:
+	var capacity := 0
+	if preview == null:
+		return capacity
+	for ability in preview.available_abilities:
+		if ability != null and (preview.granted_ability_ids.has(ability.id) or preview.selected_ability_ids.has(ability.id)):
+			capacity += ability.spell_choices_granted
+	return capacity
+
+
+func get_spell_choices_remaining() -> int:
+	return maxi(0, get_spell_choice_capacity() - learned_spell_ids.size())
+
+
+func get_spell_learning_failure_reason(training: AbilityData) -> String:
+	if training == null or training.granted_skills.is_empty():
+		return "Spell Training is invalid."
+	if character_class == null or not training.required_trait_ids.has(character_class.id):
+		return "This spell is not available to the selected class."
+	if level < training.required_level:
+		return "%s requires Level %d." % [training.granted_skills[0].display_name, training.required_level]
+	if learned_spell_ids.has(training.id):
+		return "%s is already learned." % training.granted_skills[0].display_name
+	if get_spell_choices_remaining() <= 0:
+		return "No Spell Choices remain."
+	return ""
+
+
+func toggle_spell(training: AbilityData) -> void:
+	notice = ""
+	if learned_spell_ids.has(training.id):
+		learned_spell_ids.erase(training.id)
+	else:
+		var reason := get_spell_learning_failure_reason(training)
+		if not reason.is_empty():
+			notice = reason
+			return
+		learned_spell_ids.append(training.id)
+	rebuild()
+
+
+func _rebuild_spell_choices() -> void:
+	var retained: Array[String] = []
+	var capacity := get_spell_choice_capacity()
+	for training_id in learned_spell_ids:
+		if retained.size() >= capacity:
+			break
+		var training: AbilityData = catalog.find_ability(training_id)
+		if training == null or training.granted_skills.is_empty() or level < training.required_level:
+			continue
+		if character_class == null or not training.required_trait_ids.has(character_class.id):
+			continue
+		retained.append(training_id)
+		for skill in training.granted_skills:
+			if skill != null and not preview.available_skills.has(skill):
+				preview.available_skills.append(skill)
+	learned_spell_ids = retained
 
 func toggle_ability(ability: AbilityData) -> void:
 	notice = ""
@@ -213,6 +278,9 @@ func step_error(step_id: String) -> String:
 			reason = choice_error(class_choices, character_class.attribute_choice_count, character_class.attribute_choice_options)
 			if not reason.is_empty():
 				return character_class.display_name + ": " + reason
+		"spells":
+			if get_spell_choices_remaining() > 0:
+				return "Choose %d more Spell(s)." % get_spell_choices_remaining()
 	return ""
 
 func validation_error() -> String:
@@ -231,4 +299,11 @@ func finish() -> CharacterData:
 		result.available_abilities.append(catalog.find_ability(ability_id))
 		result.equipped_abilities.append(ability_id)
 		result.selected_ability_ids.append(ability_id)
+	for training_id in learned_spell_ids:
+		var training: AbilityData = catalog.find_ability(training_id)
+		if training == null:
+			continue
+		for skill in training.granted_skills:
+			if skill != null and not result.skills.has(skill):
+				result.skills.append(skill)
 	return result

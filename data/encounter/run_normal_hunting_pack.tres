@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://cf3jpbvqnw8ee"]
+
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="3"]
+[ext_resource type="Resource" uid="uid://4g4hfpn4l1x1" path="res://data/character/giant_spider.tres" id="4"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="5"]
+[ext_resource type="Resource" uid="uid://ob8fqcae5xgu" path="res://data/character/goblin_slinger.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = "run_normal_hunting_pack"
+display_name = "Hunting Pack"
+battlefield_texture = ExtResource("3")
+enemies = Array[ExtResource("2")]([ExtResource("4"), ExtResource("5"), ExtResource("6")])

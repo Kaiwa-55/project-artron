@@ -6,13 +6,11 @@ const ATTRIBUTE_KEYS = ["strength", "dexterity", "constitution", "intelligence",
 
 func build_identity(host) -> void:
 	UI.label(host.left, "CHOOSE YOUR PORTRAIT", 18, UI.GOLD, true)
-	for visual in host.catalog.visuals:
-		UI.card(host.left, visual.display_name, "Portrait only · no stat changes", visual.artwork, host.draft.portrait_id == visual.source_id, func():
-			host.draft.select_catalog_portrait(visual.source_id)
-			host.refresh(), true)
 	var custom_label := "CHANGE CUSTOM IMAGE" if host.draft.custom_portrait != null else "CHOOSE IMAGE FROM COMPUTER"
 	UI.button(host.left, custom_label, host.choose_custom_portrait)
 	UI.label(host.left, "PNG, JPG or WebP - square images work best", 13, UI.MUTED)
+	if host.draft.custom_portrait == null:
+		UI.label(host.left, "No image selected.", 14, UI.MUTED)
 	UI.label(host.center, "A NEW STORY", 32, UI.PAPER, true)
 	UI.label(host.center, "Choose a name and a face for your journey.", 16, UI.MUTED)
 	var portrait: Texture2D = host.draft.get_portrait_texture()
@@ -230,7 +228,7 @@ func build_abilities(host) -> void:
 	host.left.add_child(filter)
 	var visible_abilities: Array = []
 	for ability in host.catalog.get_abilities():
-		if matches_filter(host, ability):
+		if ability.granted_skills.is_empty() and matches_filter(host, ability):
 			visible_abilities.append(ability)
 	if visible_abilities.is_empty():
 		UI.label(host.left, "No matching abilities.", 15, UI.MUTED)
@@ -279,6 +277,59 @@ func build_abilities(host) -> void:
 	learn.disabled = granted or (not selected and not reason.is_empty())
 	UI.label(host.center, "Included by your Ancestry or Class; no points spent." if granted else ("Removing a prerequisite also removes dependent selections and refunds their points." if selected else reason), 15, UI.MUTED)
 	UI.label(host.center, "%d points remain. You may keep unused points for later." % host.draft.preview.ability_points, 15, UI.GOLD)
+
+
+func build_spells(host) -> void:
+	UI.label(host.left, "SPELLBOOK", 20, UI.GOLD, true)
+	UI.label(host.left, "Spell Slots come from learned Abilities and do not spend Ability Points.", 14, UI.MUTED)
+	var grantors: Array = []
+	for ability in host.draft.preview.available_abilities:
+		if ability == null or ability.spell_choices_granted <= 0:
+			continue
+		if host.draft.preview.granted_ability_ids.has(ability.id) or host.draft.preview.selected_ability_ids.has(ability.id):
+			grantors.append(ability)
+			UI.button(host.left, "%s\nGrants %d Spell Slot(s)" % [ability.display_name, ability.spell_choices_granted], Callable(), true)
+	if grantors.is_empty():
+		UI.label(host.left, "No learned Ability currently grants Spell Slots.", 15, UI.MUTED)
+		UI.label(host.center, "NO SPELL SLOTS", 30, UI.PAPER, true)
+		UI.label(host.center, "Learn or gain an Ability that grants Spell Choices first.", 17, UI.MUTED)
+		return
+	var choices: Array = []
+	for ability in host.catalog.get_abilities():
+		if ability.granted_skills.is_empty():
+			continue
+		if host.draft.character_class == null or not ability.required_trait_ids.has(host.draft.character_class.id):
+			continue
+		choices.append(ability)
+	if choices.is_empty():
+		UI.label(host.center, "NO AVAILABLE SPELLS", 30, UI.PAPER, true)
+		return
+	for grantor in grantors:
+		var frame := UI.panel(host.center)
+		var content := UI.column(frame, 8)
+		UI.label(content, grantor.display_name.to_upper(), 23, UI.PAPER, true)
+		UI.label(content, grantor.description, 14, UI.MUTED)
+		UI.label(content, "GRANTS %d SPELL SLOT(S)" % grantor.spell_choices_granted, 14, UI.GOLD, true)
+		for slot_index in range(grantor.spell_choices_granted):
+			var selected_name := "Empty"
+			if slot_index < host.draft.learned_spell_ids.size():
+				var selected_training = host.catalog.find_ability(host.draft.learned_spell_ids[slot_index])
+				if selected_training != null and not selected_training.granted_skills.is_empty():
+					selected_name = selected_training.granted_skills[0].display_name
+			UI.label(content, "SPELL SLOT %d    ·    %s" % [slot_index + 1, selected_name], 16, UI.GOLD)
+		UI.line(content)
+		UI.label(content, "CHOOSE A SPELL", 14, UI.GOLD, true)
+		for training in choices:
+			var skill = training.granted_skills[0]
+			var learned: bool = host.draft.learned_spell_ids.has(training.id)
+			var range_feet: float = skill.targeting_range_feet if skill.targeting_range_feet > 0.0 else (skill.attack_data.range_feet if skill.attack_data != null else 0.0)
+			var spell_button := UI.button(content, "%s%s\n%d AP · %d Mana · %.0f ft · CD %d" % ["✓ " if learned else "", skill.display_name, skill.ap_cost, skill.mana_cost, range_feet, skill.cooldown_turns], func():
+				host.draft.toggle_spell(training)
+				host.refresh(), learned)
+			var reason: String = host.draft.get_spell_learning_failure_reason(training)
+			spell_button.disabled = not learned and not reason.is_empty()
+			spell_button.tooltip_text = skill.description if reason.is_empty() or learned else reason
+	UI.label(host.center, "%d / %d Spell Slot(s) remain. Ability Points are not used." % [host.draft.get_spell_choices_remaining(), host.draft.get_spell_choice_capacity()], 15, UI.GOLD)
 
 func matches_filter(host, ability: AbilityData) -> bool:
 	if not host.ability_search.is_empty() and not ability.display_name.to_lower().contains(host.ability_search.to_lower()):

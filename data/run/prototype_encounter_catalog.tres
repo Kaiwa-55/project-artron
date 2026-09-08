@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RunEncounterCatalog" format=3 uid="uid://c3sfl662x7rn"]
+
+[ext_resource type="Script" uid="uid://cdlkx7akqxylq" path="res://run/run_encounter_catalog.gd" id="1"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="3"]
+[ext_resource type="Resource" path="res://data/encounter/run_normal_goblin_patrol.tres" id="4"]
+[ext_resource type="Resource" path="res://data/encounter/run_normal_hunting_pack.tres" id="5"]
+[ext_resource type="Resource" path="res://data/encounter/run_normal_thornscale_scout.tres" id="6"]
+[ext_resource type="Resource" path="res://data/encounter/run_elite_crimson_stalker.tres" id="7"]
+[ext_resource type="Resource" path="res://data/encounter/run_elite_ravager_pack.tres" id="8"]
+[ext_resource type="Resource" path="res://data/encounter/run_boss_velkaria_brood.tres" id="9"]
+
+[resource]
+script = ExtResource("1")
+combat_encounters = Array[ExtResource("3")]([ExtResource("4"), ExtResource("5"), ExtResource("6")])
+elite_encounters = Array[ExtResource("3")]([ExtResource("7"), ExtResource("8")])
+boss_encounters = Array[ExtResource("3")]([ExtResource("9")])

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_xf8f5"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_eh0jn"]
 
 [sub_resource type="Resource" id="Movement"]
 script = ExtResource("2")

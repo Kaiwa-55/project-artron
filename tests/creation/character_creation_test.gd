@@ -21,6 +21,7 @@ func complete_attributes(draft) -> void:
 func run_tests() -> void:
 	var draft = Draft.new()
 	draft.setup(Catalog)
+	check(draft.portrait_id.is_empty() and draft.custom_portrait == null, "Identity starts without a preset portrait")
 	check(draft.level == 1, "Normal creation starts at Level 1")
 	check(not draft.validation_error().is_empty(), "Missing Attribute choices block confirmation")
 	draft.character_name = "   "
@@ -126,7 +127,8 @@ func run_tests() -> void:
 	wizard.auto_start_combat = false
 	root.add_child(wizard)
 	await process_frame
-	check(wizard.step_buttons.size() == 7 and wizard.step_index == 0, "New wizard creates seven steps")
+	check(wizard.step_buttons.size() == 8 and wizard.step_index == 0, "New wizard creates eight steps including Spells")
+	check(Catalog.steps[4].id == "abilities" and Catalog.steps[5].id == "spells", "Abilities should be page 5 and Spells should be page 6")
 	wizard.show_step(2)
 	var class_cards: Array = wizard.left.get_children().filter(func(node): return node is Button)
 	check(class_cards.size() == Catalog.classes.size() + 1, "New catalog class appears without a renderer change")
@@ -135,8 +137,8 @@ func run_tests() -> void:
 	wizard.draft.select_class(Catalog.classes[0])
 	wizard.show_step(0)
 	await process_frame
-	var identity_portrait: TextureRect = wizard.center.find_child("PortraitArt", true, false)
-	check(identity_portrait != null and identity_portrait.custom_minimum_size == Vector2(225, 225), "Identity portrait uses a 1:1 frame")
+	var identity_buttons: Array = wizard.left.get_children().filter(func(node): return node is Button)
+	check(identity_buttons.size() == 1 and identity_buttons[0].text == "CHOOSE IMAGE FROM COMPUTER", "Identity offers only the computer image picker and no preset portrait")
 	wizard.character_created.connect(func(data): emitted = data)
 	wizard.draft.character_name = ""
 	wizard.draft.rebuild()
@@ -145,15 +147,15 @@ func run_tests() -> void:
 	wizard.draft.character_name = "Kael"
 	wizard.draft.rebuild()
 	complete_attributes(wizard.draft)
-	wizard.furthest_step = 6
-	for index in range(7):
+	wizard.furthest_step = 7
+	for index in range(8):
 		wizard.show_step(index)
 		await process_frame
 		check(wizard.center.get_child_count() > 0, "Page renders: " + str(index))
 	for filter_index in range(7):
 		wizard.ability_filter = filter_index
 		wizard.show_step(4)
-	wizard.show_step(6)
+	wizard.show_step(7)
 	wizard.confirm_character()
 	check(emitted != null and emitted.display_name == "Kael", "Embedded scene returns CharacterData without changing scenes")
 	wizard.queue_free()

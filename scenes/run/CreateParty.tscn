@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://cki04qqhvvxl7"]
+
+[ext_resource type="Script" uid="uid://cvknnx3uhugwy" path="res://scenes/run/create_party.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/run/PartyMemberCard.tscn" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="Window"]
+bg_color = Color(0.048, 0.08, 0.116, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.48, 0.19, 1)
+
+[node name="CreateParty" type="Control" unique_id=796742276]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=445131762]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.043, 0.063, 1)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1403720039]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 54.0
+offset_top = 30.0
+offset_right = -54.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=1926190549]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="Margin/Layout" unique_id=625580400]
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Window")
+
+[node name="Title" type="Label" parent="Margin/Layout/Header" unique_id=887271517]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.85, 0.67, 1)
+theme_override_font_sizes/font_size = 24
+text = "     CREATE YOUR PARTY
+     Assemble up to three heroes before beginning the Run"
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="Margin/Layout/Header" unique_id=1971902730]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.73, 0.34, 1)
+theme_override_font_sizes/font_size = 16
+text = "0 / 3
+PARTY MEMBERS     "
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Main" type="VBoxContainer" parent="Margin/Layout" unique_id=1451761103]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="Formation" type="Label" parent="Margin/Layout/Main" unique_id=1753255274]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "PARTY FORMATION"
+vertical_alignment = 2
+
+[node name="Slots" type="HBoxContainer" parent="Margin/Layout/Main" unique_id=980781292]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="Slot1" parent="Margin/Layout/Main/Slots" unique_id=1518980018 instance=ExtResource("2")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot2" parent="Margin/Layout/Main/Slots" unique_id=1262516248 instance=ExtResource("2")]
+layout_mode = 2
+size_flags_horizontal = 3
+slot_index = 1
+
+[node name="Slot3" parent="Margin/Layout/Main/Slots" unique_id=511856475 instance=ExtResource("2")]
+layout_mode = 2
+size_flags_horizontal = 3
+slot_index = 2
+
+[node name="Summary" type="Label" parent="Margin/Layout/Main" unique_id=1437352546]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.75, 0.48, 1)
+text = "PARTY SUMMARY"
+vertical_alignment = 1
+
+[node name="Footer" type="HBoxContainer" parent="Margin/Layout" unique_id=145766603]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Status" type="Label" parent="Margin/Layout/Footer" unique_id=2023033720]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.58, 0.64, 0.7, 1)
+text = "Create at least one character."
+vertical_alignment = 1
+
+[node name="Back" type="Button" parent="Margin/Layout/Footer" unique_id=1083327596]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+text = "BACK"
+
+[node name="Start" type="Button" parent="Margin/Layout/Footer" unique_id=50532543]
+custom_minimum_size = Vector2(190, 44)
+layout_mode = 2
+text = "START NEW RUN"

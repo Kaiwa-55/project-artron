@@ -18,10 +18,11 @@ func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2
 		return start_validation
 	var actor: CombatantState = combat_system.combat_state.get_combatant(combatant_id)
 	var skill = get_skill(actor, skill_id)
-	var point_validation: ActionResult = combat_system.targeting_system.validate_target_point(actor, target_point, skill, combat_system.map_rules)
+	var effective_range: float = combat_system.skill_system.get_effective_range_feet(actor, skill)
+	var point_validation: ActionResult = combat_system.targeting_system.validate_target_point(actor, target_point, skill, combat_system.map_rules, effective_range)
 	if not point_validation.success:
 		return point_validation
-	var targets: Array[CombatantState] = combat_system.targeting_system.collect_targets(actor, target_point, skill, combat_system.combat_state, combat_system.map_rules)
+	var targets: Array[CombatantState] = combat_system.targeting_system.collect_targets(actor, target_point, skill, combat_system.combat_state, combat_system.map_rules, effective_range)
 	if targets.is_empty():
 		return ActionResult.failure("There are no valid targets in the selected area.")
 	if not actor.spend_ap(skill.ap_cost):
@@ -29,7 +30,7 @@ func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2
 	combat_system.skill_system.consume_skill_costs(actor, skill)
 	combat_system.cancel_remaining_movement(actor)
 	combat_system.clear_hidden(actor, "Offensive Skill used")
-	var area_attack: AttackData = skill.attack_data.duplicate()
+	var area_attack: AttackData = combat_system.skill_system.get_attack_data(skill, actor)
 	area_attack.ap_cost = 0
 	pending_context = AreaActionContextScript.new()
 	pending_context.setup_skill(actor, skill, target_point, area_attack, targets)
@@ -112,8 +113,9 @@ func validate_skill_start(combatant_id: String, skill_id: String) -> ActionResul
 		return ActionResult.failure("Silenced characters cannot use Mana Skills.")
 	if actor.ap < skill.ap_cost:
 		return ActionResult.failure("Not enough AP: %s requires %d AP." % [skill.display_name, skill.ap_cost])
-	if actor.mana < skill.mana_cost:
-		return ActionResult.failure("Not enough Mana: %s requires %d Mana." % [skill.display_name, skill.mana_cost])
+	var mana_cost: int = combat_system.skill_system.get_effective_mana_cost(actor, skill)
+	if actor.mana < mana_cost:
+		return ActionResult.failure("Not enough Mana: %s requires %d Mana." % [skill.display_name, mana_cost])
 	var cooldown: int = combat_system.skill_system.get_remaining_cooldown(actor, skill.id)
 	if cooldown > 0:
 		return ActionResult.failure("%s is on cooldown (%d turn(s))." % [skill.display_name, cooldown])
@@ -195,7 +197,7 @@ func continue_action(carried_events: Array[CombatEvent] = []) -> ActionResult:
 			break
 	context.finish()
 	if skill != null:
-		result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, actor.id, "", {"skill_name": skill.display_name, "mana_cost": skill.mana_cost, "cooldown": combat_system.skill_system.get_effective_cooldown_turns(actor, skill), "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}))
+		result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, actor.id, "", {"skill_name": skill.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(actor, skill), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(actor, skill), "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}))
 	else:
 		var ability_event_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": ability.cooldown_turns, "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}
 		if ability.animation_template != null and ability.animation_template.animation_type == AttackAnimationData.Type.ATTACHED_DIRECTIONAL:

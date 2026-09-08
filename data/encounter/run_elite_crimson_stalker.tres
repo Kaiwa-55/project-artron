@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://ccllk2jdfnpka"]
+
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="3"]
+[ext_resource type="Resource" uid="uid://vd4qe1jly2x2" path="res://data/character/crimson_spine_stalker.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "run_elite_crimson_stalker"
+display_name = "Crimson Spine Stalker"
+battlefield_texture = ExtResource("3")
+enemies = Array[ExtResource("2")]([ExtResource("4")])

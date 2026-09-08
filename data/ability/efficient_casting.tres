@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://beja16wnhgbq8"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_48vyo"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_wo68c"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4"]
+
+[sub_resource type="Resource" id="Mana"]
+script = ExtResource("2")
+effect_type = 13
+skill_mana_discount = 1
+minimum_skill_mana_cost = 1
+minimum_skill_base_mana_cost = 2
+first_skill_per_turn = true
+
+[resource]
+script = ExtResource("1")
+id = "efficient_casting"
+display_name = "Efficient Casting"
+required_level = 2
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("3"), ExtResource("4")]
+is_passive = true
+description = "The first Skill each Turn with a base cost of at least 2 Mana costs 1 less Mana, to a minimum cost of 1."
+effects = [SubResource("Mana")]

@@ -70,7 +70,7 @@ script = ExtResource("1_class_data")
 id = "assassin"
 display_name = "Assassin"
 description = "A precise killer who exploits unprepared and wounded targets."
-base_speed_feet = 15.0
+base_speed_feet = 10.0
 base_mana = 0
 fixed_attribute_bonuses = {
 1: 1

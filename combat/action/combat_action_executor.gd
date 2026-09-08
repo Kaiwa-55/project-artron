@@ -127,7 +127,7 @@ func execute(
 		var skill_target: CombatantState = combat_system.combat_state.get_combatant(request.target_id)
 		combat_system.cancel_remaining_movement(skill_actor)
 		combat_system.skill_system.consume_skill_costs(skill_actor, request.skill_data)
-		var skill_attack: AttackData = combat_system.skill_system.get_attack_data(request.skill_data)
+		var skill_attack: AttackData = combat_system.skill_system.get_attack_data(request.skill_data, skill_actor)
 		var skill_repeated_penalty: int = combat_system.attack_system.declare_attack_action(skill_actor, skill_attack)
 		var skill_conditional_bonuses: Array[Dictionary] = []
 		var skill_prepared: AttackResult = combat_system.attack_system.resolve_attack(skill_actor, skill_target, skill_attack, true, skill_conditional_bonuses, skill_repeated_penalty)
@@ -149,7 +149,7 @@ func execute(
 			return combat_system.resolve_pending_reaction(0)
 		combat_system.attack_system.finalize_attack(skill_actor, skill_target, skill_attack, skill_prepared)
 		var skill_result: ActionResult = combat_system.action_system.build_attack_result(skill_actor, skill_target, skill_attack, skill_prepared)
-		skill_result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, skill_actor.id, skill_target.id, {"skill_name": request.skill_data.display_name, "mana_cost": request.skill_data.mana_cost, "cooldown": combat_system.skill_system.get_effective_cooldown_turns(skill_actor, request.skill_data)}))
+		skill_result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, skill_actor.id, skill_target.id, {"skill_name": request.skill_data.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(skill_actor, request.skill_data), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(skill_actor, request.skill_data)}))
 		combat_system.offer_step_back(request, skill_actor, skill_target, skill_result)
 		combat_system.offer_mobile_shooter(request, skill_actor, skill_attack, skill_prepared, skill_result)
 		combat_system.emit_events(skill_result.events)

@@ -13,6 +13,7 @@ var content_list: VBoxContainer
 var page_title: Label
 var status_label: Label
 var tab_buttons: Dictionary = {}
+var standalone_character: CombatantState
 
 
 func _ready() -> void:
@@ -21,7 +22,16 @@ func _ready() -> void:
 
 func setup(system, target_id: String = "player") -> void:
 	combat_system = system
+	standalone_character = null
 	combatant_id = target_id
+	refresh()
+
+
+func setup_standalone(player: CombatantState, initial_tab: String = "inventory") -> void:
+	combat_system = null
+	standalone_character = player
+	active_tab = initial_tab
+	changes_locked = true
 	refresh()
 
 
@@ -42,9 +52,11 @@ func set_tab(tab_id: String) -> void:
 
 
 func refresh() -> void:
-	if combat_system == null or summary == null:
+	if summary == null:
 		return
-	var player: CombatantState = combat_system.get_combat_state().get_combatant(combatant_id)
+	var player: CombatantState = standalone_character
+	if player == null and combat_system != null:
+		player = combat_system.get_combat_state().get_combatant(combatant_id)
 	if player == null:
 		return
 	_clear(summary)
@@ -73,12 +85,20 @@ func _build_ui() -> void:
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(14)
 	add_theme_stylebox_override("panel", style)
+	var panel_scroll := ScrollContainer.new()
+	panel_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	panel_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	add_child(panel_scroll)
 	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_theme_constant_override("margin_left", 18)
 	margin.add_theme_constant_override("margin_right", 18)
 	margin.add_theme_constant_override("margin_top", 16)
 	margin.add_theme_constant_override("margin_bottom", 16)
-	add_child(margin)
+	panel_scroll.add_child(margin)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 9)
 	margin.add_child(column)
@@ -141,7 +161,10 @@ func _build_summary(player: CombatantState) -> void:
 	_add_summary("HP  %d / %d" % [player.hp, player.max_hp])
 	_add_summary("STR %d   DEX %d   CON %d" % [player.strength, player.dexterity, player.constitution])
 	_add_summary("INT %d   WIS %d   CHA %d" % [player.intelligence, player.wisdom, player.charisma])
-	_add_summary("Fortitude %d   Reflex %d   Will %d" % [player.fortitude + combat_system.effect_system.get_fortitude_bonus(player), player.reflex + combat_system.effect_system.get_reflex_bonus(player), player.will + combat_system.effect_system.get_will_bonus(player)])
+	var fortitude_bonus: int = int(combat_system.effect_system.get_fortitude_bonus(player)) if combat_system != null else 0
+	var reflex_bonus: int = int(combat_system.effect_system.get_reflex_bonus(player)) if combat_system != null else 0
+	var will_bonus: int = int(combat_system.effect_system.get_will_bonus(player)) if combat_system != null else 0
+	_add_summary("Fortitude %d   Reflex %d   Will %d" % [player.fortitude + fortitude_bonus, player.reflex + reflex_bonus, player.will + will_bonus])
 	_add_summary("Speed %.1f ft   Mana %d / %d" % [player.get_effective_speed(), player.mana, player.max_mana])
 	if player.max_faith > 0:
 		_add_summary("Faith %d / %d   Temporary Faith +%d" % [player.faith, player.max_faith, player.temporary_faith])
@@ -149,7 +172,8 @@ func _build_summary(player: CombatantState) -> void:
 
 func _build_abilities(player: CombatantState) -> void:
 	var groups := {"CLASS ABILITY": [], "ANCESTRY ABILITY": [], "BASIC ABILITY": []}
-	for ability in combat_system.ability_system.get_active_abilities(player):
+	var abilities: Array = combat_system.ability_system.get_active_abilities(player) if combat_system != null else player.available_abilities
+	for ability in abilities:
 		if ability == null:
 			continue
 		var group := "BASIC ABILITY"

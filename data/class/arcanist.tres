@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://ctr38p0r37cjp"]
+
+[ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3"]
+[ext_resource type="Resource" uid="uid://u0ne8pf7yoej" path="res://data/ability/arcane_mind.tres" id="4"]
+[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_bolt.tres" id="5"]
+[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_burst.tres" id="6"]
+[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_cone.tres" id="7"]
+[ext_resource type="Resource" uid="uid://rhole0fa05qx" path="res://data/ability/potent_casting.tres" id="8"]
+[ext_resource type="Resource" uid="uid://beja16wnhgbq8" path="res://data/ability/efficient_casting.tres" id="9"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="9_j8rrb"]
+[ext_resource type="Resource" uid="uid://bi71gw77qqnom" path="res://data/ability/spell_reach.tres" id="10"]
+[ext_resource type="Resource" uid="uid://c1715pfvn8361" path="res://data/ability/rapid_formula.tres" id="11"]
+
+[sub_resource type="Resource" id="L1"]
+script = ExtResource("2")
+max_hp_gain = 4
+granted_abilities = Array[ExtResource("9_j8rrb")]([ExtResource("4")])
+
+[sub_resource type="Resource" id="L2"]
+script = ExtResource("2")
+level = 2
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L3"]
+script = ExtResource("2")
+level = 3
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L4"]
+script = ExtResource("2")
+level = 4
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L5"]
+script = ExtResource("2")
+level = 5
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L6"]
+script = ExtResource("2")
+level = 6
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L7"]
+script = ExtResource("2")
+level = 7
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L8"]
+script = ExtResource("2")
+level = 8
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L9"]
+script = ExtResource("2")
+level = 9
+max_hp_gain = 4
+max_mana_gain = 2
+
+[sub_resource type="Resource" id="L10"]
+script = ExtResource("2")
+level = 10
+max_hp_gain = 4
+max_mana_gain = 2
+
+[resource]
+script = ExtResource("1")
+id = "arcanist"
+display_name = "Arcanist"
+description = "A ranged spellcaster who builds a personal spellbook, then improves the power, efficiency, reach, and recovery of every Skill they cast."
+base_speed_feet = 5.0
+base_mana = 8
+fixed_attribute_bonuses = {
+3: 1
+}
+attribute_choice_count = 1
+attribute_choice_options = Array[int]([1, 4])
+granted_abilities = [ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")]
+traits = [ExtResource("3")]
+auto_equipped_ability_ids = Array[String](["arcane_mind"])
+progression_entries = Array[Resource]([SubResource("L1"), SubResource("L2"), SubResource("L3"), SubResource("L4"), SubResource("L5"), SubResource("L6"), SubResource("L7"), SubResource("L8"), SubResource("L9"), SubResource("L10")])

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://ob8fqcae5xgu"]
 
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/goblin_stone_sling.tres" id="2"]
-[ext_resource type="Resource" path="res://data/ability/goblin_crippling_stone.tres" id="3"]
+[ext_resource type="Resource" uid="uid://b1gs8n4byxj7" path="res://data/attack/goblin_stone_sling.tres" id="2"]
+[ext_resource type="Resource" uid="uid://cv0448n1o0qkg" path="res://data/ability/goblin_crippling_stone.tres" id="3"]
 [ext_resource type="Resource" uid="uid://kp86gqd784s3" path="res://data/reaction/goblin_scramble_away.tres" id="4"]
 [ext_resource type="Texture2D" uid="uid://cpbx22y5x8p72" path="res://assets/token/Goblin Slinger.png" id="4_mhqld"]
 [ext_resource type="Resource" path="res://data/trait/goblin.tres" id="5"]
@@ -21,10 +21,11 @@ team = 2
 position = Vector2(1030, 260)
 base_max_hp = 8
 base_max_ap = 3
-base_speed = 25.0
+base_speed = 15.0
+speed_bonus = 10.0
 reflex_stat_bonus = 2
 strength = 8
-dexterity = 16
+dexterity = 12
 charisma = 8
 initiative_bonus = 3
 available_abilities = [ExtResource("3")]

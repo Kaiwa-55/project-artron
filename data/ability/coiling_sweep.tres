@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cgtyl8ucp6hoh"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/coiling_sweep_attack.tres" id="2"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://26iu185tyxl6" path="res://data/attack/coiling_sweep_attack.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_hk6h5"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_oa5o0"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
 
 [resource]
@@ -16,9 +18,7 @@ ap_cost = 2
 cooldown_turns = 2
 description = "Sweep a 10 ft circle for 4 Blunt damage. On Hit, apply Slowed 5 for 1 turn."
 target_mode = 1
-target_filter = 0
 attack_source = 2
 attack_data = ExtResource("2")
 area_shape = 1
-targeting_range_feet = 0.0
 area_radius_feet = 10.0

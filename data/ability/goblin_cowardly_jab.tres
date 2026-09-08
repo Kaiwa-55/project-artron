@@ -5,6 +5,7 @@
 [ext_resource type="Resource" path="res://data/attack/goblin_cowardly_jab.tres" id="3"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="3_iqek6"]
 [ext_resource type="Resource" path="res://data/trait/goblin.tres" id="4"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="4_jflkb"]
 [ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="5"]
 
 [sub_resource type="Resource" id="ToHit"]

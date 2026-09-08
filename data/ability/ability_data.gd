@@ -51,3 +51,7 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 @export var area_blocked_by_obstacles: bool = true
 @export var include_caster: bool = false
 @export var granted_reactions: Array = []
+@export var granted_skills: Array[SkillData] = []
+# The number of spells this learned/granted Ability lets the character choose.
+# Spell choices are separate from Ability Points.
+@export_range(0, 99) var spell_choices_granted: int = 0

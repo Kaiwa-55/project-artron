@@ -163,14 +163,14 @@ func execute(
 		ActionTypes.Type.SKILL:
 			var target := combat_state.get_combatant(request.target_id)
 			skill_system.consume_skill_costs(actor, request.skill_data)
-			var skill_attack: AttackData = skill_system.get_attack_data(request.skill_data)
+			var skill_attack: AttackData = skill_system.get_attack_data(request.skill_data, actor)
 			var attack_result := attack_system.resolve_attack(actor, target, skill_attack)
 			var skill_result := build_attack_result(actor, target, skill_attack, attack_result)
 			skill_result.events.push_front(CombatEvent.new(
 				EventTypes.Type.SKILL_CAST,
 				actor.id,
 			target.id,
-				{"skill_name": request.skill_data.display_name, "mana_cost": request.skill_data.mana_cost, "cooldown": skill_system.get_effective_cooldown_turns(actor, request.skill_data)}
+				{"skill_name": request.skill_data.display_name, "mana_cost": skill_system.get_effective_mana_cost(actor, request.skill_data), "cooldown": skill_system.get_effective_cooldown_turns(actor, request.skill_data)}
 			))
 			return skill_result
 

@@ -235,6 +235,67 @@ func get_skill_cooldown_modifier(combatant, skill_id: String) -> int:
 	return modifier
 
 
+func get_skill_damage_bonus(combatant) -> int:
+	return _sum_skill_modifier(combatant, AbilityEffectDataScript.Type.PASSIVE_SKILL_DAMAGE_BONUS, "skill_damage_bonus")
+
+
+func get_skill_mana_discount(combatant, skill = null) -> int:
+	var total := 0
+	if combatant == null:
+		return total
+	for ability in get_active_abilities(combatant):
+		if ability == null or combatant.level < ability.required_level:
+			continue
+		for effect in ability.effects:
+			if effect == null or effect.effect_type != AbilityEffectDataScript.Type.PASSIVE_SKILL_MANA_DISCOUNT:
+				continue
+			if skill != null and skill.mana_cost < effect.minimum_skill_base_mana_cost:
+				continue
+			if effect.first_skill_per_turn and int(combatant.ability_uses_this_turn.get(ability.id, 0)) >= 1:
+				continue
+			total += effect.skill_mana_discount
+	return total
+
+
+func commit_skill_mana_discount(combatant, skill) -> void:
+	if combatant == null or skill == null:
+		return
+	for ability in get_active_abilities(combatant):
+		for effect in ability.effects:
+			if effect != null and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_SKILL_MANA_DISCOUNT \
+				and effect.first_skill_per_turn and skill.mana_cost >= effect.minimum_skill_base_mana_cost \
+				and int(combatant.ability_uses_this_turn.get(ability.id, 0)) < 1:
+				combatant.ability_uses_this_turn[ability.id] = 1
+
+
+func get_minimum_skill_mana_cost(combatant, skill = null) -> int:
+	var minimum := 0
+	for ability in get_active_abilities(combatant):
+		for effect in ability.effects:
+			if effect != null and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_SKILL_MANA_DISCOUNT \
+				and (skill == null or skill.mana_cost >= effect.minimum_skill_base_mana_cost) \
+				and (not effect.first_skill_per_turn or int(combatant.ability_uses_this_turn.get(ability.id, 0)) < 1):
+				minimum = maxi(minimum, effect.minimum_skill_mana_cost)
+	return minimum
+
+
+func get_skill_range_bonus(combatant) -> float:
+	return float(_sum_skill_modifier(combatant, AbilityEffectDataScript.Type.PASSIVE_SKILL_RANGE_BONUS_FEET, "skill_range_bonus_feet"))
+
+
+func _sum_skill_modifier(combatant, effect_type: int, property_name: String) -> int:
+	var total := 0
+	if combatant == null:
+		return total
+	for ability in get_active_abilities(combatant):
+		if ability == null or combatant.level < ability.required_level:
+			continue
+		for effect in ability.effects:
+			if effect != null and effect.effect_type == effect_type:
+				total += int(effect.get(property_name))
+	return total
+
+
 func get_remaining_cooldown(combatant, ability_id: String) -> int:
 	if combatant == null:
 		return 0

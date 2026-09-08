@@ -1,18 +1,20 @@
-[gd_resource type="Resource" script_class="AttackData" load_steps=4 format=3]
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://b1gs8n4byxj7"]
+
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/trait/ranged.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_asct4"]
 [ext_resource type="Resource" path="res://data/trait/simple.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_766hf"]
 [ext_resource type="Resource" path="res://animation/stone_sling.tres" id="4"]
+
 [resource]
 script = ExtResource("1")
 id = "goblin_stone_sling"
 display_name = "Stone Sling"
 animation_template = ExtResource("4")
 attack_attribute = 1
-to_hit_bonus = 2
-ap_cost = 1
 base_damage = 3
-range_feet = 40.0
+range_feet = 30.0
 minimum_range_feet = 5.0
 damage_type = "bludgeoning"
 traits = [ExtResource("2"), ExtResource("3")]

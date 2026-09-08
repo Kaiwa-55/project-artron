@@ -88,12 +88,8 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CombatLogPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="4" unique_id=928194718]
-custom_minimum_size = Vector2(340, 631)
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 1
-offset_left = 10.0
-offset_top = 70.0
-offset_right = 350.0
-offset_bottom = 780.0
 
 [node name="CombatLogButton" type="Button" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="6" unique_id=1669097033]
 z_index = 20
@@ -191,11 +187,18 @@ layout_mode = 2
 [node name="ActionMenu" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="9" unique_id=167381762]
 visible = false
 z_index = 24
-layout_mode = 0
-offset_left = 445.0
-offset_top = 306.0
-offset_right = 835.0
-offset_bottom = 556.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -195.0
+offset_top = -150.0
+offset_right = 195.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Margin" type="MarginContainer" parent="UILayer/Control/ActionMenu" index="0" unique_id=1355231415]
 layout_mode = 2
@@ -231,71 +234,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="LevelUpButton" type="Button" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="10" unique_id=879313747]
-visible = false
-z_index = 20
-layout_mode = 0
-offset_left = 20.0
-offset_top = 526.0
-offset_right = 150.0
-offset_bottom = 556.0
-text = "PROGRESSION"
-
-[node name="LevelUpPanel" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="11" unique_id=862772397]
-visible = false
-z_index = 40
-layout_mode = 0
-offset_left = 300.0
-offset_top = 76.0
-offset_right = 950.0
-offset_bottom = 696.0
-
-[node name="Margin" type="MarginContainer" parent="UILayer/Control/LevelUpPanel" index="0" unique_id=1227661930]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 16
-
-[node name="Column" type="VBoxContainer" parent="UILayer/Control/LevelUpPanel/Margin" index="0" unique_id=592390589]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Header" type="HBoxContainer" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="0" unique_id=1552821861]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="UILayer/Control/LevelUpPanel/Margin/Column/Header" index="0" unique_id=1214136240]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
-text = "LEVEL UP CHOICES"
-
-[node name="Close" type="Button" parent="UILayer/Control/LevelUpPanel/Margin/Column/Header" index="1" unique_id=840934253]
-layout_mode = 2
-text = "Close"
-
-[node name="Summary" type="Label" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="1" unique_id=205954329]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.867, 0.839, 0.996, 1)
-autowrap_mode = 2
-
-[node name="Separator" type="HSeparator" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="2" unique_id=2127931125]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="UILayer/Control/LevelUpPanel/Margin/Column" index="3" unique_id=697744710]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="List" type="VBoxContainer" parent="UILayer/Control/LevelUpPanel/Margin/Column/Scroll" index="0" unique_id=1078678115]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
 [node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="12" unique_id=530167356 instance=ExtResource("5_character_panel")]
 visible = false
 z_index = 19
-layout_mode = 0
-offset_left = 65.0
-offset_top = 82.0
-offset_right = 1240.0
-offset_bottom = 692.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 78.0
+offset_right = -40.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2

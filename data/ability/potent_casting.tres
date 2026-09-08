@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://rhole0fa05qx"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_kttsr"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_7ti5m"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4"]
+
+[sub_resource type="Resource" id="Damage"]
+script = ExtResource("2")
+effect_type = 12
+skill_damage_bonus = 1
+
+[resource]
+script = ExtResource("1")
+id = "potent_casting"
+display_name = "Potent Casting"
+required_level = 2
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("3"), ExtResource("4")]
+is_passive = true
+description = "Your damaging Skills deal +1 Damage. Area Skills apply this bonus once to each target."
+effects = [SubResource("Damage")]
