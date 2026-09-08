@@ -171,112 +171,119 @@ text = "04 · Confirm"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Content" type="HBoxContainer" parent="Layout" unique_id=1087217971]
+[node name="ContentScroll" type="ScrollContainer" parent="Layout" unique_id=2087217971]
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 1
+
+[node name="Content" type="HBoxContainer" parent="Layout/ContentScroll" unique_id=1087217971]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="ChoiceZone" type="PanelContainer" parent="Layout/Content" unique_id=1110460007]
+[node name="ChoiceZone" type="PanelContainer" parent="Layout/ContentScroll/Content" unique_id=1110460007]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("Choice")
 
-[node name="Margin" type="MarginContainer" parent="Layout/Content/ChoiceZone" unique_id=1436032269]
+[node name="Margin" type="MarginContainer" parent="Layout/ContentScroll/Content/ChoiceZone" unique_id=1436032269]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 18
 
-[node name="Column" type="VBoxContainer" parent="Layout/Content/ChoiceZone/Margin" unique_id=921280973]
+[node name="Column" type="VBoxContainer" parent="Layout/ContentScroll/Content/ChoiceZone/Margin" unique_id=921280973]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="AbilityHeader" type="HBoxContainer" parent="Layout/Content/ChoiceZone/Margin/Column" unique_id=1296785966]
+[node name="AbilityHeader" type="HBoxContainer" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column" unique_id=1296785966]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Layout/Content/ChoiceZone/Margin/Column/AbilityHeader" unique_id=1344703486]
+[node name="Title" type="Label" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityHeader" unique_id=1344703486]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 17
 text = "Choose an Ability"
 
-[node name="Hint" type="Label" parent="Layout/Content/ChoiceZone/Margin/Column/AbilityHeader" unique_id=311618762]
+[node name="Hint" type="Label" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityHeader" unique_id=311618762]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.74, 0.38, 1)
 text = "1 point · may be saved"
 
-[node name="AbilityScroll" type="ScrollContainer" parent="Layout/Content/ChoiceZone/Margin/Column" unique_id=145466941]
+[node name="AbilityScroll" type="ScrollContainer" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column" unique_id=145466941]
 custom_minimum_size = Vector2(0, 205)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="AbilityList" type="VBoxContainer" parent="Layout/Content/ChoiceZone/Margin/Column/AbilityScroll" unique_id=1040839126]
+[node name="AbilityList" type="VBoxContainer" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityScroll" unique_id=1040839126]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 9
 
-[node name="Separator" type="HSeparator" parent="Layout/Content/ChoiceZone/Margin/Column" unique_id=579164934]
+[node name="Separator" type="HSeparator" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column" unique_id=579164934]
 layout_mode = 2
 
-[node name="AttributeHeader" type="HBoxContainer" parent="Layout/Content/ChoiceZone/Margin/Column" unique_id=1484799464]
+[node name="AttributeHeader" type="HBoxContainer" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column" unique_id=1484799464]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Layout/Content/ChoiceZone/Margin/Column/AttributeHeader" unique_id=1415010242]
+[node name="Title" type="Label" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeHeader" unique_id=1415010242]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 17
 text = "Attribute Improve"
 
-[node name="Used" type="Label" parent="Layout/Content/ChoiceZone/Margin/Column/AttributeHeader" unique_id=1065504517]
+[node name="Used" type="Label" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeHeader" unique_id=1065504517]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.74, 0.38, 1)
 text = "0/2 increases selected"
 
-[node name="AttributeGrid" type="GridContainer" parent="Layout/Content/ChoiceZone/Margin/Column" unique_id=631907091]
+[node name="AttributeGrid" type="GridContainer" parent="Layout/ContentScroll/Content/ChoiceZone/Margin/Column" unique_id=631907091]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 3
 
-[node name="Summary" type="PanelContainer" parent="Layout/Content" unique_id=979874513]
+[node name="Summary" type="PanelContainer" parent="Layout/ContentScroll/Content" unique_id=979874513]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("Summary")
 
-[node name="Margin" type="MarginContainer" parent="Layout/Content/Summary" unique_id=662698461]
+[node name="Margin" type="MarginContainer" parent="Layout/ContentScroll/Content/Summary" unique_id=662698461]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 18
 
-[node name="Column" type="VBoxContainer" parent="Layout/Content/Summary/Margin" unique_id=1998735668]
+[node name="Column" type="VBoxContainer" parent="Layout/ContentScroll/Content/Summary/Margin" unique_id=1998735668]
 layout_mode = 2
 theme_override_constants/separation = 9
 
-[node name="Portrait" type="PanelContainer" parent="Layout/Content/Summary/Margin/Column" unique_id=1037128314]
+[node name="Portrait" type="PanelContainer" parent="Layout/ContentScroll/Content/Summary/Margin/Column" unique_id=1037128314]
 custom_minimum_size = Vector2(0, 118)
 layout_mode = 2
 theme_override_styles/panel = SubResource("Portrait")
 
-[node name="Texture" type="TextureRect" parent="Layout/Content/Summary/Margin/Column/Portrait" unique_id=1985715048]
+[node name="Texture" type="TextureRect" parent="Layout/ContentScroll/Content/Summary/Margin/Column/Portrait" unique_id=1985715048]
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Name" type="Label" parent="Layout/Content/Summary/Margin/Column" unique_id=1559835961]
+[node name="Name" type="Label" parent="Layout/ContentScroll/Content/Summary/Margin/Column" unique_id=1559835961]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Player"
 
-[node name="Class" type="Label" parent="Layout/Content/Summary/Margin/Column" unique_id=1869588123]
+[node name="Class" type="Label" parent="Layout/ContentScroll/Content/Summary/Margin/Column" unique_id=1869588123]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.72, 0.37, 1)
 theme_override_font_sizes/font_size = 13
 text = "DEVOTEE · LEVEL 3 PREVIEW"
 
-[node name="Preview" type="Label" parent="Layout/Content/Summary/Margin/Column" unique_id=1808624759]
+[node name="Preview" type="Label" parent="Layout/ContentScroll/Content/Summary/Margin/Column" unique_id=1808624759]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.78, 0.83, 0.88, 1)

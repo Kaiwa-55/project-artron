@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://c72lxbeugjnj1" path="res://scenes/combat/ui/reaction_prompt_controller.gd" id="8_reaction"]
 [ext_resource type="Script" uid="uid://cviebsnyubsiv" path="res://scenes/combat/ui/combat_log_controller.gd" id="9_log"]
 [ext_resource type="PackedScene" uid="uid://bdwt7r2ch6564" path="res://scenes/combat/ui/CombatActionBar.tscn" id="10_action_bar_scene"]
-[ext_resource type="PackedScene" path="res://scenes/combat/ui/CombatLogPanel.tscn" id="11_combat_log_scene"]
+[ext_resource type="PackedScene" uid="uid://4adtv8r7kth4" path="res://scenes/combat/ui/CombatLogPanel.tscn" id="11_combat_log_scene"]
 
 [node name="CombatArena" type="Node2D" unique_id=280882440]
 script = ExtResource("1_root")
@@ -85,21 +85,28 @@ custom_minimum_size = Vector2(0, 42)
 layout_mode = 0
 text = "End Turn"
 
-[node name="ReferenceActionDock" parent="UILayer/Control" unique_id=1169074384 instance=ExtResource("10_action_bar_scene")]
+[node name="BottomActionRow" type="HBoxContainer" parent="UILayer/Control" unique_id=198765432]
 layout_mode = 1
-anchors_preset = 7
-anchor_top = 1.0
+anchors_preset = 12
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -319.0
+offset_left = 20.0
 offset_top = -138.0
-offset_right = 320.0
+offset_right = -20.0
 offset_bottom = -20.0
+grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="ReferenceActionDock" parent="UILayer/Control/BottomActionRow" unique_id=1169074384 instance=ExtResource("10_action_bar_scene")]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Enemy_panel" type="Panel" parent="UILayer/Control" unique_id=1099442048]
 layout_mode = 1
-anchors_preset = 6
+anchors_preset = -1
 anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -320.0
@@ -145,7 +152,14 @@ text = "Effects: None"
 autowrap_mode = 2
 
 [node name="CombatLogPanel" parent="UILayer/Control" unique_id=928194718 instance=ExtResource("11_combat_log_scene")]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 280.0
+offset_bottom = 143.0
+grow_vertical = 1
 
 [node name="ReactionPrompt" type="Panel" parent="UILayer/Control" unique_id=629339134]
 visible = false

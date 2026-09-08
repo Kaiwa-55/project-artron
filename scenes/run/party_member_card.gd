@@ -43,8 +43,22 @@ func _identity_text() -> String:
 
 
 func _stats_text() -> String:
+	var state := create_calculated_state()
+	if state == null:
+		return "Unable to calculate character stats."
+	var speed_text := "%.0f ft" % state.get_effective_speed()
+	if not is_equal_approx(state.get_effective_speed(), state.speed):
+		speed_text += "  (Base %.0f)" % state.speed
+	var resource_text := "Faith %d" % state.max_faith if state.max_faith > 0 else "Mana %d" % state.max_mana
+	return "Maximum HP                 %d\nAction Points                 %d\nSpeed                         %s\nSTR / DEX / CON          %d / %d / %d\nINT / WIS / CHA            %d / %d / %d\nReflex / Fort / Will      %d / %d / %d\n%s" % [state.max_hp, state.max_ap, speed_text, state.strength, state.dexterity, state.constitution, state.intelligence, state.wisdom, state.charisma, state.reflex, state.fortitude, state.will, resource_text]
+
+
+func create_calculated_state() -> CombatantState:
+	if character == null:
+		return null
 	var state := character.create_combatant_state()
-	AncestrySystem.new().apply_ancestry(state)
-	CharacterClassSystem.new().apply_class(state)
-	StatSystem.new().refresh_combatant(state)
-	return "Maximum HP                 %d\nAction Points                 %d\nSpeed                         %.0f ft\nReflex / Fort / Will      %d / %d / %d" % [state.max_hp, state.max_ap, state.speed, state.reflex, state.fortitude, state.will]
+	# Use the same public preparation pipeline as the real encounter so the
+	# Party screen includes Ancestry, Class, Progression and Equipment stats.
+	var preview_combat := CombatSystem.new()
+	preview_combat.start_combat([state])
+	return state

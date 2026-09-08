@@ -19,6 +19,8 @@ func _init() -> void:
 	character.level = 1
 	character.class_attribute_choices.assign([AttributeTypes.Type.CONSTITUTION])
 	var devotee: CombatantState = character.create_combatant_state()
+	# Devotee resource rules are tested without the prototype Player's starting Status.
+	devotee.effects.clear()
 	var ally := CombatantState.new()
 	ally.id = "ally"
 	ally.display_name = "Ally"
@@ -35,7 +37,8 @@ func _init() -> void:
 	system.turn_system.start_turn(system.combat_state)
 	system.turn_system.activate_turn(system.combat_state, devotee.max_ap)
 	ally.hp = 10
-	check(devotee.class_id == "devotee" and devotee.get_effective_speed() == 20.0, "Devotee class Speed combines with Human Speed")
+	var expected_speed: float = character.ancestry.speed_feet + DevoteeData.base_speed_feet
+	check(devotee.class_id == "devotee" and devotee.get_effective_speed() == expected_speed, "Devotee class Speed combines with Human Speed")
 	check(devotee.max_mana == 0 and devotee.faith == 10 and devotee.max_faith == 10, "Devotee starts combat with 10 Faith and no Mana")
 	check(devotee.equipped_abilities.has("belief") and devotee.equipped_abilities.has("pray") and devotee.equipped_abilities.has("heal_or_harm"), "Belief, Pray, and Heal or Harm are granted at Level 1")
 	check(devotee.wisdom == 12 and devotee.constitution == 12, "Belief and the current Human ancestry choices grant Wisdom and Constitution")
@@ -66,7 +69,11 @@ func _init() -> void:
 	check(system.use_active_ability(devotee.id, devotee.id, "pray").success and devotee.temporary_faith == 2, "Pray creates Temporary Faith above 10")
 	system.combat_state.current_actor_id = devotee.id
 	system.advance_turn()
-	check(devotee.temporary_faith == 1, "Temporary Faith decreases by 1 at end of turn")
+	check(devotee.temporary_faith == 0, "Temporary Faith decreases by 2 at end of turn without becoming negative")
+	devotee.temporary_faith = 5
+	system.combat_state.current_actor_id = devotee.id
+	system.advance_turn()
+	check(devotee.temporary_faith == 3, "Temporary Faith loses exactly 2 when more than 2 remains")
 
 	# Verify the real Character Creation handoff, not only a manually prepared character.
 	var draft = Draft.new()

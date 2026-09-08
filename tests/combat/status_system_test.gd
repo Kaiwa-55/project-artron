@@ -38,8 +38,19 @@ func _init() -> void:
 	actor.effects.clear()
 	var slowed = Slowed.duplicate()
 	slowed.duration_turns = 3
+	slowed.stacks_on_apply = 1
 	for index in range(3): effects.apply_effect(actor, slowed)
 	check(is_equal_approx(actor.get_effective_speed(), 15.0), "Slowed should reduce Speed by 5 ft per Stack")
+	var zero_speed_actor := make_actor()
+	zero_speed_actor.movement_in_progress = true
+	zero_speed_actor.movement_remaining_feet = 10.0
+	var zero_speed_slow := Slowed.duplicate(true)
+	zero_speed_slow.stacks_on_apply = 10
+	effects.apply_effect(zero_speed_actor, zero_speed_slow)
+	check(is_zero_approx(zero_speed_actor.get_effective_speed()), "Slowed can reduce Speed to zero")
+	var zero_speed_movement_system := MovementSystem.new()
+	check(is_zero_approx(zero_speed_movement_system.get_available_distance_feet(zero_speed_actor)), "No movement remains while Slowed reduces Speed to zero")
+	check(not zero_speed_movement_system.validate_move(zero_speed_actor, zero_speed_actor.position + Vector2.ONE, MovementData.new()).success, "Move validation rejects a character whose current Speed is zero")
 	effects.decay_end_turn_stacks(actor)
 	check(is_equal_approx(actor.get_effective_speed(), 25.0), "Slowed should decay by CON modifier")
 	actor.effects.clear()

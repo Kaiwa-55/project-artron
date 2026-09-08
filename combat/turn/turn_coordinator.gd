@@ -46,7 +46,7 @@ func advance_turn() -> void:
 	for cooldown in combat_system.ability_system.reduce_cooldowns(previous_actor):
 		combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.ABILITY_COOLDOWN_REDUCED, previous_actor.id, "", cooldown))
 	combat_system.emit_effect_resolutions(previous_actor, combat_system.effect_system.resolve_effects(previous_actor, EffectData.Trigger.END_OF_TURN))
-	var temporary_faith_lost := previous_actor.decay_temporary_faith(1)
+	var temporary_faith_lost := previous_actor.decay_temporary_faith(2)
 	if temporary_faith_lost > 0:
 		combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.FAITH_CHANGED, previous_actor.id, previous_actor.id, {"temporary_faith_lost": temporary_faith_lost, "faith": previous_actor.faith, "temporary_faith": previous_actor.temporary_faith}))
 	for effect in combat_system.effect_system.decay_end_turn_stacks(previous_actor):

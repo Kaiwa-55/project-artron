@@ -8,6 +8,11 @@ var ability_system
 func get_available_distance_feet(actor: CombatantState) -> float:
 	if actor == null:
 		return 0.0
+	# Status effects such as Slowed can reduce current Speed to zero while a
+	# split Move is still in progress. Current Speed always takes priority over
+	# the distance that was reserved when the Move began.
+	if actor.get_effective_speed() <= 0.001:
+		return 0.0
 	if actor.movement_in_progress:
 		return actor.movement_remaining_feet
 	# A completed or forfeited Move must not start a second movement allowance

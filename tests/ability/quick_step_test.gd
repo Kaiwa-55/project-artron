@@ -19,6 +19,8 @@ func _init() -> void:
 	character.selected_ability_ids.append("quick_step")
 	character.equipped_abilities.append("quick_step")
 	var player: CombatantState = character.create_combatant_state()
+	# Quick Step is tested without the prototype Player's configured starting Status.
+	player.effects.clear()
 	var enemy: CombatantState = EnemyTemplate.create_combatant_state()
 	var system := CombatSystem.new()
 	system.start_combat([player, enemy])

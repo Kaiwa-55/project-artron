@@ -10,14 +10,14 @@ const CATALOG := preload("res://data/creation/default_creation_catalog.tres")
 @onready var title_label: Label = $Layout/Header/Margin/Row/Heading/Title
 @onready var subtitle_label: Label = $Layout/Header/Margin/Row/Heading/Subtitle
 @onready var points_label: Label = $Layout/Header/Margin/Row/Points
-@onready var ability_hint: Label = $Layout/Content/ChoiceZone/Margin/Column/AbilityHeader/Hint
-@onready var ability_list: VBoxContainer = $Layout/Content/ChoiceZone/Margin/Column/AbilityScroll/AbilityList
-@onready var attribute_used: Label = $Layout/Content/ChoiceZone/Margin/Column/AttributeHeader/Used
-@onready var attribute_list: GridContainer = $Layout/Content/ChoiceZone/Margin/Column/AttributeGrid
-@onready var portrait: TextureRect = $Layout/Content/Summary/Margin/Column/Portrait/Texture
-@onready var character_name: Label = $Layout/Content/Summary/Margin/Column/Name
-@onready var class_label: Label = $Layout/Content/Summary/Margin/Column/Class
-@onready var preview_label: Label = $Layout/Content/Summary/Margin/Column/Preview
+@onready var ability_hint: Label = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityHeader/Hint
+@onready var ability_list: VBoxContainer = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityScroll/AbilityList
+@onready var attribute_used: Label = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeHeader/Used
+@onready var attribute_list: GridContainer = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeGrid
+@onready var portrait: TextureRect = $Layout/ContentScroll/Content/Summary/Margin/Column/Portrait/Texture
+@onready var character_name: Label = $Layout/ContentScroll/Content/Summary/Margin/Column/Name
+@onready var class_label: Label = $Layout/ContentScroll/Content/Summary/Margin/Column/Class
+@onready var preview_label: Label = $Layout/ContentScroll/Content/Summary/Margin/Column/Preview
 @onready var party_roster: HBoxContainer = $Layout/PartyRoster/Margin/Row/Scroll/Characters
 @onready var status_label: Label = $Layout/Footer/Margin/Row/Status
 @onready var confirm_button: Button = $Layout/Footer/Margin/Row/Confirm
@@ -32,7 +32,24 @@ var party: Array[CombatantState] = []
 func _ready() -> void:
 	$Layout/Footer/Margin/Row/Cancel.pressed.connect(cancel)
 	confirm_button.pressed.connect(confirm)
+	get_viewport().size_changed.connect(_apply_responsive_size)
+	_apply_responsive_size()
 	hide()
+
+
+func _apply_responsive_size() -> void:
+	var viewport_size := get_viewport_rect().size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+	var panel_size := Vector2(
+		minf(1180.0, maxf(560.0, viewport_size.x - 32.0)),
+		minf(760.0, maxf(420.0, viewport_size.y - 32.0))
+	)
+	set_anchors_preset(Control.PRESET_CENTER)
+	offset_left = -panel_size.x * 0.5
+	offset_top = -panel_size.y * 0.5
+	offset_right = panel_size.x * 0.5
+	offset_bottom = panel_size.y * 0.5
 
 
 func open_for(p_character: CombatantState) -> void:

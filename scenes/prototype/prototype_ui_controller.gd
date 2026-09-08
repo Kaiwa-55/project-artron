@@ -90,34 +90,33 @@ func _apply_responsive_layout() -> void:
 	var header_height := 52.0 if compact else 60.0
 	var bottom_gap := 8.0 if compact else 20.0
 	var dock_height := 104.0 if compact else 118.0
-	var dock_width := minf(640.0, viewport_size.x - edge * 2.0)
-	var dock: Control = $UILayer/Control/ReferenceActionDock
-	dock.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	dock.offset_left = -dock_width * 0.5
-	dock.offset_top = -dock_height - bottom_gap
-	dock.offset_right = dock_width * 0.5
-	dock.offset_bottom = -bottom_gap
+	var bottom_row: HBoxContainer = $UILayer/Control/BottomActionRow
+	bottom_row.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	bottom_row.offset_left = edge
+	bottom_row.offset_top = -dock_height - bottom_gap
+	bottom_row.offset_right = -edge
+	bottom_row.offset_bottom = -bottom_gap
+	var dock: Control = $UILayer/Control/BottomActionRow/ReferenceActionDock
+	dock.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var header: Control = $UILayer/Control/Header
 	header.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	header.offset_left = edge
 	header.offset_top = edge
 	header.offset_right = -edge
 	header.offset_bottom = edge + header_height
-	var side_width := 218.0 if compact else 252.0
-	var player_height := 112.0 if compact else 134.0
-	var player_panel: Control = $UILayer/Control/ReferencePlayerHUD
-	player_panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	player_panel.offset_left = edge
-	player_panel.offset_top = -dock_height - bottom_gap - player_height - 8.0
-	player_panel.offset_right = edge + side_width
-	player_panel.offset_bottom = -dock_height - bottom_gap - 8.0
+	var side_width := minf(300.0 if compact else 340.0, viewport_size.x - edge * 2.0)
+	var player_height := 118.0 if compact else 134.0
 	var turn_height := 96.0 if compact else 104.0
-	var turn_panel: Control = $UILayer/Control/ReferenceTurnHUD
-	turn_panel.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	turn_panel.offset_left = -edge - side_width
-	turn_panel.offset_top = -dock_height - bottom_gap - turn_height - 8.0
-	turn_panel.offset_right = -edge
-	turn_panel.offset_bottom = -dock_height - bottom_gap - 8.0
+	var player_panel: Control = $UILayer/Control/ReferencePlayerHUD
+	player_panel.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	player_panel.offset_left = -edge - side_width
+	player_panel.offset_top = -dock_height - bottom_gap - player_height - 8.0
+	player_panel.offset_right = -edge
+	player_panel.offset_bottom = -dock_height - bottom_gap - 8.0
+	var portrait: TextureRect = $UILayer/Control/ReferencePlayerHUD/Margin/Row/CharacterPortrait
+	portrait.custom_minimum_size = Vector2(68, 82) if compact else Vector2(78, 96)
+	var turn_panel: Control = $UILayer/Control/BottomActionRow/ReferenceTurnHUD
+	turn_panel.custom_minimum_size = Vector2(250.0 if compact else 300.0, 0)
 	var enemy_panel: Control = $UILayer/Control/Enemy_panel
 	enemy_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	enemy_panel.offset_left = -edge - side_width
@@ -329,25 +328,28 @@ func _build_reference_player_panel() -> void:
 			open_character_from_portrait()
 	)
 	essential_player_status = $UILayer/Control/ReferencePlayerHUD/Margin/Row/PlayerStatus
+	essential_player_status.clip_text = false
+	essential_player_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	essential_player_status.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 
 
 func _build_reference_turn_panel() -> void:
-	reference_turn_panel = $UILayer/Control/ReferenceTurnHUD
+	reference_turn_panel = $UILayer/Control/BottomActionRow/ReferenceTurnHUD
 	style_panel(reference_turn_panel, Color("151d23"), Color("806027"), 2)
-	essential_turn_status = $UILayer/Control/ReferenceTurnHUD/Margin/Column/TurnStatus
+	essential_turn_status = $UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column/TurnStatus
 	@warning_ignore("shadowed_variable_base_class")
-	reference_end_turn_button = $UILayer/Control/ReferenceTurnHUD/Margin/Column/EndTurn
+	reference_end_turn_button = $UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column/EndTurn
 	reference_end_turn_button.pressed.connect(func():
 		refresh_end_turn_lock()
 		if not reference_end_turn_button.disabled:
 			$"UILayer/Control/ActionSources/End Turn".pressed.emit()
 	)
 	style_action_button(reference_end_turn_button)
-	essential_target_status = $UILayer/Control/ReferenceTurnHUD/Margin/Column/TargetStatus
+	essential_target_status = $UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column/TargetStatus
 
 
 func _build_action_dock() -> void:
-	var dock: PanelContainer = $UILayer/Control/ReferenceActionDock
+	var dock: PanelContainer = $UILayer/Control/BottomActionRow/ReferenceActionDock
 	dock.z_index = 10
 	style_panel(dock, Color(0.035, 0.045, 0.048, 0.96), Color("b58a3a"), 2)
 	var action_grid: GridContainer = dock.get_node("ActionDockMargin/ActionDockColumn/ActionButtonGrid")

@@ -1,11 +1,22 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dwe3brusekjlm"]
 
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
-[ext_resource type="Resource" path="res://data/attack/arcane_burst.tres" id="2_attack"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_n28se"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3_trait"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="4_3xxnt"]
 [ext_resource type="Resource" uid="uid://dd1wjirj7cg05" path="res://animation/ki_wave.tres" id="4_animation"]
 [ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="4_sen5u"]
+
+[sub_resource type="Resource" id="Resource_cf61m"]
+script = ExtResource("4_3xxnt")
+id = "ki_wave_attack"
+display_name = "Ki wave"
+attack_attribute = 4
+defense_type = 0
+ap_cost = 0
+base_damage = 4
+range_feet = 20.0
+damage_type = "arcane"
 
 [resource]
 script = ExtResource("1_ability")
@@ -20,7 +31,7 @@ description = "Release a 20-foot line of force that strikes every enemy along it
 animation_template = ExtResource("4_animation")
 target_mode = 2
 attack_source = 2
-attack_data = ExtResource("2_attack")
+attack_data = SubResource("Resource_cf61m")
 area_shape = 2
 targeting_range_feet = 20.0
 line_length_feet = 20.0
