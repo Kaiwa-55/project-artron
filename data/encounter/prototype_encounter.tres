@@ -26,4 +26,5 @@ player_party = Array[Dictionary]([{
 "position_feet": Vector2(20, 20),
 "use_created_character": true
 }])
+player_spawn_positions_feet = Array[Vector2]([Vector2(20, 20), Vector2(4, 38), Vector2(36, 38)])
 enemies = Array[ExtResource("1_53d28")]([ExtResource("3_rpcl3")])

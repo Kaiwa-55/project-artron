@@ -10,4 +10,5 @@ script = ExtResource("1")
 id = "run_elite_crimson_stalker"
 display_name = "Crimson Spine Stalker"
 battlefield_texture = ExtResource("3")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-40, -83.3333), Vector2(-56, -65.3333), Vector2(-24, -65.3333)])
 enemies = Array[ExtResource("2")]([ExtResource("4")])

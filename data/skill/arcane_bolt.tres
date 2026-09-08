@@ -7,7 +7,6 @@
 script = ExtResource("1_skill_data")
 id = "arcane_bolt"
 display_name = "Arcane Bolt"
-description = "Fire an arcane projectile at an enemy within 15 feet."
-mana_cost = 3
-cooldown_turns = 2
+description = "Fire an arcane projectile at an enemy within 30 feet."
+cooldown_turns = 1
 attack_data = ExtResource("2_attack")

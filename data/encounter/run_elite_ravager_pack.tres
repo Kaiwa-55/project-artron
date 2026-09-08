@@ -11,4 +11,5 @@ script = ExtResource("1")
 id = "run_elite_ravager_pack"
 display_name = "Ravager Pack"
 battlefield_texture = ExtResource("3")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-40, -83.3333), Vector2(-56, -65.3333), Vector2(-24, -65.3333)])
 enemies = Array[ExtResource("2")]([ExtResource("4"), ExtResource("5")])

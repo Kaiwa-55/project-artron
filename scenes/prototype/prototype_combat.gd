@@ -72,7 +72,7 @@ func create_encounter_player_party(data: Resource) -> Array[CombatantState]:
 			entries = []
 			for index in range(active_run.party_character_data.size()):
 				var member: CharacterData = active_run.party_character_data[index]
-				entries.append({"character": member, "id": "player" if index == 0 else "ally_%d" % index, "display_name": member.display_name, "position_feet": Vector2(-40 - index * 16, -83.3333 + index * 18), "use_created_character": false})
+				entries.append({"character": member, "id": "player" if index == 0 else "ally_%d" % index, "display_name": member.display_name, "use_created_character": false})
 	if entries.is_empty():
 		entries = [
 			{"character": PlayerData, "id": "player", "display_name": "Player", "position_feet": Vector2(-40, -83.3333), "use_created_character": true},
@@ -98,7 +98,8 @@ func create_encounter_player_party(data: Resource) -> Array[CombatantState]:
 		state.display_name = String(entry.get("display_name", state.display_name))
 		state.team = data.player_team if data != null else 1
 		apply_active_run_bonuses(state)
-		state.position = Vector2(entry.get("position_feet", Vector2.ZERO)) * combat_system.map_rules.world_units_per_foot
+		var spawn_position_feet: Vector2 = data.get_player_spawn_position_feet(index, entry) if data != null else Vector2(entry.get("position_feet", Vector2.ZERO))
+		state.position = spawn_position_feet * combat_system.map_rules.world_units_per_foot
 		used_ids[unique_id] = true
 		states.append(state)
 	return states

@@ -11,5 +11,5 @@ display_name = "Arcane Bolt"
 attack_attribute = 3
 defense_type = 2
 base_damage = 6
-range_feet = 15.0
+range_feet = 30.0
 damage_type = "arcane"

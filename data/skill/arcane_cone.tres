@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://k6apocdyw1ee"]
 
-[ext_resource type="Script" path="res://data/skill/skill_data.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1_skill"]
 [ext_resource type="Resource" path="res://data/attack/arcane_burst.tres" id="2_attack"]
 
 [resource]
@@ -9,10 +9,8 @@ id = "arcane_cone"
 display_name = "Arcane Cone"
 description = "Project arcane force in a 90-degree cone up to 15 feet."
 mana_cost = 2
-ap_cost = 1
 cooldown_turns = 1
 attack_data = ExtResource("2_attack")
 target_mode = 2
 area_shape = 3
-targeting_range_feet = 15.0
-cone_angle_degrees = 90.0
+targeting_range_feet = 20.0

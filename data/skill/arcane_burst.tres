@@ -7,11 +7,11 @@
 script = ExtResource("1")
 id = "arcane_burst"
 display_name = "Arcane Burst"
-description = "Choose a point within 20 feet. Attack every enemy in a 7.5-foot circle."
-mana_cost = 5
+description = "Choose a point within 25 feet. Attack every enemy in a 7.5-foot circle."
+mana_cost = 3
 cooldown_turns = 2
 attack_data = ExtResource("2")
 target_mode = 2
 area_shape = 1
-targeting_range_feet = 20.0
+targeting_range_feet = 25.0
 area_radius_feet = 7.5
