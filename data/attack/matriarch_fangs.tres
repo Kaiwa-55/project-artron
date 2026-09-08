@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AttackData" format=3]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://b6yu34cdhq7hr"]
 
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
-[ext_resource type="Resource" path="res://data/status/poisoned.tres" id="3"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_iewxh"]
+[ext_resource type="Resource" uid="uid://digjbueytlfmk" path="res://data/status/poisoned.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="4_doitc"]
 [ext_resource type="Resource" path="res://data/trait/pierce.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
 
@@ -12,10 +14,9 @@ script = ExtResource("1")
 id = "matriarch_fangs"
 display_name = "Matriarch's Fangs"
 animation_template = ExtResource("2")
-to_hit_bonus = 4
-ap_cost = 1
+to_hit_bonus = 2
 base_damage = 7
-damage_type = "pierce"
 range_feet = 8.0
-effects_on_hit = [ExtResource("3")]
+damage_type = "pierce"
+effects_on_hit = Array[ExtResource("2_iewxh")]([ExtResource("3")])
 traits = [ExtResource("4"), ExtResource("5"), ExtResource("6")]

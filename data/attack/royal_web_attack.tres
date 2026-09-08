@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AttackData" format=3]
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://crlyuxp3mfn57"]
 
-[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/status/rooted.tres" id="2"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_ovueq"]
+[ext_resource type="Resource" uid="uid://n8baw8i6gpig" path="res://data/status/rooted.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/ranged.tres" id="3"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_tjm75"]
 
 [resource]
 script = ExtResource("1")
@@ -10,9 +12,8 @@ id = "royal_web_attack"
 display_name = "Royal Web"
 attack_attribute = 1
 defense_type = 1
-to_hit_bonus = 4
+to_hit_bonus = 2
 can_critical = false
-base_damage = 0
 range_feet = 30.0
-effects_on_hit = [ExtResource("2")]
+effects_on_hit = Array[ExtResource("1_ovueq")]([ExtResource("2")])
 traits = [ExtResource("3")]
