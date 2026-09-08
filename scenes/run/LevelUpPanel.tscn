@@ -63,10 +63,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -340.0
-offset_right = 500.0
-offset_bottom = 340.0
+offset_left = -421.0
+offset_top = -311.0
+offset_right = 421.0
+offset_bottom = 311.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("Window")
@@ -132,7 +132,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Steps" type="PanelContainer" parent="Layout" unique_id=15033330]
-custom_minimum_size = Vector2(0, 43)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_styles/panel = SubResource("Steps")
 

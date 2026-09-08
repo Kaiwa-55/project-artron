@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_rbohh"]
 [ext_resource type="Resource" uid="uid://c3kfwp8x2gwbp" path="res://data/reaction/mobile_shooter_reaction.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_c3xv8"]
 [ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
 
 [resource]

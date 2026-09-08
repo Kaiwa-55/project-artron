@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://5ihci8242y3l"]
 
 [ext_resource type="Script" uid="uid://bjcf0jgx8cddo" path="res://scenes/run/run_map.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/run/LevelUpPanel.tscn" id="2_level_up"]
+[ext_resource type="PackedScene" uid="uid://bflch7fvultxh" path="res://scenes/run/LevelUpPanel.tscn" id="2_level_up"]
 [ext_resource type="PackedScene" path="res://scenes/ui/CharacterPanel.tscn" id="3_character_panel"]
 
 [node name="RunMap" type="Control" unique_id=1652433532]
@@ -107,6 +107,18 @@ disabled = true
 text = "ENTER NODE"
 
 [node name="LevelUpPanel" parent="." unique_id=1673864593 instance=ExtResource("2_level_up")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 842.0
+offset_bottom = 622.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="CharacterPanel" parent="." unique_id=1904462491 instance=ExtResource("3_character_panel")]
 visible = false
