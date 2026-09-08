@@ -14,7 +14,6 @@ timing = 1
 recipient = 1
 dynamic_effect = 3
 damage_type = "light"
-faith_divisor = 1
 
 [resource]
 script = ExtResource("1")

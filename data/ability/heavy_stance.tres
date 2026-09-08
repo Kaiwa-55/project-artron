@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dj2rt6fftxywk"]
 
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_sh8rx"]
 [ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_aefwf"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/stance.tres" id="4"]
 [ext_resource type="Resource" path="res://data/effect/heavy_stance.tres" id="5"]
@@ -14,7 +16,6 @@ effect = ExtResource("5")
 script = ExtResource("1")
 id = "heavy_stance"
 display_name = "Heavy Stance"
-required_level = 1
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4")]
 ap_cost = 1
