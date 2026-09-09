@@ -149,6 +149,7 @@ func apply_run_progression_state(target: CombatantState, source: CombatantState)
 	target.class_id = source.class_id
 	target.class_display_name = source.class_display_name
 	target.active_traits = source.active_traits.duplicate()
+	target.status_immunities = source.status_immunities.duplicate()
 	target.granted_ability_ids = source.granted_ability_ids.duplicate()
 	target.available_abilities = source.available_abilities.duplicate()
 	target.equipped_abilities = source.equipped_abilities.duplicate()

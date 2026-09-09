@@ -5,6 +5,8 @@ extends RefCounted
 func apply_effect(target: CombatantState, effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false, source: CombatantState = null) -> bool:
 	if target == null or effect == null or effect.id.is_empty():
 		return false
+	if target.is_immune_to_status(effect):
+		return false
 
 	if effect.effect_type == EffectData.Type.CLEANSE:
 		return cleanse_statuses(
@@ -157,6 +159,21 @@ func expire_start_turn_effects(combatant: CombatantState) -> Array[EffectInstanc
 		expired.append(effect)
 		combatant.effects.remove_at(index)
 	return expired
+
+
+func decay_start_turn_stacks(combatant: CombatantState) -> Array[EffectInstance]:
+	var removed: Array[EffectInstance] = []
+	if combatant == null:
+		return removed
+	for index in range(combatant.effects.size() - 1, -1, -1):
+		var instance := combatant.effects[index]
+		if instance == null or instance.data == null or instance.data.stack_decay_at_start_turn <= 0:
+			continue
+		instance.stack_count = maxi(0, instance.stack_count - instance.data.stack_decay_at_start_turn)
+		if instance.stack_count <= 0:
+			removed.append(instance)
+			combatant.effects.remove_at(index)
+	return removed
 
 
 func decay_end_turn_stacks(combatant: CombatantState) -> Array[EffectInstance]:

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/cone.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "judgment_wave_attack"
+display_name = "Judgment Wave"
+requires_to_hit = false
+can_critical = false
+ap_cost = 0
+base_damage = 0
+uses_attribute_damage_modifier = false
+range_feet = 20.0
+damage_type = "light"
+traits = [ExtResource("2"), ExtResource("3")]

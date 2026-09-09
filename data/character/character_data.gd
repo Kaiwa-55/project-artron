@@ -56,6 +56,7 @@ const DefaultUnarmedAttack = preload("res://data/attack/unarmed_attack.tres")
 
 @export var damage_resistances: Dictionary = {}
 @export var damage_immunities: Array[String] = []
+@export var status_immunities: Array[String] = []
 @export var starting_effects: Array[EffectData] = []
 @export var available_abilities: Array = []
 @export var equipped_abilities: Array = []
@@ -124,6 +125,7 @@ func create_combatant_state() -> CombatantState:
 	state.initiative_bonus = initiative_bonus
 	state.damage_resistances = damage_resistances.duplicate(true)
 	state.damage_immunities = damage_immunities.duplicate()
+	state.status_immunities = status_immunities.duplicate()
 	state.available_abilities = available_abilities.duplicate()
 	state.equipped_abilities = equipped_abilities.duplicate()
 	state.equipped_weapon_attack = equipped_weapon_attack

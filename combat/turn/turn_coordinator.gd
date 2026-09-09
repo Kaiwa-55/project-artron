@@ -76,6 +76,8 @@ func start_current_turn() -> void:
 	combat_system.turn_system.start_turn(combat_system.combat_state)
 	for effect in combat_system.effect_system.expire_start_turn_effects(actor):
 		combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.EFFECT_EXPIRED, actor.id, "", {"effect_name": effect.data.display_name}))
+	for effect in combat_system.effect_system.decay_start_turn_stacks(actor):
+		combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.EFFECT_EXPIRED, actor.id, "", {"effect_name": effect.data.display_name}))
 	combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.TURN_STARTED, actor.id))
 	combat_system.emit_effect_resolutions(actor, combat_system.effect_system.resolve_effects(actor, EffectData.Trigger.START_OF_TURN))
 	if combat_system.check_for_combat_end():

@@ -36,7 +36,9 @@ enum StatusKind {
 	SURPRISE,
 	HIDDEN,
 	HASTE,
-	DYING
+	DYING,
+	PRONE,
+	AIRBORNE
 }
 
 enum StackMode {
@@ -85,7 +87,10 @@ enum StackMode {
 # Status rules. Effects do not stack unless their own data explicitly allows it.
 @export var stackable: bool = false
 @export_range(1, 999) var stacks_on_apply: int = 1
-@export_range(1, 999) var max_stacks: int = 1
+@export_range(0, 999) var max_stacks: int = 1
+# Zero max_stacks means unlimited. Stack-decay statuses persist until this
+# process removes their final Stack.
+@export_range(0, 99) var stack_decay_at_start_turn: int = 0
 @export var status_tags: Array[String] = []
 @export var can_be_cleansed: bool = true
 # Statuses opt into the Escape Action individually. The real DC is captured

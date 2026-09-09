@@ -96,6 +96,7 @@ var fortitude_bonus: int = 0
 var damage_resistances: Dictionary = {}
 var equipment_damage_resistances: Dictionary = {}
 var damage_immunities: Array[String] = []
+var status_immunities: Array[String] = []
 
 var available_abilities: Array = []
 var equipped_abilities: Array = []
@@ -263,7 +264,8 @@ func add_effect(effect: EffectData, source_ability_id: String = "", source_abili
 		if active_effect.data.id == effect.id:
 			match effect.stack_mode:
 				EffectData.StackMode.ADD_STACKS:
-					active_effect.stack_count = mini(effect.max_stacks, active_effect.stack_count + effect.stacks_on_apply)
+					var next_stacks: int = active_effect.stack_count + effect.stacks_on_apply
+					active_effect.stack_count = next_stacks if effect.max_stacks <= 0 else mini(effect.max_stacks, next_stacks)
 					active_effect.remaining_turns = maxi(active_effect.remaining_turns, effect.duration_turns)
 				EffectData.StackMode.KEEP_STRONGER:
 					if effect.potency > active_effect.data.potency:
@@ -294,6 +296,14 @@ func has_status(status_id: String) -> bool:
 		if effect_instance.data.id == status_id:
 			return true
 	return false
+
+
+func is_immune_to_status(status: EffectData) -> bool:
+	if status == null:
+		return false
+	if status_immunities.has(status.id):
+		return true
+	return status.status_tags.any(func(tag): return status_immunities.has(String(tag)))
 
 
 func remove_status(status_id: String) -> bool:

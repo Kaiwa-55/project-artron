@@ -69,6 +69,11 @@ func execute_ability(combatant_id: String, ability_id: String, target_point: Vec
 		area_attack.base_damage = 0
 	if ability.animation_template != null and not uses_single_area_animation(ability.animation_template):
 		area_attack.animation_template = ability.animation_template
+	if ability.active_attack_base_damage_per_level > 0:
+		area_attack.base_damage = ability.active_attack_base_damage_per_level * actor.level
+	area_attack.base_damage += ability.active_attack_base_damage_from_faith_multiplier * actor.get_total_faith()
+	if ability.active_attack_base_damage_faith_divisor > 0:
+		area_attack.base_damage += floori(float(actor.get_total_faith()) / float(ability.active_attack_base_damage_faith_divisor))
 	area_attack.ap_cost = 0
 	if not actor.spend_ap(ability.ap_cost):
 		return ActionResult.failure("Not enough AP.")

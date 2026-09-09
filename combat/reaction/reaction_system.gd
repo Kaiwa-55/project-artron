@@ -192,6 +192,7 @@ func get_ally_damage_reaction_prompt(attacker, target, attack: AttackData, attac
 		var reactor: CombatantState = combat_state.get_combatant(reactor_id)
 		if reactor == null or reactor.is_dying() or reactor.team != target.team:
 			continue
+		var available_reactions: Array = []
 		for reaction in reactor.active_reactions:
 			if reaction == null or reaction.trigger != ReactionDataScript.Trigger.ALLY_ATTACKED:
 				continue
@@ -209,9 +210,14 @@ func get_ally_damage_reaction_prompt(attacker, target, attack: AttackData, attac
 				continue
 			if get_effect(reaction, ReactionEffectDataScript.Type.DAMAGE_MODIFIER) == null:
 				continue
+			available_reactions.append(reaction)
+		if not available_reactions.is_empty():
+			# Preserve the established damage-reduction choice first when a Devotee
+			# can also choose a full redirect such as Sacrificial.
+			available_reactions.sort_custom(func(a, b): return a.faith_cost > b.faith_cost)
 			return {
 				"damage_intervention": true,
-				"reactions": [reaction],
+				"reactions": available_reactions,
 				"reactor": reactor,
 				"attacker": attacker,
 				"attack_target": target,

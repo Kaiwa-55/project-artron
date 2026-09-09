@@ -1,7 +1,7 @@
 class_name AbilityUseEffectData
 extends Resource
 
-enum Timing { ALWAYS, ON_HIT, ON_MISS }
+enum Timing { ALWAYS, ON_HIT, ON_MISS, ON_DAMAGE }
 enum Recipient { CASTER, TARGET }
 enum DynamicEffect { NONE, GAIN_FAITH_FROM_WISDOM_MODIFIER, HEAL_OR_HARM_BY_FAITH, SMITE_LIGHT_BY_FAITH, HEAL_BY_FAITH, CONDEMN_BY_FAITH }
 

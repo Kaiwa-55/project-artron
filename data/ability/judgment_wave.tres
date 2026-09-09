@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/attack/judgment_wave_attack.tres" id="3"]
+[ext_resource type="Resource" path="res://data/status/prone.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="5"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/cone.tres" id="7"]
+
+[sub_resource type="Resource" id="ProneOnDamage"]
+script = ExtResource("2")
+timing = 3
+recipient = 1
+effect = ExtResource("4")
+
+[resource]
+script = ExtResource("1")
+id = "judgment_wave"
+display_name = "Judgment Wave"
+required_level = 2
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("5"), ExtResource("6"), ExtResource("7")]
+auto_equip_on_grant = true
+ap_cost = 3
+faith_cost = 3
+description = "Attack everything in a 20 ft cone. Deal Light Damage equal to current Faith plus Level. Targets that take damage become Prone."
+target_mode = 2
+target_filter = 2
+attack_source = 2
+attack_data = ExtResource("3")
+active_attack_base_damage_per_level = 1
+active_attack_base_damage_from_faith_multiplier = 1
+use_effects = [SubResource("ProneOnDamage")]
+area_shape = 3
+targeting_range_feet = 20.0
+cone_angle_degrees = 90.0

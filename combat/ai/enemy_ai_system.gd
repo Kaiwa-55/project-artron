@@ -426,9 +426,10 @@ func evaluate_status_value(effect: EffectData, target: CombatantState) -> float:
 	if current != null:
 		match effect.stack_mode:
 			EffectData.StackMode.ADD_STACKS:
-				if current.stack_count >= effect.max_stacks:
+				if effect.max_stacks > 0 and current.stack_count >= effect.max_stacks:
 					return 0.0
-				base_value *= minf(1.0, float(effect.stacks_on_apply) / float(maxi(1, effect.max_stacks)))
+				if effect.max_stacks > 0:
+					base_value *= minf(1.0, float(effect.stacks_on_apply) / float(effect.max_stacks))
 			EffectData.StackMode.KEEP_STRONGER:
 				if current.data.potency >= effect.potency:
 					return 0.0

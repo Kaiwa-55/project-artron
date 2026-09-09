@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3]
+
+[ext_resource type="Script" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
+
+[sub_resource type="Resource" id="DamageRedirect"]
+script = ExtResource("2")
+effect_type = 9
+target = 2
+redirect_damage_to_reactor = true
+
+[resource]
+script = ExtResource("1")
+id = "sacrificial_reaction"
+display_name = "Sacrificial"
+description = "When an ally within 15 ft would take damage, spend 1 AP and 1 Faith to take that damage instead."
+traits = [ExtResource("3"), ExtResource("4")]
+trigger = 5
+reach_feet = 15.0
+auto_resolve = false
+ap_cost = 1
+faith_cost = 1
+required_trait_id = "devotee"
+effects = [SubResource("DamageRedirect")]
+can_target_self = false

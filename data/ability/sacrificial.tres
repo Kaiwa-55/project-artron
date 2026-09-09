@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Resource" path="res://data/reaction/sacrificial_reaction.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "sacrificial"
+display_name = "Sacrificial"
+required_level = 1
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("2"), ExtResource("3")]
+auto_equip_on_grant = true
+reaction_only = true
+ap_cost = 1
+faith_cost = 1
+description = "Reaction. When an ally within 15 ft would take damage, take that damage instead."
+granted_reactions = [ExtResource("4")]

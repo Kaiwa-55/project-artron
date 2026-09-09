@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "airborne"
+display_name = "Airborne"
+duration_turns = 1
+persists_until_combat_end = true
+status_kind = 18
+stack_mode = 1
+stackable = true
+stacks_on_apply = 1
+max_stacks = 0
+stack_decay_at_start_turn = 1
+status_tags = Array[String](["status", "debuff", "wind", "airborne"])

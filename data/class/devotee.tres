@@ -11,22 +11,26 @@
 [ext_resource type="Resource" path="res://data/ability/bless.tres" id="9_bless"]
 [ext_resource type="Resource" path="res://data/ability/condemn.tres" id="10_condemn"]
 [ext_resource type="Resource" path="res://data/ability/unwavering_faith.tres" id="11_unwavering"]
+[ext_resource type="Resource" path="res://data/ability/sacrificial.tres" id="12_sacrificial"]
+[ext_resource type="Resource" path="res://data/ability/judgment_wave.tres" id="13_judgment_wave"]
+[ext_resource type="Resource" path="res://data/ability/radiance_burst.tres" id="14_radiance_burst"]
 
 [sub_resource type="Resource" id="L1"]
 script = ExtResource("5")
 max_hp_gain = 5
-granted_abilities = Array[ExtResource("6")]([ExtResource("2"), ExtResource("3"), ExtResource("7"), ExtResource("8"), ExtResource("9_bless"), ExtResource("10_condemn")])
+granted_abilities = Array[ExtResource("6")]([ExtResource("2"), ExtResource("3"), ExtResource("7"), ExtResource("8"), ExtResource("9_bless"), ExtResource("10_condemn"), ExtResource("12_sacrificial")])
 
 [sub_resource type="Resource" id="L2"]
 script = ExtResource("5")
 level = 2
 max_hp_gain = 5
-granted_abilities = [ExtResource("11_unwavering")]
+granted_abilities = [ExtResource("11_unwavering"), ExtResource("13_judgment_wave")]
 
 [sub_resource type="Resource" id="L3"]
 script = ExtResource("5")
 level = 3
 max_hp_gain = 5
+granted_abilities = [ExtResource("14_radiance_burst")]
 
 [sub_resource type="Resource" id="L4"]
 script = ExtResource("5")
@@ -76,7 +80,7 @@ fixed_attribute_bonuses = {
 }
 attribute_choice_count = 1
 attribute_choice_options = Array[int]([2, 1])
-granted_abilities = [ExtResource("2"), ExtResource("3"), ExtResource("7"), ExtResource("8"), ExtResource("9_bless"), ExtResource("10_condemn"), ExtResource("11_unwavering")]
+granted_abilities = [ExtResource("2"), ExtResource("3"), ExtResource("7"), ExtResource("8"), ExtResource("9_bless"), ExtResource("10_condemn"), ExtResource("11_unwavering"), ExtResource("12_sacrificial"), ExtResource("13_judgment_wave"), ExtResource("14_radiance_burst")]
 traits = [ExtResource("4")]
-auto_equipped_ability_ids = Array[String](["belief", "pray", "heal_or_harm", "armor_of_faith", "bless", "condemn", "unwavering_faith"])
+auto_equipped_ability_ids = Array[String](["belief", "pray", "heal_or_harm", "armor_of_faith", "bless", "condemn", "unwavering_faith", "sacrificial", "judgment_wave", "radiance_burst"])
 progression_entries = Array[Resource]([SubResource("L1"), SubResource("L2"), SubResource("L3"), SubResource("L4"), SubResource("L5"), SubResource("L6"), SubResource("L7"), SubResource("L8"), SubResource("L9"), SubResource("L10")])

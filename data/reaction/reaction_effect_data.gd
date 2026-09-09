@@ -10,6 +10,7 @@ enum DistanceMode { FIXED_FEET, SPEED_MULTIPLIER }
 @export var amount: int = 0
 @export_range(0, 99) var faith_divisor: int = 0
 @export_range(0, 99) var minimum_amount: int = 0
+@export var redirect_damage_to_reactor: bool = false
 @export var minimum_margin: int = 0
 @export var maximum_margin: int = 0
 @export var uses_margin_range: bool = false

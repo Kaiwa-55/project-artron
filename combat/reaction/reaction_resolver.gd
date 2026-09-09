@@ -539,8 +539,10 @@ func resolve_damage_intervention_choice(request: ActionRequest, prompt: Dictiona
 		reactor.spend_ap(reaction.ap_cost)
 		reactor.spend_faith(reaction.faith_cost)
 		prepared.reaction_damage_reduction += reduction
+		if effect != null and effect.redirect_damage_to_reactor:
+			prepared.redirected_damage_target = reactor
 		combat_system.clear_hidden(reactor, "Reactive Ability used")
-		result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, target.id, {"reaction_name": reaction.display_name, "damage_reduction": reduction, "faith_cost": reaction.faith_cost}))
+		result.events.append(CombatEvent.new(EventTypes.Type.REACTION_TRIGGERED, reactor.id, target.id, {"reaction_name": reaction.display_name, "damage_reduction": reduction, "damage_redirected": effect != null and effect.redirect_damage_to_reactor, "faith_cost": reaction.faith_cost}))
 		result.events.append(CombatEvent.new(EventTypes.Type.FAITH_CHANGED, reactor.id, reactor.id, {"ability_name": reaction.display_name, "faith_spent": reaction.faith_cost, "faith": reactor.faith, "temporary_faith": reactor.temporary_faith}))
 	else:
 		result.events.append(CombatEvent.new(EventTypes.Type.REACTION_DECLINED, reactor.id, target.id, {"reaction_name": reaction.display_name if reaction != null else "Divine Intervention"}))

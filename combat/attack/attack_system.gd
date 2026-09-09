@@ -247,7 +247,8 @@ func finalize_attack(attacker: CombatantState, target: CombatantState, attack: A
 	result.immune = damage_system.is_immune(target, attack)
 	result.resistance = damage_system.get_resistance(target, attack)
 	result.final_damage = 0 if result.immune else maxi(0, damage_system.calculate_final_damage(result.damage, result.resistance) - result.reaction_damage_reduction)
-	target.apply_damage(result.final_damage)
+	var damage_recipient: CombatantState = result.redirected_damage_target if result.redirected_damage_target != null else target
+	damage_recipient.apply_damage(result.final_damage)
 	ability_system.commit_conditional_damage_bonuses(attacker, result.conditional_damage_bonuses)
 	if not result.immune:
 		for effect in attack.effects_on_hit:

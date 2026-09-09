@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/radiance_burst_attack.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/circle.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "radiance_burst"
+display_name = "Radiance Burst"
+required_level = 3
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+auto_equip_on_grant = true
+ap_cost = 3
+faith_cost = 2
+description = "Choose a visible point within 30 ft. Deal Light Damage equal to floor(current Faith / 2) to enemies in a 10 ft radius. Obstacles block the area."
+target_mode = 2
+target_filter = 0
+attack_source = 2
+attack_data = ExtResource("2")
+active_attack_base_damage_faith_divisor = 2
+area_shape = 1
+targeting_range_feet = 30.0
+area_radius_feet = 10.0
+requires_line_of_sight = true
+area_blocked_by_obstacles = true

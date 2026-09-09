@@ -224,12 +224,13 @@ func build_attack_result(
 		)
 
 		if attack_result.final_damage > 0:
+			var damage_target_id: String = attack_result.redirected_damage_target.id if attack_result.redirected_damage_target != null else target.id
 
 			result.events.append(
 				CombatEvent.new(
 					EventTypes.Type.DAMAGE_APPLIED,
 					attacker.id,
-					target.id,
+					damage_target_id,
 					{
 						"amount":
 							attack_result.final_damage

@@ -45,6 +45,9 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 		ability_attack.ap_cost = ability.ap_cost
 		if ability.active_attack_base_damage_per_level > 0:
 			ability_attack.base_damage = ability.active_attack_base_damage_per_level * actor.level
+		ability_attack.base_damage += ability.active_attack_base_damage_from_faith_multiplier * actor.get_total_faith()
+		if ability.active_attack_base_damage_faith_divisor > 0:
+			ability_attack.base_damage += floori(float(actor.get_total_faith()) / float(ability.active_attack_base_damage_faith_divisor))
 		if ability.animation_template != null:
 			ability_attack.animation_template = ability.animation_template
 		ability_attack.active_damage_bonus = ability.active_attack_flat_damage_bonus + ability.active_attack_damage_bonus_per_level * actor.level
@@ -110,6 +113,7 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 func apply_effects(actor: CombatantState, target: CombatantState, ability, attack_events: Array[CombatEvent], output_events: Array[CombatEvent], include_always: bool = true, include_conditional: bool = true) -> void:
 	var hit := attack_events.any(func(event): return event.type == EventTypes.Type.ATTACK_HIT)
 	var missed := attack_events.any(func(event): return event.type == EventTypes.Type.ATTACK_MISS)
+	var damaged := target != null and attack_events.any(func(event): return event.type == EventTypes.Type.DAMAGE_APPLIED and event.target_id == target.id and int(event.data.get("amount", 0)) > 0)
 	for entry in combat_system.ability_system.get_use_effects(ability):
 		if entry == null:
 			continue
@@ -120,6 +124,8 @@ func apply_effects(actor: CombatantState, target: CombatantState, ability, attac
 		if entry.timing == AbilityUseEffectDataScript.Timing.ON_HIT and not hit:
 			continue
 		if entry.timing == AbilityUseEffectDataScript.Timing.ON_MISS and not missed:
+			continue
+		if entry.timing == AbilityUseEffectDataScript.Timing.ON_DAMAGE and not damaged:
 			continue
 		if entry.dynamic_effect != AbilityUseEffectDataScript.DynamicEffect.NONE:
 			apply_dynamic_effect(actor, target, ability, entry, output_events)

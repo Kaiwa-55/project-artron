@@ -46,6 +46,11 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 @export var active_attack_flat_damage_bonus: int = 0
 @export var active_attack_damage_bonus_per_level: int = 0
 @export var active_attack_base_damage_per_level: int = 0
+# Adds current Faith to an Active Ability's base damage. The executor snapshots
+# this value before paying the Ability's Faith cost.
+@export var active_attack_base_damage_from_faith_multiplier: int = 0
+# When positive, adds floor(current Faith / divisor) to base damage.
+@export_range(0, 99) var active_attack_base_damage_faith_divisor: int = 0
 @export var use_effects: Array = []
 @export var area_shape: AreaShape = AreaShape.NONE
 @export var targeting_range_feet: float = 0.0
