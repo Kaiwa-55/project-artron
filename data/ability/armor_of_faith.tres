@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="4"]
+
+[sub_resource type="Resource" id="ArmorOfFaithEffect"]
+script = ExtResource("2")
+effect_type = 17
+faith_per_defense_bonus = 5
+
+[resource]
+script = ExtResource("1")
+id = "armor_of_faith"
+display_name = "Armor of Faith"
+required_level = 1
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Passive. Gain +1 Reflex, Fortitude, and Will for every 5 total Faith, rounded down."
+effects = [SubResource("ArmorOfFaithEffect")]

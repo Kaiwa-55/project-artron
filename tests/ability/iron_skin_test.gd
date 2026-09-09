@@ -19,6 +19,11 @@ func _init() -> void:
 	check(actor.get_damage_resistance("blunt") == 1, "Iron Skin resists Blunt", failures)
 	check(actor.get_damage_resistance("bludgeoning") == 1, "Iron Skin resists Bludgeoning alias", failures)
 	check(actor.get_damage_resistance("fire") == 0, "Iron Skin does not resist unrelated damage", failures)
+	actor.level = 4
+	check(actor.get_damage_resistance("slash") == 2, "Iron Skin scales to 2 Resistance at Level 4", failures)
+	actor.level = 10
+	check(actor.get_damage_resistance("slash") == 5, "Iron Skin scales to 5 Resistance at Level 10", failures)
+	actor.level = 2
 	actor.damage_resistances["pierce"] = 2
 	actor.equipment_damage_resistances["pierce"] = 3
 	check(actor.get_damage_resistance("pierce") == 6, "Iron Skin stacks with innate and equipment Resistance", failures)

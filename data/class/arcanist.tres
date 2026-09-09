@@ -78,7 +78,7 @@ id = "arcanist"
 display_name = "Arcanist"
 description = "A ranged spellcaster who builds a personal spellbook, then improves the power, efficiency, reach, and recovery of every Skill they cast."
 base_speed_feet = 5.0
-base_mana = 8
+base_mana = 5
 fixed_attribute_bonuses = {
 3: 1
 }

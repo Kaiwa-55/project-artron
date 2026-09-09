@@ -2,29 +2,59 @@
 
 [ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1_53d28"]
-[ext_resource type="Resource" uid="uid://vd4qe1jly2x2" path="res://data/character/crimson_spine_stalker.tres" id="3_rpcl3"]
+[ext_resource type="Resource" path="res://data/ability/blood_claw.tres" id="3_wum6y"]
 [ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4"]
+[ext_resource type="Resource" path="res://data/ability/predator_rush.tres" id="4_irl6l"]
+[ext_resource type="Resource" path="res://data/attack/rending_talon.tres" id="5_kc6wg"]
 [ext_resource type="Resource" uid="uid://87olcsmdty3u" path="res://data/character/player.tres" id="5_player"]
+[ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="6_7qnd7"]
+[ext_resource type="Texture2D" uid="uid://ttpm6xtupsxp" path="res://assets/character_creation/Crimson Spine Stalker.png" id="7_imatu"]
+[ext_resource type="Resource" uid="uid://b4pdb0x8d6gnk" path="res://data/reaction/skitter_dodge.tres" id="8_jkklf"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="9_te15p"]
+[ext_resource type="Resource" path="res://data/trait/demon.tres" id="10_c8kss"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="11_euk6r"]
+
+[sub_resource type="Resource" id="Resource_1k873"]
+script = ExtResource("1_53d28")
+id = "crimson_spine_stalker"
+display_name = "Crimson Spine Stalker"
+portrait = ExtResource("7_imatu")
+token_texture = ExtResource("7_imatu")
+token_scale = 1.3
+token_offset = Vector2(0, 20)
+team = 2
+position = Vector2(1250, 1500)
+level = 4
+base_max_hp = 30
+base_max_ap = 4
+base_speed = 20.0
+reflex_stat_bonus = 3
+fortitude_stat_bonus = 1
+strength = 16
+dexterity = 18
+constitution = 14
+intelligence = 8
+wisdom = 12
+charisma = 8
+initiative_bonus = -10
+available_abilities = [ExtResource("3_wum6y"), ExtResource("4_irl6l")]
+equipped_abilities = ["blood_claw", "predator_rush"]
+equipped_weapon_attack = ExtResource("5_kc6wg")
+natural_attack = ExtResource("5_kc6wg")
+traits = [ExtResource("10_c8kss")]
+reactions = [ExtResource("8_jkklf")]
 
 [resource]
 script = ExtResource("1")
 id = "prototype_velkaria"
 display_name = "Velkaria Prototype Encounter"
 battlefield_texture = ExtResource("4")
-map_objects = Array[Dictionary]([{
-"blocks_movement": true,
-"id": "stone_pillar",
-"kind": "obstacle",
-"label": "Stone Pillar",
-"position_feet": Vector2(49.1667, 30.4167),
-"radius_feet": 2.8333
-}])
 player_party = Array[Dictionary]([{
 "character": ExtResource("5_player"),
 "display_name": "Player",
 "id": "player",
-"position_feet": Vector2(20, 20),
+"position_feet": Vector2(0, 0),
 "use_created_character": true
 }])
-player_spawn_positions_feet = Array[Vector2]([Vector2(20, 20), Vector2(4, 38), Vector2(36, 38)])
-enemies = Array[ExtResource("1_53d28")]([ExtResource("3_rpcl3")])
+player_spawn_positions_feet = Array[Vector2]([Vector2(10, 0), Vector2(4, 38), Vector2(36, 38)])
+enemies = Array[ExtResource("1_53d28")]([SubResource("Resource_1k873")])

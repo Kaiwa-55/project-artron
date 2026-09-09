@@ -4,12 +4,13 @@
 [ext_resource type="Resource" uid="uid://b1gs8n4byxj7" path="res://data/attack/goblin_stone_sling.tres" id="2"]
 [ext_resource type="Resource" uid="uid://cv0448n1o0qkg" path="res://data/ability/goblin_crippling_stone.tres" id="3"]
 [ext_resource type="Resource" uid="uid://kp86gqd784s3" path="res://data/reaction/goblin_scramble_away.tres" id="4"]
+[ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="4_leb1v"]
 [ext_resource type="Texture2D" uid="uid://cpbx22y5x8p72" path="res://assets/token/Goblin Slinger.png" id="4_mhqld"]
 [ext_resource type="Resource" path="res://data/trait/goblin.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/humanoid.tres" id="6"]
 [ext_resource type="Resource" path="res://data/ai/goblin_slinger_ai_profile.tres" id="7"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="7_leb1v"]
-[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="10_papyd"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="10_papyd"]
 
 [resource]
 script = ExtResource("1")
@@ -18,7 +19,7 @@ display_name = "Goblin Slinger"
 portrait = ExtResource("4_mhqld")
 token_texture = ExtResource("4_mhqld")
 team = 2
-position = Vector2(250, 10)
+position = Vector2(1800, 1500)
 base_max_hp = 8
 base_max_ap = 3
 base_speed = 15.0

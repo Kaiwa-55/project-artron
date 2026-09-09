@@ -19,8 +19,14 @@ func refresh_combatant(
 		+ combatant.get_modifier(combatant.constitution) * combatant.level \
 		+ combatant.max_hp_bonus
 	)
-	combatant.max_mana = max(0, combatant.base_max_mana + combatant.max_mana_bonus)
+	combatant.max_mana = max(
+		0,
+		combatant.base_max_mana
+		+ combatant.ancestry_max_mana_bonus
+		+ combatant.max_mana_bonus
+	)
 	combatant.max_ap = max(0, combatant.base_max_ap + combatant.max_ap_bonus)
+	combatant.max_faith = max(0, combatant.base_max_faith + AbilitySystem.new().get_passive_max_faith_bonus(combatant))
 	combatant.speed = max(0.0, combatant.base_speed + combatant.speed_bonus)
 
 	combatant.reflex = 10 \
@@ -40,7 +46,11 @@ func refresh_combatant(
 		combatant.hp = combatant.max_hp
 		combatant.mana = combatant.max_mana
 		combatant.ap = combatant.max_ap
+		combatant.finishing_gauge = 0
+		combatant.faith = combatant.max_faith
 	else:
 		combatant.hp = clampi(combatant.hp, 0, combatant.max_hp)
 		combatant.mana = clampi(combatant.mana, 0, combatant.max_mana)
 		combatant.ap = clampi(combatant.ap, 0, combatant.max_ap)
+		combatant.finishing_gauge = clampi(combatant.finishing_gauge, 0, combatant.max_finishing_gauge)
+		combatant.faith = clampi(combatant.faith, 0, combatant.max_faith)

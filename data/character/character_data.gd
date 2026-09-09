@@ -63,6 +63,7 @@ const DefaultUnarmedAttack = preload("res://data/attack/unarmed_attack.tres")
 @export var natural_attack: AttackData
 @export var unarmed_attack: AttackData = DefaultUnarmedAttack
 @export var equipment_inventory: Array = []
+@export var item_inventory: Array[ItemStackData] = []
 @export var starting_equipment: Array = []
 @export var starting_equipment_slots: Dictionary = {}
 @export var skills: Array = []
@@ -101,6 +102,7 @@ func create_combatant_state() -> CombatantState:
 	state.selected_ability_costs_applied = selected_ability_costs_applied
 	state.base_max_hp = base_max_hp
 	state.base_max_mana = base_max_mana
+	state.base_max_faith = base_max_faith
 	state.max_faith = base_max_faith
 	state.base_max_ap = base_max_ap
 	state.base_speed = base_speed
@@ -128,6 +130,10 @@ func create_combatant_state() -> CombatantState:
 	state.natural_attack = natural_attack
 	state.unarmed_attack = unarmed_attack
 	state.equipment_inventory = equipment_inventory.duplicate()
+	state.item_inventory.clear()
+	for stack_data in item_inventory:
+		if stack_data != null and stack_data.item != null and stack_data.quantity > 0:
+			state.item_inventory.append(stack_data.create_runtime_stack())
 	state.starting_equipment = starting_equipment.duplicate()
 	state.starting_equipment_slots = starting_equipment_slots.duplicate()
 	state.available_skills = skills.duplicate()

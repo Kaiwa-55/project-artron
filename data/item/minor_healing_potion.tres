@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ConsumableData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/item/consumable_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/consumable.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="3"]
+[ext_resource type="Resource" path="res://data/item/effect/minor_healing_6.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "minor_healing_potion"
+display_name = "Minor Healing Potion"
+description = "Restore 6 HP. Cannot be used while Dying. Consumed after use."
+traits = [ExtResource("2"), ExtResource("3")]
+maximum_stack_size = 10
+ap_cost = 1
+target_mode = 0
+target_filter = 0
+range_feet = 5.0
+cannot_target_dying = true
+requires_missing_hp = true
+consume_on_use = true
+effects = Array[EffectData]([ExtResource("4")])

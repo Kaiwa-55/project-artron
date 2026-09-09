@@ -9,7 +9,7 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 
 @export var id: String = ""
 @export var display_name: String = ""
-@export_range(1, 10) var required_level: int = 1
+@export_range(0, 10) var required_level: int = 1
 @export var prerequisite_id: String = ""
 @export var required_trait_ids: Array[String] = []
 @export_range(1, 10, 1) var ability_point_cost: int = 1
@@ -18,8 +18,13 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 @export var is_passive: bool = false
 @export var reaction_only: bool = false
 @export var execution_mode: ExecutionMode = ExecutionMode.STANDARD
+# ATTACK_SEQUENCE uses Dual Weapon setup when count is zero. A positive count
+# repeats the configured/equipped Attack and can opt into RAP per individual hit.
+@export_range(0, 20) var sequence_attack_count: int = 0
+@export var sequence_counts_each_attack_for_penalty: bool = false
 @export_range(0, 10) var ap_cost: int = 0
 @export_range(0, 99) var faith_cost: int = 0
+@export_range(0, 99) var finishing_gauge_cost: int = 0
 @export_range(0, 99) var cooldown_turns: int = 0
 # Zero means that the Ability has no per-turn use limit.
 @export_range(0, 10) var uses_per_turn: int = 0
@@ -40,6 +45,7 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 # attack abilities whose bonus should scale without becoming a global Passive.
 @export var active_attack_flat_damage_bonus: int = 0
 @export var active_attack_damage_bonus_per_level: int = 0
+@export var active_attack_base_damage_per_level: int = 0
 @export var use_effects: Array = []
 @export var area_shape: AreaShape = AreaShape.NONE
 @export var targeting_range_feet: float = 0.0

@@ -11,5 +11,5 @@ script = ExtResource("1")
 id = "run_normal_thornscale_scout"
 display_name = "Thornscale Scout"
 battlefield_texture = ExtResource("3")
-player_spawn_positions_feet = Array[Vector2]([Vector2(-40, -83.3333), Vector2(-56, -65.3333), Vector2(-24, -65.3333)])
+player_spawn_positions_feet = Array[Vector2]([Vector2(-15, -10), Vector2(-25, 0), Vector2(0, -20)])
 enemies = Array[ExtResource("2")]([ExtResource("4"), ExtResource("5")])

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "beat_down"
+display_name = "Beat Down"
+required_level = 3
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+execution_mode = 1
+sequence_attack_count = 5
+sequence_counts_each_attack_for_penalty = true
+ap_cost = 3
+cooldown_turns = 2
+description = "Attack one enemy five times with Unarmed Attack. Every strike rolls To Hit, calculates Damage, and receives Repeated Attack Penalty separately. Requires a free hand."
+attack_source = 2
+attack_data = ExtResource("2")
+required_attack_trait_ids = Array[String](["unarmed"])
+targeting_range_feet = 5.0

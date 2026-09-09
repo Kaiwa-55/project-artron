@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AncestryData" format=3 uid="uid://c1us3722fcrng"]
+
+[ext_resource type="Script" uid="uid://k88uu57v5uny" path="res://data/ancestry/ancestry_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://bigb1oyrju84o" path="res://data/trait/human.tres" id="2"]
+[ext_resource type="Resource" path="res://data/ability/human_adapt_blue.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "human_blue_blood"
+display_name = "Human (Blue Blood)"
+description = "Humans born with blue blood, carrying innate vitality and magical potential."
+base_hp = 6
+base_mana = 5
+speed_feet = 5.0
+attribute_choice_count = 2
+traits = [ExtResource("2")]
+granted_abilities = [ExtResource("3")]

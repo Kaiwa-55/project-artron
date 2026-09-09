@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EffectData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "minor_healing_potion_heal"
+display_name = "Minor Healing Potion"
+effect_type = 1
+amount = 6

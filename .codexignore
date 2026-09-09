@@ -1,0 +1,31 @@
+# Godot-generated cache and imported resources
+.godot/
+
+# Local Godot runtimes, SDKs, and export templates
+Godot/
+tools/
+export_templates/
+
+# Local scratch files and generated test output
+work/
+logs/
+*.log
+
+# Exported game builds and packages
+Project Artron.exe
+Project Artron.console.exe
+Project Artron.pck
+*.zip
+*.apk
+*.aab
+
+# Repository-local backup data
+.git-empty-backup/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+*.swp

@@ -4,6 +4,9 @@ extends RefCounted
 const AbilityEffectDataScript = preload("res://data/ability/ability_effect_data.gd")
 const AbilityUseEffectDataScript = preload("res://data/ability/ability_use_effect_data.gd")
 
+var combat_state
+var map_rules
+
 
 func toggle_ability(combatant, ability_id: String) -> ActionResult:
 	var ability = get_available_ability(combatant, ability_id)
@@ -47,7 +50,7 @@ func unequip_ability(combatant, ability_id: String) -> ActionResult:
 
 
 func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0) -> int:
-	var total_bonus := 0
+	var total_bonus := get_aura_attack_bonus(combatant)
 	for ability in get_attack_abilities(combatant, attack):
 		for effect_index in range(ability.effects.size()):
 			var effect = ability.effects[effect_index]
@@ -67,6 +70,32 @@ func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0) -> i
 				total_bonus += effect.passive_value
 				combatant.ability_uses_this_turn[ability.id] = 1
 	return total_bonus
+
+
+func get_aura_attack_bonus(combatant) -> int:
+	if combatant == null or combat_state == null or map_rules == null:
+		return 0
+	var bonuses_by_effect: Dictionary = {}
+	for source in combat_state.combatants.values():
+		if source == null or source.is_dying():
+			continue
+		for instance in source.effects:
+			if instance == null or instance.data == null:
+				continue
+			var effect = instance.data
+			if effect.aura_radius_feet <= 0.0 or effect.aura_attack_bonus == 0:
+				continue
+			if source == combatant and not effect.aura_includes_source:
+				continue
+			if source != combatant and (not effect.aura_affects_allies or source.team != combatant.team):
+				continue
+			if not map_rules.is_target_in_range(source, combatant, effect.aura_radius_feet):
+				continue
+			bonuses_by_effect[effect.id] = maxi(int(bonuses_by_effect.get(effect.id, 0)), effect.aura_attack_bonus * instance.stack_count)
+	var total := 0
+	for bonus in bonuses_by_effect.values():
+		total += int(bonus)
+	return total
 
 
 func get_attack_range_bonus(combatant, attack) -> float:
@@ -103,6 +132,28 @@ func get_first_move_distance_bonus(combatant) -> float:
 	return total
 
 
+func get_passive_defense_bonus(combatant) -> int:
+	var total := 0
+	if combatant == null:
+		return total
+	for ability in get_active_abilities(combatant):
+		for effect in ability.effects:
+			if effect != null and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_DEFENSE_BONUS_FROM_FAITH:
+				total += floori(float(combatant.get_total_faith()) / float(maxi(1, effect.faith_per_defense_bonus)))
+	return total
+
+
+func get_passive_max_faith_bonus(combatant) -> int:
+	var total := 0
+	if combatant == null:
+		return total
+	for ability in get_active_abilities(combatant):
+		for effect in ability.effects:
+			if effect != null and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_MAX_FAITH_BY_LEVEL:
+				total += floori(float(combatant.level) / float(maxi(1, effect.levels_per_faith_bonus)))
+	return total
+
+
 func commit_first_move_distance_bonuses(combatant) -> void:
 	if combatant == null:
 		return
@@ -125,7 +176,7 @@ func apply_after_move_passives(combatant) -> Array[Dictionary]:
 				continue
 			if combatant.has_status(effect.status_effect.id):
 				continue
-			combatant.add_effect(effect.status_effect)
+			combatant.add_effect(effect.status_effect, ability.id, ability.display_name, false, combatant.id, combatant.class_dc)
 			applied.append({"ability_name": ability.display_name, "effect_name": effect.status_effect.display_name})
 	return applied
 
@@ -472,6 +523,9 @@ func get_targeting_range(combatant, ability) -> float:
 	if combatant == null or ability == null:
 		return 0.0
 	if ability.execution_mode == AbilityData.ExecutionMode.ATTACK_SEQUENCE:
+		if ability.sequence_attack_count > 0:
+			var sequence_attack: AttackData = get_attack_data(combatant, ability)
+			return sequence_attack.range_feet + get_attack_range_bonus(combatant, sequence_attack) if sequence_attack != null else 0.0
 		var main_item = combatant.equipped_items.get(EquipmentSystem.WEAPON_SLOT_1)
 		var off_item = combatant.equipped_items.get(EquipmentSystem.WEAPON_SLOT_2)
 		if main_item == null or off_item == null or main_item.weapon_attack == null or off_item.weapon_attack == null:
@@ -503,7 +557,11 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 		return ActionResult.failure("Reaction abilities can only be used when their trigger occurs.")
 	if ability_has_trait(ability, "stance"):
 		for effect_instance in combatant.effects:
-			if effect_instance != null and effect_instance.is_stance and effect_instance.source_ability_id != ability.id:
+			if effect_instance == null or not effect_instance.is_stance:
+				continue
+			if effect_instance.source_ability_id == ability.id and ability_has_trait(ability, "aura"):
+				return ActionResult.failure("%s is already active." % ability.display_name)
+			if effect_instance.source_ability_id != ability.id:
 				var active_name: String = effect_instance.source_ability_name
 				if active_name.is_empty():
 					active_name = effect_instance.source_ability_id
@@ -514,14 +572,23 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 		return ActionResult.failure("Not enough AP.")
 	if combatant.get_total_faith() < ability.faith_cost:
 		return ActionResult.failure("Not enough Faith: %s requires %d Faith." % [ability.display_name, ability.faith_cost])
+	if combatant.finishing_gauge < ability.finishing_gauge_cost:
+		return ActionResult.failure("Not enough Finishing Gauge: %s requires %d." % [ability.display_name, ability.finishing_gauge_cost])
 	if get_remaining_cooldown(combatant, ability.id) > 0:
 		return ActionResult.failure("%s is on cooldown." % ability.display_name)
 	if ability.uses_per_turn > 0 and int(combatant.ability_uses_this_turn.get(ability.id, 0)) >= ability.uses_per_turn:
 		return ActionResult.failure("%s has already been used this turn." % ability.display_name)
 	if ability.execution_mode == AbilityData.ExecutionMode.ATTACK_SEQUENCE:
-		var sequence_validation: ActionResult = EquipmentSystem.new().validate_dual_weapon_setup(combatant)
-		if not sequence_validation.success:
-			return sequence_validation
+		if ability.sequence_attack_count <= 0:
+			var sequence_validation: ActionResult = EquipmentSystem.new().validate_dual_weapon_setup(combatant)
+			if not sequence_validation.success:
+				return sequence_validation
+		elif get_attack_data(combatant, ability) == null:
+			return ActionResult.failure("This Attack Sequence has no valid Attack.")
+		else:
+			var unarmed_validation: ActionResult = EquipmentSystem.new().validate_unarmed_attack(combatant, get_attack_data(combatant, ability))
+			if not unarmed_validation.success:
+				return unarmed_validation
 	for trait_id in ability.required_trait_ids:
 		if not combatant_has_trait(combatant, trait_id):
 			return ActionResult.failure("Requires the %s trait." % trait_id)

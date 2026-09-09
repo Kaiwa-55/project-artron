@@ -35,7 +35,10 @@ func _process(delta: float) -> void:
 	var required_zoom := get_minimum_allowed_zoom()
 	if zoom.x < required_zoom:
 		zoom = Vector2.ONE * required_zoom
-	var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var direction := Vector2(
+		float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
+		float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W))
+	).normalized()
 	if not direction.is_zero_approx():
 		position += direction * keyboard_pan_speed * delta / zoom.x
 		_clamp_to_map()

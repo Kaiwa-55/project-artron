@@ -42,12 +42,57 @@ func execute_dual_weapon(actor: CombatantState, target: CombatantState, ability:
 		"attacks": [main_attack, off_attack],
 		"index": 0,
 		"repeated_attack_penalty": repeated_penalty,
+		"count_each_attack_for_penalty": false,
 	}
 	var opening_events: Array[CombatEvent] = [CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, target.id, {
 		"ability_name": ability.display_name,
 		"ap_cost": ability.ap_cost,
 		"cooldown": cooldown,
 		"attack_count": 2,
+	})]
+	combat_system.emit_events(opening_events)
+	return _continue(opening_events)
+
+
+func execute_repeated_attack(actor: CombatantState, target: CombatantState, ability: AbilityData) -> ActionResult:
+	var source_attack: AttackData = combat_system.ability_system.get_attack_data(actor, ability)
+	if source_attack == null:
+		return ActionResult.failure("This Attack Sequence has no valid Attack.")
+	var unarmed_validation: ActionResult = combat_system.equipment_system.validate_unarmed_attack(actor, source_attack)
+	if not unarmed_validation.success:
+		return unarmed_validation
+	var range_feet: float = source_attack.range_feet + combat_system.ability_system.get_attack_range_bonus(actor, source_attack)
+	if not combat_system.map_rules.is_target_in_range(actor, target, range_feet):
+		return ActionResult.failure("Target is out of %s range (%.0f ft)." % [ability.display_name, range_feet])
+	if not actor.spend_ap(ability.ap_cost):
+		return ActionResult.failure("Not enough AP.")
+	if not actor.spend_faith(ability.faith_cost):
+		actor.change_ap(ability.ap_cost)
+		return ActionResult.failure("Not enough Faith.")
+	combat_system.cancel_remaining_movement(actor)
+	actor.ability_uses_this_turn[ability.id] = int(actor.ability_uses_this_turn.get(ability.id, 0)) + 1
+	var cooldown: int = combat_system.ability_system.start_cooldown(actor, ability)
+	var attacks: Array[AttackData] = []
+	for _index in range(ability.sequence_attack_count):
+		var attack: AttackData = source_attack.duplicate(true)
+		attack.ap_cost = 0
+		if ability.animation_template != null:
+			attack.animation_template = ability.animation_template
+		attacks.append(attack)
+	pending_context = {
+		"actor_id": actor.id,
+		"target_id": target.id,
+		"ability": ability,
+		"attacks": attacks,
+		"index": 0,
+		"repeated_attack_penalty": 0,
+		"count_each_attack_for_penalty": ability.sequence_counts_each_attack_for_penalty,
+	}
+	var opening_events: Array[CombatEvent] = [CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, target.id, {
+		"ability_name": ability.display_name,
+		"ap_cost": ability.ap_cost,
+		"cooldown": cooldown,
+		"attack_count": ability.sequence_attack_count,
 	})]
 	combat_system.emit_events(opening_events)
 	return _continue(opening_events)
@@ -72,7 +117,10 @@ func _continue(carried_events: Array[CombatEvent]) -> ActionResult:
 		request.target_id = target.id
 		request.attack_data = attacks[index]
 		request.attack_sequence_continuation = true
-		request.repeated_attack_penalty = int(pending_context.get("repeated_attack_penalty", 0))
+		if pending_context.get("count_each_attack_for_penalty", false):
+			request.repeated_attack_penalty = combat_system.attack_system.declare_attack_action(actor, attacks[index])
+		else:
+			request.repeated_attack_penalty = int(pending_context.get("repeated_attack_penalty", 0))
 		pending_context["index"] = index + 1
 		var step: ActionResult = combat_system.combat_action_executor.execute(request)
 		combined.success = step.success

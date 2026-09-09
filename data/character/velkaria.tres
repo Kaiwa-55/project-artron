@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://b6yu34cdhq7hr" path="res://data/attack/matriarch_fangs.tres" id="3"]
 [ext_resource type="Resource" uid="uid://dh8ga6jndtyxy" path="res://data/ability/royal_web.tres" id="4"]
 [ext_resource type="Resource" uid="uid://cavsk0n3fecin" path="res://data/ability/brood_rush.tres" id="5"]
+[ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="5_7labd"]
 [ext_resource type="Resource" uid="uid://ba1p6uancpnja" path="res://data/reaction/skittering_guard.tres" id="6"]
 [ext_resource type="Resource" path="res://data/trait/beast.tres" id="7"]
 [ext_resource type="Resource" path="res://data/trait/spider.tres" id="8"]
@@ -12,7 +13,7 @@
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="9"]
 [ext_resource type="Resource" path="res://data/trait/web_walker.tres" id="10"]
 [ext_resource type="Resource" path="res://data/ai/velkaria_boss_profile.tres" id="11"]
-[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="13_dpjg4"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="13_dpjg4"]
 
 [resource]
 script = ExtResource("1")

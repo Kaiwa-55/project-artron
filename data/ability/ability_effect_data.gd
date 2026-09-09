@@ -25,7 +25,9 @@ enum Type {
 	PASSIVE_SKILL_MANA_DISCOUNT,
 	PASSIVE_SKILL_RANGE_BONUS_FEET,
 	PASSIVE_SPEED_BONUS_FEET,
-	PASSIVE_DAMAGE_RESISTANCE
+	PASSIVE_DAMAGE_RESISTANCE,
+	PASSIVE_DEFENSE_BONUS_FROM_FAITH,
+	PASSIVE_MAX_FAITH_BY_LEVEL
 }
 
 enum ConditionMode {
@@ -83,4 +85,14 @@ enum ConditionMode {
 # is divided by the owner's current Level before the minimum is applied.
 @export var resistance_damage_type_ids: Array[String] = []
 @export var resistance_divide_by_level: bool = false
+# When greater than zero, Resistance becomes floor(Level / this value).
+# This takes precedence over resistance_divide_by_level.
+@export_range(0, 10) var resistance_levels_per_point: int = 0
 @export var minimum_resistance: int = 0
+
+# Grants the same live bonus to Reflex, Fortitude, and Will. The value is
+# floor(current total Faith / faith_per_defense_bonus).
+@export_range(1, 99) var faith_per_defense_bonus: int = 5
+# Grants one Max Faith for each completed level interval, beginning when the
+# character reaches the first interval (for example levels 2, 4, 6...).
+@export_range(1, 10) var levels_per_faith_bonus: int = 2

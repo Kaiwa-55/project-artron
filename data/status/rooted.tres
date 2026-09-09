@@ -10,3 +10,5 @@ display_name = "Rooted"
 icon_texture = ExtResource("1_du1ve")
 status_kind = 5
 status_tags = Array[String](["status", "control", "movement"])
+can_escape = true
+escape_ap_cost = 1

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="4"]
+
+[sub_resource type="Resource" id="MaxFaithByLevel"]
+script = ExtResource("2")
+effect_type = 18
+levels_per_faith_bonus = 2
+
+[resource]
+script = ExtResource("1")
+id = "unwavering_faith"
+display_name = "Unwavering Faith"
+required_level = 2
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("3"), ExtResource("4")]
+auto_equip_on_grant = true
+is_passive = true
+description = "+1 Max Faith at Level 2 and another +1 every 2 Levels thereafter."
+effects = [SubResource("MaxFaithByLevel")]

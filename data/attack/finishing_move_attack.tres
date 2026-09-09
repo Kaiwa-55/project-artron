@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/blunt.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "finishing_move_attack"
+display_name = "Finishing Move"
+animation_template = ExtResource("2")
+is_unarmed = true
+base_damage = 0
+uses_attribute_damage_modifier = false
+damage_type = "blunt"
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+

@@ -2,7 +2,7 @@ class_name EffectSystem
 extends RefCounted
 
 
-func apply_effect(target: CombatantState, effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false) -> bool:
+func apply_effect(target: CombatantState, effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false, source: CombatantState = null) -> bool:
 	if target == null or effect == null or effect.id.is_empty():
 		return false
 
@@ -14,10 +14,22 @@ func apply_effect(target: CombatantState, effect: EffectData, source_ability_id:
 			effect.cleanse_all
 		) > 0
 
-	target.add_effect(effect, source_ability_id, source_ability_name, is_stance)
+	var source_id := source.id if source != null else ""
+	var source_dc: int = source.class_dc if source != null else effect.default_escape_dc
+	target.add_effect(effect, source_ability_id, source_ability_name, is_stance, source_id, source_dc)
 	if target.movement_in_progress:
 		target.movement_remaining_feet = minf(target.movement_remaining_feet, target.get_effective_speed())
 	return true
+
+
+func get_escapable_effects(combatant: CombatantState) -> Array[EffectInstance]:
+	var result: Array[EffectInstance] = []
+	if combatant == null:
+		return result
+	for instance in combatant.effects:
+		if instance != null and instance.data != null and instance.data.can_escape:
+			result.append(instance)
+	return result
 
 
 func get_attack_bonus(combatant: CombatantState) -> int:

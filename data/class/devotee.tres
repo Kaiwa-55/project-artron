@@ -7,16 +7,21 @@
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="6"]
 [ext_resource type="Resource" uid="uid://bowe4sdgeblby" path="res://data/ability/heal_or_harm.tres" id="7"]
+[ext_resource type="Resource" path="res://data/ability/armor_of_faith.tres" id="8"]
+[ext_resource type="Resource" path="res://data/ability/bless.tres" id="9_bless"]
+[ext_resource type="Resource" path="res://data/ability/condemn.tres" id="10_condemn"]
+[ext_resource type="Resource" path="res://data/ability/unwavering_faith.tres" id="11_unwavering"]
 
 [sub_resource type="Resource" id="L1"]
 script = ExtResource("5")
 max_hp_gain = 5
-granted_abilities = Array[ExtResource("6")]([ExtResource("2"), ExtResource("3"), ExtResource("7")])
+granted_abilities = Array[ExtResource("6")]([ExtResource("2"), ExtResource("3"), ExtResource("7"), ExtResource("8"), ExtResource("9_bless"), ExtResource("10_condemn")])
 
 [sub_resource type="Resource" id="L2"]
 script = ExtResource("5")
 level = 2
 max_hp_gain = 5
+granted_abilities = [ExtResource("11_unwavering")]
 
 [sub_resource type="Resource" id="L3"]
 script = ExtResource("5")
@@ -71,7 +76,7 @@ fixed_attribute_bonuses = {
 }
 attribute_choice_count = 1
 attribute_choice_options = Array[int]([2, 1])
-granted_abilities = [ExtResource("2"), ExtResource("3"), ExtResource("7")]
+granted_abilities = [ExtResource("2"), ExtResource("3"), ExtResource("7"), ExtResource("8"), ExtResource("9_bless"), ExtResource("10_condemn"), ExtResource("11_unwavering")]
 traits = [ExtResource("4")]
-auto_equipped_ability_ids = Array[String](["belief", "pray", "heal_or_harm"])
+auto_equipped_ability_ids = Array[String](["belief", "pray", "heal_or_harm", "armor_of_faith", "bless", "condemn", "unwavering_faith"])
 progression_entries = Array[Resource]([SubResource("L1"), SubResource("L2"), SubResource("L3"), SubResource("L4"), SubResource("L5"), SubResource("L6"), SubResource("L7"), SubResource("L8"), SubResource("L9"), SubResource("L10")])

@@ -50,7 +50,8 @@ func _stats_text() -> String:
 	if not is_equal_approx(state.get_effective_speed(), state.speed):
 		speed_text += "  (Base %.0f)" % state.speed
 	var resource_text := "Faith %d" % state.max_faith if state.max_faith > 0 else "Mana %d" % state.max_mana
-	return "Maximum HP                 %d\nAction Points                 %d\nSpeed                         %s\nSTR / DEX / CON          %d / %d / %d\nINT / WIS / CHA            %d / %d / %d\nReflex / Fort / Will      %d / %d / %d\n%s" % [state.max_hp, state.max_ap, speed_text, state.strength, state.dexterity, state.constitution, state.intelligence, state.wisdom, state.charisma, state.reflex, state.fortitude, state.will, resource_text]
+	var passive_defense_bonus := AbilitySystem.new().get_passive_defense_bonus(state)
+	return "Maximum HP                 %d\nAction Points                 %d\nClass DC                       %d\nSpeed                         %s\nSTR / DEX / CON          %d / %d / %d\nINT / WIS / CHA            %d / %d / %d\nReflex / Fort / Will      %d / %d / %d\n%s" % [state.max_hp, state.max_ap, state.class_dc, speed_text, state.strength, state.dexterity, state.constitution, state.intelligence, state.wisdom, state.charisma, state.reflex + passive_defense_bonus, state.fortitude + passive_defense_bonus, state.will + passive_defense_bonus, resource_text]
 
 
 func create_calculated_state() -> CombatantState:

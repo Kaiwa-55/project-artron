@@ -105,7 +105,7 @@ func build_ancestry(host) -> void:
 	UI.label(host.center, ancestry.description, 18, UI.MUTED)
 	UI.line(host.center)
 	UI.label(host.center, "HERITAGE", 18, UI.GOLD, true)
-	UI.label(host.center, "Base HP +%d\nSpeed +%.0f ft\nChoose %d different Attributes, +%d each." % [ancestry.base_hp, ancestry.speed_feet, ancestry.attribute_choice_count, ancestry.attribute_bonus_per_choice])
+	UI.label(host.center, "Base HP +%d\nBase Mana +%d\nSpeed +%.0f ft\nChoose %d different Attributes, +%d each." % [ancestry.base_hp, ancestry.base_mana, ancestry.speed_feet, ancestry.attribute_choice_count, ancestry.attribute_bonus_per_choice])
 	UI.label(host.center, UI.traits_text(ancestry), 15, UI.GOLD)
 	for ability in ancestry.granted_abilities:
 		feature(host.center, ability, "ANCESTRY FEATURE")

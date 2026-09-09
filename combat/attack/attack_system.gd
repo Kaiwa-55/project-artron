@@ -159,7 +159,7 @@ func resolve_attack(
 
 	# Miss
 	if not result.hit:
-		apply_miss_effects(target, attack, result)
+		apply_miss_effects(target, attack, result, attacker)
 		return result
 
 	# Damage
@@ -198,13 +198,14 @@ func resolve_attack(
 
 	if not result.immune:
 		for effect in attack.effects_on_hit:
-			if effect_system.apply_effect(target, effect):
+			if effect_system.apply_effect(target, effect, "", "", false, attacker):
 				result.applied_effects.append(effect.display_name)
 	apply_passive_on_hit_statuses(attacker, target, attack, result)
 
 	if attack.defense_bonus > 0:
 		attacker.reflex_bonus += attack.defense_bonus
 		attacker.fortitude_bonus += attack.defense_bonus
+	grant_finishing_gauge_on_hit(attacker, result)
 
 	return result
 
@@ -232,7 +233,7 @@ func finalize_attack(attacker: CombatantState, target: CombatantState, attack: A
 		return result
 	if not result.hit:
 		result.deferred = false
-		apply_miss_effects(target, attack, result)
+		apply_miss_effects(target, attack, result, attacker)
 		return result
 	result.deferred = false
 	result.critical_roll = dice_system.roll_percent()
@@ -250,21 +251,28 @@ func finalize_attack(attacker: CombatantState, target: CombatantState, attack: A
 	ability_system.commit_conditional_damage_bonuses(attacker, result.conditional_damage_bonuses)
 	if not result.immune:
 		for effect in attack.effects_on_hit:
-			if effect_system.apply_effect(target, effect): result.applied_effects.append(effect.display_name)
+			if effect_system.apply_effect(target, effect, "", "", false, attacker): result.applied_effects.append(effect.display_name)
 	apply_passive_on_hit_statuses(attacker, target, attack, result)
+	grant_finishing_gauge_on_hit(attacker, result)
 	return result
 
 
-func apply_miss_effects(target: CombatantState, attack: AttackData, result: AttackResult) -> void:
+func grant_finishing_gauge_on_hit(attacker: CombatantState, result: AttackResult) -> void:
+	if result == null or not result.hit or not trait_system.has_trait(attacker, "martial_artist"):
+		return
+	result.finishing_gauge_gained = attacker.change_finishing_gauge(1)
+
+
+func apply_miss_effects(target: CombatantState, attack: AttackData, result: AttackResult, attacker: CombatantState = null) -> void:
 	if target == null or attack == null:
 		return
 	for effect in attack.effects_on_miss:
-		if effect_system.apply_effect(target, effect):
+		if effect_system.apply_effect(target, effect, "", "", false, attacker):
 			result.applied_effects.append(effect.display_name)
 
 
 func apply_passive_on_hit_statuses(attacker: CombatantState, target: CombatantState, attack: AttackData, result: AttackResult) -> void:
 	for entry in ability_system.consume_on_hit_status_effects(attacker, attack):
 		var effect: EffectData = entry.get("effect")
-		if effect_system.apply_effect(target, effect):
+		if effect_system.apply_effect(target, effect, String(entry.get("ability_id", "")), String(entry.get("source", "")), false, attacker):
 			result.applied_effects.append(effect.display_name)

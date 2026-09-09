@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4_trait"]
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5_progression"]
 [ext_resource type="Resource" path="res://data/ability/martial_sense.tres" id="10_martial_sense"]
+[ext_resource type="Resource" path="res://data/ability/finishing_move.tres" id="11_finishing_move"]
 
 [sub_resource type="Resource" id="Progression_L1"]
 script = ExtResource("5_progression")
@@ -64,12 +65,13 @@ display_name = "Martial Artist"
 description = "An unarmed combatant who builds momentum through disciplined technique."
 base_speed_feet = 10.0
 base_mana = 0
+max_finishing_gauge = 10
 fixed_attribute_bonuses = {
 2: 1
 }
 attribute_choice_count = 1
 attribute_choice_options = Array[int]([0, 1])
-granted_abilities = [ExtResource("2_build_up_body")]
+granted_abilities = [ExtResource("2_build_up_body"), ExtResource("11_finishing_move")]
 traits = [ExtResource("4_trait")]
-auto_equipped_ability_ids = Array[String](["build_up_body"])
+auto_equipped_ability_ids = Array[String](["build_up_body", "finishing_move"])
 progression_entries = Array[Resource]([SubResource("Progression_L1"), SubResource("Progression_L2"), SubResource("Progression_L3"), SubResource("Progression_L4"), SubResource("Progression_L5"), SubResource("Progression_L6"), SubResource("Progression_L7"), SubResource("Progression_L8"), SubResource("Progression_L9"), SubResource("Progression_L10")])

@@ -18,6 +18,8 @@ const AbilityMovementExecutorScript = preload("res://combat/ability/ability_move
 const EquipmentActionExecutorScript = preload("res://combat/equipment/equipment_action_executor.gd")
 const TurnCoordinatorScript = preload("res://combat/turn/turn_coordinator.gd")
 const CombatActionExecutorScript = preload("res://combat/action/combat_action_executor.gd")
+const EscapeActionExecutorScript = preload("res://combat/action/escape_action_executor.gd")
+const ConsumableItemExecutorScript = preload("res://combat/item/consumable_item_executor.gd")
 const ReactionResolverScript = preload("res://combat/reaction/reaction_resolver.gd")
 const AreaActionExecutorScript = preload("res://combat/targeting/area_action_executor.gd")
 const AttackSequenceExecutorScript = preload("res://combat/attack/attack_sequence_executor.gd")
@@ -53,6 +55,8 @@ var event_system: EventSystem
 var turn_coordinator
 var equipment_action_executor
 var combat_action_executor
+var escape_action_executor
+var consumable_item_executor
 var reaction_resolver
 var pending_action: ActionRequest:
 	get: return reaction_resolver.pending_action if reaction_resolver != null else null
@@ -122,11 +126,12 @@ func _init() -> void:
 	stat_system = StatsSystemScript.new()
 	ability_system = AbilitySystemScript.new()
 	map_rules = MapRulesScript.new()
+	ability_system.map_rules = map_rules
 	trait_system = TraitSystemScript.new()
 	targeting_system = TargetingSystemScript.new()
 	effect_system = EffectSystem.new()
 
-	defense_system = DefenseSystem.new(effect_system)
+	defense_system = DefenseSystem.new(effect_system, ability_system)
 
 	damage_system = DamageSystem.new(
 		attribute_system,
@@ -178,6 +183,8 @@ func _init() -> void:
 	equipment_action_executor = EquipmentActionExecutorScript.new(self)
 	turn_coordinator = TurnCoordinatorScript.new(self)
 	combat_action_executor = CombatActionExecutorScript.new(self)
+	escape_action_executor = EscapeActionExecutorScript.new(self)
+	consumable_item_executor = ConsumableItemExecutorScript.new(self)
 
 func start_combat(
 	combatants: Array[CombatantState]
@@ -188,6 +195,14 @@ func execute_action(
 	request: ActionRequest
 ) -> ActionResult:
 	return combat_action_executor.execute(request)
+
+
+func execute_escape(combatant_id: String, status_id: String) -> ActionResult:
+	return escape_action_executor.execute(combatant_id, status_id)
+
+
+func use_consumable_item(combatant_id: String, item_id: String, target_id: String = "") -> ActionResult:
+	return consumable_item_executor.execute(combatant_id, item_id, target_id)
 
 
 func is_player_controlled(combatant: CombatantState) -> bool:

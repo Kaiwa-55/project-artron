@@ -12,7 +12,7 @@ script = ExtResource("2")
 effect_type = 16
 passive_value = 2
 resistance_damage_type_ids = Array[String](["slash", "slashing", "pierce", "blunt", "bludgeoning"])
-resistance_divide_by_level = true
+resistance_levels_per_point = 2
 minimum_resistance = 1
 
 [resource]
@@ -23,5 +23,5 @@ required_level = 2
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. Gain Slashing, Pierce, and Bludgeoning Resistance equal to floor(2 / Level), minimum 1."
+description = "Passive. Gain Slashing, Pierce, and Bludgeoning Resistance equal to floor(Level / 2), minimum 1."
 effects = [SubResource("AbilityEffect_iron_skin")]

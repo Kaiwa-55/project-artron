@@ -8,11 +8,13 @@
 [ext_resource type="Resource" path="res://data/equipment/leather_armor.tres" id="10_leather_armor"]
 [ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="11_buckler"]
 [ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="13_human"]
+[ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="13_yufwi"]
 [ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="22_uvnxd"]
 [ext_resource type="Resource" uid="uid://mwn86gfa6f6d" path="res://data/equipment/club.tres" id="item_club"]
 [ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="item_dagger"]
 [ext_resource type="Resource" uid="uid://dy5ai2cdwi0dj" path="res://data/equipment/dagger_offhand.tres" id="item_dagger_offhand"]
 [ext_resource type="Resource" uid="uid://y0eqxm0uunff" path="res://data/equipment/hand_axe.tres" id="item_hand_axe"]
+[ext_resource type="Resource" path="res://data/item/minor_healing_potion_stack.tres" id="item_minor_healing_potion"]
 [ext_resource type="Resource" uid="uid://dn48gsppkugs0" path="res://data/equipment/shortbow.tres" id="item_shortbow"]
 [ext_resource type="Resource" uid="uid://qi8e4p706jhp" path="res://data/equipment/short_spear.tres" id="item_short_spear"]
 [ext_resource type="Resource" uid="uid://c1tpa53aw63r" path="res://data/skill/arcane_bolt.tres" id="skill_arcane_bolt"]
@@ -20,7 +22,7 @@
 [ext_resource type="Resource" uid="uid://k6apocdyw1ee" path="res://data/skill/arcane_cone.tres" id="skill_arcane_cone"]
 [ext_resource type="Resource" uid="uid://bgdxui81ypnb5" path="res://data/skill/ember_bolt.tres" id="skill_ember_bolt"]
 [ext_resource type="Resource" uid="uid://ld6omfqnqxcv" path="res://data/skill/flame_wave.tres" id="skill_flame_wave"]
-[ext_resource type="Resource" path="res://data/skill/frost_shard.tres" id="skill_frost_shard"]
+[ext_resource type="Resource" uid="uid://xetjc8rsswyk" path="res://data/skill/frost_shard.tres" id="skill_frost_shard"]
 [ext_resource type="Resource" path="res://data/skill/frozen_ground.tres" id="skill_frozen_ground"]
 
 [resource]
@@ -37,8 +39,8 @@ class_attribute_choices = Array[int]([2])
 level = 3
 base_max_hp = 0
 base_max_ap = 4
-max_mana_bonus = 10
 equipment_inventory = [ExtResource("3_xo044"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_dagger_offhand"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")]
+item_inventory = Array[ExtResource("13_yufwi")]([ExtResource("item_minor_healing_potion")])
 starting_equipment = [ExtResource("item_dagger"), ExtResource("item_dagger_offhand")]
 starting_equipment_slots = {
 "dagger": 0,

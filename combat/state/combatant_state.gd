@@ -22,6 +22,9 @@ var class_display_name: String = ""
 var collision_radius_feet: float = 2.5
 
 var level: int = 1
+var class_dc: int:
+	get:
+		return get_class_dc()
 var experience: int = 0
 var ability_points: int = 0
 var attribute_points: int = 0
@@ -37,6 +40,9 @@ var base_max_ap: int = 1
 var base_speed: float = 0.0
 
 var max_hp_bonus: int = 0
+# Ancestry Mana is kept separate from the class base so applying a class cannot
+# overwrite it when character creation rebuilds the preview.
+var ancestry_max_mana_bonus: int = 0
 var max_mana_bonus: int = 0
 var max_ap_bonus: int = 0
 var speed_bonus: float = 0.0
@@ -54,8 +60,12 @@ var mana: int = 0
 var max_mana: int = 0
 
 var faith: int = 0
+var base_max_faith: int = 0
 var max_faith: int = 0
 var temporary_faith: int = 0
+
+var finishing_gauge: int = 0
+var max_finishing_gauge: int = 0
 
 var ap: int = 0
 var max_ap: int = 0
@@ -93,6 +103,7 @@ var equipped_weapon_attack: AttackData
 var natural_attack: AttackData
 var unarmed_attack: AttackData
 var equipment_inventory: Array = []
+var item_inventory: Array[ItemStack] = []
 var equipped_items: Dictionary = {}
 var active_weapon_slot: int = 0
 var starting_equipment: Array = []
@@ -119,6 +130,10 @@ var life_state: CombatEnums.LifeState = \
 
 func get_modifier(value: int) -> int:
 	return floori((value - 10) / 2.0)
+
+
+func get_class_dc() -> int:
+	return 12 + level
 
 func get_attribute_modifier(
 	attribute: AttributeTypes.Type
@@ -201,6 +216,12 @@ func change_mana(amount: int) -> int:
 	return mana - previous_mana
 
 
+func change_finishing_gauge(amount: int) -> int:
+	var previous_gauge := finishing_gauge
+	finishing_gauge = clampi(finishing_gauge + amount, 0, max_finishing_gauge)
+	return finishing_gauge - previous_gauge
+
+
 func get_total_faith() -> int:
 	return faith + temporary_faith
 
@@ -237,7 +258,7 @@ func clear_temporary_defense() -> void:
 	fortitude_bonus = 0
 
 
-func add_effect(effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false) -> EffectInstance:
+func add_effect(effect: EffectData, source_ability_id: String = "", source_ability_name: String = "", is_stance: bool = false, source_combatant_id: String = "", source_class_dc: int = 0) -> EffectInstance:
 	for active_effect in effects:
 		if active_effect.data.id == effect.id:
 			match effect.stack_mode:
@@ -257,9 +278,13 @@ func add_effect(effect: EffectData, source_ability_id: String = "", source_abili
 				active_effect.source_ability_id = source_ability_id
 				active_effect.source_ability_name = source_ability_name
 				active_effect.is_stance = is_stance
+			if not source_combatant_id.is_empty():
+				active_effect.source_combatant_id = source_combatant_id
+			if source_class_dc > 0:
+				active_effect.source_class_dc = source_class_dc
 			return active_effect
 
-	var instance := EffectInstance.new(effect, source_ability_id, source_ability_name, is_stance)
+	var instance := EffectInstance.new(effect, source_ability_id, source_ability_name, is_stance, source_combatant_id, source_class_dc)
 	effects.append(instance)
 	return instance
 
@@ -340,7 +365,9 @@ func get_ability_damage_resistance(ability, damage_type: String) -> int:
 		if not ability_effect.resistance_damage_type_ids.any(func(type_id): return String(type_id).strip_edges().to_lower() == key):
 			continue
 		var amount: int = ability_effect.passive_value
-		if ability_effect.resistance_divide_by_level:
+		if ability_effect.resistance_levels_per_point > 0:
+			amount = floori(float(level) / float(ability_effect.resistance_levels_per_point))
+		elif ability_effect.resistance_divide_by_level:
 			amount = floori(float(amount) / maxf(1.0, float(level)))
 		total += maxi(ability_effect.minimum_resistance, amount)
 	return total

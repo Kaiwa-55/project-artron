@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/human.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "human_adapt_blue"
+display_name = "Human Adapt (Blue)"
+required_level = 0
+required_trait_ids = Array[String](["human"])
+traits = [ExtResource("3"), ExtResource("2")]
+auto_equip_on_grant = true
+is_passive = true
+description = "Blue Blood ancestry feature: choose two different Attributes; each gains +1."

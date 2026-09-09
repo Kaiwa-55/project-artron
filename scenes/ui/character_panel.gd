@@ -75,7 +75,10 @@ func refresh() -> void:
 func _resource_text(player: CombatantState) -> String:
 	if player.max_faith > 0:
 		return "Faith %d / %d   |   Temporary +%d" % [player.faith, player.max_faith, player.temporary_faith]
-	return "Mana %d / %d" % [player.mana, player.max_mana]
+	var resource_text := "Mana %d / %d" % [player.mana, player.max_mana]
+	if player.max_finishing_gauge > 0:
+		resource_text += "   |   Finishing Gauge %d / %d" % [player.finishing_gauge, player.max_finishing_gauge]
+	return resource_text
 
 
 func _build_ui() -> void:
@@ -154,6 +157,7 @@ func _build_ui() -> void:
 func _build_summary(player: CombatantState) -> void:
 	_add_summary(player.display_name, 24, Color("f8fafc"))
 	_add_summary("Level %d  |  %s  |  %s" % [player.level, player.ancestry_display_name, player.class_display_name])
+	_add_summary("Class DC %d" % player.class_dc)
 	var portrait := ColorRect.new()
 	portrait.custom_minimum_size = Vector2(0, 155)
 	portrait.color = Color("17243a")
@@ -161,11 +165,14 @@ func _build_summary(player: CombatantState) -> void:
 	_add_summary("HP  %d / %d" % [player.hp, player.max_hp])
 	_add_summary("STR %d   DEX %d   CON %d" % [player.strength, player.dexterity, player.constitution])
 	_add_summary("INT %d   WIS %d   CHA %d" % [player.intelligence, player.wisdom, player.charisma])
-	var fortitude_bonus: int = int(combat_system.effect_system.get_fortitude_bonus(player)) if combat_system != null else 0
-	var reflex_bonus: int = int(combat_system.effect_system.get_reflex_bonus(player)) if combat_system != null else 0
-	var will_bonus: int = int(combat_system.effect_system.get_will_bonus(player)) if combat_system != null else 0
-	_add_summary("Fortitude %d   Reflex %d   Will %d" % [player.fortitude + fortitude_bonus, player.reflex + reflex_bonus, player.will + will_bonus])
+	var passive_defense_bonus := AbilitySystem.new().get_passive_defense_bonus(player)
+	var displayed_fortitude: int = combat_system.defense_system.get_defense(player, DefenseTypes.Type.FORTITUDE) if combat_system != null else player.fortitude + passive_defense_bonus
+	var displayed_reflex: int = combat_system.defense_system.get_defense(player, DefenseTypes.Type.REFLEX) if combat_system != null else player.reflex + passive_defense_bonus
+	var displayed_will: int = combat_system.defense_system.get_defense(player, DefenseTypes.Type.WILL) if combat_system != null else player.will + passive_defense_bonus
+	_add_summary("Fortitude %d   Reflex %d   Will %d" % [displayed_fortitude, displayed_reflex, displayed_will])
 	_add_summary("Speed %.1f ft   Mana %d / %d" % [player.get_effective_speed(), player.mana, player.max_mana])
+	if player.max_finishing_gauge > 0:
+		_add_summary("Finishing Gauge %d / %d" % [player.finishing_gauge, player.max_finishing_gauge])
 	if player.max_faith > 0:
 		_add_summary("Faith %d / %d   Temporary Faith +%d" % [player.faith, player.max_faith, player.temporary_faith])
 
@@ -188,7 +195,8 @@ func _build_abilities(player: CombatantState) -> void:
 			_add_content("No abilities", Color("94a3b8"))
 		for ability in groups[group]:
 			var faith_text := "  |  %d Faith" % ability.faith_cost if ability.faith_cost > 0 else ""
-			_add_content("%s  |  %d AP%s  |  Cooldown %d" % [ability.display_name, ability.ap_cost, faith_text, int(player.ability_cooldowns.get(ability.id, 0))], Color("f8fafc"), 16)
+			var gauge_text := "  |  %d Finishing Gauge" % ability.finishing_gauge_cost if ability.finishing_gauge_cost > 0 else ""
+			_add_content("%s  |  %d AP%s%s  |  Cooldown %d" % [ability.display_name, ability.ap_cost, faith_text, gauge_text, int(player.ability_cooldowns.get(ability.id, 0))], Color("f8fafc"), 16)
 			_add_content(ability.description, Color("94a3b8"))
 
 
@@ -205,6 +213,15 @@ func _build_equipment(player: CombatantState, show_actions: bool) -> void:
 
 func _build_inventory(player: CombatantState) -> void:
 	_add_content("BACKPACK", Color("38bdf8"), 15)
+	_add_content("ITEMS", Color("d5a84c"), 14)
+	if player.item_inventory.is_empty():
+		_add_content("No Items")
+	for stack in player.item_inventory:
+		if stack != null and stack.item != null:
+			_add_content("%s x%d" % [stack.item.display_name, stack.quantity], Color("f8fafc"), 16)
+			_add_content(stack.item.description, Color("94a3b8"))
+			content_list.add_child(HSeparator.new())
+	_add_content("EQUIPMENT", Color("d5a84c"), 14)
 	for item in player.equipment_inventory:
 		if item != null:
 			_add_item(player, item, false)

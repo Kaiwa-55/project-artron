@@ -58,12 +58,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "ABILITY"
 
-[node name="Throw" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=159688356]
+[node name="Basic" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=159688356]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "THROW"
+text = "BASIC ACTION"
 
-[node name="EmptySlot" type="Control" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=883453693]
+[node name="Item" type="Button" parent="ActionDockMargin/ActionDockColumn/ActionButtonGrid" unique_id=883453693]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+size_flags_horizontal = 3
+text = "ITEM"

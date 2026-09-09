@@ -5,12 +5,13 @@
 [ext_resource type="Resource" uid="uid://ctqkt0361nl8" path="res://data/ability/web_shot.tres" id="3"]
 [ext_resource type="Resource" uid="uid://cvd6jwl5g2sqy" path="res://data/ability/skitter.tres" id="4"]
 [ext_resource type="Texture2D" uid="uid://dbwiijuaampm4" path="res://assets/token/Giant Spider Portrait.jpg" id="4_c3hra"]
+[ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="4_xwcla"]
 [ext_resource type="Resource" path="res://data/trait/beast.tres" id="5"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="5_4byrn"]
 [ext_resource type="Resource" path="res://data/trait/poison.tres" id="6"]
 [ext_resource type="Resource" path="res://data/trait/web_walker.tres" id="7"]
 [ext_resource type="Texture2D" uid="uid://1j04obpn8av3" path="res://assets/token/token_Giant Spider.png" id="7_c3hra"]
-[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="11_qfxig"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="11_qfxig"]
 
 [resource]
 script = ExtResource("1")
@@ -19,7 +20,7 @@ display_name = "Giant Spider"
 portrait = ExtResource("4_c3hra")
 token_texture = ExtResource("7_c3hra")
 team = 2
-position = Vector2(720, 250)
+position = Vector2(1700, 1500)
 collision_radius_feet = 5.0
 level = 2
 base_max_hp = 22

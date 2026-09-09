@@ -11,6 +11,7 @@ func apply_ancestry(combatant: CombatantState) -> void:
 	combatant.ancestry_id = ancestry.id
 	combatant.ancestry_display_name = ancestry.display_name
 	combatant.base_max_hp += ancestry.base_hp
+	combatant.ancestry_max_mana_bonus = ancestry.base_mana
 	combatant.base_speed += ancestry.speed_feet
 	apply_attribute_choices(combatant, ancestry)
 	for trait_data in ancestry.traits:

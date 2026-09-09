@@ -354,7 +354,7 @@ func _build_action_dock() -> void:
 	style_panel(dock, Color(0.035, 0.045, 0.048, 0.96), Color("b58a3a"), 2)
 	var action_grid: GridContainer = dock.get_node("ActionDockMargin/ActionDockColumn/ActionButtonGrid")
 	action_category_buttons.clear()
-	for category in ["attack", "move", "skill", "ability", "throw"]:
+	for category in ["attack", "move", "skill", "ability", "basic", "item"]:
 		var button: Button = action_grid.get_node(category.capitalize())
 		button.icon = _get_action_category_icon(category)
 		button.expand_icon = true
@@ -373,7 +373,8 @@ func _get_action_category_icon(category: String) -> AtlasTexture:
 		"move": 1,
 		"skill": 2,
 		"ability": 3,
-		"throw": 4,
+		"item": 4,
+		"basic": 5,
 	}
 	var icon := AtlasTexture.new()
 	icon.atlas = CombatActionIconAtlas
@@ -409,7 +410,7 @@ func show_action_menu(category: String) -> void:
 	for child in action_menu_list.get_children():
 		action_menu_list.remove_child(child)
 		child.queue_free()
-	action_menu_title.text = category.to_upper()
+	action_menu_title.text = "BASIC ACTION" if category == "basic" else category.to_upper()
 	var player: CombatantState = get_displayed_party_member()
 	if player == null:
 		return
@@ -435,7 +436,11 @@ func show_action_menu(category: String) -> void:
 				unarmed_button.disabled = not free_hand or player.ap < player.unarmed_attack.ap_cost
 			if listed_items.is_empty() and player.unarmed_attack == null:
 				add_action_menu_note("No equipped weapon attacks.")
+		"basic":
+			add_action_menu_button("THROW", "Open throwable weapons and items.", show_action_menu.bind("throw"), true)
+			add_action_menu_button("ESCAPE", "Attempt to remove an escapable Status.", show_action_menu.bind("escape"), true)
 		"throw":
+			add_action_menu_button("← BACK TO BASIC ACTION", "Return to the Basic Action list.", show_action_menu.bind("basic"), true)
 			var listed_items: Array = []
 			for item in player.equipment_inventory:
 				if item == null or listed_items.has(item):
@@ -456,6 +461,17 @@ func show_action_menu(category: String) -> void:
 				button.disabled = not held or player.ap < thrown_attack.ap_cost
 			if listed_items.is_empty():
 				add_action_menu_note("No throwable items in inventory.")
+		"escape":
+			add_action_menu_button("← BACK TO BASIC ACTION", "Return to the Basic Action list.", show_action_menu.bind("basic"), true)
+			var escapable := combat_system.effect_system.get_escapable_effects(player)
+			for instance in escapable:
+				var dc: int = instance.source_class_dc if instance.source_class_dc > 0 else instance.data.default_escape_dc
+				var tooltip := "Roll 3d8 + STR modifier vs DC %d. AP is spent whether the roll succeeds or fails." % dc
+				add_action_menu_button("%s · %d AP · DC %d" % [instance.data.display_name, instance.data.escape_ap_cost, dc], tooltip, use_escape_from_menu.bind(instance.data.id))
+				var escape_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
+				escape_button.disabled = player.ap < instance.data.escape_ap_cost
+			if escapable.is_empty():
+				add_action_menu_note("No active Status can be escaped.")
 		"skill":
 			for skill in player.available_skills:
 				if skill != null:
@@ -472,17 +488,34 @@ func show_action_menu(category: String) -> void:
 						ability_target = get_first_valid_ability_target(player, ability)
 					var validation: ActionResult = combat_system.ability_system.validate_active_use(player, ability, ability_target)
 					var faith_text := " · %d Faith" % ability.faith_cost if ability.faith_cost > 0 else ""
+					var gauge_text := " · %d Finishing Gauge" % ability.finishing_gauge_cost if ability.finishing_gauge_cost > 0 else ""
 					var tooltip: String = ability.description if validation.success else "%s\nUnavailable: %s" % [ability.description, validation.failure_reason]
-					add_action_menu_button("%s · %d AP%s" % [ability.display_name, ability.ap_cost, faith_text], tooltip, use_ability_from_menu.bind(ability))
+					add_action_menu_button("%s · %d AP%s%s" % [ability.display_name, ability.ap_cost, faith_text, gauge_text], tooltip, use_ability_from_menu.bind(ability))
 					var ability_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
 					ability_button.disabled = not validation.success
 			if action_menu_list.get_child_count() == 0:
 				add_action_menu_note("No Active Abilities available.")
+		"item":
+			for stack in player.item_inventory:
+				if stack == null or stack.item == null or not (stack.item is ConsumableData):
+					continue
+				var item: ConsumableData = stack.item
+				var target_id := player.id
+				if item.target_mode == ConsumableData.TargetMode.SINGLE_COMBATANT:
+					var first_target := get_first_valid_item_target(player, item)
+					target_id = first_target.id if first_target != null else ""
+				var validation: ActionResult = combat_system.consumable_item_executor.validate(player.id, item.id, target_id)
+				var tooltip: String = item.description if validation.success else "%s\nUnavailable: %s" % [item.description, validation.failure_reason]
+				add_action_menu_button("%s x%d - %d AP" % [item.display_name, stack.quantity, item.ap_cost], tooltip, use_item_from_menu.bind(item))
+				var item_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
+				item_button.disabled = not validation.success
+			if player.item_inventory.is_empty():
+				add_action_menu_note("No Items available.")
 	var current_actor: CombatantState = combat_system.get_combat_state().get_current_actor()
 	var read_only: bool = current_actor == null or current_actor.id != player.id
 	if read_only:
 		for child in action_menu_list.get_children():
-			if child is Button:
+			if child is Button and not child.get_meta("menu_navigation", false):
 				child.disabled = true
 				child.tooltip_text = "This character can only use Actions during their Turn."
 	action_menu_panel.visible = true
@@ -497,10 +530,26 @@ func get_first_valid_ability_target(actor: CombatantState, ability: AbilityData)
 	return null
 
 
-func add_action_menu_button(text: String, tooltip: String, action: Callable) -> void:
+func get_first_valid_item_target(actor: CombatantState, item: ConsumableData) -> CombatantState:
+	if actor == null or item == null or combat_system == null:
+		return null
+	for candidate in combat_system.get_combat_state().combatants.values():
+		if candidate != null and combat_system.consumable_item_executor.validate(actor.id, item.id, candidate.id).success:
+			return candidate
+	return null
+
+
+func add_action_menu_button(text: String, tooltip: String, action: Callable, menu_navigation: bool = false) -> void:
 	var button := Button.new()
+	var arguments := action.get_bound_arguments()
+	if not arguments.is_empty() and (arguments[0] is AttackData or arguments[0] is SkillData or arguments[0] is AbilityData):
+		button.set_script(preload("res://scenes/combat/ui/action_detail_button.gd"))
+		button.detail_source = arguments[0]
+		button.detail_actor = get_displayed_party_member()
+		button.detail_system = combat_system
 	button.text = text
 	button.tooltip_text = tooltip
+	button.set_meta("menu_navigation", menu_navigation)
 	button.custom_minimum_size = Vector2(0, 38)
 	button.pressed.connect(func():
 		action_menu_panel.visible = false
@@ -623,6 +672,17 @@ func use_ability_from_menu(ability: AbilityData) -> void:
 	begin_single_targeting("ability", ability)
 
 
+func use_item_from_menu(item: ConsumableData) -> void:
+	if item.target_mode == ConsumableData.TargetMode.SELF:
+		var actor_id := get_player_controlled_actor_id()
+		handle_menu_action_result(combat_system.use_consumable_item(actor_id, item.id, actor_id))
+		return
+	if item.target_mode == ConsumableData.TargetMode.SINGLE_COMBATANT:
+		begin_single_targeting("item", item)
+		return
+	$UILayer/Control.set_mode_hint("%s requires ground targeting, which is not available for Items yet." % item.display_name)
+
+
 func begin_single_targeting(kind: String, source) -> void:
 	pending_single_target_kind = kind
 	pending_single_target_source = source
@@ -641,6 +701,8 @@ func begin_single_targeting(kind: String, source) -> void:
 func get_single_target_range(kind: String, source) -> float:
 	if kind == "skill":
 		return combat_system.skill_system.get_effective_range_feet(get_player_controlled_actor(), source)
+	if kind == "item":
+		return source.range_feet
 	var player: CombatantState = get_player_controlled_actor()
 	return combat_system.ability_system.get_targeting_range(player, source)
 
@@ -653,7 +715,7 @@ func draw_single_targeting() -> void:
 	draw_circle(player.position, range_world, Color(0.34, 0.59, 0.67, 0.10))
 	draw_arc(player.position, range_world, 0.0, TAU, 96, Color("78bed0"), 2.0)
 	for target in state.combatants.values():
-		if target == null or target.is_dying() or not is_valid_single_target(player, target):
+		if target == null or not is_valid_single_target(player, target):
 			continue
 		var in_range: bool = combat_system.map_rules.is_target_in_range(player, target, range_feet)
 		var color := Color("d5a84c") if in_range else Color(0.55, 0.58, 0.60, 0.45)
@@ -661,11 +723,15 @@ func draw_single_targeting() -> void:
 
 
 func is_valid_single_target(player: CombatantState, target: CombatantState) -> bool:
+	if target.is_dying() and (pending_single_target_kind != "item" or pending_single_target_source.cannot_target_dying):
+		return false
 	if pending_single_target_kind == "skill":
 		match pending_single_target_source.target_filter:
 			SkillData.TargetFilter.ENEMIES: return target.team != player.team
 			SkillData.TargetFilter.ALLIES: return target.team == player.team
 			_: return true
+	if pending_single_target_kind == "item":
+		return combat_system.consumable_item_executor.target_filter_matches(player, target, pending_single_target_source)
 	match pending_single_target_source.target_filter:
 		AbilityData.TargetFilter.ENEMIES: return target.team != player.team
 		AbilityData.TargetFilter.ALLIES: return target.team == player.team
@@ -678,7 +744,7 @@ func confirm_single_target(mouse_position: Vector2) -> bool:
 	var range_feet: float = get_single_target_range(pending_single_target_kind, pending_single_target_source)
 	for combatant_node in get_all_combatant_nodes():
 		var target: CombatantState = combatant_node.state
-		if target == null or target.is_dying() or not is_valid_single_target(player, target):
+		if target == null or not is_valid_single_target(player, target):
 			continue
 		var radius: float = target.collision_radius_feet * combat_system.map_rules.world_units_per_foot
 		if mouse_position.distance_to(target.position) > radius + 8.0:
@@ -698,8 +764,10 @@ func confirm_single_target(mouse_position: Vector2) -> bool:
 			request.target_id = target.id
 			request.skill_data = source
 			handle_menu_action_result(combat_system.execute_action(request))
-		else:
+		elif kind == "ability":
 			handle_menu_action_result(combat_system.use_active_ability(player.id, target.id, source.id))
+		else:
+			handle_menu_action_result(combat_system.use_consumable_item(player.id, source.id, target.id))
 		queue_redraw()
 		return true
 	$UILayer/Control.set_mode_hint("Choose a highlighted valid target, or right-click/Esc to cancel.")
@@ -740,6 +808,20 @@ func refresh_action_dock() -> void:
 			action_menu_panel.visible = false
 
 
+func use_escape_from_menu(status_id: String) -> void:
+	action_menu_panel.visible = false
+	var actor: CombatantState = get_player_controlled_actor()
+	if actor == null:
+		return
+	var result: ActionResult = combat_system.execute_escape(actor.id, status_id)
+	$UILayer/Control.record_action_result(result)
+	if not result.success:
+		$UILayer/Control.set_mode_hint("Escape failed: %s" % result.failure_reason)
+	else:
+		$UILayer/Control.set_mode_hint("Escape resolved. Choose an action.")
+	refresh_combatant_nodes()
+
+
 func refresh_essential_hud() -> void:
 	if essential_player_status == null or combat_system == null:
 		return
@@ -758,6 +840,8 @@ func refresh_essential_hud() -> void:
 			essential_player_status.text = "%s\n%s · Lv %d\nHP %d/%d · Faith %d/%d\nTemp +%d · Move %.1f ft" % [player.display_name, player.class_display_name, player.level, player.hp, player.max_hp, player.faith, player.max_faith, player.temporary_faith, available_move]
 		else:
 			essential_player_status.text = "%s\n%s · Lv %d\nHP %d/%d · Mana %d/%d\nMove %.1f ft" % [player.display_name, player.class_display_name, player.level, player.hp, player.max_hp, player.mana, player.max_mana, available_move]
+		if player.max_finishing_gauge > 0:
+			essential_player_status.text += "\nFinishing Gauge %d/%d" % [player.finishing_gauge, player.max_finishing_gauge]
 		essential_turn_status.text = "ACTION POINTS   %d / %d" % [player.ap, player.effective_max_ap]
 		essential_target_status.text = "REACTION READY" if player.ap > 0 and not player.has_status("surprise") else "REACTION UNAVAILABLE"
 		return
@@ -769,7 +853,10 @@ func refresh_essential_hud() -> void:
 func get_combat_resource_text(player: CombatantState) -> String:
 	if player.max_faith > 0:
 		return "Faith %d / %d   |   Temporary +%d" % [player.faith, player.max_faith, player.temporary_faith]
-	return "Mana %d / %d" % [player.mana, player.max_mana]
+	var resource_text := "Mana %d / %d" % [player.mana, player.max_mana]
+	if player.max_finishing_gauge > 0:
+		resource_text += "   |   Finishing Gauge %d / %d" % [player.finishing_gauge, player.max_finishing_gauge]
+	return resource_text
 
 
 func _build_inventory_drawer() -> void:

@@ -215,7 +215,10 @@ func build_attack_result(
 					"immune": attack_result.immune,
 					"damage_type": attack.damage_type,
 					"resistance": attack_result.resistance,
-					"final_damage": attack_result.final_damage
+					"final_damage": attack_result.final_damage,
+					"finishing_gauge_gained": attack_result.finishing_gauge_gained,
+					"finishing_gauge": attacker.finishing_gauge,
+					"max_finishing_gauge": attacker.max_finishing_gauge
 				}
 			)
 		)

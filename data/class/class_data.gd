@@ -8,6 +8,7 @@ extends Resource
 @export var base_speed_feet: float = -1.0
 @export var base_mana: int = -1
 @export var base_faith: int = -1
+@export var max_finishing_gauge: int = 0
 @export var fixed_attribute_bonuses: Dictionary = {}
 @export_range(0, 6) var attribute_choice_count: int = 0
 @export var attribute_choice_options: Array[int] = []

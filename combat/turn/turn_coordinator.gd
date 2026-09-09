@@ -10,6 +10,7 @@ func _init(p_combat_system) -> void:
 
 func start_combat(combatants: Array[CombatantState]) -> void:
 	combat_system.combat_state = CombatState.new()
+	combat_system.ability_system.combat_state = combat_system.combat_state
 	for combatant in combatants:
 		combatant.last_attack_declared_round = 0
 		combatant.last_step_back_round = 0

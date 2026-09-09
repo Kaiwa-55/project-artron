@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cwbsg8u2ws47a"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_bp487"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="3"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/healing.tres" id="5"]
+
+[sub_resource type="Resource" id="MeditateHeal"]
+script = ExtResource("3")
+id = "meditate_heal"
+display_name = "Meditate"
+effect_type = 1
+
+[sub_resource type="Resource" id="HealSelf"]
+script = ExtResource("2")
+effect = SubResource("MeditateHeal")
+effect_amount_per_level = 10
+
+[resource]
+script = ExtResource("1")
+id = "meditate"
+display_name = "Meditate"
+required_level = 3
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("4"), ExtResource("5")]
+ap_cost = 2
+cooldown_turns = 3
+description = "Restore HP equal to 10 x Level. Cannot restore a character in the Dying state."
+target_mode = 1
+target_filter = 1
+use_effects = [SubResource("HealSelf")]

@@ -4,11 +4,12 @@
 [ext_resource type="Resource" path="res://data/attack/rending_talon.tres" id="2"]
 [ext_resource type="Resource" path="res://data/ability/blood_claw.tres" id="3"]
 [ext_resource type="Resource" path="res://data/ability/predator_rush.tres" id="4"]
+[ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="4_4da8l"]
 [ext_resource type="Texture2D" uid="uid://ttpm6xtupsxp" path="res://assets/character_creation/Crimson Spine Stalker.png" id="4_e7p0a"]
 [ext_resource type="Resource" uid="uid://b4pdb0x8d6gnk" path="res://data/reaction/skitter_dodge.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/demon.tres" id="6"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="7_4da8l"]
-[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="9_l8whn"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="9_l8whn"]
 
 [resource]
 script = ExtResource("1")
@@ -17,7 +18,7 @@ display_name = "Crimson Spine Stalker"
 portrait = ExtResource("4_e7p0a")
 token_texture = ExtResource("4_e7p0a")
 token_scale = 1.3
-token_offset = Vector2(0, 60)
+token_offset = Vector2(0, 20)
 team = 2
 level = 4
 base_max_hp = 30

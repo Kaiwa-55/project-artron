@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/finishing_move_attack.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+id = "finishing_move"
+display_name = "Finishing Move"
+required_level = 0
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+auto_equip_on_grant = true
+ap_cost = 3
+finishing_gauge_cost = 10
+description = "Spend 10 Finishing Gauge and make an Unarmed Attack against one enemy. On Hit, deal Blunt Damage equal to 10 × Level. The Gauge is spent even if the Attack misses."
+attack_source = 2
+attack_data = ExtResource("2")
+required_attack_trait_ids = Array[String](["unarmed"])
+active_attack_base_damage_per_level = 10

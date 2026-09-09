@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://b1wxp6i1we7pb"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_mplt5"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_kab07"]
+[ext_resource type="Resource" uid="uid://bkdigf3b6p2nf" path="res://data/status/slowed.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="5"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="6"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="7"]
+
+[sub_resource type="Resource" id="SlowOnHit"]
+script = ExtResource("2")
+timing = 1
+recipient = 1
+effect = ExtResource("4")
+scaling_attribute = 0
+scale_effect_stacks_with_attribute = true
+minimum_scaled_stacks = 1
+
+[resource]
+script = ExtResource("1")
+id = "key_strike"
+display_name = "Key Strike"
+required_level = 2
+required_trait_ids = Array[String](["martial_artist"])
+traits = [ExtResource("5"), ExtResource("6"), ExtResource("7")]
+ap_cost = 1
+cooldown_turns = 2
+description = "Attack an enemy with Unarmed Attack. On Hit, apply Slowed stacks equal to your Strength modifier (minimum 1). Each Slowed stack reduces Speed by 5 ft. Requires a free hand."
+attack_source = 2
+attack_data = ExtResource("3")
+required_attack_trait_ids = Array[String](["unarmed"])
+use_effects = [SubResource("SlowOnHit")]
+targeting_range_feet = 5.0

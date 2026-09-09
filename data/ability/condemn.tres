@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Resource" path="res://data/status/weakened.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/devotee.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/divine.tres" id="5"]
+
+[sub_resource type="Resource" id="CondemnEffect"]
+script = ExtResource("2")
+recipient = 1
+effect = ExtResource("3")
+dynamic_effect = 5
+damage_type = "light"
+faith_divisor = 4
+secondary_faith_divisor = 5
+
+[resource]
+script = ExtResource("1")
+id = "condemn"
+display_name = "Condemn"
+required_level = 1
+required_trait_ids = Array[String](["devotee"])
+traits = [ExtResource("4"), ExtResource("5")]
+auto_equip_on_grant = true
+ap_cost = 2
+faith_cost = 1
+uses_per_turn = 1
+description = "Condemn one enemy within 15 ft. Deal Light Damage equal to floor(Faith / 4) and apply Weakened equal to floor(Faith / 5). Faith is measured before paying this Ability's cost. Once per Turn."
+target_filter = 0
+use_effects = [SubResource("CondemnEffect")]
+targeting_range_feet = 15.0

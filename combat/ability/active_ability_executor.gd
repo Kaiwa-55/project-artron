@@ -27,6 +27,8 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 	if not validation.success:
 		return validation
 	if ability.execution_mode == AbilityData.ExecutionMode.ATTACK_SEQUENCE:
+		if ability.sequence_attack_count > 0:
+			return combat_system.attack_sequence_executor.execute_repeated_attack(actor, target, ability)
 		return combat_system.attack_sequence_executor.execute_dual_weapon(actor, target, ability)
 	if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT \
 		and ability.targeting_range_feet > 0.0 \
@@ -41,10 +43,20 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 	if source_attack != null:
 		var ability_attack: AttackData = source_attack.duplicate()
 		ability_attack.ap_cost = ability.ap_cost
+		if ability.active_attack_base_damage_per_level > 0:
+			ability_attack.base_damage = ability.active_attack_base_damage_per_level * actor.level
 		if ability.animation_template != null:
 			ability_attack.animation_template = ability.animation_template
 		ability_attack.active_damage_bonus = ability.active_attack_flat_damage_bonus + ability.active_attack_damage_bonus_per_level * actor.level
 		ability_attack.active_damage_bonus_source = ability.display_name
+		var attack_validation: ActionResult = combat_system.attack_system.validate_attack(actor, target, ability_attack)
+		if not attack_validation.success:
+			return attack_validation
+		var unarmed_validation: ActionResult = combat_system.equipment_system.validate_unarmed_attack(actor, ability_attack)
+		if not unarmed_validation.success:
+			return unarmed_validation
+		if actor.change_finishing_gauge(-ability.finishing_gauge_cost) != -ability.finishing_gauge_cost:
+			return ActionResult.failure("Not enough Finishing Gauge.")
 		var request := ActionRequest.new(combatant_id, ActionTypes.Type.ATTACK)
 		request.target_id = target.id
 		request.attack_data = ability_attack
@@ -57,6 +69,10 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 		if not actor.spend_faith(ability.faith_cost):
 			actor.change_ap(ability.ap_cost)
 			return ActionResult.failure("Not enough Faith.")
+		if actor.change_finishing_gauge(-ability.finishing_gauge_cost) != -ability.finishing_gauge_cost:
+			actor.change_ap(ability.ap_cost)
+			actor.gain_faith(ability.faith_cost)
+			return ActionResult.failure("Not enough Finishing Gauge.")
 		combat_system.cancel_remaining_movement(actor)
 		result = ActionResult.success_result()
 	if not result.success:
@@ -74,6 +90,9 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 	var defer_conditional: bool = result.requires_reaction_choice and result.reaction_prompt.has("prepared_attack")
 	apply_effects(actor, target, ability, result.events, ability_events, true, not defer_conditional)
 	var trigger_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": cooldown}
+	if ability.finishing_gauge_cost > 0:
+		trigger_data["finishing_gauge_spent"] = ability.finishing_gauge_cost
+		trigger_data["finishing_gauge"] = actor.finishing_gauge
 	# Attacking Abilities carry their animation on ATTACK_HIT / ATTACK_MISS so it
 	# resolves after defensive Reactions. Effect-only Abilities animate here.
 	if source_attack == null and ability.animation_template != null:
@@ -108,17 +127,24 @@ func apply_effects(actor: CombatantState, target: CombatantState, ability, attac
 		var recipient: CombatantState = actor if entry.recipient == AbilityUseEffectDataScript.Recipient.CASTER else target
 		var applied_effect: EffectData = build_scaled_effect(actor, entry)
 		var applies_stance: bool = recipient == actor and combat_system.ability_system.ability_has_trait(ability, "stance")
-		if applied_effect != null and recipient != null and combat_system.effect_system.apply_effect(recipient, applied_effect, ability.id, ability.display_name, applies_stance):
+		if applied_effect != null and recipient != null and applied_effect.trigger == EffectData.Trigger.ON_APPLY and applied_effect.effect_type == EffectData.Type.HEAL:
+			var healed: int = recipient.heal(applied_effect.amount)
+			output_events.append(CombatEvent.new(EventTypes.Type.EFFECT_HEAL_APPLIED, actor.id, recipient.id, {"effect_name": ability.display_name, "amount": healed}))
+			continue
+		if applied_effect != null and recipient != null and combat_system.effect_system.apply_effect(recipient, applied_effect, ability.id, ability.display_name, applies_stance, actor):
 			output_events.append(CombatEvent.new(EventTypes.Type.EFFECT_APPLIED, actor.id, recipient.id, {"effect_name": applied_effect.display_name, "ability_name": ability.display_name}))
 
 
 func build_scaled_effect(actor: CombatantState, entry) -> EffectData:
 	if entry == null or entry.effect == null:
 		return null
-	if not entry.scale_stat_bonuses_with_attribute:
+	if not entry.scale_stat_bonuses_with_attribute and not entry.scale_effect_stacks_with_attribute and entry.effect_amount_per_level == 0:
 		return entry.effect
 	var scaled: EffectData = entry.effect.duplicate(true)
 	var amount: int = actor.get_attribute_modifier(entry.scaling_attribute) * entry.scaling_multiplier
+	scaled.amount += actor.level * entry.effect_amount_per_level
+	if entry.scale_effect_stacks_with_attribute:
+		scaled.stacks_on_apply = maxi(entry.minimum_scaled_stacks, amount)
 	if entry.scale_reflex_bonus:
 		scaled.reflex_bonus += amount
 	if entry.scale_fortitude_bonus:
@@ -165,6 +191,25 @@ func apply_dynamic_effect(actor: CombatantState, target: CombatantState, ability
 			var healing: int = floori(float(faith_before_cost) / float(maxi(1, entry.faith_divisor)))
 			var healed := target.heal(healing)
 			output_events.append(CombatEvent.new(EventTypes.Type.EFFECT_HEAL_APPLIED, actor.id, target.id, {"effect_name": ability.display_name, "amount": healed, "faith_power": faith_before_cost}))
+		AbilityUseEffectDataScript.DynamicEffect.CONDEMN_BY_FAITH:
+			if target == null or target.is_dying():
+				return
+			var faith_before_cost: int = actor.get_total_faith() + ability.faith_cost
+			var raw_damage: int = floori(float(faith_before_cost) / float(maxi(1, entry.faith_divisor)))
+			var immune := target.is_immune_to_damage(entry.damage_type)
+			var resistance := target.get_damage_resistance(entry.damage_type)
+			var final_damage: int = 0 if immune else maxi(0, raw_damage - resistance)
+			target.apply_damage(final_damage)
+			output_events.append(CombatEvent.new(EventTypes.Type.DAMAGE_APPLIED, actor.id, target.id, {"ability_name": ability.display_name, "damage": final_damage, "damage_type": entry.damage_type, "faith_power": faith_before_cost, "immune": immune, "resistance": resistance}))
+			var weakened_amount: int = floori(float(faith_before_cost) / float(maxi(1, entry.secondary_faith_divisor)))
+			if weakened_amount > 0 and entry.effect != null:
+				var weakened: EffectData = entry.effect.duplicate(true)
+				weakened.potency = weakened_amount
+				weakened.reflex_bonus = -weakened_amount
+				weakened.fortitude_bonus = -weakened_amount
+				weakened.will_bonus = -weakened_amount
+				if combat_system.effect_system.apply_effect(target, weakened, ability.id, ability.display_name, false, actor):
+					output_events.append(CombatEvent.new(EventTypes.Type.EFFECT_APPLIED, actor.id, target.id, {"effect_name": weakened.display_name, "ability_name": ability.display_name, "potency": weakened_amount}))
 
 
 func apply_pending_conditional_effects(attack_events: Array[CombatEvent], output_events: Array[CombatEvent]) -> void:

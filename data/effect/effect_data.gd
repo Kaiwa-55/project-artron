@@ -74,12 +74,25 @@ enum StackMode {
 @export var speed_penalty_per_stack: float = 0.0
 @export var speed_bonus_per_stack: float = 0.0
 
+# Aura effects remain on their source and are evaluated against current
+# positions whenever a relevant action resolves.
+@export var aura_radius_feet: float = 0.0
+@export var aura_attack_bonus: int = 0
+@export var aura_affects_allies: bool = true
+@export var aura_includes_source: bool = true
+@export var aura_color: Color = Color(0.96, 0.78, 0.32, 0.18)
+
 # Status rules. Effects do not stack unless their own data explicitly allows it.
 @export var stackable: bool = false
 @export_range(1, 999) var stacks_on_apply: int = 1
 @export_range(1, 999) var max_stacks: int = 1
 @export var status_tags: Array[String] = []
 @export var can_be_cleansed: bool = true
+# Statuses opt into the Escape Action individually. The real DC is captured
+# from the applier's Class DC when the status is applied.
+@export var can_escape: bool = false
+@export_range(0, 10) var escape_ap_cost: int = 1
+@export_range(0, 99) var default_escape_dc: int = 12
 
 # Control status: reduces the affected Combatant's effective Max AP this turn.
 @export_range(0, 99) var ap_penalty_per_stack: int = 0

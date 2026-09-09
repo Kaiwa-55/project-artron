@@ -139,7 +139,10 @@ func apply_run_progression_state(target: CombatantState, source: CombatantState)
 	target.charisma = source.charisma
 	target.base_max_hp = source.base_max_hp
 	target.base_max_mana = source.base_max_mana
+	target.ancestry_max_mana_bonus = source.ancestry_max_mana_bonus
+	target.base_max_faith = source.base_max_faith
 	target.max_faith = source.max_faith
+	target.max_finishing_gauge = source.max_finishing_gauge
 	target.base_speed = source.base_speed
 	target.ancestry_id = source.ancestry_id
 	target.ancestry_display_name = source.ancestry_display_name
@@ -149,6 +152,7 @@ func apply_run_progression_state(target: CombatantState, source: CombatantState)
 	target.granted_ability_ids = source.granted_ability_ids.duplicate()
 	target.available_abilities = source.available_abilities.duplicate()
 	target.equipped_abilities = source.equipped_abilities.duplicate()
+	target.item_inventory = duplicate_item_inventory(source.item_inventory)
 	target.set_meta("creation_rules_applied", true)
 	var catalog = load("res://data/creation/default_creation_catalog.tres")
 	for ability_id in target.selected_ability_ids:
@@ -157,6 +161,28 @@ func apply_run_progression_state(target: CombatantState, source: CombatantState)
 			target.available_abilities.append(ability)
 		if ability != null and not target.equipped_abilities.has(ability_id):
 			target.equipped_abilities.append(ability_id)
+
+
+func duplicate_item_inventory(source_inventory: Array[ItemStack]) -> Array[ItemStack]:
+	var result: Array[ItemStack] = []
+	for stack in source_inventory:
+		if stack != null and stack.item != null and stack.quantity > 0:
+			result.append(ItemStack.new(stack.item, stack.quantity))
+	return result
+
+
+func sync_run_item_inventories() -> void:
+	if not get_tree().has_meta("active_run_state"):
+		return
+	var active_run = get_tree().get_meta("active_run_state")
+	if not active_run is RunState:
+		return
+	for combatant in combat_system.get_combat_state().combatants.values():
+		if combatant == null or not combat_system.is_player_controlled(combatant):
+			continue
+		var progression_state: CombatantState = active_run.party_progression_states.get(combatant.id)
+		if progression_state != null:
+			progression_state.item_inventory = duplicate_item_inventory(combatant.item_inventory)
 
 
 func setup_party_nodes(states: Array[CombatantState]) -> void:
@@ -426,6 +452,7 @@ func _process(_delta: float) -> void:
 	var state = combat_system.get_combat_state()
 	if state.is_finished() and state.combat_result == CombatEnums.CombatResult.VICTORY and get_tree().has_meta("active_run_state") and not post_combat_transition_started:
 		post_combat_transition_started = true
+		sync_run_item_inventories()
 		open_reward_after_victory()
 	$UILayer/Control/DefeatOverlay.visible = state.is_finished() and state.combat_result == CombatEnums.CombatResult.DEFEAT
 	var reaction_locked: bool = combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
@@ -492,6 +519,7 @@ func refresh_end_turn_lock() -> void:
 func _draw() -> void:
 	if combat_system == null:
 		return
+	draw_active_auras()
 	if pending_target_attack != null:
 		draw_attack_targeting()
 	if not pending_single_target_kind.is_empty():
@@ -532,3 +560,21 @@ func _draw() -> void:
 		draw_arc(target.position, target_radius, 0.0, TAU, 32, Color("facc15"), 4.0)
 	draw_arc(player.position, effective_range * scale_per_foot, 0.0, TAU, 96, Color(0.22, 0.75, 1.0, 0.65), 2.0)
 	$UILayer/Control.set_mode_hint("%s | %s | %d target(s) | Left-click confirm, right-click/Esc cancel" % [source.display_name, preview.failure_reason if not preview.valid else "Valid target point", preview.targets.size()])
+
+
+func draw_active_auras() -> void:
+	var state = combat_system.get_combat_state()
+	if state == null:
+		return
+	var scale_per_foot: float = combat_system.map_rules.world_units_per_foot
+	for source in state.combatants.values():
+		if source == null or source.is_dying():
+			continue
+		for instance in source.effects:
+			if instance == null or instance.data == null or instance.data.aura_radius_feet <= 0.0:
+				continue
+			var radius: float = instance.data.aura_radius_feet * scale_per_foot
+			var fill: Color = instance.data.aura_color
+			var outline := Color(fill.r, fill.g, fill.b, minf(fill.a + 0.55, 1.0))
+			draw_circle(source.position, radius, fill)
+			draw_arc(source.position, radius, 0.0, TAU, 64, outline, 2.0)

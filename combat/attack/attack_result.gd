@@ -23,6 +23,7 @@ var triggered_abilities: Array[Dictionary] = []
 var resistance: int = 0
 var final_damage: int = 0
 var reaction_damage_reduction: int = 0
+var finishing_gauge_gained: int = 0
 
 var applied_effects: Array[String] = []
 var deferred: bool = false

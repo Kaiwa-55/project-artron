@@ -26,6 +26,7 @@ extends Resource
 @export var ap_cost: int = 1
 
 @export var base_damage: int = 0
+@export var uses_attribute_damage_modifier: bool = true
 
 @export var range_feet: float = 5.0
 @export var minimum_range_feet: float = 0.0

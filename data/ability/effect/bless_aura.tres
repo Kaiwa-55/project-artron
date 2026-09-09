@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "bless_aura"
+display_name = "Bless Aura"
+duration_turns = 5
+aura_radius_feet = 10.0
+aura_attack_bonus = 1
+aura_affects_allies = true
+aura_includes_source = true
+aura_color = Color(0.96, 0.78, 0.32, 0.18)
+

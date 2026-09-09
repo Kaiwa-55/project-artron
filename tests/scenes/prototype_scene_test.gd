@@ -31,6 +31,7 @@ func run_test() -> void:
 	check(prototype.get_node("UILayer/Control/BottomActionRow/ReferenceActionDock") != null, "reference-style horizontal Action Dock should be available")
 	check(prototype.action_category_buttons.size() >= 4, "Action Bar should contain at least Attack, Move, Skill and Ability categories")
 	check(prototype.action_category_buttons.has("attack") and prototype.action_category_buttons.has("move") and prototype.action_category_buttons.has("skill") and prototype.action_category_buttons.has("ability"), "Action Bar should expose the four required categories")
+	check(prototype.action_category_buttons.has("basic") and not prototype.action_category_buttons.has("throw") and not prototype.action_category_buttons.has("escape"), "Throw and Escape should be grouped under Basic Action")
 	var action_grid: GridContainer = prototype.get_node("UILayer/Control/BottomActionRow/ReferenceActionDock/ActionDockMargin/ActionDockColumn/ActionButtonGrid")
 	check(action_grid.columns == 3 and action_grid.get_child_count() == 6, "Action Bar should use a two-row 3-column layout")
 	check(prototype.action_category_buttons.values().all(func(button): return button.icon != null), "Every Action category should display its combat icon")

@@ -16,8 +16,11 @@ func apply_class(combatant: CombatantState) -> void:
 	if character_class.base_mana >= 0:
 		combatant.base_max_mana = character_class.base_mana
 	if character_class.base_faith >= 0:
-		combatant.max_faith = character_class.base_faith
+		combatant.base_max_faith = character_class.base_faith
+		combatant.max_faith = combatant.base_max_faith
 		combatant.faith = combatant.max_faith
+	combatant.max_finishing_gauge = character_class.max_finishing_gauge
+	combatant.finishing_gauge = mini(combatant.finishing_gauge, combatant.max_finishing_gauge)
 	apply_fixed_attribute_bonuses(combatant, character_class.fixed_attribute_bonuses)
 	apply_attribute_choices(combatant, character_class)
 	for trait_data in character_class.traits:

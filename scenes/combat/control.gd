@@ -410,6 +410,10 @@ func is_player_relevant_log_message(message: String) -> bool:
 
 
 func should_show_combat_event(event: CombatEvent) -> bool:
+	# Item effects remain in event history for feedback/automation, while the
+	# player-facing log combines them into the single ITEM_USED action card.
+	if event.data.has("item_id") and event.type in [EventTypes.Type.EFFECT_HEAL_APPLIED, EventTypes.Type.EFFECT_DAMAGE_APPLIED]:
+		return false
 	match event.type:
 		EventTypes.Type.ATTACK_HIT, \
 		EventTypes.Type.ATTACK_MISS, \
@@ -422,6 +426,10 @@ func should_show_combat_event(event: CombatEvent) -> bool:
 		EventTypes.Type.COMBAT_VICTORY, \
 		EventTypes.Type.COMBAT_DEFEAT, \
 		EventTypes.Type.SKILL_CAST:
+			return true
+		EventTypes.Type.ESCAPE_ATTEMPTED:
+			return true
+		EventTypes.Type.ITEM_USED:
 			return true
 		EventTypes.Type.DAMAGE_APPLIED:
 			# Weapon attacks already include final damage in ATTACK_HIT.
@@ -471,9 +479,28 @@ func create_combat_log_card_data(event: CombatEvent, details: String) -> Diction
 			type_name = "COMBAT"
 			outcome = "DEFEAT"
 			tone = "damage"
+		EventTypes.Type.ESCAPE_ATTEMPTED:
+			action_name = "Escape: %s" % event.data.get("effect_name", "Status")
+			type_name = "ACTION"
+			outcome = "SUCCESS" if event.data.get("succeeded", false) else "FAILED"
+			tone = "heal" if event.data.get("succeeded", false) else "damage"
+			roll_text = "%d vs DC %d" % [event.data.get("total", 0), event.data.get("dc", 0)]
+		EventTypes.Type.ITEM_USED:
+			action_name = event.data.get("item_name", "Item")
+			type_name = "ITEM"
+			if int(event.data.get("healing", 0)) > 0:
+				outcome = "HEALED"
+				damage_text = "+%d HP" % int(event.data.get("healing", 0))
+				tone = "heal"
+			elif int(event.data.get("damage", 0)) > 0:
+				outcome = "DAMAGED"
+				damage_text = "%d damage" % int(event.data.get("damage", 0))
+				tone = "damage"
+			else:
+				outcome = "USED"
 	if event.data.has("attack_total"):
 		roll_text = "%d vs DEF %d" % [event.data.get("attack_total", 0), event.data.get("defense", 0)]
-	if event.data.has("final_damage") or event.data.has("damage"):
+	if event.type != EventTypes.Type.ITEM_USED and (event.data.has("final_damage") or event.data.has("damage")):
 		damage_text = "%d %s damage" % [event.data.get("final_damage", event.data.get("damage", 0)), event.data.get("damage_type", "")]
 	return {
 		"action": action_name,
@@ -637,6 +664,14 @@ func format_combat_event(event: CombatEvent) -> String:
 
 		EventTypes.Type.ABILITY_TRIGGERED:
 			if not event.data.has("stacks"):
+				if event.data.get("finishing_gauge_spent", 0) > 0:
+					return "%s uses %s (AP -%d, Finishing Gauge -%d, Gauge %d)." % [
+						event.source_id.capitalize(),
+						event.data.get("ability_name", "Ability"),
+						event.data.get("ap_cost", 0),
+						event.data.get("finishing_gauge_spent", 0),
+						event.data.get("finishing_gauge", 0)
+					]
 				return "%s uses %s (AP -%d, Cooldown %d)." % [
 					event.source_id.capitalize(),
 					event.data.get("ability_name", "Ability"),
@@ -680,6 +715,31 @@ func format_combat_event(event: CombatEvent) -> String:
 			return "%s changed equipment: %s." % [
 				event.source_id.capitalize(),
 				event.data.get("item_name", "item")
+			]
+
+		EventTypes.Type.ESCAPE_ATTEMPTED:
+			return "%s attempts to Escape %s — 3d8 %d %+d STR = %d vs DC %d: %s." % [
+				event.source_id.capitalize(),
+				event.data.get("effect_name", "a Status"),
+				event.data.get("roll", 0),
+				event.data.get("strength_modifier", 0),
+				event.data.get("total", 0),
+				event.data.get("dc", 0),
+				"escaped" if event.data.get("succeeded", false) else "failed"
+			]
+
+		EventTypes.Type.ITEM_USED:
+			var effect_text := ""
+			if int(event.data.get("healing", 0)) > 0:
+				effect_text = " and restores %d HP" % int(event.data.get("healing", 0))
+			elif int(event.data.get("damage", 0)) > 0:
+				effect_text = " and deals %d damage" % int(event.data.get("damage", 0))
+			return "%s uses %s%s (AP -%d, %d remaining)." % [
+				event.source_id.capitalize(),
+				event.data.get("item_name", "an Item"),
+				effect_text,
+				event.data.get("ap_cost", 0),
+				event.data.get("quantity_remaining", 0)
 			]
 
 	return ""

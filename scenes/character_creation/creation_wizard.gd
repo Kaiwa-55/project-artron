@@ -201,7 +201,7 @@ func refresh_summary() -> void:
 	UI.label(summary_column, "LEVEL %d    ·    BUILD PREVIEW" % draft.level, 14, UI.GOLD)
 	UI.line(summary_column)
 	var state: CombatantState = draft.preview
-	UI.label(summary_column, "HP %d   MANA %d   AP %d\nSPEED %.0f ft" % [state.max_hp, state.max_mana, state.max_ap, state.speed], 16)
+	UI.label(summary_column, "HP %d   MANA %d   AP %d\nCLASS DC %d   SPEED %.0f ft" % [state.max_hp, state.max_mana, state.max_ap, state.class_dc, state.speed], 16)
 	if state.max_faith > 0:
 		UI.label(summary_column, "FAITH %d / %d   TEMP +%d" % [state.faith, state.max_faith, state.temporary_faith], 16, UI.GOLD)
 	var grid := GridContainer.new()

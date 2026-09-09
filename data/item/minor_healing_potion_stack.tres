@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemStackData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://data/item/item_stack_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/item/minor_healing_potion.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item = ExtResource("2")
+quantity = 1
