@@ -7,12 +7,12 @@
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="6"]
 [ext_resource type="Resource" uid="uid://bowe4sdgeblby" path="res://data/ability/heal_or_harm.tres" id="7"]
-[ext_resource type="Resource" path="res://data/ability/armor_of_faith.tres" id="8"]
-[ext_resource type="Resource" path="res://data/ability/bless.tres" id="9_bless"]
-[ext_resource type="Resource" path="res://data/ability/condemn.tres" id="10_condemn"]
-[ext_resource type="Resource" path="res://data/ability/unwavering_faith.tres" id="11_unwavering"]
+[ext_resource type="Resource" uid="uid://sa7fcketc153" path="res://data/ability/armor_of_faith.tres" id="8"]
+[ext_resource type="Resource" uid="uid://cq7q1t6lppyy" path="res://data/ability/bless.tres" id="9_bless"]
+[ext_resource type="Resource" uid="uid://vhdcgkscv0xl" path="res://data/ability/condemn.tres" id="10_condemn"]
+[ext_resource type="Resource" uid="uid://b3r7x8n0ulubu" path="res://data/ability/unwavering_faith.tres" id="11_unwavering"]
 [ext_resource type="Resource" path="res://data/ability/sacrificial.tres" id="12_sacrificial"]
-[ext_resource type="Resource" path="res://data/ability/judgment_wave.tres" id="13_judgment_wave"]
+[ext_resource type="Resource" uid="uid://daan1680h5ge6" path="res://data/ability/judgment_wave.tres" id="13_judgment_wave"]
 [ext_resource type="Resource" path="res://data/ability/radiance_burst.tres" id="14_radiance_burst"]
 
 [sub_resource type="Resource" id="L1"]
@@ -24,13 +24,13 @@ granted_abilities = Array[ExtResource("6")]([ExtResource("2"), ExtResource("3"),
 script = ExtResource("5")
 level = 2
 max_hp_gain = 5
-granted_abilities = [ExtResource("11_unwavering"), ExtResource("13_judgment_wave")]
+granted_abilities = Array[ExtResource("6")]([ExtResource("11_unwavering"), ExtResource("13_judgment_wave")])
 
 [sub_resource type="Resource" id="L3"]
 script = ExtResource("5")
 level = 3
 max_hp_gain = 5
-granted_abilities = [ExtResource("14_radiance_burst")]
+granted_abilities = Array[ExtResource("6")]([ExtResource("14_radiance_burst")])
 
 [sub_resource type="Resource" id="L4"]
 script = ExtResource("5")

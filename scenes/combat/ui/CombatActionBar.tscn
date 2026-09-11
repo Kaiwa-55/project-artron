@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://bdwt7r2ch6564"]
 
+[ext_resource type="Texture2D" uid="uid://bjla1tcgw3ied" path="res://assets/ui/ui02.png" id="1_s2gun"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0q1xx"]
+draw_center = false
+
 [node name="ReferenceActionDock" type="PanelContainer" unique_id=1863515548]
-clip_contents = true
 custom_minimum_size = Vector2(0, 118)
-anchors_preset = 15
+clip_contents = true
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -15,6 +20,16 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_0q1xx")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1306483018]
+layout_mode = 2
+texture = ExtResource("1_s2gun")
+region_rect = Rect2(4, 20, 24, 24.13182)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
 
 [node name="ActionDockMargin" type="MarginContainer" parent="." unique_id=715372809]
 layout_mode = 2

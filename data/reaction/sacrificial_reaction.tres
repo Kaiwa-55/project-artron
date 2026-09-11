@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="ReactionData" format=3]
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://cv4tj4j7aehb1"]
 
-[ext_resource type="Script" path="res://data/reaction/reaction_data.gd" id="1"]
-[ext_resource type="Script" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
 
@@ -20,7 +20,6 @@ traits = [ExtResource("3"), ExtResource("4")]
 trigger = 5
 reach_feet = 15.0
 auto_resolve = false
-ap_cost = 1
 faith_cost = 1
 required_trait_id = "devotee"
 effects = [SubResource("DamageRedirect")]

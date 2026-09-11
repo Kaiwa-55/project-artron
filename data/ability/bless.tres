@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cq7q1t6lppyy"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
-[ext_resource type="Script" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_rsk0n"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_c8cdq"]
 [ext_resource type="Resource" path="res://data/ability/effect/bless_aura.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/divine.tres" id="5"]
@@ -16,7 +18,6 @@ effect = ExtResource("3")
 script = ExtResource("1")
 id = "bless"
 display_name = "Bless"
-required_level = 1
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7")]
 auto_equip_on_grant = true

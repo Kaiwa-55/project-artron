@@ -1,0 +1,477 @@
+[gd_scene format=3 uid="uid://blf68i7j6p7wd"]
+
+[ext_resource type="Texture2D" uid="uid://bxdfvno0ktxok" path="res://assets/token/Cultist.png" id="1_portrait"]
+[ext_resource type="StyleBox" uid="uid://bw1lu2ex7swas" path="res://Style/new_style_box_flat.tres" id="2_2qjim"]
+[ext_resource type="Texture2D" uid="uid://che5ag6yrccrf" path="res://assets/icon/Ui icon/Faith.png" id="2_faith"]
+[ext_resource type="Texture2D" uid="uid://cinfr2gc5xgin" path="res://assets/icon/Ui icon/Flame.png" id="3_flame"]
+[ext_resource type="Texture2D" uid="uid://cp67pcerwjiqm" path="res://assets/icon/Ui icon/Fortitude.png" id="4_fortitude"]
+[ext_resource type="Texture2D" uid="uid://bgwlri3ya8uc8" path="res://assets/icon/Ui icon/Reflex.png" id="5_reflex"]
+[ext_resource type="Texture2D" uid="uid://bnau5jishxops" path="res://assets/icon/Ui icon/Will.png" id="6_will"]
+[ext_resource type="Texture2D" uid="uid://cxa5uc5oym5ex" path="res://assets/icon/Ui icon/att icon.png" id="7_attack"]
+[ext_resource type="Texture2D" uid="uid://bndlqnqo03aj4" path="res://assets/ui/Bar 01.png" id="7_iirrm"]
+[ext_resource type="Texture2D" uid="uid://c5kx8xiyh1bfn" path="res://assets/icon/Ui icon/skil icon.png" id="8_skill"]
+[ext_resource type="Texture2D" uid="uid://bg60fskcgjqd1" path="res://assets/icon/Ui icon/itm icon.png" id="9_item"]
+[ext_resource type="Texture2D" uid="uid://cm8bma32tu02p" path="res://assets/icon/Ui icon/mve icon.png" id="10_move"]
+[ext_resource type="Texture2D" uid="uid://mmp82i6g6a34" path="res://assets/icon/Ui icon/ability .png" id="11_ability"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.055, 0.055, 0.06, 1)
+border_width_top = 6
+border_width_right = 6
+border_color = Color(0.82, 0.82, 0.82, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+
+[sub_resource type="StyleBoxFlat" id="EndTurnStyle"]
+bg_color = Color(0.07, 0.06, 0.065, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[node name="ActionBarLayoutConcept" type="Control" unique_id=1695377896]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FaithReadout" type="Control" parent="." unique_id=2026688558]
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 444.0
+offset_right = 55.0
+offset_bottom = 500.0
+
+[node name="Value" type="Label" parent="FaithReadout" unique_id=820459388]
+layout_mode = 0
+offset_right = 47.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_font_sizes/font_size = 15
+text = "10"
+horizontal_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="FaithReadout" unique_id=869360821]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 15.0
+offset_right = 40.0
+offset_bottom = 48.0
+texture = ExtResource("2_faith")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Caption" type="Label" parent="FaithReadout" unique_id=878173883]
+layout_mode = 0
+offset_top = 44.0
+offset_right = 47.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+text = "Faith"
+horizontal_alignment = 1
+
+[node name="StatusReadout" type="Control" parent="." unique_id=553996047]
+anchors_preset = 0
+offset_left = 58.0
+offset_top = 444.0
+offset_right = 105.0
+offset_bottom = 500.0
+
+[node name="Value" type="Label" parent="StatusReadout" unique_id=1341534916]
+layout_mode = 0
+offset_right = 47.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_font_sizes/font_size = 15
+text = "10"
+horizontal_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="StatusReadout" unique_id=822645590]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 15.0
+offset_right = 40.0
+offset_bottom = 48.0
+texture = ExtResource("2_faith")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Caption" type="Label" parent="StatusReadout" unique_id=490601943]
+layout_mode = 0
+offset_top = 44.0
+offset_right = 47.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_font_sizes/font_size = 11
+text = "Status"
+horizontal_alignment = 1
+
+[node name="ActionBarPanel" type="Panel" parent="." unique_id=1643905993]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -196.0
+offset_right = 788.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ActionBarPanel" unique_id=1910082468]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="ActionBarPanel/HBoxContainer" unique_id=1154492992]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="PortraitFrame" type="Panel" parent="ActionBarPanel/HBoxContainer/Control" unique_id=1898001361]
+clip_contents = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 14.0
+offset_right = 118.0
+offset_bottom = 120.0
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Portrait" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control/PortraitFrame" unique_id=1137275511]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_portrait")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Heat Value" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control" unique_id=1343808126]
+layout_mode = 0
+offset_left = 91.0
+offset_top = -20.0
+offset_right = 139.0
+offset_bottom = 35.0
+texture = ExtResource("3_flame")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="ActionBarPanel/HBoxContainer/Control/Heat Value" unique_id=146265600]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -28.0
+offset_right = 6.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.05, 0.01, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainHand" type="Panel" parent="ActionBarPanel/HBoxContainer/Control" unique_id=1114013095]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 128.0
+offset_right = 58.0
+offset_bottom = 178.0
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="OffHand" type="Panel" parent="ActionBarPanel/HBoxContainer/Control" unique_id=1190711415]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 128.0
+offset_right = 120.0
+offset_bottom = 178.0
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="MainHandCaption" type="Label" parent="ActionBarPanel/HBoxContainer/Control" unique_id=821047926]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 178.0
+offset_right = 65.0
+offset_bottom = 195.0
+theme_override_font_sizes/font_size = 10
+text = "Main-Hand"
+horizontal_alignment = 1
+
+[node name="OffHandCaption" type="Label" parent="ActionBarPanel/HBoxContainer/Control" unique_id=903859923]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 178.0
+offset_right = 128.0
+offset_bottom = 195.0
+theme_override_font_sizes/font_size = 10
+text = "Off-Hand"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="ActionBarPanel/HBoxContainer" unique_id=203896777]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ActionBarPanel/HBoxContainer/Control2" unique_id=1124731711]
+custom_minimum_size = Vector2(27.115, 50)
+clip_contents = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 138.0
+offset_bottom = 196.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer" unique_id=141166727]
+layout_mode = 2
+
+[node name="Will" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer" unique_id=1594407735]
+texture_filter = 1
+custom_minimum_size = Vector2(42, 70)
+layout_mode = 2
+texture = ExtResource("6_will")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer/Will" unique_id=1519625484]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 22.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 15
+text = "10"
+horizontal_alignment = 1
+
+[node name="Caption" type="Label" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer/Will" unique_id=6393634]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -18.0
+offset_bottom = -3.9999924
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 10
+text = "Will"
+horizontal_alignment = 1
+
+[node name="Fortitude" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer" unique_id=578188322]
+texture_filter = 1
+custom_minimum_size = Vector2(42, 70)
+layout_mode = 2
+texture = ExtResource("4_fortitude")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer/Fortitude" unique_id=1065077988]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 22.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 15
+text = "10"
+horizontal_alignment = 1
+
+[node name="Caption" type="Label" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer/Fortitude" unique_id=47694652]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -18.0
+offset_bottom = -3.9999924
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 10
+text = "Fortitude"
+horizontal_alignment = 1
+
+[node name="Reflex" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer" unique_id=99160468]
+texture_filter = 1
+custom_minimum_size = Vector2(42, 70)
+layout_mode = 2
+texture = ExtResource("5_reflex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer/Reflex" unique_id=68181892]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 22.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 15
+text = "10"
+horizontal_alignment = 1
+
+[node name="Caption" type="Label" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer/Reflex" unique_id=839573359]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -18.0
+offset_bottom = -3.9999924
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 10
+text = "Reflex"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer" unique_id=301095390]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer2" unique_id=2004527395]
+custom_minimum_size = Vector2(120, 50)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Hp Bar" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=711071254]
+layout_mode = 2
+texture = ExtResource("7_iirrm")
+expand_mode = 5
+
+[node name="Mana Bar" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Control2/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1237359772]
+layout_mode = 2
+texture = ExtResource("7_iirrm")
+expand_mode = 5
+
+[node name="Actions" type="Control" parent="ActionBarPanel/HBoxContainer" unique_id=2103259550]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="ActionBarPanel/HBoxContainer/Actions" unique_id=1572412121]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.056
+anchor_right = 1.0
+anchor_bottom = 0.89300007
+offset_top = 0.023999214
+offset_bottom = -0.028015137
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+
+[node name="Ability" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=846887691]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("11_ability")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Move" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=450686943]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_move")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Item" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=1707086168]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("9_item")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Skill" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=585114916]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("8_skill")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Attack" type="TextureRect" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=1500615472]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("7_attack")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Slot1" type="Panel" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=833952535]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot2" type="Panel" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=1477954871]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot3" type="Panel" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=496529400]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot4" type="Panel" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=407910106]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot5" type="Panel" parent="ActionBarPanel/HBoxContainer/Actions/GridContainer" unique_id=2114046159]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Action in Action Slot" type="GridContainer" parent="." unique_id=981096083]
+layout_mode = 0
+offset_left = 796.0
+offset_top = 531.0
+offset_right = 964.0
+offset_bottom = 725.0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Slot1" type="Panel" parent="Action in Action Slot" unique_id=997407861]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot2" type="Panel" parent="Action in Action Slot" unique_id=1896309526]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot3" type="Panel" parent="Action in Action Slot" unique_id=2027782757]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="Slot4" type="Panel" parent="Action in Action Slot" unique_id=1786321887]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_2qjim")
+
+[node name="ScrollTrack" type="HScrollBar" parent="Action in Action Slot" unique_id=523467102]
+layout_mode = 2
+
+[node name="EndTurn" type="Button" parent="." unique_id=1773787670]
+layout_mode = 0
+offset_left = 1095.0
+offset_top = 625.0
+offset_right = 1270.0
+offset_bottom = 705.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.96, 0.92, 0.93, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("EndTurnStyle")
+theme_override_styles/pressed = SubResource("EndTurnStyle")
+theme_override_styles/hover = SubResource("EndTurnStyle")
+text = "END TURN"

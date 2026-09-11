@@ -1,14 +1,15 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://b3r7x8n0ulubu"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
-[ext_resource type="Script" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_kmqf1"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_cebs5"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="4"]
 
 [sub_resource type="Resource" id="MaxFaithByLevel"]
 script = ExtResource("2")
 effect_type = 18
-levels_per_faith_bonus = 2
 
 [resource]
 script = ExtResource("1")
