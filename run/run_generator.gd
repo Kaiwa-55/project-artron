@@ -4,6 +4,7 @@ extends RefCounted
 const DEFAULT_FLOORS := 9
 const MIN_LANES := 2
 const MAX_LANES := 4
+const DEFAULT_EVENT := preload("res://data/event/strange_caravan.tres")
 
 
 func generate(seed_value: int, floor_count: int = DEFAULT_FLOORS, encounter_catalog: RunEncounterCatalog = null) -> Array[MapNodeData]:
@@ -44,6 +45,9 @@ func create_node(node_id: String, type: MapNodeData.NodeType, floor_index: int, 
 	node.threat = maxi(0, threat)
 	if type in [MapNodeData.NodeType.COMBAT, MapNodeData.NodeType.ELITE, MapNodeData.NodeType.BOSS]:
 		node.encounter_pool_id = ["", "normal", "elite", "", "", "", "", "boss"][type]
+	elif type == MapNodeData.NodeType.EVENT:
+		node.event_data = DEFAULT_EVENT.duplicate(true)
+		node.event_data.id = StringName("%s_%s" % [DEFAULT_EVENT.id, node_id])
 	return node
 
 

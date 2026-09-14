@@ -6,16 +6,35 @@ func _init() -> void:
 func run_test() -> void:
 	var arena = load("res://scenes/prototype/PrototypeCombat.tscn").instantiate()
 	root.add_child(arena)
+	await process_frame
+	await process_frame
 	var player: CombatantState = arena.combat_system.get_combat_state().get_combatant("player")
 	arena.combat_system.get_combat_state().current_actor_id = player.id
 	player.ap = player.max_ap
 	var success: bool = arena.action_category_buttons.size() == 6 and arena.action_category_buttons.has("basic") and arena.action_category_buttons.has("item") and not arena.action_category_buttons.has("throw") and not arena.action_category_buttons.has("escape")
-	arena.show_action_menu("basic")
+	var basic_button: Button = arena.action_category_buttons["basic"]
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.position = basic_button.get_global_rect().get_center()
+	click.global_position = click.position
+	var motion := InputEventMouseMotion.new()
+	motion.position = click.position
+	motion.global_position = click.position
+	root.push_input(motion, true)
+	await process_frame
+	click.pressed = true
+	root.push_input(click, true)
+	click = click.duplicate()
+	click.pressed = false
+	root.push_input(click, true)
+	await process_frame
 	var basic_entries: Array[String] = []
 	for child in arena.action_menu_list.get_children():
 		if child is Button:
 			basic_entries.append(child.text)
-	success = success and basic_entries == ["THROW", "ESCAPE"]
+	success = success and arena.minor_action_scroll.visible and not arena.action_menu_panel.visible and basic_entries == ["THROW", "ESCAPE"]
+	arena.action_category_buttons["ability"].pressed.emit()
+	success = success and arena.minor_action_scroll.visible and arena.action_menu_list.get_child_count() > 0
 	player.hp = maxi(1, player.max_hp - 6)
 	arena.show_action_menu("item")
 	var item_buttons: Array[Button] = []
@@ -40,9 +59,8 @@ func run_test() -> void:
 	arena.show_action_menu("throw")
 	var unequipped_throw_buttons := 0
 	for child in arena.action_menu_list.get_children():
-		if child is Button and child.text.contains("Equip first"):
+		if child is Button and child.disabled and not child.get_meta("menu_navigation", false):
 			unequipped_throw_buttons += 1
-			success = success and child.disabled
 	success = success and unequipped_throw_buttons == 2
 	var axe = load("res://data/equipment/hand_axe.tres")
 	arena.combat_system.equipment_system.equip_hand_item_without_cost(player, axe, 0)
@@ -56,6 +74,12 @@ func run_test() -> void:
 	success = success and enabled == 1 and arena.pending_target_attack.thrown_item == axe
 	arena.cancel_attack_targeting()
 	arena.show_action_menu("attack")
+	var attack_buttons: Array[Node] = arena.action_menu_list.get_children().filter(func(child): return child is Button and not child.disabled)
+	success = success and attack_buttons.all(func(button): return not button.text.contains(" AP"))
+	if not attack_buttons.is_empty():
+		attack_buttons[0].pressed.emit()
+	success = success and arena.pending_target_attack != null
+	arena.cancel_attack_targeting()
 	for button in arena.action_menu_list.get_children():
 		if button is Button:
 			success = success and not button.text.begins_with("Throw")
@@ -75,9 +99,22 @@ func run_test() -> void:
 		if button is Button and not button.get_meta("menu_navigation", false):
 			success = success and button.disabled
 	await process_frame
-	var dock: Control = arena.get_node("UILayer/Control/BottomActionRow/ReferenceActionDock")
+	var dock: Control = arena.get_node("UILayer/Control/CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major")
 	for button in arena.action_category_buttons.values():
 		success = success and dock.get_global_rect().encloses(button.get_global_rect())
+	for child in arena.action_menu_list.get_children():
+		arena.action_menu_list.remove_child(child)
+		child.queue_free()
+	for index in range(8):
+		arena.add_action_menu_button("Action %d" % index, "", func(): pass)
+	await process_frame
+	success = success and arena.minor_action_list.columns == 4
+	success = success and arena.minor_action_scroll.get_h_scroll_bar().max_value > arena.minor_action_scroll.get_h_scroll_bar().page
+	var icon_button := Button.new()
+	icon_button.text = "Icon Action"
+	arena.style_minor_action_button(icon_button, load("res://assets/ui/Will.png"))
+	success = success and icon_button.text.is_empty() and icon_button.has_node("ActionIcon") and icon_button.get_node("ActionName").text == "Icon Action"
+	icon_button.free()
 	arena.queue_free()
 	await process_frame
 	print("THROW_MENU_TEST: " + ("PASS" if success else "FAIL"))

@@ -1,6 +1,8 @@
 class_name EventSystem
 extends RefCounted
 
+signal event_emitted(event: CombatEvent)
+
 
 var event_history: Array[CombatEvent] = []
 
@@ -12,6 +14,7 @@ func emit(
 		return
 
 	event_history.append(event)
+	event_emitted.emit(event)
 
 
 func clear() -> void:

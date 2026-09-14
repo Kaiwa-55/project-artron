@@ -23,16 +23,16 @@ func run_test() -> void:
 	panel.show()
 	panel.set_tab("equipment")
 	await process_frame
+	var item_button: Button = panel.item_grid.get_child(0).get_node_or_null("EntryButton")
+	var success: bool = item_button != null
+	if item_button != null:
+		item_button.pressed.emit()
 	var button: Button
-	for row in panel.content_list.get_children():
-		if row is HBoxContainer:
-			for child in row.get_children():
-				if child is Button and child.text == "Equip Hand 2 - 1 AP" and not child.disabled:
-					button = child
-					break
-		if button != null:
+	for child in panel.equipment_action_bar.get_children():
+		if child is Button and child.text.contains("Hand 2") and not child.disabled:
+			button = child
 			break
-	var success: bool = button != null
+	success = success and panel.equipment_action_bar.visible and button != null
 	var ap := player.ap
 	for frame in range(5):
 		await process_frame
@@ -41,11 +41,9 @@ func run_test() -> void:
 		button.pressed.emit()
 		success = success and player.ap == ap - 1 and player.equipped_items.has(3)
 	panel.set_changes_locked(true)
-	for row in panel.content_list.get_children():
-		if row is HBoxContainer:
-			for child in row.get_children():
-				if child is Button:
-					success = success and child.disabled
+	for child in panel.equipment_action_bar.get_children():
+		if child is Button:
+			success = success and child.disabled
 	arena.queue_free()
 	await process_frame
 	print("EQUIPMENT_BUTTON_TEST: " + ("PASS" if success else "FAIL"))

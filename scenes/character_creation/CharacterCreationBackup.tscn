@@ -1,0 +1,3737 @@
+[gd_scene format=3 uid="uid://dmnmcrd2ltct1"]
+
+[ext_resource type="Texture2D" uid="uid://bxlun3v3fh7o1" path="res://assets/ui/GUI_2x.png" id="1_eh8hi"]
+[ext_resource type="Texture2D" uid="uid://clkx0c1dy5l6j" path="res://assets/ui/Icons.png" id="2_lhj88"]
+[ext_resource type="Texture2D" uid="uid://57jnw07hrre3" path="res://assets/ui/Will.png" id="3_262h5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_14cdr"]
+font_size = 10
+font_color = Color(0.42745098, 0.003921569, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_htemk"]
+font_size = 13
+font_color = Color(0.8117946, 0.86691475, 0.0013838554, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pj0hq"]
+font_size = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pj0hq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_q4lci"]
+font_size = 10
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htemk"]
+atlas = ExtResource("1_eh8hi")
+region = Rect2(198, 103, 4, 4)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ugcl7"]
+font_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_0kyq7"]
+font_color = Color(0.51566744, 0, 0.12629282, 1)
+outline_size = 1
+outline_color = Color(0.49019608, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2v35g"]
+font_size = 8
+font_color = Color(0.56078434, 0.06666667, 0, 1)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q4lci"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pp1to"]
+font_size = 12
+font_color = Color(0.46666667, 0, 0.0627451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_j2e6e"]
+font_size = 9
+font_color = Color(0.46666667, 0, 0.0627451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hd6mv"]
+font_size = 7
+font_color = Color(0.46666667, 0, 0.0627451, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_htemk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wo73g"]
+font_size = 14
+font_color = Color(0.56078434, 0.06666667, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wn4hl"]
+font_size = 12
+font_color = Color(0.56078434, 0.06666667, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_w4anh"]
+font_size = 8
+font_color = Color(0.46666667, 0, 0.0627451, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14cdr"]
+atlas = ExtResource("2_lhj88")
+region = Rect2(51, 66, 11, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ifixy"]
+atlas = ExtResource("2_lhj88")
+region = Rect2(35, 66, 11, 13)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hd6mv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ugcl7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rm47n"]
+font_size = 8
+font_color = Color(0.56078434, 0.06666667, 0, 1)
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ifixy"]
+font_size = 6
+font_color = Color(0.56078434, 0.06666667, 0, 1)
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mwb6j"]
+font_size = 6
+font_color = Color(0.099256, 0.36431986, 1, 1)
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b0jfs"]
+font_size = 14
+font_color = Color(0.5137255, 0, 0.1254902, 1)
+outline_size = 1
+outline_color = Color(0.68156266, 0.012092815, 0.08717313, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7y25n"]
+font_size = 10
+font_color = Color(0.51566744, 0, 0.12629282, 1)
+outline_size = 1
+outline_color = Color(0.49019608, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_14cdr"]
+
+[node name="CharacterCreation" type="Control" unique_id=1050848233]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1929966754]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 5.0
+offset_right = -3.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=600578204]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1516790351]
+layout_mode = 2
+
+[node name="Header" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=702660966]
+layout_mode = 2
+theme_override_constants/separation = -3
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Header" unique_id=117035010]
+layout_mode = 2
+text = "Project Artron"
+label_settings = SubResource("LabelSettings_14cdr")
+
+[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Header" unique_id=90707280]
+layout_mode = 2
+text = "Create Charactor"
+label_settings = SubResource("LabelSettings_htemk")
+
+[node name="Identity_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1032763103]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Identity_button" unique_id=799070229]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Identity_button" unique_id=1476995188]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Identity"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Ancestry_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1099940936]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Ancestry_button" unique_id=82725174]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Ancestry_button" unique_id=1069941232]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ancestry"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Class_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=898632515]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Class_button" unique_id=722233301]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Class_button" unique_id=1763741513]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Class"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=312376494]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Attribute_button" unique_id=779933303]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Attribute_button" unique_id=1409571182]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Attribute"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Abilities_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=486477962]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Abilities_button" unique_id=1243314797]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Abilities_button" unique_id=1582689468]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Abilities"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spells_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=842352263]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Spells_button" unique_id=1943574538]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Spells_button" unique_id=1247186762]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Spells"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Equiptment_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=310816636]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Equiptment_button" unique_id=166930326]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Equiptment_button" unique_id=501445137]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Equiptment"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Revier_button" type="NinePatchRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1577248702]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 4
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/Revier_button" unique_id=335670373]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/Revier_button" unique_id=1760939171]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Review"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Identity" type="HBoxContainer" parent="VBoxContainer" unique_id=1650019941]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Image_Story_Can_Select" type="NinePatchRect" parent="VBoxContainer/Identity" unique_id=708588000]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Identity/Image_Story_Can_Select" unique_id=686391221]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599808
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer" unique_id=519946718]
+custom_minimum_size = Vector2(80, 188)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 7
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="StoryContainer" type="VBoxContainer" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer" unique_id=1770343777]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer/StoryContainer" unique_id=677803209]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_pj0hq")
+
+[node name="Label" type="Label" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer/StoryContainer" unique_id=219327380]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(1, 0)
+text = "Choose Character"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+
+[node name="Story_or_chooseImage" type="NinePatchRect" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer/StoryContainer" unique_id=4374212]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer/StoryContainer/Story_or_chooseImage" unique_id=24374577]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer/StoryContainer/Story_or_chooseImage/TextureRect" unique_id=1015465158]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Choose Image"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer/Identity/Image_Story_Can_Select/MarginContainer/StoryContainer/Story_or_chooseImage/TextureRect" unique_id=1066157040]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Story" type="NinePatchRect" parent="VBoxContainer/Identity" unique_id=661217878]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Identity/Story" unique_id=679676737]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.016
+anchor_top = 0.023000002
+anchor_right = 0.984
+anchor_bottom = 0.97700006
+offset_left = 0.015999794
+offset_top = 0.06599951
+offset_right = -0.016021729
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Identity/Story/NinePatchRect" unique_id=1436614858]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022000002
+anchor_top = 0.024
+anchor_right = 0.98600006
+anchor_bottom = 0.9760001
+offset_left = 0.035999298
+offset_top = 0.09599972
+offset_right = 0.067993164
+offset_bottom = -0.09602356
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer" unique_id=2004881223]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer/MarginContainer" unique_id=119280783]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer/MarginContainer/VBoxContainer" unique_id=257135030]
+layout_mode = 2
+text = "Story"
+label_settings = SubResource("LabelSettings_0kyq7")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer/MarginContainer/VBoxContainer" unique_id=318880198]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=332039730]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Story Description"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Name_edit" type="TextEdit" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer/MarginContainer/VBoxContainer" unique_id=263650463]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+placeholder_text = "Character_Name"
+
+[node name="Image_Preview" type="TextureRect" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer/MarginContainer/VBoxContainer" unique_id=1381046520]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Identity/Story/NinePatchRect/HBoxContainer" unique_id=766308139]
+visible = false
+layout_mode = 2
+
+[node name="Character_Detail" type="NinePatchRect" parent="VBoxContainer/Identity" unique_id=1910458904]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Identity/Character_Detail" unique_id=2142054277]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599951
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Identity/Character_Detail/MarginContainer" unique_id=1735339333]
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect" unique_id=1221058868]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator2" type="HSeparator" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=574867901]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Label" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1481958865]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Your Character"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1144427919]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label2" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1748180081]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1903695809]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ancestry/Class"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=2083685396]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="VSeparator3" type="HSeparator" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1587638439]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1221065313]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer" unique_id=1509517356]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Hp"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer" unique_id=787206915]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Mana"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer" unique_id=862211573]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Ap"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=2087827478]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer2" unique_id=1321463535]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Class Dc"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer2" unique_id=2013769273]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Speed"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="GridBoxContainer3" type="GridContainer" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1983598634]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/GridBoxContainer3" unique_id=1032421617]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Str"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Dex" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/GridBoxContainer3" unique_id=1406781464]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Dex"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Con" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/GridBoxContainer3" unique_id=669530653]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Con"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Int" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/GridBoxContainer3" unique_id=1847525315]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Int"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Wis" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/GridBoxContainer3" unique_id=629841387]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Wis"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Cha" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/GridBoxContainer3" unique_id=1471775973]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cha "
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=26109014]
+layout_mode = 2
+
+[node name="Fortitude" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer4" unique_id=1848708805]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Reflex" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer4" unique_id=411941650]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Reflex"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Will" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer/HBoxContainer4" unique_id=1184973976]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Will"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=580533931]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=1019880245]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability Point Avaliable"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer/Identity/Character_Detail/MarginContainer/NinePatchRect/VBoxContainer" unique_id=593332715]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Identity" unique_id=1306242778]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="Ancestry" type="HBoxContainer" parent="VBoxContainer" unique_id=618399798]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Ancestry" unique_id=697708542]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Ancestry/NinePatchRect" unique_id=457207717]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer" unique_id=875013141]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 7
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer" unique_id=1663328183]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer" unique_id=887240921]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1507438783]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=656519416]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(1, 0)
+text = "Choose Ancestry"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=2000035709]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/NinePatchRect" unique_id=292116387]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/NinePatchRect" unique_id=1110591538]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Human"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1064608148]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/NinePatchRect2" unique_id=965436420]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/NinePatchRect2" unique_id=2032543362]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Human(Blue Blood)"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Ancestry/NinePatchRect/MarginContainer/HBoxContainer" unique_id=2116124145]
+visible = false
+layout_mode = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Ancestry" unique_id=99961510]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Ancestry/NinePatchRect2" unique_id=2104647992]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect" unique_id=98990504]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022000002
+anchor_top = 0.024
+anchor_right = 0.98300004
+anchor_bottom = 0.9760001
+offset_left = 0.035999298
+offset_top = 0.09599972
+offset_right = 0.1539917
+offset_bottom = -0.09602356
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer" unique_id=1443606053]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer" unique_id=293565267]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=827812630]
+layout_mode = 2
+text = "Ancestry Name"
+label_settings = SubResource("LabelSettings_0kyq7")
+
+[node name="Traits" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=888948131]
+layout_mode = 2
+text = "NAME"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Base Hp" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1890397888]
+layout_mode = 2
+text = "Base Hp"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Speed" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1574190145]
+layout_mode = 2
+text = "Speed"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Base Mana" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1904541893]
+layout_mode = 2
+text = "Base Mana"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Ability" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1273099268]
+layout_mode = 2
+text = "Ability"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Ability Container" type="MarginContainer" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1014987312]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container" unique_id=716715958]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1978428476]
+layout_mode = 2
+
+[node name="Ability Name" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1244500369]
+layout_mode = 2
+text = "Ability Name"
+label_settings = SubResource("LabelSettings_wo73g")
+
+[node name="Ability Type" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=681013080]
+layout_mode = 2
+text = "Ability Type"
+label_settings = SubResource("LabelSettings_wn4hl")
+
+[node name="Ability Trait" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1136846635]
+layout_mode = 2
+text = "Ability Trait"
+label_settings = SubResource("LabelSettings_wn4hl")
+autowrap_mode = 1
+
+[node name="Description" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1437367052]
+layout_mode = 2
+text = "Description"
+label_settings = SubResource("LabelSettings_wn4hl")
+autowrap_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=11407750]
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Ancestry/NinePatchRect2/NinePatchRect/MarginContainer/HBoxContainer" unique_id=1004551787]
+visible = false
+layout_mode = 2
+
+[node name="NinePatchRect3" type="NinePatchRect" parent="VBoxContainer/Ancestry" unique_id=1875710905]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Ancestry/NinePatchRect3" unique_id=1250732829]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599951
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Ancestry/NinePatchRect3" unique_id=448458154]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.067
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.96900004
+offset_left = -0.03999996
+offset_top = 0.06599951
+offset_bottom = -0.0020141602
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer" unique_id=187885128]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator2" type="HSeparator" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=1831306067]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Header" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=7782266]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Your Character"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=1177881661]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=1599502883]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="Ancestry_Class" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=250730464]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ancestry/Class"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=227244157]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="VSeparator3" type="HSeparator" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=1263327378]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=599506250]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer" unique_id=295748207]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Hp"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Mana" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1686198379]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Mana"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ap" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer" unique_id=387735237]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Ap"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=176332241]
+layout_mode = 2
+
+[node name="ClassDc" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=924555007]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Class Dc"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Speed" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1478694009]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Speed"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="GridBoxContainer3" type="GridContainer" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=426840375]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=635286667]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Str"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Dex" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=2012865657]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Dex"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Con" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1860378604]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Con"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Int" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=370837288]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Int"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Wis" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1469439635]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Wis"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Cha" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=547644122]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cha "
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=126129086]
+layout_mode = 2
+
+[node name="Fortitude" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=203885515]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Reflex" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1560598602]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Reflex"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Will" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=922950261]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Will"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=656958286]
+layout_mode = 2
+
+[node name="Ability Point Avaliable" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=1846604371]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability Point Avaliable"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ability" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=2142129908]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Abilitygranted" type="Label" parent="VBoxContainer/Ancestry/NinePatchRect3/MarginContainer/VBoxContainer" unique_id=611395603]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "AbilitygrantedName"
+label_settings = SubResource("LabelSettings_w4anh")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Ancestry" unique_id=1520408169]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="Class" type="HBoxContainer" parent="VBoxContainer" unique_id=1846672340]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Class_Select_Tab" type="NinePatchRect" parent="VBoxContainer/Class" unique_id=783644366]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Class/Class_Select_Tab" unique_id=2076913809]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer" unique_id=691550064]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 7
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer" unique_id=689755571]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer" unique_id=822974045]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1493784214]
+layout_mode = 2
+
+[node name="Choose Class" type="Label" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1347592335]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(1, 0)
+text = "Choose Class"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+
+[node name="Class" type="NinePatchRect" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1132425470]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer/Class" unique_id=214181888]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer/Class" unique_id=906262114]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "ClassName"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Class2" type="NinePatchRect" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1485367591]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer/Class2" unique_id=425718587]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer/VBoxContainer/Class2" unique_id=2077041708]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "ClassName"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Class/Class_Select_Tab/MarginContainer/HBoxContainer" unique_id=1191320801]
+visible = false
+layout_mode = 2
+
+[node name="Class_Detail" type="NinePatchRect" parent="VBoxContainer/Class" unique_id=1514357372]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Class_Detail_Rect" type="NinePatchRect" parent="VBoxContainer/Class/Class_Detail" unique_id=170885279]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect" unique_id=1373858755]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022000002
+anchor_top = 0.024
+anchor_right = 0.98300004
+anchor_bottom = 0.9760001
+offset_left = 0.035999298
+offset_top = 0.09599972
+offset_right = 0.1539917
+offset_bottom = -0.09602356
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer" unique_id=871231081]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer" unique_id=2043727008]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=939308926]
+layout_mode = 2
+text = "Class Name"
+label_settings = SubResource("LabelSettings_0kyq7")
+
+[node name="Traits" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=693572360]
+layout_mode = 2
+text = "Traits"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Base Hp" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=593790909]
+layout_mode = 2
+text = "Base Hp"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Speed" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1034578627]
+layout_mode = 2
+text = "Speed"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Base Mana" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=432687785]
+layout_mode = 2
+text = "Base Mana"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Ability" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=490964203]
+layout_mode = 2
+text = "Ability"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Ability Container" type="MarginContainer" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1835517027]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container" unique_id=1337618140]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1897023786]
+layout_mode = 2
+
+[node name="Ability Name" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1746757776]
+layout_mode = 2
+text = "Ability Name"
+label_settings = SubResource("LabelSettings_wo73g")
+
+[node name="Ability Type" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=2060744960]
+layout_mode = 2
+text = "Ability Type"
+label_settings = SubResource("LabelSettings_wn4hl")
+
+[node name="Ability Trait" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=1097110067]
+layout_mode = 2
+text = "Ability Trait"
+label_settings = SubResource("LabelSettings_wn4hl")
+autowrap_mode = 1
+
+[node name="Description" type="Label" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=874217537]
+layout_mode = 2
+text = "Description"
+label_settings = SubResource("LabelSettings_wn4hl")
+autowrap_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Ability Container/VBoxContainer" unique_id=2138020525]
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Class/Class_Detail/Class_Detail_Rect/MarginContainer/HBoxContainer" unique_id=1241286283]
+visible = false
+layout_mode = 2
+
+[node name="Character_Details" type="NinePatchRect" parent="VBoxContainer/Class" unique_id=242871226]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Character_DetailsRect" type="NinePatchRect" parent="VBoxContainer/Class/Character_Details" unique_id=1400218248]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599951
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Class/Character_Details" unique_id=1426470454]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.067
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.96900004
+offset_left = -0.03999996
+offset_top = 0.06599951
+offset_bottom = -0.0020141602
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Class/Character_Details/MarginContainer" unique_id=1408476420]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator2" type="HSeparator" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=164634470]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Header" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=120302445]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Your Character"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=1876127590]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=550084859]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="Ancestry_Class" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=280103490]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ancestry/Class"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=1207095878]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="VSeparator3" type="HSeparator" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=2106721146]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=1641833093]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=448610902]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Hp"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Mana" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1348064225]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Mana"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ap" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=457675348]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Ap"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=1563377208]
+layout_mode = 2
+
+[node name="ClassDc" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1113331355]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Class Dc"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Speed" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1690386884]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Speed"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="GridBoxContainer3" type="GridContainer" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=921377962]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1744379438]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Str"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Dex" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=766041856]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Dex"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Con" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1707706036]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Con"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Int" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=529564712]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Int"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Wis" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=622854827]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Wis"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Cha" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=862458563]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cha "
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=727105113]
+layout_mode = 2
+
+[node name="Fortitude" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=332742138]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Reflex" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=326489858]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Reflex"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Will" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=2007132740]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Will"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=1168348476]
+layout_mode = 2
+
+[node name="Ability Point Avaliable" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=677317297]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability Point Avaliable"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ability" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=1682653081]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Abilitygranted" type="Label" parent="VBoxContainer/Class/Character_Details/MarginContainer/VBoxContainer" unique_id=541265384]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "AbilitygrantedName"
+label_settings = SubResource("LabelSettings_w4anh")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Class" unique_id=230517217]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="Attribute" type="HBoxContainer" parent="VBoxContainer" unique_id=940067409]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Ability_That_Increase_Attribute" type="NinePatchRect" parent="VBoxContainer/Attribute" unique_id=483365875]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute" unique_id=1377936559]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer" unique_id=970065705]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 7
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer" unique_id=1323247606]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer" unique_id=804432491]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer" unique_id=2044855574]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer" unique_id=124557799]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(1, 0)
+text = "Ability"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+
+[node name="Ability2" type="NinePatchRect" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1179087745]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer/Ability2" unique_id=169662674]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer/Ability2" unique_id=1427732806]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ability"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Ability3" type="NinePatchRect" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer" unique_id=732796564]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer/Ability3" unique_id=1436156861]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="Label" type="Label" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer/VBoxContainer/Ability3" unique_id=686400671]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ability"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Attribute/Ability_That_Increase_Attribute/MarginContainer/HBoxContainer" unique_id=389532659]
+visible = false
+layout_mode = 2
+
+[node name="AbilitiesAndAttribute_Detail" type="NinePatchRect" parent="VBoxContainer/Attribute" unique_id=1744619360]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="AbilitiesAndAttribute_Detail_Rect" type="NinePatchRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail" unique_id=72175151]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect" unique_id=590420784]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022000002
+anchor_top = 0.024
+anchor_right = 0.98300004
+anchor_bottom = 0.9760001
+offset_left = 0.035999298
+offset_top = 0.09599972
+offset_right = 0.1539917
+offset_bottom = -0.09602356
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer" unique_id=830344141]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer" unique_id=1100736941]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=895673726]
+layout_mode = 2
+text = "Ability Name"
+label_settings = SubResource("LabelSettings_0kyq7")
+
+[node name="Traits" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=288940526]
+layout_mode = 2
+text = "Traits"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Description" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=669559700]
+layout_mode = 2
+text = "Description"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Attribute Container" type="MarginContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer" unique_id=306970424]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container" unique_id=784863611]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer" unique_id=282445063]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer" unique_id=358610904]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer" unique_id=829965730]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -6
+
+[node name="Type" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Str" unique_id=1663210488]
+layout_mode = 2
+text = "Str"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Str" unique_id=1137691558]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonDecrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Str/HBoxContainer" unique_id=1521974964]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_14cdr")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Str/HBoxContainer" unique_id=1722485927]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_262h5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonIncrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Str/HBoxContainer" unique_id=1531065541]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_ifixy")
+flat = true
+
+[node name="Value" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Str" unique_id=1718331527]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="Dex" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer" unique_id=1312541859]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -6
+
+[node name="Type" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Dex" unique_id=750801563]
+layout_mode = 2
+text = "Dex"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Dex" unique_id=985390350]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonDecrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Dex/HBoxContainer" unique_id=1219285746]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_14cdr")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Dex/HBoxContainer" unique_id=1629442859]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_262h5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonIncrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Dex/HBoxContainer" unique_id=1758955010]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_ifixy")
+flat = true
+
+[node name="Value" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Dex" unique_id=195792229]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="Con" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer" unique_id=1537749896]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -6
+
+[node name="Type" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Con" unique_id=1436523849]
+layout_mode = 2
+text = "Con"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Con" unique_id=1338427452]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonDecrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Con/HBoxContainer" unique_id=119969494]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_14cdr")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Con/HBoxContainer" unique_id=1576286257]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_262h5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonIncrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Con/HBoxContainer" unique_id=199036617]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_ifixy")
+flat = true
+
+[node name="Value" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Con" unique_id=530636745]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="Int" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer" unique_id=606315662]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -6
+
+[node name="Type" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Int" unique_id=1439224178]
+layout_mode = 2
+text = "Int"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Int" unique_id=1707537485]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonDecrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Int/HBoxContainer" unique_id=147926322]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_14cdr")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Int/HBoxContainer" unique_id=2038398205]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_262h5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonIncrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Int/HBoxContainer" unique_id=1720044234]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_ifixy")
+flat = true
+
+[node name="Value" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Int" unique_id=1212655402]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="Wis" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer" unique_id=1228477018]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -6
+
+[node name="Type" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Wis" unique_id=1363267959]
+layout_mode = 2
+text = "Wis"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Wis" unique_id=680673549]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonDecrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Wis/HBoxContainer" unique_id=2066526000]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_14cdr")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Wis/HBoxContainer" unique_id=766549612]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_262h5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonIncrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Wis/HBoxContainer" unique_id=1114083040]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_ifixy")
+flat = true
+
+[node name="Value" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Wis" unique_id=897786900]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="Cha" type="VBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer" unique_id=1750302604]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -6
+
+[node name="Type" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Cha" unique_id=1922379696]
+layout_mode = 2
+text = "Cha"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Cha" unique_id=1972755665]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonDecrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Cha/HBoxContainer" unique_id=530068852]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_14cdr")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Cha/HBoxContainer" unique_id=1190752936]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_262h5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonIncrease" type="Button" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Cha/HBoxContainer" unique_id=558082931]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = SubResource("AtlasTexture_ifixy")
+flat = true
+
+[node name="Value" type="Label" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer/GridContainer/Cha" unique_id=687704329]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer/VBoxContainer/Attribute Container/VBoxContainer" unique_id=73609121]
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Attribute/AbilitiesAndAttribute_Detail/AbilitiesAndAttribute_Detail_Rect/MarginContainer/HBoxContainer" unique_id=439423242]
+visible = false
+layout_mode = 2
+
+[node name="Character_Details" type="NinePatchRect" parent="VBoxContainer/Attribute" unique_id=944931076]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Character_DetailsRect" type="NinePatchRect" parent="VBoxContainer/Attribute/Character_Details" unique_id=467263516]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599951
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Attribute/Character_Details" unique_id=1998744743]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.067
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.96900004
+offset_left = -0.03999996
+offset_top = 0.06599951
+offset_bottom = -0.0020141602
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Attribute/Character_Details/MarginContainer" unique_id=753644528]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator2" type="HSeparator" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=808004094]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Header" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=2015193967]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Your Character"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1249138525]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=954405888]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="Ancestry_Class" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=369190281]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ancestry/Class"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1874256063]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="VSeparator3" type="HSeparator" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=2125800338]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1362758456]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=186763624]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Hp"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Mana" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1597816440]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Mana"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ap" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=826863896]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Ap"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=2029024834]
+layout_mode = 2
+
+[node name="ClassDc" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=379984496]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Class Dc"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Speed" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=957803401]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Speed"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="GridBoxContainer3" type="GridContainer" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1563649120]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=694523466]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Str"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Dex" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1619768545]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Dex"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Con" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=298059018]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Con"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Int" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=522507446]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Int"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Wis" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=2116654967]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Wis"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Cha" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1171502362]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cha "
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=568739174]
+layout_mode = 2
+
+[node name="Fortitude" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=928484728]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Reflex" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=2047511257]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Reflex"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Will" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1638146150]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Will"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1154699966]
+layout_mode = 2
+
+[node name="Ability Point Avaliable" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1041916263]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability Point Avaliable"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ability" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1610040533]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Abilitygranted" type="Label" parent="VBoxContainer/Attribute/Character_Details/MarginContainer/VBoxContainer" unique_id=1193668883]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "AbilitygrantedName"
+label_settings = SubResource("LabelSettings_w4anh")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Attribute" unique_id=1917721744]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="Abilities" type="HBoxContainer" parent="VBoxContainer" unique_id=1209054122]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Ability" type="NinePatchRect" parent="VBoxContainer/Abilities" unique_id=445854382]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Abilities/Ability" unique_id=2116366271]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Abilities/Ability/MarginContainer" unique_id=2131654938]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 7
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Abilities/Ability/MarginContainer" unique_id=695458094]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer" unique_id=716558219]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer" unique_id=327014466]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer" unique_id=3617720]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(1, 0)
+text = "Ability"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+
+[node name="Ability" type="NinePatchRect" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1016859375]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability" unique_id=395422984]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.009000001
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.027999938
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer" unique_id=994878824]
+custom_minimum_size = Vector2(-2.16, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_hd6mv")
+
+[node name="Ability_Icon" type="TextureRect" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer" unique_id=1109745999]
+show_behind_parent = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+offset_transform_enabled = true
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer" unique_id=1913880419]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -1
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer/VBoxContainer" unique_id=1025181845]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ugcl7")
+
+[node name="Name" type="Label" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer/VBoxContainer" unique_id=2116401629]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_rm47n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer/VBoxContainer" unique_id=1326488272]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_ifixy")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Type" type="Label" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer/VBoxContainer" unique_id=435763624]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Type"
+label_settings = SubResource("LabelSettings_ifixy")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Select status" type="Label" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability/HBoxContainer/VBoxContainer" unique_id=1254304600]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "selected or un"
+label_settings = SubResource("LabelSettings_mwb6j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer/VBoxContainer/Ability" unique_id=49154120]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Abilities/Ability/MarginContainer/HBoxContainer" unique_id=1058957912]
+visible = false
+layout_mode = 2
+
+[node name="Detail" type="NinePatchRect" parent="VBoxContainer/Abilities" unique_id=1383814094]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="DetailRect" type="NinePatchRect" parent="VBoxContainer/Abilities/Detail" unique_id=766358074]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Ability Detail" type="MarginContainer" parent="VBoxContainer/Abilities/Detail/DetailRect" unique_id=1961409756]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022000002
+anchor_top = 0.024
+anchor_right = 0.98300004
+anchor_bottom = 0.9760001
+offset_left = 0.035999298
+offset_top = 0.09599972
+offset_right = 0.1539917
+offset_bottom = -0.09602356
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail" unique_id=879837082]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer" unique_id=800228170]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=933779277]
+layout_mode = 2
+text = "Ability Name"
+label_settings = SubResource("LabelSettings_0kyq7")
+
+[node name="Level" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1729601730]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_b0jfs")
+
+[node name="Prequest" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=982023617]
+layout_mode = 2
+text = "Prequest"
+label_settings = SubResource("LabelSettings_7y25n")
+
+[node name="Type" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1096696408]
+layout_mode = 2
+text = "Type"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Traits" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1917659698]
+layout_mode = 2
+text = "Traits"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Cost" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=729252414]
+layout_mode = 2
+text = "Cost"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Target" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=408747822]
+layout_mode = 2
+text = "Target"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Range" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1521674097]
+layout_mode = 2
+text = "Range"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Area" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=15222320]
+layout_mode = 2
+text = "Area"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Duration" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=601327475]
+layout_mode = 2
+text = "Duration"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Cooldown" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=429875848]
+layout_mode = 2
+text = "Cooldown"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1975543300]
+layout_mode = 2
+
+[node name="Description" type="Label" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1299260836]
+layout_mode = 2
+text = "Description"
+label_settings = SubResource("LabelSettings_2v35g")
+autowrap_mode = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=273803876]
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Abilities/Detail/DetailRect/Ability Detail/HBoxContainer" unique_id=603777591]
+visible = false
+layout_mode = 2
+
+[node name="Character_Details" type="NinePatchRect" parent="VBoxContainer/Abilities" unique_id=2125169808]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Character_DetailsRect" type="NinePatchRect" parent="VBoxContainer/Abilities/Character_Details" unique_id=1704011404]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599951
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Abilities/Character_Details" unique_id=1481389841]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.067
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.96900004
+offset_left = -0.03999996
+offset_top = 0.06599951
+offset_bottom = -0.0020141602
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Abilities/Character_Details/MarginContainer" unique_id=1809533190]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator2" type="HSeparator" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=2102530143]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Header" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=128986576]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Your Character"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=509558911]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1892956604]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="Ancestry_Class" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1286590861]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ancestry/Class"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1039098544]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="VSeparator3" type="HSeparator" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=985887960]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=2100285118]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2028767284]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Hp"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Mana" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1701781705]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Mana"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ap" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1885748674]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Ap"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1385566068]
+layout_mode = 2
+
+[node name="ClassDc" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1150309585]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Class Dc"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Speed" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2037341621]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Speed"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="GridBoxContainer3" type="GridContainer" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=2130553223]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1248645873]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Str"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Dex" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1610693413]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Dex"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Con" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1092053836]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Con"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Int" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=791371426]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Int"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Wis" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=977288583]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Wis"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Cha" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=985429055]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cha "
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1607770812]
+layout_mode = 2
+
+[node name="Fortitude" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=72569102]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Reflex" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=869350870]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Reflex"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Will" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1479273600]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Will"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1211863379]
+layout_mode = 2
+
+[node name="Ability Point Avaliable" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1403519177]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability Point Avaliable"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ability" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1237503943]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Abilitygranted" type="Label" parent="VBoxContainer/Abilities/Character_Details/MarginContainer/VBoxContainer" unique_id=1895601498]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "AbilitygrantedName"
+label_settings = SubResource("LabelSettings_w4anh")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Abilities" unique_id=1928470390]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="Spell" type="HBoxContainer" parent="VBoxContainer" unique_id=1573982653]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Ability" type="NinePatchRect" parent="VBoxContainer/Spell" unique_id=1311206996]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Spell/Ability" unique_id=1418124963]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/Spell/Ability/MarginContainer" unique_id=998828173]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 7
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Spell/Ability/MarginContainer" unique_id=142852277]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer" unique_id=1875200060]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer" unique_id=687474794]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer" unique_id=101958637]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(1, 0)
+text = "Ability"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+
+[node name="Abilitythatgivespell" type="NinePatchRect" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer" unique_id=696048421]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell" unique_id=1690760678]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.009000001
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.027999938
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer" unique_id=968854443]
+custom_minimum_size = Vector2(-2.16, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_hd6mv")
+
+[node name="Ability_Icon" type="TextureRect" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer" unique_id=1067372969]
+show_behind_parent = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+offset_transform_enabled = true
+texture = SubResource("AtlasTexture_htemk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer" unique_id=1742745876]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -1
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer/VBoxContainer" unique_id=2100316352]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ugcl7")
+
+[node name="Name" type="Label" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer/VBoxContainer" unique_id=1561741444]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_rm47n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Type" type="Label" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer/VBoxContainer" unique_id=1796627398]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "SpellType"
+label_settings = SubResource("LabelSettings_ifixy")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell/HBoxContainer/VBoxContainer" unique_id=1682402336]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_ifixy")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer/VBoxContainer/Abilitythatgivespell" unique_id=721212647]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Spell/Ability/MarginContainer/HBoxContainer" unique_id=1663587370]
+visible = false
+layout_mode = 2
+
+[node name="Detail" type="NinePatchRect" parent="VBoxContainer/Spell" unique_id=726151868]
+custom_minimum_size = Vector2(80, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="DetailRect" type="NinePatchRect" parent="VBoxContainer/Spell/Detail" unique_id=1335676736]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Ability Detail" type="MarginContainer" parent="VBoxContainer/Spell/Detail/DetailRect" unique_id=863555984]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022000002
+anchor_top = 0.024
+anchor_right = 0.98300004
+anchor_bottom = 0.9760001
+offset_left = 0.035999298
+offset_top = 0.09599972
+offset_right = 0.1539917
+offset_bottom = -0.09602356
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail" unique_id=599270759]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer" unique_id=579633178]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=606094166]
+layout_mode = 2
+text = "Ability Name"
+label_settings = SubResource("LabelSettings_0kyq7")
+
+[node name="Level" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1502489745]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_b0jfs")
+
+[node name="Prequest" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1030034228]
+layout_mode = 2
+text = "Prequest"
+label_settings = SubResource("LabelSettings_7y25n")
+
+[node name="Type" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=185457337]
+layout_mode = 2
+text = "Type"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Traits" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=150315953]
+layout_mode = 2
+text = "Traits"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Cost" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=81197622]
+visible = false
+layout_mode = 2
+text = "Cost"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Target" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=11119674]
+visible = false
+layout_mode = 2
+text = "Target"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Range" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1534856446]
+visible = false
+layout_mode = 2
+text = "Range"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Area" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=2123947409]
+visible = false
+layout_mode = 2
+text = "Area"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Duration" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1534984575]
+visible = false
+layout_mode = 2
+text = "Duration"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="Cooldown" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=434411164]
+visible = false
+layout_mode = 2
+text = "Cooldown"
+label_settings = SubResource("LabelSettings_2v35g")
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1824392842]
+layout_mode = 2
+
+[node name="Description" type="Label" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1607460186]
+layout_mode = 2
+text = "Description"
+label_settings = SubResource("LabelSettings_2v35g")
+autowrap_mode = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=1709264539]
+layout_mode = 2
+
+[node name="Spell_List" type="VBoxContainer" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer" unique_id=968935136]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer/Spell_List" unique_id=23533145]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer/Spell_List/HBoxContainer" unique_id=683875197]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer/VBoxContainer/Spell_List/HBoxContainer" unique_id=1292337923]
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/Spell/Detail/DetailRect/Ability Detail/HBoxContainer" unique_id=979893026]
+visible = false
+layout_mode = 2
+
+[node name="Character_Details" type="NinePatchRect" parent="VBoxContainer/Spell" unique_id=605109869]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(256, 96, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Character_DetailsRect" type="NinePatchRect" parent="VBoxContainer/Spell/Character_Details" unique_id=1203441004]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.97700006
+offset_top = 0.06599951
+offset_bottom = -0.06600952
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(190, 0, 50, 48)
+patch_margin_left = 8
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Spell/Character_Details" unique_id=620708146]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.067
+anchor_top = 0.023000002
+anchor_right = 0.95000005
+anchor_bottom = 0.96900004
+offset_left = -0.03999996
+offset_top = 0.06599951
+offset_bottom = -0.0020141602
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Spell/Character_Details/MarginContainer" unique_id=1876838599]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VSeparator2" type="HSeparator" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=616392600]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Header" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=968935885]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Your Character"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1119474712]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=562189398]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Name"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+
+[node name="Ancestry_Class" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=698137612]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ancestry/Class"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=877461714]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Level"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="VSeparator3" type="HSeparator" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1193057601]
+modulate = Color(0.844109, 0.5591589, 0.43978277, 1)
+self_modulate = Color(0.72156864, 0.43529412, 0.3137255, 1)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1855993692]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=141888002]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Hp"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Mana" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=204642315]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Mana"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ap" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer" unique_id=507289895]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Ap"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1403825780]
+layout_mode = 2
+
+[node name="ClassDc" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1466153248]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Class Dc"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Speed" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1219910527]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Speed"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="GridBoxContainer3" type="GridContainer" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1652429885]
+layout_mode = 2
+columns = 3
+
+[node name="Str" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=777955117]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Str"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Dex" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1968821072]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Dex"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Con" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1199584259]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Con"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Int" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=2067783175]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "Int"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Wis" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=1303467038]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Wis"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Cha" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/GridBoxContainer3" unique_id=230439130]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cha "
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1883588236]
+layout_mode = 2
+
+[node name="Fortitude" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1939578153]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Reflex" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=2094680557]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Reflex"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="Will" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=791226187]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Will"
+label_settings = SubResource("LabelSettings_hd6mv")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=306051202]
+layout_mode = 2
+
+[node name="Ability Point Avaliable" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1307660828]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability Point Avaliable"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Ability" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1264041114]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Ability"
+label_settings = SubResource("LabelSettings_j2e6e")
+horizontal_alignment = 1
+
+[node name="Abilitygranted" type="Label" parent="VBoxContainer/Spell/Character_Details/MarginContainer/VBoxContainer" unique_id=1417186030]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "AbilitygrantedName"
+label_settings = SubResource("LabelSettings_w4anh")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Spell" unique_id=1726018718]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1876013435]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=2134463263]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/HBoxContainer2" unique_id=1200864625]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Back" type="Label" parent="VBoxContainer/HBoxContainer2/NinePatchRect" unique_id=758011739]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.017
+anchor_top = 0.05
+anchor_right = 0.98300004
+anchor_bottom = 0.95000005
+offset_left = -0.0400002
+offset_right = 0.039993286
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="VBoxContainer/HBoxContainer2" unique_id=530418148]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("1_eh8hi")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Next" type="Label" parent="VBoxContainer/HBoxContainer2/NinePatchRect2" unique_id=1458543147]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.017
+anchor_top = 0.05
+anchor_right = 0.98300004
+anchor_bottom = 0.95000005
+offset_left = -0.0400002
+offset_right = 0.039993286
+grow_horizontal = 2
+grow_vertical = 2
+text = "Next"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/HBoxContainer2" unique_id=91123307]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_14cdr")

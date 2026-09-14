@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://buib3ur3rbi6w"]
+
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="2"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_4tjb1"]
+[ext_resource type="Texture2D" uid="uid://dk8v46m62vwxo" path="res://assets/events/caravan_search_anime.png" id="3"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_uon4w"]
+
+[sub_resource type="Resource" id="Choice_leave"]
+script = ExtResource("2")
+text = "Return to the road"
+
+[resource]
+script = ExtResource("1")
+id = &"caravan_search"
+title = "Inside the Caravan"
+description = "The overturned wagon has been searched already. Fresh tracks lead into the dunes."
+illustration = ExtResource("3")
+choices = Array[ExtResource("2")]([SubResource("Choice_leave")])

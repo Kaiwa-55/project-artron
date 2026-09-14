@@ -51,11 +51,11 @@ theme_override_font_sizes/font_size = 18
 text = "Choose one reward"
 horizontal_alignment = 1
 
-[node name="Cards" type="HBoxContainer" parent="Margin/Layout"]
+[node name="Cards" type="GridContainer" parent="Margin/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
+columns = 4
 theme_override_constants/separation = 22
-alignment = 1
 
 [node name="Status" type="Label" parent="Margin/Layout"]
 custom_minimum_size = Vector2(0, 46)

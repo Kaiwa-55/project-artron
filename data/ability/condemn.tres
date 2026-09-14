@@ -23,7 +23,6 @@ id = "condemn"
 display_name = "Condemn"
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("4"), ExtResource("5")]
-auto_equip_on_grant = true
 ap_cost = 2
 faith_cost = 1
 uses_per_turn = 1

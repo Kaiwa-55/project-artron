@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/ability/effect/brutal_strike_damage.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_442mc"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_dirfv"]
 [ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
 
 [resource]

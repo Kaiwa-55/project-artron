@@ -1,18 +1,18 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://np5jygbw8l8d"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_kfh67"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
-[ext_resource type="Resource" path="res://data/reaction/sacrificial_reaction.tres" id="4"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_s5aj6"]
+[ext_resource type="Resource" uid="uid://cv4tj4j7aehb1" path="res://data/reaction/sacrificial_reaction.tres" id="4"]
 
 [resource]
 script = ExtResource("1")
 id = "sacrificial"
 display_name = "Sacrificial"
-required_level = 1
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("2"), ExtResource("3")]
-auto_equip_on_grant = true
 reaction_only = true
 ap_cost = 1
 faith_cost = 1

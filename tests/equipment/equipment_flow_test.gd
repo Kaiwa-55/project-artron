@@ -14,7 +14,7 @@ func _init() -> void:
 	system.combat_state.current_actor_id = player.id
 	player.ap = player.max_ap
 
-	var sword = find_item(player, "iron_sword")
+	var sword = find_item(player, "sword")
 	var spear = find_item(player, "long_spear")
 	var armor = find_item(player, "leather_armor")
 	var shield = find_item(player, "buckler")

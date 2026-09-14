@@ -2,47 +2,122 @@
 
 [ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="1_53d28"]
-[ext_resource type="Resource" path="res://data/ability/blood_claw.tres" id="3_wum6y"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="3_j58h4"]
 [ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4"]
-[ext_resource type="Resource" path="res://data/ability/predator_rush.tres" id="4_irl6l"]
-[ext_resource type="Resource" path="res://data/attack/rending_talon.tres" id="5_kc6wg"]
-[ext_resource type="Resource" uid="uid://87olcsmdty3u" path="res://data/character/player.tres" id="5_player"]
 [ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="6_7qnd7"]
-[ext_resource type="Texture2D" uid="uid://ttpm6xtupsxp" path="res://assets/character_creation/Crimson Spine Stalker.png" id="7_imatu"]
-[ext_resource type="Resource" uid="uid://b4pdb0x8d6gnk" path="res://data/reaction/skitter_dodge.tres" id="8_jkklf"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="9_te15p"]
-[ext_resource type="Resource" path="res://data/trait/demon.tres" id="10_c8kss"]
 [ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="11_euk6r"]
+[ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="12_mxx2m"]
+[ext_resource type="Resource" uid="uid://623hc2j4n3co" path="res://data/ability/build_up_body.tres" id="13_mc5ft"]
+[ext_resource type="Resource" path="res://data/ability/finishing_move.tres" id="14_bjhw8"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="15_s0wnp"]
+[ext_resource type="Resource" uid="uid://dso253emhcod0" path="res://data/ability/martial_sense.tres" id="16_oo0bf"]
+[ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="17_5qwgw"]
+[ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="18_b7dxh"]
+[ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="19_ohn4t"]
+[ext_resource type="Resource" uid="uid://ckrki53jpb51j" path="res://data/equipment/sword.tres" id="20_hqhrd"]
+[ext_resource type="Resource" uid="uid://cp2oeb5hig86m" path="res://data/equipment/long_spear.tres" id="21_kn6y8"]
+[ext_resource type="Resource" uid="uid://b0887ygowuyvx" path="res://data/equipment/leather_armor.tres" id="22_4gotm"]
+[ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="23_80qkq"]
+[ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="24_pxlmc"]
+[ext_resource type="Resource" uid="uid://dy5ai2cdwi0dj" path="res://data/equipment/dagger_offhand.tres" id="25_3c5j3"]
+[ext_resource type="Resource" uid="uid://mwn86gfa6f6d" path="res://data/equipment/club.tres" id="26_6yt0m"]
+[ext_resource type="Resource" uid="uid://y0eqxm0uunff" path="res://data/equipment/hand_axe.tres" id="27_ccn23"]
+[ext_resource type="Resource" uid="uid://qi8e4p706jhp" path="res://data/equipment/short_spear.tres" id="28_emkik"]
+[ext_resource type="Resource" uid="uid://dn48gsppkugs0" path="res://data/equipment/shortbow.tres" id="29_82xhh"]
+[ext_resource type="Resource" path="res://data/item/minor_healing_potion_stack.tres" id="30_g5w2d"]
+[ext_resource type="Resource" uid="uid://cy3els7jt02f6" path="res://data/reaction/parry.tres" id="31_3xhpx"]
 
-[sub_resource type="Resource" id="Resource_1k873"]
-script = ExtResource("1_53d28")
-id = "crimson_spine_stalker"
-display_name = "Crimson Spine Stalker"
-portrait = ExtResource("7_imatu")
-token_texture = ExtResource("7_imatu")
-token_scale = 1.3
-token_offset = Vector2(0, 20)
-team = 2
-position = Vector2(1250, 1500)
+[sub_resource type="Resource" id="Progression_L1"]
+script = ExtResource("17_5qwgw")
+max_hp_gain = 8
+granted_abilities = Array[ExtResource("15_s0wnp")]([ExtResource("13_mc5ft"), ExtResource("16_oo0bf")])
+
+[sub_resource type="Resource" id="Progression_L2"]
+script = ExtResource("17_5qwgw")
+level = 2
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L3"]
+script = ExtResource("17_5qwgw")
+level = 3
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L4"]
+script = ExtResource("17_5qwgw")
 level = 4
-base_max_hp = 30
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L5"]
+script = ExtResource("17_5qwgw")
+level = 5
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L6"]
+script = ExtResource("17_5qwgw")
+level = 6
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L7"]
+script = ExtResource("17_5qwgw")
+level = 7
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L8"]
+script = ExtResource("17_5qwgw")
+level = 8
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L9"]
+script = ExtResource("17_5qwgw")
+level = 9
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Progression_L10"]
+script = ExtResource("17_5qwgw")
+level = 10
+max_hp_gain = 7
+
+[sub_resource type="Resource" id="Resource_4b2gx"]
+script = ExtResource("18_b7dxh")
+id = "martial_artist"
+display_name = "Martial Artist"
+description = "An unarmed combatant who builds momentum through disciplined technique."
+base_speed_feet = 10.0
+base_mana = 0
+max_finishing_gauge = 10
+fixed_attribute_bonuses = {
+2: 1
+}
+attribute_choice_count = 1
+attribute_choice_options = Array[int]([0, 1])
+granted_abilities = [ExtResource("13_mc5ft"), ExtResource("14_bjhw8"), ExtResource("16_oo0bf")]
+traits = [ExtResource("19_ohn4t")]
+auto_equipped_ability_ids = Array[String](["build_up_body", "finishing_move", "martial_sense"])
+progression_entries = Array[Resource]([SubResource("Progression_L1"), SubResource("Progression_L2"), SubResource("Progression_L3"), SubResource("Progression_L4"), SubResource("Progression_L5"), SubResource("Progression_L6"), SubResource("Progression_L7"), SubResource("Progression_L8"), SubResource("Progression_L9"), SubResource("Progression_L10")])
+
+[sub_resource type="Resource" id="Resource_bxa7c"]
+script = ExtResource("1_53d28")
+id = "player"
+display_name = "Player"
+token_scale = 1.4
+team = 1
+position = Vector2(510, 250)
+ancestry = ExtResource("12_mxx2m")
+ancestry_attribute_choices = Array[int]([1, 2, 4])
+character_class = SubResource("Resource_4b2gx")
+class_attribute_choices = Array[int]([2])
+level = 3
+base_max_hp = 0
 base_max_ap = 4
-base_speed = 20.0
-reflex_stat_bonus = 3
-fortitude_stat_bonus = 1
-strength = 16
-dexterity = 18
-constitution = 14
-intelligence = 8
-wisdom = 12
-charisma = 8
-initiative_bonus = -10
-available_abilities = [ExtResource("3_wum6y"), ExtResource("4_irl6l")]
-equipped_abilities = ["blood_claw", "predator_rush"]
-equipped_weapon_attack = ExtResource("5_kc6wg")
-natural_attack = ExtResource("5_kc6wg")
-traits = [ExtResource("10_c8kss")]
-reactions = [ExtResource("8_jkklf")]
+equipment_inventory = [ExtResource("20_hqhrd"), ExtResource("21_kn6y8"), ExtResource("22_4gotm"), ExtResource("23_80qkq"), ExtResource("24_pxlmc"), ExtResource("25_3c5j3"), ExtResource("26_6yt0m"), ExtResource("27_ccn23"), ExtResource("28_emkik"), ExtResource("29_82xhh")]
+item_inventory = Array[ExtResource("6_7qnd7")]([ExtResource("30_g5w2d")])
+starting_equipment = [ExtResource("24_pxlmc")]
+starting_equipment_slots = {
+"dagger": 0,
+"dagger_offhand": 3
+}
+reactions = [ExtResource("31_3xhpx")]
 
 [resource]
 script = ExtResource("1")
@@ -50,11 +125,11 @@ id = "prototype_velkaria"
 display_name = "Velkaria Prototype Encounter"
 battlefield_texture = ExtResource("4")
 player_party = Array[Dictionary]([{
-"character": ExtResource("5_player"),
+"character": SubResource("Resource_bxa7c"),
 "display_name": "Player",
 "id": "player",
 "position_feet": Vector2(0, 0),
 "use_created_character": true
 }])
 player_spawn_positions_feet = Array[Vector2]([Vector2(10, 0), Vector2(4, 38), Vector2(36, 38)])
-enemies = Array[ExtResource("1_53d28")]([SubResource("Resource_1k873")])
+enemies = Array[ExtResource("1_53d28")]([ExtResource("3_j58h4")])

@@ -8,10 +8,14 @@ var combat_system: CombatSystem
 var local_log_entries: PackedStringArray = []
 var selected_target_name: String = "None"
 var selected_target_id: String = "enemy"
+var displayed_reactions: Array = []
+var selected_reaction_index: int = -1
+var reaction_ui_bound: bool = false
 
 
 func setup(system: CombatSystem) -> void:
 	combat_system = system
+	_bind_authored_reaction_ui()
 	update_ui()
 
 
@@ -254,86 +258,98 @@ func set_action_buttons_enabled(enabled: bool) -> void:
 
 
 func show_reaction_prompt(prompt: Dictionary) -> void:
-	if prompt.get("opportunity_choice", false):
-		var opportunity_reaction = prompt.get("reaction")
-		var moving_actor = prompt.get("attacker")
-		$ReactionPrompt/VBoxContainer/Message.text = "%s is leaving your weapon's reach.\nUse Opportunity Attack before the movement resolves?" % (moving_actor.display_name if moving_actor != null else "An enemy")
-		var opportunity_buttons := $ReactionPrompt/VBoxContainer/Buttons
-		for child in opportunity_buttons.get_children():
-			opportunity_buttons.remove_child(child)
-			child.queue_free()
-		var use_button := Button.new()
-		use_button.custom_minimum_size = Vector2(150, 38)
-		use_button.text = "%s (%d AP)" % [opportunity_reaction.display_name, opportunity_reaction.ap_cost]
-		use_button.tooltip_text = opportunity_reaction.description
-		use_button.pressed.connect(_on_reaction_pressed.bind(0))
-		opportunity_buttons.add_child(use_button)
-		var decline_button := Button.new()
-		decline_button.custom_minimum_size = Vector2(130, 38)
-		decline_button.text = "Do Not Use"
-		decline_button.pressed.connect(_on_reaction_pressed.bind(-1))
-		opportunity_buttons.add_child(decline_button)
-		$ReactionPrompt.visible = true
-		return
-	if prompt.get("step_back", false):
-		var reaction = prompt.get("reaction")
-		var reaction_name: String = reaction.display_name if reaction != null else "Movement Reaction"
-		$ReactionPrompt/VBoxContainer/Message.text = "The attack has resolved. Move up to %.1f ft with %s?" % [prompt.get("distance_feet", 0.0), reaction_name]
-		var step_buttons := $ReactionPrompt/VBoxContainer/Buttons
-		for child in step_buttons.get_children():
-			step_buttons.remove_child(child)
-			child.queue_free()
-		var use_button := Button.new()
-		use_button.custom_minimum_size = Vector2(130, 38)
-		use_button.text = "%s (%d AP)" % [reaction_name, reaction.ap_cost if reaction != null else 1]
-		use_button.tooltip_text = reaction.description if reaction != null else "Move after the triggering attack."
-		use_button.pressed.connect(_on_reaction_pressed.bind(0))
-		step_buttons.add_child(use_button)
-		var decline_button := Button.new()
-		decline_button.custom_minimum_size = Vector2(130, 38)
-		decline_button.text = "Do Not Use"
-		decline_button.pressed.connect(_on_reaction_pressed.bind(-1))
-		step_buttons.add_child(decline_button)
-		$ReactionPrompt.visible = true
-		return
-	var reactions: Array = prompt.get("reactions", [])
+	_bind_authored_reaction_ui()
+	$ReactionPrompt.visible = false
+	displayed_reactions.clear()
+	var reactions: Array = prompt.get("reactions", []).duplicate()
 	if reactions.is_empty() and prompt.has("reaction"):
 		reactions.append(prompt["reaction"])
-	var attacker = prompt.get("attacker")
 	if reactions.is_empty():
+		hide_reaction_prompt()
 		return
-	var attacker_name: String = attacker.display_name if attacker != null else "An enemy"
-	var prepared: AttackResult = prompt.get("prepared_attack")
-	var attack_total: int = prepared.roll + prepared.attack_modifier if prepared != null else 0
-	var defense: int = prepared.defense if prepared != null else 0
-	var margin: int = prepared.margin if prepared != null else 0
-	if prompt.get("damage_intervention", false):
-		var protected_target = prompt.get("attack_target")
-		$ReactionPrompt/VBoxContainer/Message.text = "%s is about to damage %s.\nUse a Reaction to reduce the damage?" % [attacker_name, protected_target.display_name if protected_target != null else "your ally"]
-	else:
-		$ReactionPrompt/VBoxContainer/Message.text = "%s rolled %d vs DEF %d (margin %+d).\nChoose one Reaction:" % [attacker_name, attack_total, defense, margin]
-	var buttons := $ReactionPrompt/VBoxContainer/Buttons
-	for child in buttons.get_children():
-		buttons.remove_child(child)
-		child.queue_free()
+	displayed_reactions.assign(reactions)
+	var list: VBoxContainer = $CombatUI/Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList
+	var template: NinePatchRect = list.get_node("ReactionTemplate")
+	template.hide()
+	for child in list.get_children():
+		if child != template:
+			list.remove_child(child)
+			child.queue_free()
 	for index in range(reactions.size()):
 		var reaction = reactions[index]
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(130, 38)
-		button.text = "%s (%d AP%s)" % [reaction.display_name, reaction.ap_cost, ", %d Faith" % reaction.faith_cost if reaction.faith_cost > 0 else ""]
+		var card: NinePatchRect = template.duplicate()
+		card.name = "Reaction_%d" % index
+		card.visible = true
+		card.get_node("HBoxContainer/VBoxContainer/Name").text = reaction.display_name
+		card.get_node("HBoxContainer/VBoxContainer/Cost").text = _format_reaction_cost(reaction)
+		var button: Button = card.get_node("Button")
 		button.tooltip_text = reaction.description
-		button.pressed.connect(_on_reaction_pressed.bind(index))
-		buttons.add_child(button)
-	var skip_button := Button.new()
-	skip_button.custom_minimum_size = Vector2(130, 38)
-	skip_button.text = "Do Not Use"
-	skip_button.pressed.connect(_on_reaction_pressed.bind(-1))
-	buttons.add_child(skip_button)
-	$ReactionPrompt.visible = true
+		button.pressed.connect(_select_authored_reaction.bind(index, prompt))
+		list.add_child(card)
+	$CombatUI/Reaction.visible = true
+	_select_authored_reaction(0, prompt)
+	$CombatUI/Reaction/Reaction/VBoxContainer/ReactionScroll.scroll_vertical = 0
 
 
 func hide_reaction_prompt() -> void:
 	$ReactionPrompt.visible = false
+	$CombatUI/Reaction.visible = false
+	$CombatUI/ReactionDescription.visible = false
+	selected_reaction_index = -1
+	displayed_reactions.clear()
+
+
+func _bind_authored_reaction_ui() -> void:
+	if reaction_ui_bound:
+		return
+	var cancel_button: Button = $CombatUI/Reaction/Reaction/VBoxContainer/HBoxContainer/Cancel_Button/Button
+	var use_button: Button = $CombatUI/Reaction/Reaction/VBoxContainer/HBoxContainer/Use_Button/Button
+	cancel_button.pressed.connect(_on_reaction_pressed.bind(-1))
+	use_button.pressed.connect(_use_selected_reaction)
+	reaction_ui_bound = true
+
+
+func _select_authored_reaction(index: int, prompt: Dictionary) -> void:
+	if index < 0 or index >= displayed_reactions.size():
+		return
+	selected_reaction_index = index
+	var list: VBoxContainer = $CombatUI/Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList
+	for child in list.get_children():
+		if child.name == "ReactionTemplate":
+			continue
+		var child_index: int = int(String(child.name).trim_prefix("Reaction_"))
+		child.modulate = Color.WHITE if child_index == index else Color(0.72, 0.72, 0.72, 1.0)
+	var reaction = displayed_reactions[index]
+	$CombatUI/ReactionDescription/Frame/Description.text = "%s\n\n%s" % [_reaction_context_text(prompt), reaction.description]
+	$CombatUI/ReactionDescription.visible = true
+
+
+func _use_selected_reaction() -> void:
+	if selected_reaction_index >= 0:
+		_on_reaction_pressed(selected_reaction_index)
+
+
+func _format_reaction_cost(reaction) -> String:
+	var costs: PackedStringArray = ["%d AP" % reaction.ap_cost]
+	if reaction.faith_cost > 0:
+		costs.append("%d Faith" % reaction.faith_cost)
+	return "Cost: %s" % " · ".join(costs)
+
+
+func _reaction_context_text(prompt: Dictionary) -> String:
+	var attacker = prompt.get("attacker")
+	var attacker_name: String = attacker.display_name if attacker != null else "An enemy"
+	if prompt.get("opportunity_choice", false):
+		return "%s is leaving your weapon's reach." % attacker_name
+	if prompt.get("step_back", false):
+		return "The attack has resolved. You may move up to %.1f ft." % prompt.get("distance_feet", 0.0)
+	if prompt.get("damage_intervention", false):
+		var protected_target = prompt.get("attack_target")
+		return "%s is about to damage %s." % [attacker_name, protected_target.display_name if protected_target != null else "your ally"]
+	var prepared: AttackResult = prompt.get("prepared_attack")
+	if prepared != null:
+		return "%s rolled %d vs DEF %d (margin %+d)." % [attacker_name, prepared.roll + prepared.attack_modifier, prepared.defense, prepared.margin]
+	return "Choose a Reaction to resolve the current trigger."
 
 
 func _on_reaction_pressed(reaction_index: int) -> void:
@@ -401,7 +417,7 @@ func update_combat_log() -> void:
 	for entry in entries:
 		var card = CombatLogActionCardScene.instantiate()
 		list.add_child(card)
-		card.setup(entry)
+		card.setup(entry, size.x <= 700.0 or size.y <= 400.0)
 
 
 func is_player_relevant_log_message(message: String) -> bool:

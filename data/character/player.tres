@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://ckrki53jpb51j" path="res://data/equipment/sword.tres" id="3_xo044"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="4_8rcdb"]
 [ext_resource type="Resource" uid="uid://cp2oeb5hig86m" path="res://data/equipment/long_spear.tres" id="9_long_spear"]
-[ext_resource type="Resource" path="res://data/equipment/leather_armor.tres" id="10_leather_armor"]
+[ext_resource type="Resource" uid="uid://b0887ygowuyvx" path="res://data/equipment/leather_armor.tres" id="10_leather_armor"]
 [ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="11_buckler"]
 [ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="13_human"]
 [ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="13_yufwi"]
@@ -47,3 +47,4 @@ starting_equipment_slots = {
 "dagger_offhand": 3
 }
 skills = [ExtResource("skill_arcane_bolt"), ExtResource("skill_arcane_burst"), ExtResource("skill_arcane_cone"), ExtResource("skill_ember_bolt"), ExtResource("skill_flame_wave"), ExtResource("skill_frost_shard"), ExtResource("skill_frozen_ground")]
+reactions = [null]

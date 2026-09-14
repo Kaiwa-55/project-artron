@@ -1,0 +1,1220 @@
+[gd_scene format=3 uid="uid://bequh8k0cy5wt"]
+
+[ext_resource type="Texture2D" uid="uid://bxlun3v3fh7o1" path="res://assets/ui/GUI_2x.png" id="1_21fn4"]
+[ext_resource type="Texture2D" uid="uid://57jnw07hrre3" path="res://assets/ui/Will.png" id="2_ppua2"]
+[ext_resource type="Texture2D" uid="uid://bafaukp6u8tca" path="res://assets/ui/Reflex.png" id="3_ppua2"]
+[ext_resource type="Texture2D" uid="uid://cpw4r1kyadsuh" path="res://assets/ui/Equipment.png" id="3_ynof4"]
+[ext_resource type="Texture2D" uid="uid://djhpoo05f46al" path="res://assets/ui/Main_tiles.png" id="5_8twgj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_htemk"]
+line_spacing = -3.0
+font_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_14cdr"]
+font_size = 8
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14cdr"]
+atlas = ExtResource("3_ynof4")
+region = Rect2(131, 354, 10, 12)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q4lci"]
+font_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_pj0hq"]
+font_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_ugcl7"]
+font_size = 7
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4lci"]
+atlas = ExtResource("1_21fn4")
+region = Rect2(2, 2, 44, 44)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_htemk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pp1to"]
+font_size = 8
+font_color = Color(0.16862746, 0.12941177, 1, 1)
+outline_size = 1
+outline_color = Color(0.3764706, 0.6392157, 0.5176471, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0kyq7"]
+font_size = 15
+font_color = Color(0.33647054, 0.2011339, 9.62615e-08, 1)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wn4hl"]
+line_spacing = -6.0
+font_size = 7
+font_color = Color(0.3372549, 0.2, 0, 1)
+outline_size = 1
+outline_color = Color(0.20942885, 0.20942888, 0.20942888, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_8twgj"]
+font_size = 6
+font_color = Color(0.16862746, 0.12941177, 1, 1)
+outline_size = 1
+outline_color = Color(0.24705882, 0.46666667, 0.19607843, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b0jfs"]
+font_size = 9
+
+[sub_resource type="LabelSettings" id="LabelSettings_ph8cy"]
+font_size = 9
+font_color = Color(0.30980393, 0.20392157, 0.050980393, 1)
+outline_size = 1
+outline_color = Color(0.52156866, 0.49411765, 0.4, 1)
+
+[node name="Combat_ui" type="Control" unique_id=1113737439]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Combat_bar" type="HBoxContainer" parent="." unique_id=1931184677]
+custom_minimum_size = Vector2(400, 120)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -120.0
+offset_right = 460.0
+grow_vertical = 0
+
+[node name="Combat_bar_Container" type="MarginContainer" parent="Combat_bar" unique_id=1094662171]
+custom_minimum_size = Vector2(345, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container" unique_id=1003977115]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="StatusBar" type="HBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer" unique_id=714632170]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Status" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/StatusBar" unique_id=689595702]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "STATUS: NONE"
+label_settings = SubResource("LabelSettings_htemk")
+vertical_alignment = 1
+clip_text = true
+
+[node name="Combat_bar" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer" unique_id=1698655824]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(224, 96, 32, 32)
+patch_margin_left = 25
+patch_margin_top = 25
+patch_margin_right = 25
+patch_margin_bottom = 25
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar" unique_id=152445701]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0057971017
+anchor_top = 0.019999895
+anchor_right = 0.9942029
+anchor_bottom = 0.97916675
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer" unique_id=195265111]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Profile" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer" unique_id=456327376]
+layout_mode = 2
+size_flags_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0.5, 0)
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile" unique_id=349046170]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("2_ppua2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile" unique_id=844517135]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+text = "Name"
+label_settings = SubResource("LabelSettings_htemk")
+autowrap_mode = 1
+
+[node name="Speed" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile" unique_id=720714277]
+layout_mode = 2
+text = "Speed: 10"
+label_settings = SubResource("LabelSettings_htemk")
+autowrap_mode = 1
+
+[node name="Weapon" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile" unique_id=1652038652]
+layout_mode = 2
+text = "Weapon: Unarmed"
+label_settings = SubResource("LabelSettings_htemk")
+clip_text = true
+
+[node name="Resistance" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile" unique_id=21128031]
+layout_mode = 2
+text = "Resistance: fire5, blunt3"
+label_settings = SubResource("LabelSettings_htemk")
+autowrap_mode = 2
+
+[node name="Imunity" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile" unique_id=1594683515]
+layout_mode = 2
+text = "Imunity: light, slash, stun"
+label_settings = SubResource("LabelSettings_htemk")
+autowrap_mode = 2
+
+[node name="DefenseAndResource" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer" unique_id=1998574490]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource" unique_id=136486087]
+layout_mode = 2
+size_flags_vertical = 2
+alignment = 1
+
+[node name="Fortitude" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=1599715276]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -1
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Fortitude" unique_id=1553631781]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_14cdr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Fortitude" unique_id=1083037477]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = SubResource("AtlasTexture_14cdr")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Fortitude" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Fortitude" unique_id=649750874]
+layout_mode = 2
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Reflex" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=1142089964]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -1
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Reflex" unique_id=2115148148]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_14cdr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Reflex" unique_id=252397535]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("3_ppua2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Reflex" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Reflex" unique_id=238874351]
+layout_mode = 2
+text = "Reflex"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Will" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=995488048]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -1
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Will" unique_id=1782212246]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_14cdr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Will" unique_id=1495590156]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_ppua2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Will" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer/Will" unique_id=850824166]
+layout_mode = 2
+text = "Will"
+label_settings = SubResource("LabelSettings_q4lci")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource" unique_id=1508690346]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/separation = -4
+
+[node name="Hp" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer" unique_id=189595276]
+layout_mode = 2
+size_flags_vertical = 2
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(81, 177, 46, 14)
+patch_margin_left = 5
+patch_margin_top = 9
+patch_margin_right = 5
+patch_margin_bottom = 9
+
+[node name="ProgressBar" type="ProgressBar" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Hp" unique_id=1169899236]
+modulate = Color(0.28627452, 1, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 22.09
+show_percentage = false
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Hp/ProgressBar" unique_id=1390144461]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "10/10"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TempHp" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer" unique_id=1747864314]
+layout_mode = 2
+size_flags_vertical = 2
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(81, 177, 46, 14)
+patch_margin_left = 5
+patch_margin_top = 9
+patch_margin_right = 5
+patch_margin_bottom = 9
+
+[node name="ProgressBar" type="ProgressBar" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/TempHp" unique_id=1912338432]
+modulate = Color(0.921149, 0.91721237, 0.9282248, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 22.09
+show_percentage = false
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/TempHp/ProgressBar" unique_id=831927995]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "10/10"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mana" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer" unique_id=589058308]
+layout_mode = 2
+size_flags_vertical = 2
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(81, 177, 46, 14)
+patch_margin_left = 5
+patch_margin_top = 9
+patch_margin_right = 5
+patch_margin_bottom = 9
+
+[node name="ProgressBar" type="ProgressBar" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Mana" unique_id=1994151104]
+modulate = Color(0.28627452, 1, 1, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 22.09
+show_percentage = false
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Mana/ProgressBar" unique_id=725505756]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "10/10"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Faith" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer" unique_id=1019512520]
+visible = false
+layout_mode = 2
+size_flags_vertical = 2
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(81, 177, 46, 14)
+patch_margin_left = 5
+patch_margin_top = 9
+patch_margin_right = 5
+patch_margin_bottom = 9
+
+[node name="ProgressBar" type="ProgressBar" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Faith" unique_id=1350277559]
+modulate = Color(0.91769403, 0.9250966, 0.21339592, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 22.09
+show_percentage = false
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Faith/ProgressBar" unique_id=1351373216]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Faith 10/10 + 3"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Heat" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer" unique_id=381652624]
+visible = false
+layout_mode = 2
+size_flags_vertical = 2
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(81, 177, 46, 14)
+patch_margin_left = 5
+patch_margin_top = 9
+patch_margin_right = 5
+patch_margin_bottom = 9
+
+[node name="ProgressBar" type="ProgressBar" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Heat" unique_id=17406805]
+modulate = Color(0.84597284, 0.4218493, 0.17352304, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 22.09
+show_percentage = false
+
+[node name="Value" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Heat/ProgressBar" unique_id=1993399318]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Heat0/10"
+label_settings = SubResource("LabelSettings_pj0hq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Action_Bar_Major" type="GridContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer" unique_id=1833639577]
+layout_mode = 2
+size_flags_horizontal = 10
+columns = 3
+
+[node name="Attack" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=1762559685]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Attack" unique_id=881037058]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Attack"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Attack" unique_id=2004544904]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Attack" unique_id=577968461]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Move" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=77479684]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Move" unique_id=1307580149]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Move"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Move" unique_id=1890665742]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Move" unique_id=827553353]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Item" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=647675929]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Item" unique_id=1215201594]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Item"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Item" unique_id=1715333542]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Item" unique_id=468310879]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Ability" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=789241635]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Ability" unique_id=903553984]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ability"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Ability" unique_id=1741145119]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Ability" unique_id=852725921]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Skill" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=1063522516]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Skill" unique_id=77727981]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Skill"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Skill" unique_id=1295531377]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Skill" unique_id=1708375514]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Basic" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=2119843511]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Basic" unique_id=654049276]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Basic"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Basic" unique_id=1724498895]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Basic" unique_id=2117980236]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar" unique_id=339753604]
+show_behind_parent = true
+custom_minimum_size = Vector2(345, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.019999895
+anchor_right = 1.0
+anchor_bottom = 0.99999994
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_q4lci")
+metadata/_edit_use_anchors_ = true
+
+[node name="Action_bar_Minor" type="VBoxContainer" parent="Combat_bar" unique_id=52722955]
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="VSeparator" type="VSeparator" parent="Combat_bar/Action_bar_Minor" unique_id=56418009]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor" unique_id=1246682445]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(0, 0, 49, 48)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="GridContainer2" type="GridContainer" parent="Combat_bar/Action_bar_Minor/NinePatchRect" unique_id=758182112]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.020833334
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Any_in_Major" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=1395370352]
+show_behind_parent = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major" unique_id=1844394944]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Any_in_Major"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major" unique_id=1949426343]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major" unique_id=36653183]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Any_in_Major2" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=1807758127]
+show_behind_parent = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major2" unique_id=468226534]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Any_in_Major"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major2" unique_id=511659580]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major2" unique_id=1992355326]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Any_in_Major3" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=924380239]
+show_behind_parent = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major3" unique_id=1742953611]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Any_in_Major"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major3" unique_id=440648297]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major3" unique_id=1898038994]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Any_in_Major4" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=1004909088]
+show_behind_parent = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_21fn4")
+region_rect = Rect2(256, 64, 32, 32)
+patch_margin_left = 26
+patch_margin_top = 6
+patch_margin_right = 26
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major4" unique_id=1735487858]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Any_in_Major"
+label_settings = SubResource("LabelSettings_ugcl7")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major4" unique_id=682908191]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major4" unique_id=563662231]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Endturn" type="NinePatchRect" parent="." unique_id=1080428264]
+custom_minimum_size = Vector2(86, 48)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85625
+anchor_top = 0.8666667
+anchor_right = 0.990625
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("5_8twgj")
+region_rect = Rect2(207, 196, 50, 40)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 7
+patch_margin_bottom = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Endturn" unique_id=521918841]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -14.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -6
+
+[node name="Label2" type="Label" parent="Endturn/VBoxContainer" unique_id=1415865183]
+layout_mode = 2
+size_flags_vertical = 10
+text = "Action Point 4/4"
+label_settings = SubResource("LabelSettings_pp1to")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Label" type="Label" parent="Endturn/VBoxContainer" unique_id=719879263]
+layout_mode = 2
+size_flags_vertical = 2
+text = "End Turn"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 1
+
+[node name="Button" type="Button" parent="Endturn" unique_id=1811867714]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Reaction" type="PanelContainer" parent="." unique_id=983778129]
+visible = false
+z_index = 40
+custom_minimum_size = Vector2(290, 280)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -140.0
+offset_right = -10.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Reaction" type="NinePatchRect" parent="Reaction" unique_id=1328316597]
+texture_filter = 1
+custom_minimum_size = Vector2(120, 0)
+clip_contents = true
+layout_mode = 2
+texture = ExtResource("5_8twgj")
+region_rect = Rect2(196, 95, 39, 38)
+patch_margin_left = 8
+patch_margin_top = 17
+patch_margin_right = 7
+patch_margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Reaction/Reaction" unique_id=1783637286]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 18.0
+offset_right = -8.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ReactionScroll" type="ScrollContainer" parent="Reaction/Reaction/VBoxContainer" unique_id=1686766817]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="ReactionList" type="VBoxContainer" parent="Reaction/Reaction/VBoxContainer/ReactionScroll" unique_id=397528735]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="ReactionTemplate" type="NinePatchRect" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList" unique_id=1645185011]
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+texture = ExtResource("5_8twgj")
+region_rect = Rect2(203, 155, 27, 26)
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 6
+patch_margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList/ReactionTemplate" unique_id=177334153]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.04
+anchor_top = 0.13333334
+anchor_right = 0.952
+anchor_bottom = 0.8666667
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Icon" type="TextureRect" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList/ReactionTemplate/HBoxContainer" unique_id=65323066]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+texture = ExtResource("3_ppua2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList/ReactionTemplate/HBoxContainer" unique_id=47076166]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -3
+
+[node name="Name" type="Label" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList/ReactionTemplate/HBoxContainer/VBoxContainer" unique_id=551977497]
+layout_mode = 2
+text = "Reaction_Name"
+label_settings = SubResource("LabelSettings_wn4hl")
+autowrap_mode = 1
+
+[node name="Cost" type="Label" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList/ReactionTemplate/HBoxContainer/VBoxContainer" unique_id=1536666570]
+layout_mode = 2
+text = "Cost"
+label_settings = SubResource("LabelSettings_8twgj")
+autowrap_mode = 1
+
+[node name="Button" type="Button" parent="Reaction/Reaction/VBoxContainer/ReactionScroll/ReactionList/ReactionTemplate" unique_id=165526356]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Reaction/Reaction/VBoxContainer" unique_id=2094637484]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="Cancel_Button" type="NinePatchRect" parent="Reaction/Reaction/VBoxContainer/HBoxContainer" unique_id=1994362348]
+custom_minimum_size = Vector2(40, 20)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+texture = ExtResource("5_8twgj")
+region_rect = Rect2(299, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="Button" type="Button" parent="Reaction/Reaction/VBoxContainer/HBoxContainer/Cancel_Button" unique_id=1960316387]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="Reaction/Reaction/VBoxContainer/HBoxContainer/Cancel_Button" unique_id=1951417475]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Cancel"
+label_settings = SubResource("LabelSettings_b0jfs")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Use_Button" type="NinePatchRect" parent="Reaction/Reaction/VBoxContainer/HBoxContainer" unique_id=1358758525]
+custom_minimum_size = Vector2(40, 20)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 3
+texture = ExtResource("5_8twgj")
+region_rect = Rect2(299, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="Button" type="Button" parent="Reaction/Reaction/VBoxContainer/HBoxContainer/Use_Button" unique_id=542507453]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Label" type="Label" parent="Reaction/Reaction/VBoxContainer/HBoxContainer/Use_Button" unique_id=1486323708]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Use"
+label_settings = SubResource("LabelSettings_b0jfs")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReactionDescription" type="PanelContainer" parent="." unique_id=1853159549]
+visible = false
+z_index = 40
+custom_minimum_size = Vector2(290, 280)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -140.0
+offset_right = 300.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Frame" type="NinePatchRect" parent="ReactionDescription" unique_id=1392768137]
+texture_filter = 1
+custom_minimum_size = Vector2(120, 0)
+clip_contents = true
+layout_mode = 2
+texture = ExtResource("5_8twgj")
+region_rect = Rect2(196, 95, 39, 38)
+patch_margin_left = 8
+patch_margin_top = 17
+patch_margin_right = 7
+patch_margin_bottom = 5
+
+[node name="Description" type="Label" parent="ReactionDescription/Frame" unique_id=433850802]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 28.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "AAAAAA"
+label_settings = SubResource("LabelSettings_ph8cy")
+autowrap_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Turn_Order" type="MarginContainer" parent="." unique_id=2094561342]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 54.0
+grow_horizontal = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Turn_Order" unique_id=994773094]
+visible = false
+layout_mode = 2

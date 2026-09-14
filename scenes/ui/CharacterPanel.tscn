@@ -1,8 +1,5 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cxvd22i6oec0b"]
 
-[ext_resource type="Script" path="res://scenes/ui/character_panel.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cjemktmhmuxvi" path="res://InventoryandMore.tscn" id="1_inventory"]
 
-[node name="CharacterPanel" type="PanelContainer"]
-offset_right = 1175.0
-offset_bottom = 610.0
-script = ExtResource("1_script")
+[node name="CharacterPanel" unique_id=859676041 instance=ExtResource("1_inventory")]

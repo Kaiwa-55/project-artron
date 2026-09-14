@@ -19,7 +19,7 @@ func run_test() -> void:
 		presenter.sync_movement()
 		success = success and target.no_damage_icon == null
 	# Check real result construction for both damaging and status-only attacks.
-	for attack_path in ["res://data/attack/web_shot.tres", "res://data/attack/iron_sword.tres"]:
+	for attack_path in ["res://data/attack/web_shot.tres", "res://data/attack/sword.tres"]:
 		var attack = load(attack_path)
 		for hit in [false, true]:
 			var result := AttackResult.new()

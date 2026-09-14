@@ -18,8 +18,13 @@ const CATALOG := preload("res://data/creation/default_creation_catalog.tres")
 @onready var character_name: Label = $Layout/ContentScroll/Content/Summary/Margin/Column/Name
 @onready var class_label: Label = $Layout/ContentScroll/Content/Summary/Margin/Column/Class
 @onready var preview_label: Label = $Layout/ContentScroll/Content/Summary/Margin/Column/Preview
+@onready var party_roster_panel: PanelContainer = $Layout/PartyRoster
+@onready var party_roster_margin: MarginContainer = $Layout/PartyRoster/Margin
+@onready var party_roster_row: HBoxContainer = $Layout/PartyRoster/Margin/Row
+@onready var party_roster_label: Label = $Layout/PartyRoster/Margin/Row/Label
 @onready var party_roster: HBoxContainer = $Layout/PartyRoster/Margin/Row/Scroll/Characters
 @onready var status_label: Label = $Layout/Footer/Margin/Row/Status
+@onready var footer_row: HBoxContainer = $Layout/Footer/Margin/Row
 @onready var confirm_button: Button = $Layout/Footer/Margin/Row/Confirm
 
 var character: CombatantState
@@ -41,7 +46,8 @@ func _apply_responsive_size() -> void:
 	var viewport_size := get_viewport_rect().size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
 		return
-	var panel_size := Vector2(
+	var compact := viewport_size.x <= 700.0 or viewport_size.y <= 400.0
+	var panel_size := viewport_size - Vector2(12.0, 12.0) if compact else Vector2(
 		minf(1180.0, maxf(560.0, viewport_size.x - 32.0)),
 		minf(760.0, maxf(420.0, viewport_size.y - 32.0))
 	)
@@ -50,6 +56,87 @@ func _apply_responsive_size() -> void:
 	offset_top = -panel_size.y * 0.5
 	offset_right = panel_size.x * 0.5
 	offset_bottom = panel_size.y * 0.5
+	var header: PanelContainer = $Layout/Header
+	header.custom_minimum_size.y = 50.0 if compact else 76.0
+	var header_margin: MarginContainer = $Layout/Header/Margin
+	_set_margins(header_margin, 10 if compact else 20, 5 if compact else 12)
+	var header_row: HBoxContainer = $Layout/Header/Margin/Row
+	header_row.add_theme_constant_override("separation", 8 if compact else 16)
+	var badge: PanelContainer = $Layout/Header/Margin/Row/LevelBadge
+	badge.custom_minimum_size = Vector2(36.0, 36.0) if compact else Vector2(52.0, 52.0)
+	level_badge.add_theme_font_size_override("font_size", 13 if compact else 18)
+	title_label.add_theme_font_size_override("font_size", 16 if compact else 22)
+	title_label.clip_text = compact
+	subtitle_label.add_theme_font_size_override("font_size", 10 if compact else 13)
+	points_label.add_theme_font_size_override("font_size", 9 if compact else 13)
+	var steps: PanelContainer = $Layout/Steps
+	steps.custom_minimum_size.y = 26.0 if compact else 40.0
+	for step in $Layout/Steps/Row.get_children():
+		if step is Label:
+			step.add_theme_font_size_override("font_size", 9 if compact else 16)
+	var choice_margin: MarginContainer = $Layout/ContentScroll/Content/ChoiceZone/Margin
+	_set_margins(choice_margin, 8 if compact else 20, 6 if compact else 18)
+	var choice_column: VBoxContainer = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column
+	choice_column.add_theme_constant_override("separation", 5 if compact else 12)
+	$Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityHeader/Title.add_theme_font_size_override("font_size", 12 if compact else 17)
+	ability_hint.add_theme_font_size_override("font_size", 9 if compact else 16)
+	$Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeHeader/Title.add_theme_font_size_override("font_size", 12 if compact else 17)
+	attribute_used.add_theme_font_size_override("font_size", 9 if compact else 16)
+	var ability_scroll: ScrollContainer = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityScroll
+	ability_scroll.custom_minimum_size.y = 150.0 if compact else 205.0
+	attribute_list.columns = 3
+	attribute_list.add_theme_constant_override("h_separation", 4 if compact else 8)
+	attribute_list.add_theme_constant_override("v_separation", 4 if compact else 8)
+	$Layout/ContentScroll/Content/Summary.visible = not compact
+	var roster: PanelContainer = party_roster_panel
+	roster.custom_minimum_size.y = 52.0 if compact else 92.0
+	var roster_margin: MarginContainer = party_roster_margin
+	_set_margins(roster_margin, 10 if compact else 20, 5 if compact else 8)
+	party_roster_label.custom_minimum_size.x = 65.0 if compact else 125.0
+	party_roster_label.add_theme_font_size_override("font_size", 9 if compact else 16)
+	party_roster_label.text = "PARTY\nHERO" if compact else "PARTY\nSELECT HERO"
+	var footer: PanelContainer = $Layout/Footer
+	footer.custom_minimum_size.y = 46.0 if compact else 70.0
+	var footer_margin: MarginContainer = $Layout/Footer/Margin
+	_set_margins(footer_margin, 10 if compact else 20, 5 if compact else 12)
+	footer_row.add_theme_constant_override("separation", 6 if compact else 12)
+	if compact and party_roster_row.get_parent() != footer_row:
+		party_roster_row.reparent(footer_row)
+		footer_row.move_child(party_roster_row, 0)
+	elif not compact and party_roster_row.get_parent() != party_roster_margin:
+		party_roster_row.reparent(party_roster_margin)
+	party_roster_panel.visible = not compact
+	party_roster_row.custom_minimum_size.x = 202.0 if compact else 0.0
+	party_roster_row.size_flags_horizontal = Control.SIZE_FILL
+	status_label.add_theme_font_size_override("font_size", 9 if compact else 12)
+	status_label.clip_text = compact
+	var cancel_button: Button = $Layout/Footer/Margin/Row/Cancel
+	cancel_button.custom_minimum_size = Vector2(72.0, 32.0) if compact else Vector2(120.0, 42.0)
+	confirm_button.custom_minimum_size = Vector2(126.0, 32.0) if compact else Vector2(190.0, 42.0)
+	cancel_button.add_theme_font_size_override("font_size", 10 if compact else 16)
+	confirm_button.add_theme_font_size_override("font_size", 10 if compact else 16)
+	for ability_card in ability_list.get_children():
+		if ability_card is Button:
+			ability_card.custom_minimum_size.y = 46.0 if compact else 68.0
+	for attribute_card in attribute_list.get_children():
+		if attribute_card is PanelContainer and attribute_card.get_child_count() > 0:
+			attribute_card.get_child(0).custom_minimum_size = Vector2(145.0, 44.0) if compact else Vector2(185.0, 62.0)
+	for member_button in party_roster.get_children():
+		if member_button is Button:
+			member_button.custom_minimum_size = Vector2(125.0, 40.0) if compact else Vector2(170.0, 68.0)
+			member_button.add_theme_constant_override("icon_max_width", 30 if compact else 52)
+
+
+func _set_margins(container: MarginContainer, horizontal: int, vertical: int) -> void:
+	container.add_theme_constant_override("margin_left", horizontal)
+	container.add_theme_constant_override("margin_right", horizontal)
+	container.add_theme_constant_override("margin_top", vertical)
+	container.add_theme_constant_override("margin_bottom", vertical)
+
+
+func _uses_compact_layout() -> bool:
+	var viewport_size := get_viewport_rect().size
+	return viewport_size.x <= 700.0 or viewport_size.y <= 400.0
 
 
 func open_for(p_character: CombatantState) -> void:
@@ -92,10 +179,10 @@ func build_party_roster() -> void:
 		if member == null:
 			continue
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(170, 68)
+		button.custom_minimum_size = Vector2(125, 40) if _uses_compact_layout() else Vector2(170, 68)
 		button.icon = member.token_texture
 		button.expand_icon = true
-		button.add_theme_constant_override("icon_max_width", 52)
+		button.add_theme_constant_override("icon_max_width", 30 if _uses_compact_layout() else 52)
 		button.text = "%s\nLv.%d  •  %d choice%s" % [member.display_name, member.level, member.ability_points + member.attribute_points, "s" if member.ability_points + member.attribute_points != 1 else ""]
 		button.tooltip_text = "Select %s for Level Up" % member.display_name
 		button.add_theme_stylebox_override("normal", _ability_card_style(member == character))
@@ -142,7 +229,7 @@ func _build_abilities() -> void:
 		if not reason.is_empty() and not learned and not selected:
 			continue
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(0, 68)
+		card.custom_minimum_size = Vector2(0, 46 if _uses_compact_layout() else 68)
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		card.text = "%s\n%s · Level %d · %d Point%s" % [ability.display_name, "Selected" if selected else ("Learned" if learned else _type_text(ability)), ability.required_level, ability.ability_point_cost, "s" if ability.ability_point_cost != 1 else ""]
 		card.tooltip_text = ability.description
@@ -168,7 +255,7 @@ func _build_attributes() -> void:
 	var entries := [["Strength", AttributeTypes.Type.STRENGTH, character.strength], ["Dexterity", AttributeTypes.Type.DEXTERITY, character.dexterity], ["Constitution", AttributeTypes.Type.CONSTITUTION, character.constitution], ["Intelligence", AttributeTypes.Type.INTELLIGENCE, character.intelligence], ["Wisdom", AttributeTypes.Type.WISDOM, character.wisdom], ["Charisma", AttributeTypes.Type.CHARISMA, character.charisma]]
 	for entry in entries:
 		var row := HBoxContainer.new()
-		row.custom_minimum_size = Vector2(185, 62)
+		row.custom_minimum_size = Vector2(145, 44) if _uses_compact_layout() else Vector2(185, 62)
 		var panel := PanelContainer.new()
 		panel.add_theme_stylebox_override("panel", _attribute_card_style())
 		panel.add_child(row)

@@ -14,5 +14,6 @@ passive_value = 2
 script = ExtResource("1_ability_data")
 id = "long_reach"
 display_name = "Long Reach"
+auto_equip_on_grant = true
 is_passive = true
 effects = [SubResource("AbilityEffect_reach")]

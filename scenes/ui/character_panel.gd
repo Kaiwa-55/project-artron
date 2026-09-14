@@ -1,5 +1,5 @@
 class_name CharacterPanel
-extends PanelContainer
+extends Control
 
 signal equipment_change_requested(item, slot: int)
 signal closed

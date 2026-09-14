@@ -9,8 +9,16 @@
 [ext_resource type="Script" uid="uid://d3m08xgnxkn07" path="res://scenes/combat/ui/targeting_selection_presentation.gd" id="7_targeting"]
 [ext_resource type="Script" uid="uid://c72lxbeugjnj1" path="res://scenes/combat/ui/reaction_prompt_controller.gd" id="8_reaction"]
 [ext_resource type="Script" uid="uid://cviebsnyubsiv" path="res://scenes/combat/ui/combat_log_controller.gd" id="9_log"]
-[ext_resource type="PackedScene" uid="uid://bdwt7r2ch6564" path="res://scenes/combat/ui/CombatActionBar.tscn" id="10_action_bar_scene"]
+[ext_resource type="PackedScene" uid="uid://bequh8k0cy5wt" path="res://scenes/ui/combat_ui.tscn" id="10_combat_ui_scene"]
 [ext_resource type="PackedScene" uid="uid://4adtv8r7kth4" path="res://scenes/combat/ui/CombatLogPanel.tscn" id="11_combat_log_scene"]
+[ext_resource type="Texture2D" uid="uid://djhpoo05f46al" path="res://assets/ui/Main_tiles.png" id="11_u1yet"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_htemk"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_14cdr"]
+line_spacing = 0.0
+font_size = 13
 
 [node name="CombatArena" type="Node2D" unique_id=280882440]
 script = ExtResource("1_root")
@@ -85,71 +93,59 @@ custom_minimum_size = Vector2(0, 42)
 layout_mode = 0
 text = "End Turn"
 
-[node name="BottomActionRow" type="HBoxContainer" parent="UILayer/Control" unique_id=198765432]
+[node name="CombatUI" parent="UILayer/Control" unique_id=46096903 instance=ExtResource("10_combat_ui_scene")]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -138.0
-offset_right = -20.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
+mouse_filter = 2
 
-[node name="ReferenceActionDock" parent="UILayer/Control/BottomActionRow" unique_id=1169074384 instance=ExtResource("10_action_bar_scene")]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Enemy_panel" type="Panel" parent="UILayer/Control" unique_id=1099442048]
+[node name="Enemy_panel" type="NinePatchRect" parent="UILayer/Control" unique_id=1573275925]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -320.0
-offset_top = 96.0
-offset_right = -20.0
-offset_bottom = -158.0
-grow_horizontal = 0
+anchor_left = 0.80625
+anchor_top = 0.48055556
+anchor_right = 0.990625
+anchor_bottom = 0.8472222
+offset_bottom = 1.5258789e-05
+grow_horizontal = 2
 grow_vertical = 2
-
-[node name="PanelTitle" type="Label" parent="UILayer/Control/Enemy_panel" unique_id=721863910]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 12.0
-offset_right = 300.0
-offset_bottom = 38.0
-theme_override_font_sizes/font_size = 18
-text = "ENEMY"
+texture = ExtResource("11_u1yet")
+region_rect = Rect2(293, 95, 38, 38)
+patch_margin_left = 7
+patch_margin_top = 18
+patch_margin_right = 7
+patch_margin_bottom = 5
+metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control/Enemy_panel" unique_id=1930457242]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = 48.0
-offset_right = -14.0
-offset_bottom = -14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 6
+anchors_preset = -1
+anchor_left = 0.03773585
+anchor_top = 0.12878788
+anchor_right = 0.9622642
+anchor_bottom = 0.969697
+theme_override_constants/separation = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelTitle" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=721863910]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "ENEMY"
+label_settings = SubResource("LabelSettings_htemk")
 
 [node name="Name" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1643155864]
 layout_mode = 2
 text = "Name"
+label_settings = SubResource("LabelSettings_14cdr")
 
 [node name="Hp" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1391254509]
 layout_mode = 2
 text = "HP"
+label_settings = SubResource("LabelSettings_14cdr")
 
 [node name="Effects" type="Label" parent="UILayer/Control/Enemy_panel/VBoxContainer" unique_id=1650639699]
 layout_mode = 2
 text = "Effects: None"
+label_settings = SubResource("LabelSettings_14cdr")
 autowrap_mode = 2
 
 [node name="CombatLogPanel" parent="UILayer/Control" unique_id=928194718 instance=ExtResource("11_combat_log_scene")]

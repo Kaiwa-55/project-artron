@@ -1,19 +1,20 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dso253emhcod0"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_4q48r"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
-[ext_resource type="Resource" path="res://data/reaction/martial_sense.tres" id="4"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_jsg27"]
+[ext_resource type="Resource" uid="uid://bcmu0jrkddx8m" path="res://data/reaction/martial_sense.tres" id="4"]
 
 [resource]
 script = ExtResource("1")
 id = "martial_sense"
 display_name = "Martial Sense"
-required_level = 1
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("2"), ExtResource("3")]
+auto_equip_on_grant = true
 reaction_only = true
 ap_cost = 1
 description = "When a Melee Attack hits at Defense +1, spend 1 AP to turn it into a Miss."
 granted_reactions = [ExtResource("4")]
-

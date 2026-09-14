@@ -15,6 +15,6 @@ id = "unarmed_attack"
 display_name = "Unarmed Attack"
 animation_template = ExtResource("2")
 is_unarmed = true
-base_damage = 1
+base_damage = 3
 damage_type = "blunt"
 traits = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("8_2e4mp")]

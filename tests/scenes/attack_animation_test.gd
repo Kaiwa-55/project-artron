@@ -20,9 +20,9 @@ func run_test() -> void:
 	arena.movement_presentation.collect_attack_animations()
 	arena.movement_presentation.event_cursor = arena.combat_system.event_system.event_history.size()
 	arena.movement_presentation.attack_queue.clear()
-	var sword = load("res://data/attack/iron_sword.tres")
+	var sword = load("res://data/attack/sword.tres")
 	var template = sword.animation_template
-	check(template != null, "Iron Sword has an animation template", failures)
+	check(template != null, "Sword has an animation template", failures)
 	var origin := attacker.state.position
 	var ap := attacker.state.ap
 	var speed := attacker.state.movement_remaining_feet

@@ -15,7 +15,7 @@ func _init() -> void:
 	system.combat_state.current_actor_id = player.id
 	player.ap = 10
 	# Keep this test independent from the player's current prototype loadout.
-	player.equipped_weapon_attack = load("res://data/attack/iron_sword.tres")
+	player.equipped_weapon_attack = load("res://data/attack/sword.tres")
 
 	var devotee_data = load("res://data/character/player.tres").duplicate(true)
 	var devotee: CombatantState = devotee_data.create_combatant_state()

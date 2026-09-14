@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dnjnuja1pg5o4" path="res://scenes/prototype/prototype_combat.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://co08kejbik35t" path="res://entities/combatant.gd" id="3_combatant"]
 [ext_resource type="Resource" uid="uid://dx2vhg2qs2l04" path="res://data/encounter/prototype_encounter.tres" id="4_encounter"]
-[ext_resource type="PackedScene" path="res://scenes/ui/CharacterPanel.tscn" id="5_character_panel"]
+[ext_resource type="PackedScene" uid="uid://cxvd22i6oec0b" path="res://scenes/ui/CharacterPanel.tscn" id="5_character_panel"]
 
 [node name="PrototypeCombat" unique_id=1293345908 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
@@ -63,57 +63,15 @@ offset_bottom = 42.0
 offset_right = 8.0
 offset_bottom = 42.0
 
-[node name="ReferenceTurnHUD" type="PanelContainer" parent="UILayer/Control/BottomActionRow" parent_id_path=PackedInt32Array(198765432) index="1" unique_id=1206569473]
-z_index = 10
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Margin" type="MarginContainer" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD" index="0" unique_id=788150050]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 10
-
-[node name="Column" type="VBoxContainer" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin" index="0" unique_id=1148135780]
-layout_mode = 2
-theme_override_constants/separation = 7
-
-[node name="TurnStatus" type="Label" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="0" unique_id=1091826297]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.835, 0.659, 0.298, 1)
-text = "ACTION POINTS"
-
-[node name="EndTurn" type="Button" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="1" unique_id=262984086]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-text = "END TURN"
-
-[node name="TargetStatus" type="Label" parent="UILayer/Control/BottomActionRow/ReferenceTurnHUD/Margin/Column" index="2" unique_id=19126729]
-visible = false
-layout_mode = 2
-
-[node name="Enemy_panel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="3" unique_id=1099442048]
+[node name="Enemy_panel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="3" unique_id=1573275925]
 clip_contents = true
-offset_left = -304.0
-offset_top = -304.0
-offset_right = -4.0
-offset_bottom = -381.0
-
-[node name="PanelTitle" parent="UILayer/Control/Enemy_panel" index="0" unique_id=721863910]
-offset_left = 5.0
-offset_top = 254.0
-offset_right = 291.0
-offset_bottom = 280.0
-
-[node name="VBoxContainer" parent="UILayer/Control/Enemy_panel" index="1" unique_id=1930457242]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
+anchor_left = 0.78125
+anchor_top = 0.3
+anchor_right = 0.9921875
 offset_bottom = 0.0
 
 [node name="CombatLogPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="4" unique_id=928194718]
+visible = false
 offset_bottom = 0.0
 
 [node name="CombatLogButton" type="Button" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="6" unique_id=1669097033]
@@ -126,50 +84,7 @@ offset_bottom = 48.0
 text = "COMBAT LOG"
 flat = true
 
-[node name="ReferencePlayerHUD" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="7" unique_id=1471552592]
-z_index = 10
-clip_contents = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -273.0
-offset_top = -410.0
-offset_right = -20.0
-offset_bottom = -276.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="Margin" type="MarginContainer" parent="UILayer/Control/ReferencePlayerHUD" index="0" unique_id=1760101268]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 11
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 10
-
-[node name="Row" type="HBoxContainer" parent="UILayer/Control/ReferencePlayerHUD/Margin" index="0" unique_id=633567976]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="CharacterPortrait" type="TextureRect" parent="UILayer/Control/ReferencePlayerHUD/Margin/Row" index="0" unique_id=96160317]
-custom_minimum_size = Vector2(78, 96)
-layout_mode = 2
-tooltip_text = "Click to open Character"
-mouse_default_cursor_shape = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="PlayerStatus" type="Label" parent="UILayer/Control/ReferencePlayerHUD/Margin/Row" index="1" unique_id=1685222132]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
-text = "PLAYER STATUS"
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="ActionMenu" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="8" unique_id=167381762]
+[node name="ActionMenu" type="PanelContainer" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="7" unique_id=167381762]
 visible = false
 z_index = 24
 layout_mode = 1
@@ -219,21 +134,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="9" unique_id=530167356 instance=ExtResource("5_character_panel")]
+[node name="CharacterPanel" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="8" unique_id=530167356 instance=ExtResource("5_character_panel")]
 visible = false
 z_index = 19
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = 40.0
 offset_top = 78.0
 offset_right = -40.0
 offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
 
-[node name="DefeatOverlay" type="ColorRect" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="10" unique_id=1043847456]
+[node name="DefeatOverlay" type="ColorRect" parent="UILayer/Control" parent_id_path=PackedInt32Array(76147029) index="9" unique_id=1043847456]
 visible = false
 z_index = 100
 layout_mode = 1

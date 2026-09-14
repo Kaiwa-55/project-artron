@@ -1,0 +1,117 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/event/event_panel.gd" id="1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_narrative"]
+
+[node name="EventPanel" type="CanvasLayer"]
+layer = 100
+visible = false
+script = ExtResource("1")
+
+[node name="Backdrop" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="BackgroundImage" type="TextureRect" parent="Backdrop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="ColorRect" parent="Backdrop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.015, 0.024, 0.08)
+
+[node name="SafeArea" type="MarginContainer" parent="Backdrop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="VBoxContainer" parent="Backdrop/SafeArea"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Backdrop/SafeArea/Content"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.32, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 25
+text = "EVENT"
+horizontal_alignment = 1
+
+[node name="SceneSpace" type="Control" parent="Backdrop/SafeArea/Content"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_filter = 2
+size_flags_vertical = 3
+
+[node name="Narrative" type="PanelContainer" parent="Backdrop/SafeArea/Content"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBox_narrative")
+
+[node name="Margin" type="MarginContainer" parent="Backdrop/SafeArea/Content/Narrative"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="Bottom" type="VBoxContainer" parent="Backdrop/SafeArea/Content/Narrative/Margin"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 4
+
+[node name="Description" type="Label" parent="Backdrop/SafeArea/Content/Narrative/Margin/Bottom"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 9
+text = "Description"
+autowrap_mode = 2
+
+[node name="ChoiceScroll" type="ScrollContainer" parent="Backdrop/SafeArea/Content/Narrative/Margin/Bottom"]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+mouse_filter = 1
+size_flags_vertical = 3
+
+[node name="Choices" type="VBoxContainer" parent="Backdrop/SafeArea/Content/Narrative/Margin/Bottom/ChoiceScroll"]
+layout_mode = 2
+mouse_filter = 1
+size_flags_horizontal = 3
+theme_override_constants/separation = 2

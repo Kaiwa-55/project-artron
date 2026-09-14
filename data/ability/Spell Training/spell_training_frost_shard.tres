@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://ch436lluws1uy"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_gcu1c"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_1kiix"]
+[ext_resource type="Resource" uid="uid://xetjc8rsswyk" path="res://data/skill/frost_shard.tres" id="3_wiggg"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="4_v4vac"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="5_hns34"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="6_6d46d"]
+
+[resource]
+script = ExtResource("4_v4vac")
+id = "spell_training_frost_shard"
+display_name = "Spell Training: Frost Shard"
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("5_hns34"), ExtResource("6_6d46d")]
+is_passive = true
+description = "Add Frost Shard to your available Skills."
+granted_skills = Array[ExtResource("2_1kiix")]([ExtResource("3_wiggg")])

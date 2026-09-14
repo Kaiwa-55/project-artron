@@ -4,14 +4,7 @@
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="2"]
 [ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3"]
 [ext_resource type="Resource" uid="uid://u0ne8pf7yoej" path="res://data/ability/arcane_mind.tres" id="4"]
-[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_bolt.tres" id="5"]
-[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_burst.tres" id="6"]
-[ext_resource type="Resource" path="res://data/ability/spell_training_arcane_cone.tres" id="7"]
-[ext_resource type="Resource" uid="uid://rhole0fa05qx" path="res://data/ability/potent_casting.tres" id="8"]
-[ext_resource type="Resource" uid="uid://beja16wnhgbq8" path="res://data/ability/efficient_casting.tres" id="9"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="9_j8rrb"]
-[ext_resource type="Resource" uid="uid://bi71gw77qqnom" path="res://data/ability/spell_reach.tres" id="10"]
-[ext_resource type="Resource" uid="uid://c1715pfvn8361" path="res://data/ability/rapid_formula.tres" id="11"]
 
 [sub_resource type="Resource" id="L1"]
 script = ExtResource("2")
@@ -84,7 +77,7 @@ fixed_attribute_bonuses = {
 }
 attribute_choice_count = 1
 attribute_choice_options = Array[int]([1, 4])
-granted_abilities = [ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")]
+granted_abilities = [ExtResource("4")]
 traits = [ExtResource("3")]
 auto_equipped_ability_ids = Array[String](["arcane_mind"])
 progression_entries = Array[Resource]([SubResource("L1"), SubResource("L2"), SubResource("L3"), SubResource("L4"), SubResource("L5"), SubResource("L6"), SubResource("L7"), SubResource("L8"), SubResource("L9"), SubResource("L10")])

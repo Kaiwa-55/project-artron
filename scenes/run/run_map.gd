@@ -1,14 +1,14 @@
 extends Control
 
-const NODE_SIZE := Vector2(74, 74)
-const FLOOR_SPACING := 122.0
-const LANE_SPACING := 130.0
+const NODE_SIZE := Vector2(40, 40)
+const FLOOR_SPACING := 78.0
+const LANE_SPACING := 50.0
 const ENCOUNTER_CATALOG := preload("res://data/run/prototype_encounter_catalog.tres")
 const COMBAT_SCENE := "res://scenes/prototype/PrototypeCombat.tscn"
 const PLAYER_DATA := preload("res://data/character/player.tres")
 const DEFAULT_PARTY_ENCOUNTER := preload("res://data/encounter/prototype_encounter.tres")
 
-@onready var map_canvas: Control = $Margin/Layout/MapPanel/MapCanvas
+@onready var map_canvas: Control = $Margin/Layout/MapPanel/MapScroll/MapCanvas
 @onready var seed_input: LineEdit = $Margin/Layout/Header/SeedInput
 @onready var seed_label: Label = $Margin/Layout/Header/SeedLabel
 @onready var location_label: Label = $Margin/Layout/Footer/LocationLabel
@@ -17,11 +17,15 @@ const DEFAULT_PARTY_ENCOUNTER := preload("res://data/encounter/prototype_encount
 @onready var level_up_panel: LevelUpPanel = $LevelUpPanel
 @onready var party_inventory: HBoxContainer = $Margin/Layout/Footer/PartyInventory
 @onready var character_panel: CharacterPanel = $CharacterPanel
+@onready var event_panel: EventPanel = $EventPanel
 
 var run_state: RunState
 var node_buttons: Dictionary = {}
 var selected_node_id: String = ""
 var reset_party_to_level_one_on_start: bool = false
+var event_manager: EventManager
+var encounter_manager: EncounterManager
+var pending_encounter_from_event: bool = false
 
 
 func _ready() -> void:
@@ -43,6 +47,7 @@ func _ready() -> void:
 	else:
 		start_run(int(Time.get_unix_time_from_system()))
 	ensure_player_progression_state()
+	setup_event_flow()
 	refresh_level_up_button()
 	build_party_inventory_buttons()
 
@@ -65,6 +70,14 @@ func start_run(seed_value: int, reset_party_to_level_one: bool = false) -> void:
 	get_tree().set_meta("active_run_state", run_state)
 	get_tree().remove_meta("active_run_node_id")
 	get_tree().remove_meta("active_encounter_data")
+	get_tree().remove_meta("active_event_encounter")
+	get_tree().remove_meta("active_event_encounter_data")
+	get_tree().remove_meta("pending_event_encounter_result")
+	if event_manager != null:
+		encounter_manager.active_encounter = null
+		event_manager.active_event = null
+		event_manager.configure(run_state.game_state, encounter_manager)
+		event_panel.close()
 	seed_input.text = str(seed_value)
 	seed_label.text = "RUN SEED  %d" % seed_value
 	selected_node_id = ""
@@ -157,10 +170,11 @@ func build_party_inventory_buttons() -> void:
 		if member == null:
 			continue
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(122, 46)
+		button.custom_minimum_size = Vector2(72, 32)
 		button.icon = member.token_texture
 		button.expand_icon = true
-		button.text = "%s\nINVENTORY" % member.display_name
+		button.add_theme_font_size_override("font_size", 7)
+		button.text = "%s\nINV" % member.display_name
 		button.tooltip_text = "Open %s's Inventory" % member.display_name
 		button.pressed.connect(open_party_inventory.bind(member_id))
 		party_inventory.add_child(button)
@@ -194,23 +208,33 @@ func build_map() -> void:
 	node_buttons.clear()
 	var grouped: Dictionary = {}
 	var max_floor := 0
+	var max_lanes := 1
 	for node in run_state.nodes:
 		if not grouped.has(node.floor_index):
 			grouped[node.floor_index] = []
 		grouped[node.floor_index].append(node)
 		max_floor = maxi(max_floor, node.floor_index)
+		max_lanes = maxi(max_lanes, grouped[node.floor_index].size())
+	var canvas_height := maxf(
+		252.0,
+		float(max_lanes - 1) * LANE_SPACING + NODE_SIZE.y + 24.0
+	)
+	map_canvas.custom_minimum_size = Vector2(
+		40.0 + float(max_floor) * FLOOR_SPACING + NODE_SIZE.x + 24.0,
+		canvas_height
+	)
 	var positions: Dictionary = {}
 	for floor_index in grouped:
 		var floor_nodes: Array = grouped[floor_index]
 		for lane_index in range(floor_nodes.size()):
 			positions[floor_nodes[lane_index].id] = Vector2(
-				70.0 + float(floor_index) * FLOOR_SPACING,
-				map_canvas.size.y * 0.5 + (float(lane_index) - float(floor_nodes.size() - 1) * 0.5) * LANE_SPACING
+				24.0 + float(floor_index) * FLOOR_SPACING,
+				canvas_height * 0.5 + (float(lane_index) - float(floor_nodes.size() - 1) * 0.5) * LANE_SPACING - NODE_SIZE.y * 0.5
 			)
 	for node in run_state.nodes:
 		for next_id in node.next_node_ids:
 			var line := Line2D.new()
-			line.width = 4.0
+			line.width = 1.5
 			line.default_color = Color("34465f")
 			line.points = PackedVector2Array([positions[node.id] + NODE_SIZE * 0.5, positions[next_id] + NODE_SIZE * 0.5])
 			map_canvas.add_child(line)
@@ -220,6 +244,7 @@ func build_map() -> void:
 		button.position = positions[node.id]
 		button.size = NODE_SIZE
 		button.text = "%s\n%s" % [node.get_short_label(), node.get_display_name()]
+		button.add_theme_font_size_override("font_size", 7)
 		button.tooltip_text = "%s • Threat %d" % [node.get_display_name(), node.threat]
 		button.pressed.connect(select_node.bind(node.id))
 		map_canvas.add_child(button)
@@ -243,17 +268,77 @@ func confirm_selected_node() -> void:
 	selected_node_id = ""
 	continue_button.disabled = true
 	refresh_map_state()
+	if node.event_data != null:
+		event_manager.start_event(node.event_data, get_event_context())
+		return
 	if node.encounter_data != null:
-		get_tree().set_meta("active_run_state", run_state)
-		get_tree().set_meta("active_run_node_id", node.id)
-		get_tree().set_meta("active_encounter_data", node.encounter_data)
-		var change_error := get_tree().change_scene_to_file(COMBAT_SCENE)
-		if change_error != OK:
-			location_label.text = "Could not open Encounter: %s" % error_string(change_error)
+		present_encounter(node.encounter_data, false)
 		return
 	get_tree().remove_meta("active_run_node_id")
 	get_tree().remove_meta("active_encounter_data")
 	location_label.text = "Entered %s — this Node does not start Combat." % node.get_display_name()
+
+
+func setup_event_flow() -> void:
+	encounter_manager = EncounterManager.new()
+	encounter_manager.name = "EncounterManager"
+	add_child(encounter_manager)
+	event_manager = EventManager.new()
+	event_manager.name = "EventManager"
+	add_child(event_manager)
+	event_manager.configure(run_state.game_state, encounter_manager)
+	encounter_manager.combat_requested.connect(_on_event_encounter_requested)
+	event_panel.encounter_confirmed.connect(start_presented_encounter)
+	event_panel.setup(event_manager)
+	resume_event_encounter_result()
+
+
+func get_event_context() -> EventContext:
+	var party: Array[CombatantState] = []
+	for member in run_state.party_progression_states.values():
+		if member is CombatantState:
+			party.append(member)
+	var context := EventContext.new(run_state.game_state, party)
+	context.actor_id = "player"
+	context.rng.seed = run_state.seed ^ run_state.current_node_id.hash()
+	return context
+
+
+func _on_event_encounter_requested(data: EncounterData) -> void:
+	present_encounter(data, true)
+
+
+func present_encounter(data: EncounterData, from_event: bool = false) -> void:
+	pending_encounter_from_event = from_event
+	event_panel.show_encounter(data)
+
+
+func start_presented_encounter(data: EncounterData) -> void:
+	get_tree().set_meta("active_run_state", run_state)
+	get_tree().set_meta("active_run_node_id", run_state.current_node_id)
+	get_tree().set_meta("active_encounter_data", data)
+	if pending_encounter_from_event:
+		get_tree().set_meta("active_event_encounter", true)
+		get_tree().set_meta("active_event_encounter_data", data)
+	else:
+		get_tree().remove_meta("active_event_encounter")
+		get_tree().remove_meta("active_event_encounter_data")
+	var change_error := get_tree().change_scene_to_file(COMBAT_SCENE)
+	if change_error != OK:
+		location_label.text = "Could not open Encounter: %s" % error_string(change_error)
+
+
+func resume_event_encounter_result() -> void:
+	if not get_tree().has_meta("pending_event_encounter_result") or not get_tree().has_meta("active_event_encounter_data"):
+		return
+	var data := get_tree().get_meta("active_event_encounter_data") as EncounterData
+	var result_type: EncounterResult.Type = int(get_tree().get_meta("pending_event_encounter_result")) as EncounterResult.Type
+	get_tree().remove_meta("pending_event_encounter_result")
+	get_tree().remove_meta("active_event_encounter")
+	get_tree().remove_meta("active_event_encounter_data")
+	get_tree().remove_meta("active_encounter_data")
+	if data != null and encounter_manager.resume_encounter(data, get_event_context()):
+		encounter_manager.finish_encounter(EncounterResult.new(result_type))
 
 
 func refresh_map_state() -> void:

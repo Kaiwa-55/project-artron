@@ -20,7 +20,6 @@ id = "bless"
 display_name = "Bless"
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7")]
-auto_equip_on_grant = true
 ap_cost = 1
 description = "Stance Aura for 5 Turns. The Devotee and allies within 10 ft gain +1 To Hit with Attacks."
 target_filter = 1

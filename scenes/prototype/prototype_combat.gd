@@ -451,6 +451,11 @@ func _process(_delta: float) -> void:
 	if combat_system == null or combat_system.get_combat_state() == null:
 		return
 	var state = combat_system.get_combat_state()
+	if state.is_finished() and get_tree().has_meta("active_event_encounter") and not post_combat_transition_started:
+		post_combat_transition_started = true
+		sync_run_item_inventories()
+		return_to_event_flow_after_combat(state.combat_result)
+		return
 	if state.is_finished() and state.combat_result == CombatEnums.CombatResult.VICTORY and get_tree().has_meta("active_run_state") and not post_combat_transition_started:
 		post_combat_transition_started = true
 		sync_run_item_inventories()
@@ -479,6 +484,16 @@ func open_reward_after_victory() -> void:
 	if change_error != OK:
 		post_combat_transition_started = false
 		$UILayer/Control.add_log_message("Could not open Reward Selection: %s" % error_string(change_error))
+
+
+func return_to_event_flow_after_combat(combat_result: CombatEnums.CombatResult) -> void:
+	await get_tree().create_timer(0.75).timeout
+	var result_type := EncounterResult.Type.VICTORY if combat_result == CombatEnums.CombatResult.VICTORY else EncounterResult.Type.DEFEAT
+	get_tree().set_meta("pending_event_encounter_result", result_type)
+	var change_error := get_tree().change_scene_to_file(RUN_MAP_SCENE)
+	if change_error != OK:
+		post_combat_transition_started = false
+		$UILayer/Control.add_log_message("Could not return to Event: %s" % error_string(change_error))
 
 
 func restart_run_after_defeat() -> void:

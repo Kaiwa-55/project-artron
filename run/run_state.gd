@@ -13,6 +13,7 @@ signal node_entered(node: MapNodeData)
 @export var gold: int = 0
 @export var party_max_hp_bonus: int = 0
 @export var party_ability_point_bonus: int = 0
+@export var game_state: GameState = GameState.new()
 var player_progression_state: CombatantState
 var applied_party_ability_point_bonus: int = 0
 var party_progression_states: Dictionary = {}
@@ -37,6 +38,7 @@ func setup(p_seed: int, generated_nodes: Array[MapNodeData]) -> void:
 	gold = 0
 	party_max_hp_bonus = 0
 	party_ability_point_bonus = 0
+	game_state = GameState.new()
 	player_progression_state = null
 	applied_party_ability_point_bonus = 0
 	party_progression_states.clear()

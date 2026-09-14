@@ -1,0 +1,1592 @@
+[gd_scene format=3 uid="uid://cjemktmhmuxvi"]
+
+[ext_resource type="Texture2D" uid="uid://cpw4r1kyadsuh" path="res://assets/ui/Equipment.png" id="1_0fbet"]
+[ext_resource type="Texture2D" uid="uid://djhpoo05f46al" path="res://assets/ui/Main_tiles.png" id="2_qtu10"]
+[ext_resource type="Texture2D" uid="uid://clkx0c1dy5l6j" path="res://assets/ui/Icons.png" id="3_ee4bf"]
+[ext_resource type="Texture2D" uid="uid://bafaukp6u8tca" path="res://assets/ui/Reflex.png" id="3_kbped"]
+[ext_resource type="Texture2D" uid="uid://57jnw07hrre3" path="res://assets/ui/Will.png" id="4_fj5cn"]
+[ext_resource type="Script" uid="uid://bphiedi1nt406" path="res://scenes/ui/inventory_and_more.gd" id="5_script"]
+[ext_resource type="Texture2D" uid="uid://ctt83jllfiy6r" path="res://assets/icon/skill_icons1.png" id="7_3fcwd"]
+[ext_resource type="PackedScene" uid="uid://djgrhmfiivlbf" path="res://scenes/ui/ItemWhenSelectedPanel.tscn" id="7_kip2e"]
+[ext_resource type="Texture2D" uid="uid://bxlun3v3fh7o1" path="res://assets/ui/GUI_2x.png" id="8_hjido"]
+[ext_resource type="Texture2D" uid="uid://bcfsveirby0ja" path="res://icon.svg" id="9_mwjd4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62e2m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0fbet"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ugcl7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0kyq7"]
+atlas = ExtResource("3_ee4bf")
+region = Rect2(40, 183, 15, 17)
+
+[sub_resource type="LabelSettings" id="LabelSettings_14cdr"]
+font_size = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy58a"]
+atlas = ExtResource("3_kbped")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6a6wx"]
+atlas = ExtResource("4_fj5cn")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0fbet"]
+atlas = ExtResource("1_0fbet")
+region = Rect2(50, 336, 43, 46)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_14cdr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_htemk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htemk"]
+atlas = ExtResource("1_0fbet")
+region = Rect2(128, 316, 4, 7)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q4lci"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_htemk"]
+font_size = 13
+font_color = Color(0.29882693, 0.18276581, 0.059224434, 1)
+outline_size = 1
+outline_color = Color(0.613289, 0.46394074, 0.26281607, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pj0hq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pj0hq"]
+atlas = ExtResource("3_ee4bf")
+region = Rect2(36, 51, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ugcl7"]
+atlas = ExtResource("3_ee4bf")
+region = Rect2(34, 4, 12, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14cdr"]
+atlas = ExtResource("3_ee4bf")
+region = Rect2(18, 2, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbped"]
+atlas = ExtResource("3_ee4bf")
+region = Rect2(2, 98, 12, 12)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q4lci"]
+font_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_pj0hq"]
+line_spacing = -1.0
+font_size = 7
+
+[sub_resource type="LabelSettings" id="LabelSettings_ugcl7"]
+font_size = 14
+font_color = Color(1, 0.31764707, 0.11372549, 1)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mwjd4"]
+font_size = 14
+font_color = Color(0.44801188, 0.56886965, 0.9163364, 1)
+outline_size = 1
+outline_color = Color(0.00014455899, 3.8950053e-05, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wn4hl"]
+atlas = ExtResource("3_ee4bf")
+region = Rect2(40, 183, 15, 17)
+
+[sub_resource type="LabelSettings" id="LabelSettings_k00u0"]
+font_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_nh7ey"]
+font_size = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_0kyq7"]
+font_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_pp1to"]
+font_size = 12
+font_color = Color(0.5107831, 0, 0.01506661, 1)
+outline_size = 1
+outline_color = Color(0.5568628, 0.5568628, 0.5568628, 0.63529414)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0kyq7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wn4hl"]
+line_spacing = -3.0
+font_size = 8
+outline_size = 1
+outline_color = Color(0.8156863, 0.6745098, 0.50980395, 0.3764706)
+
+[sub_resource type="LabelSettings" id="LabelSettings_aiipn"]
+line_spacing = -3.0
+font_size = 6
+outline_size = 1
+outline_color = Color(0.8156863, 0.6745098, 0.50980395, 0.3764706)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xan8r"]
+font_size = 8
+font_color = Color(0.40754402, 0.06697694, 2.4065375e-08, 1)
+outline_size = 1
+outline_color = Color(0.8156863, 0.6745098, 0.50980395, 0.3764706)
+
+[sub_resource type="LabelSettings" id="LabelSettings_f3phk"]
+font_size = 4
+font_color = Color(0.40754402, 0.06697694, 2.4065375e-08, 1)
+outline_size = 1
+outline_color = Color(0.8156863, 0.6745098, 0.50980395, 0.3764706)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pp1to"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8oybn"]
+line_spacing = -3.0
+font_size = 6
+font_color = Color(0.40754402, 0.06697694, 2.4065375e-08, 1)
+outline_size = 1
+outline_color = Color(0.8156863, 0.6745098, 0.50980395, 0.3764706)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kip2e"]
+atlas = ExtResource("2_qtu10")
+region = Rect2(356, 291, 9, 9)
+
+[node name="InventoryAndMore" type="Control" unique_id=411264663]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_script")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=90658028]
+custom_minimum_size = Vector2(425, 250)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -212.5
+offset_top = -137.5
+offset_right = 212.5
+offset_bottom = 137.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_62e2m")
+
+[node name="EquiptMentMargincontainer" type="MarginContainer" parent="PanelContainer" unique_id=1711210765]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="EquiptMentcontainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer" unique_id=386735628]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer" unique_id=1044352119]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer" unique_id=1822550433]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer2" unique_id=324385904]
+custom_minimum_size = Vector2(2.02, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_0fbet")
+
+[node name="NinePatchRect3" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer2" unique_id=1816140214]
+z_index = 1
+custom_minimum_size = Vector2(225, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(11, 9)
+texture = ExtResource("1_0fbet")
+region_rect = Rect2(37, 288, 38, 14)
+patch_margin_left = 32
+patch_margin_top = 10
+patch_margin_right = 32
+patch_margin_bottom = 11
+
+[node name="Label" type="Label" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer2/NinePatchRect3" unique_id=2019615484]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+text = "Equiptment"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer" unique_id=1193957002]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EquiptmentSlot" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer" unique_id=590506401]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(2, 0)
+texture = ExtResource("1_0fbet")
+region_rect = Rect2(7, 347, 34, 26)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 5
+
+[node name="DefenseValue" type="MarginContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot" unique_id=257958886]
+custom_minimum_size = Vector2(70, 85)
+layout_mode = 1
+offset_right = 70.0
+offset_bottom = 55.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue" unique_id=1035505727]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer" unique_id=480620933]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ugcl7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer" unique_id=1874624157]
+layout_mode = 2
+
+[node name="FortitdeContainer" type="MarginContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer" unique_id=244616782]
+custom_minimum_size = Vector2(70, 16)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/FortitdeContainer" unique_id=2040911609]
+layout_mode = 2
+
+[node name="Fortitdeicon" type="TextureRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/FortitdeContainer/HBoxContainer" unique_id=190076876]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 3)
+texture = SubResource("AtlasTexture_0kyq7")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Value" type="Label" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/FortitdeContainer/HBoxContainer" unique_id=212261481]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-7, 7)
+text = "Fortitude:10"
+label_settings = SubResource("LabelSettings_14cdr")
+vertical_alignment = 1
+
+[node name="ReflexContainer2" type="MarginContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer" unique_id=1141852291]
+custom_minimum_size = Vector2(70, 16)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/ReflexContainer2" unique_id=2115293799]
+layout_mode = 2
+
+[node name="Reflexicon" type="TextureRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/ReflexContainer2/HBoxContainer" unique_id=1184085987]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 1)
+texture = SubResource("AtlasTexture_iy58a")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Value" type="Label" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/ReflexContainer2/HBoxContainer" unique_id=1935692497]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-7, 7)
+text = "Reflex:10"
+label_settings = SubResource("LabelSettings_14cdr")
+vertical_alignment = 1
+
+[node name="WillContainer3" type="MarginContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer" unique_id=253575952]
+custom_minimum_size = Vector2(70, 16)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/WillContainer3" unique_id=778240480]
+layout_mode = 2
+
+[node name="Willicon" type="TextureRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/WillContainer3/HBoxContainer" unique_id=1214691572]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = SubResource("AtlasTexture_6a6wx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/DefenseValue/HBoxContainer/VBoxContainer/WillContainer3/HBoxContainer" unique_id=2006761547]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-7, 7)
+text = "Will:10"
+label_settings = SubResource("LabelSettings_14cdr")
+vertical_alignment = 1
+
+[node name="Bookicon" type="TextureRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot" unique_id=1373892413]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.25
+offset_top = -57.0
+offset_right = 53.25
+offset_bottom = 57.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_0fbet")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+metadata/_edit_use_anchors_ = true
+
+[node name="EquiptmentSlot" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot" unique_id=884826995]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -86.0
+offset_right = 64.0
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot" unique_id=585002360]
+layout_mode = 2
+alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer2" unique_id=1965034096]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_14cdr")
+
+[node name="Main Hand" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer2" unique_id=1537001414]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Acessory 1" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer2" unique_id=1298531830]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot" unique_id=1248783570]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot" unique_id=1266849883]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer" unique_id=1441152949]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_14cdr")
+
+[node name="Head" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer" unique_id=2090304775]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Body" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer" unique_id=1535118966]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="trousers" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer" unique_id=2144376698]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Shoes" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer" unique_id=279869626]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot" unique_id=1906214771]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_htemk")
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot" unique_id=366715332]
+layout_mode = 2
+alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer3" unique_id=1160484373]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_14cdr")
+
+[node name="Acessory 2" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer3" unique_id=227517895]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Off Hand" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer3" unique_id=1914526438]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Acessory 3" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer3" unique_id=139522748]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/EquiptmentSlot/EquiptmentSlot/VBoxContainer3" unique_id=616617484]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_14cdr")
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer" unique_id=1892724228]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2, 0)
+texture = ExtResource("1_0fbet")
+region_rect = Rect2(39, 302, 34, 23)
+patch_margin_left = 6
+patch_margin_top = 3
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2" unique_id=2102602011]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -100.0
+offset_right = 90.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=836512980]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+columns = 4
+
+[node name="ItemContainer" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1366086259]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer2" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=2110646441]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer3" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1094155250]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer4" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1691738928]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer5" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1470931345]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer6" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=761851708]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer7" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1795727196]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer8" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=586555971]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer9" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1247074759]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer10" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=651352048]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer11" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1939376207]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer12" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=754599478]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer13" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1485600529]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer14" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1247663612]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer15" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=1322404305]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="ItemContainer16" type="Panel" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/GridContainer" unique_id=924788157]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=1779640805]
+layout_mode = 2
+
+[node name="ButtonPrevious" type="TextureButton" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/HBoxContainer" unique_id=407851156]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_horizontal = 8
+offset_transform_enabled = true
+offset_transform_position = Vector2(2, 0)
+texture_normal = SubResource("AtlasTexture_htemk")
+stretch_mode = 0
+flip_h = true
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/HBoxContainer" unique_id=2058341504]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Label" type="Label" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/HBoxContainer" unique_id=412920177]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_htemk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/HBoxContainer" unique_id=708662182]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_pj0hq")
+
+[node name="ButtonNext" type="TextureButton" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/HBoxContainer" unique_id=1084796897]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_horizontal = 8
+offset_transform_enabled = true
+offset_transform_position = Vector2(2, 0)
+texture_normal = SubResource("AtlasTexture_htemk")
+stretch_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer" unique_id=1821002714]
+layout_mode = 2
+alignment = 1
+
+[node name="CharacterBoxContainer" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2" unique_id=1460037216]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="CharacterButton" type="TextureButton" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2/CharacterBoxContainer" unique_id=437514306]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.5
+offset_top = -6.0
+offset_right = 4.5
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_position = Vector2(-0.09, 0)
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_pj0hq")
+
+[node name="InventoryBoxContainer" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2" unique_id=751407690]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="InventoryButton" type="TextureButton" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2/InventoryBoxContainer" unique_id=1801228663]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_ugcl7")
+
+[node name="EquiptmentBoxContainer" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2" unique_id=1475253225]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="EquiptmentButton" type="TextureButton" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2/EquiptmentBoxContainer" unique_id=1751101086]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_14cdr")
+
+[node name="CraftBoxContainer2" type="NinePatchRect" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2" unique_id=1930858474]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="CraftButton" type="TextureButton" parent="PanelContainer/EquiptMentMargincontainer/EquiptMentcontainer/VBoxContainer2/CraftBoxContainer2" unique_id=1366090631]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_kbped")
+
+[node name="ProfileMargincontainer" type="MarginContainer" parent="PanelContainer" unique_id=181313039]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Profilecontainer" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer" unique_id=1269714490]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer" unique_id=1733162001]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer" unique_id=1682248534]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer2" unique_id=1441999752]
+custom_minimum_size = Vector2(2.02, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_0fbet")
+
+[node name="NinePatchRect3" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer2" unique_id=1006808097]
+z_index = 1
+custom_minimum_size = Vector2(225, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(11, 9)
+texture = ExtResource("1_0fbet")
+region_rect = Rect2(37, 288, 38, 14)
+patch_margin_left = 32
+patch_margin_top = 10
+patch_margin_right = 32
+patch_margin_bottom = 11
+
+[node name="Label" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer2/NinePatchRect3" unique_id=980293984]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+text = "Profile"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer" unique_id=1593836142]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CharacterDetail" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer" unique_id=549450870]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(2, 0)
+texture = ExtResource("1_0fbet")
+region_rect = Rect2(7, 347, 34, 26)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 4
+patch_margin_bottom = 5
+
+[node name="CharacterImage" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=731853136]
+layout_mode = 0
+offset_left = 6.5
+offset_top = 3.0
+offset_right = 86.5
+offset_bottom = 83.0
+texture = ExtResource("7_3fcwd")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=1550439535]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.467
+anchor_top = 0.037
+anchor_right = 0.98700005
+anchor_bottom = 0.384
+offset_left = 0.033996582
+offset_top = 0.007999897
+offset_right = 0.07398987
+offset_bottom = 0.055999756
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox" unique_id=186297448]
+layout_mode = 2
+text = "Name"
+label_settings = SubResource("LabelSettings_q4lci")
+autowrap_mode = 1
+
+[node name="Ancestry" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox" unique_id=420938979]
+layout_mode = 2
+text = "Ancestry:"
+label_settings = SubResource("LabelSettings_pj0hq")
+
+[node name="Class" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox" unique_id=2013625991]
+layout_mode = 2
+text = "Class:"
+label_settings = SubResource("LabelSettings_pj0hq")
+
+[node name="Class DC" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox" unique_id=1468449558]
+layout_mode = 2
+text = "Class Dc:"
+label_settings = SubResource("LabelSettings_pj0hq")
+
+[node name="Level" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox" unique_id=1279507337]
+self_modulate = Color(0.8235294, 0.827451, 0.05490196, 1)
+layout_mode = 2
+
+[node name="Level" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox/Level" unique_id=1767457119]
+layout_mode = 2
+text = "Lv.1"
+label_settings = SubResource("LabelSettings_pj0hq")
+
+[node name="LevelProgressBar" type="ProgressBar" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox/Level" unique_id=600136726]
+self_modulate = Color(0.5683177, 0.99781877, 0.8499894, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+value = 54.84
+show_percentage = false
+
+[node name="Traits" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox" unique_id=1549974233]
+layout_mode = 2
+text = "Trait"
+label_settings = SubResource("LabelSettings_pj0hq")
+autowrap_mode = 1
+
+[node name="Hp" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=2130011872]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 86.0
+offset_right = 92.0
+offset_bottom = 111.0
+theme_override_constants/separation = -3
+
+[node name="Label" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Hp" unique_id=1616856394]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "HP / Max HP"
+label_settings = SubResource("LabelSettings_ugcl7")
+
+[node name="ProgressBar" type="ProgressBar" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Hp" unique_id=753938659]
+self_modulate = Color(6.9548937e-06, 0.60537547, 0.055894688, 1)
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+value = 30.64
+show_percentage = false
+
+[node name="Mana" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=377652904]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 112.0
+offset_right = 92.0
+offset_bottom = 137.0
+theme_override_constants/separation = -3
+
+[node name="Label" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Mana" unique_id=2033616971]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "Mana "
+label_settings = SubResource("LabelSettings_mwjd4")
+
+[node name="ProgressBar" type="ProgressBar" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Mana" unique_id=178510432]
+self_modulate = Color(0, 0.58492184, 0.9858354, 1)
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+value = 22.73
+show_percentage = false
+
+[node name="Other_Stat" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=116266663]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 141.0
+offset_right = 92.0
+offset_bottom = 209.0
+theme_override_constants/separation = 0
+
+[node name="Speed" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Other_Stat" unique_id=607325598]
+layout_mode = 2
+text = "Speed: "
+label_settings = SubResource("LabelSettings_pj0hq")
+autowrap_mode = 1
+
+[node name="Initiative" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Other_Stat" unique_id=482945497]
+layout_mode = 2
+text = "Initiative"
+label_settings = SubResource("LabelSettings_pj0hq")
+autowrap_mode = 1
+
+[node name="Resistance" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Other_Stat" unique_id=320532695]
+layout_mode = 2
+text = "Ex. Resistance : Fire 5,Cold 5"
+label_settings = SubResource("LabelSettings_pj0hq")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Immune" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Other_Stat" unique_id=831321328]
+layout_mode = 2
+text = "Ex. Immune : Stun"
+label_settings = SubResource("LabelSettings_pj0hq")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Defense" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=1465768406]
+layout_mode = 0
+offset_left = 96.5
+offset_top = 180.0
+offset_right = 192.5
+offset_bottom = 211.0
+theme_override_constants/separation = 18
+
+[node name="Fortitude" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense" unique_id=806518061]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -3
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Fortitude" unique_id=120081822]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2, 0)
+texture = SubResource("AtlasTexture_wn4hl")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Fortitude" unique_id=1820702196]
+layout_mode = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Fortitude"
+label_settings = SubResource("LabelSettings_k00u0")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Fortitude" unique_id=1121424831]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_nh7ey")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Reflex" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense" unique_id=463412132]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -3
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Reflex" unique_id=897596936]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2, 0)
+texture = ExtResource("3_kbped")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Reflex" unique_id=2001237928]
+layout_mode = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "Reflex"
+label_settings = SubResource("LabelSettings_k00u0")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Reflex" unique_id=1670979100]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_nh7ey")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Will" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense" unique_id=940410410]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -3
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Will" unique_id=99108534]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Will" unique_id=962265054]
+layout_mode = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "Will"
+label_settings = SubResource("LabelSettings_k00u0")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Defense/Will" unique_id=1220992479]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_nh7ey")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Attribute" type="GridContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail" unique_id=1799640779]
+layout_mode = 0
+offset_left = 96.5
+offset_top = 88.0
+offset_right = 195.5
+offset_bottom = 158.0
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 5
+columns = 3
+
+[node name="Str" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute" unique_id=727956080]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Str" unique_id=838381836]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Str" unique_id=183797308]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Str" unique_id=1372330593]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Str"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Con" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute" unique_id=708691632]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Con" unique_id=1409806111]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Con" unique_id=322259158]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Con" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Con" unique_id=720964140]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Con"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Dex" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute" unique_id=1577702053]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Dex" unique_id=1495089002]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Dex" unique_id=825289592]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Dex" unique_id=1278317101]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Dex"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Wis" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute" unique_id=1361041501]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Wis" unique_id=724167956]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Wis" unique_id=354844976]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Wis" unique_id=1971723420]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Wis"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Int" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute" unique_id=800659194]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Int" unique_id=1594788663]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Int" unique_id=970439750]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Int" unique_id=1985280547]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Int"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cha" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute" unique_id=1236562499]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Value" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Cha" unique_id=892272107]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "10"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Cha" unique_id=600516146]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-3, 0)
+texture = ExtResource("4_fj5cn")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Text" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/Attribute/Cha" unique_id=516814252]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2.5, 0)
+text = "Cha"
+label_settings = SubResource("LabelSettings_0kyq7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer" unique_id=87335562]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(-2, 0)
+texture = ExtResource("1_0fbet")
+region_rect = Rect2(39, 302, 34, 23)
+patch_margin_left = 6
+patch_margin_top = 3
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2" unique_id=173861135]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.023000002
+anchor_top = 0.032
+anchor_right = 0.9620001
+anchor_bottom = 0.87000006
+offset_left = -0.054000378
+offset_top = 0.08799982
+offset_right = 0.023986816
+offset_bottom = 0.07998657
+theme_override_constants/separation = 5
+
+[node name="Class" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=105544648]
+layout_mode = 2
+text = "Class Ability"
+label_settings = SubResource("LabelSettings_pp1to")
+
+[node name="AbilityContainer" type="PanelContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=979098450]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0kyq7")
+
+[node name="frame" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer" unique_id=1156039482]
+custom_minimum_size = Vector2(0, 40)
+clip_contents = true
+layout_mode = 2
+texture = ExtResource("8_hjido")
+region_rect = Rect2(144, 0, 48, 48)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7
+
+[node name="VBoxContainer" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame" unique_id=1824408463]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="icon" type="TextureRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer" unique_id=1873835436]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+texture = ExtResource("9_mwjd4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer" unique_id=488852329]
+layout_mode = 2
+theme_override_constants/separation = -3
+
+[node name="Name" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer/VBoxContainer" unique_id=1554722042]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_wn4hl")
+autowrap_mode = 1
+
+[node name="Trait" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer/VBoxContainer" unique_id=53262047]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_aiipn")
+autowrap_mode = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer" unique_id=102171301]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_override_constants/separation = -3
+
+[node name="Level" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer/VBoxContainer2" unique_id=201359942]
+layout_mode = 2
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_xan8r")
+
+[node name="Abilitytype" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer/VBoxContainer2" unique_id=1200251299]
+layout_mode = 2
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_f3phk")
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame/VBoxContainer" unique_id=90276246]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_pp1to")
+
+[node name="Description" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer/AbilityContainer/frame" unique_id=445373144]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.23700002
+anchor_top = 0.425
+anchor_right = 0.9620001
+anchor_bottom = 0.9250001
+offset_left = -0.08200455
+offset_right = 0.067993164
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_8oybn")
+autowrap_mode = 1
+
+[node name="Ancestry" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=959802922]
+layout_mode = 2
+text = "Ancestry Ability"
+label_settings = SubResource("LabelSettings_pp1to")
+
+[node name="AbilityContainer2" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=1082165801]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("8_hjido")
+region_rect = Rect2(144, 0, 48, 48)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7
+
+[node name="Basic" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=907782796]
+layout_mode = 2
+text = "Basic Ability"
+label_settings = SubResource("LabelSettings_pp1to")
+
+[node name="AbilityContainer3" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/VBoxContainer" unique_id=498723551]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("8_hjido")
+region_rect = Rect2(144, 0, 48, 48)
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2" unique_id=877692449]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.023000002
+anchor_top = 0.88900006
+anchor_right = 0.9620001
+anchor_bottom = 0.97200006
+offset_left = -0.054000378
+offset_top = -0.024017334
+offset_right = 0.023986816
+offset_bottom = 0.04798889
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 10
+
+[node name="ButtonPrevious" type="TextureButton" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/HBoxContainer" unique_id=1897479732]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_horizontal = 8
+offset_transform_enabled = true
+offset_transform_position = Vector2(2, 0)
+texture_normal = SubResource("AtlasTexture_htemk")
+stretch_mode = 0
+flip_h = true
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/HBoxContainer" unique_id=1991639934]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q4lci")
+
+[node name="Label" type="Label" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/HBoxContainer" unique_id=653421199]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+label_settings = SubResource("LabelSettings_htemk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/HBoxContainer" unique_id=1542414202]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_pj0hq")
+
+[node name="ButtonNext" type="TextureButton" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer/HBoxContainer/NinePatchRect2/HBoxContainer" unique_id=1141131887]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_horizontal = 8
+offset_transform_enabled = true
+offset_transform_position = Vector2(2, 0)
+texture_normal = SubResource("AtlasTexture_htemk")
+stretch_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/ProfileMargincontainer/Profilecontainer" unique_id=132708765]
+layout_mode = 2
+alignment = 1
+
+[node name="CharacterBoxContainer" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2" unique_id=1021684153]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="CharacterButton" type="TextureButton" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2/CharacterBoxContainer" unique_id=1032465598]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.5
+offset_top = -6.0
+offset_right = 4.5
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_position = Vector2(-0.09, 0)
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_pj0hq")
+
+[node name="InventoryBoxContainer" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2" unique_id=1239617724]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="InventoryButton" type="TextureButton" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2/InventoryBoxContainer" unique_id=1952919724]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_ugcl7")
+
+[node name="EquiptmentBoxContainer" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2" unique_id=16369080]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="EquiptmentButton" type="TextureButton" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2/EquiptmentBoxContainer" unique_id=1089232278]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_14cdr")
+
+[node name="CraftBoxContainer2" type="NinePatchRect" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2" unique_id=752411163]
+custom_minimum_size = Vector2(20, 25)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 0)
+offset_transform_visual_only = false
+texture = ExtResource("2_qtu10")
+region_rect = Rect2(203, 155, 26, 26)
+patch_margin_left = 3
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 4
+
+[node name="CraftButton" type="TextureButton" parent="PanelContainer/ProfileMargincontainer/Profilecontainer/VBoxContainer2/CraftBoxContainer2" unique_id=1170706176]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_kbped")
+
+[node name="ItemWhenSelectedPanel" parent="." unique_id=97551226 instance=ExtResource("7_kip2e")]
+visible = false
+z_index = 0
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 109.0
+offset_bottom = 90.0
+grow_horizontal = 1
+grow_vertical = 1
+mouse_filter = 0
+script = null
+
+[node name="ExitButton" type="TextureButton" parent="." unique_id=74927564]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.791
+anchor_top = 0.22800002
+anchor_right = 0.80500007
+anchor_bottom = 0.25300002
+offset_left = -0.23999023
+offset_top = -0.08000183
+offset_right = -0.20007324
+offset_bottom = -0.08000946
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+offset_transform_enabled = true
+offset_transform_visual_only = false
+texture_normal = SubResource("AtlasTexture_kip2e")

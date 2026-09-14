@@ -23,7 +23,6 @@ display_name = "Judgment Wave"
 required_level = 2
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("5"), ExtResource("6"), ExtResource("7")]
-auto_equip_on_grant = true
 ap_cost = 3
 faith_cost = 3
 description = "Attack everything in a 20 ft cone. Deal Light Damage equal to current Faith plus Level. Targets that take damage become Prone."

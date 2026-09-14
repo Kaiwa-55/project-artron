@@ -18,7 +18,6 @@ display_name = "Unwavering Faith"
 required_level = 2
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("3"), ExtResource("4")]
-auto_equip_on_grant = true
 is_passive = true
 description = "+1 Max Faith at Level 2 and another +1 every 2 Levels thereafter."
 effects = [SubResource("MaxFaithByLevel")]
