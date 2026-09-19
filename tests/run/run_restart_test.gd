@@ -27,7 +27,7 @@ func run_test() -> void:
 	check(run_map.run_state.current_node_id == "start" and run_map.run_state.completed_node_ids.is_empty(), "Restart creates a clean route", failures)
 	for member in run_map.run_state.party_progression_states.values():
 		check(member.level == 1 and member.experience == 0, "Every party member restarts at Level 1 with zero XP", failures)
-	check(run_map.run_state.gold == 0 and run_map.run_state.reward_history.is_empty(), "Restart clears Run rewards and Gold", failures)
+	check(run_map.run_state.gold == RunState.STARTING_GOLD and run_map.run_state.reward_history.is_empty(), "Restart restores starting Gold and clears Run rewards", failures)
 	run_map.queue_free()
 	if failures.is_empty():
 		print("RUN_RESTART_TEST: PASS")

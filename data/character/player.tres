@@ -9,7 +9,13 @@
 [ext_resource type="Resource" uid="uid://ckvdq66wiwbbl" path="res://data/equipment/buckler.tres" id="11_buckler"]
 [ext_resource type="Resource" uid="uid://dmhchlar7qr22" path="res://data/ancestry/human.tres" id="13_human"]
 [ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="13_yufwi"]
-[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="22_uvnxd"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="24_mgsqb"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="25_mewtd"]
+[ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="26_mv47j"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="27_aempt"]
+[ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="28_d8f8g"]
+[ext_resource type="Resource" path="res://data/trait/blunt.tres" id="29_qn4w5"]
+[ext_resource type="Resource" uid="uid://bm7e73pueqb80" path="res://data/trait/light.tres" id="30_ax7ba"]
 [ext_resource type="Resource" uid="uid://mwn86gfa6f6d" path="res://data/equipment/club.tres" id="item_club"]
 [ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="item_dagger"]
 [ext_resource type="Resource" uid="uid://dy5ai2cdwi0dj" path="res://data/equipment/dagger_offhand.tres" id="item_dagger_offhand"]
@@ -23,7 +29,17 @@
 [ext_resource type="Resource" uid="uid://bgdxui81ypnb5" path="res://data/skill/ember_bolt.tres" id="skill_ember_bolt"]
 [ext_resource type="Resource" uid="uid://ld6omfqnqxcv" path="res://data/skill/flame_wave.tres" id="skill_flame_wave"]
 [ext_resource type="Resource" uid="uid://xetjc8rsswyk" path="res://data/skill/frost_shard.tres" id="skill_frost_shard"]
-[ext_resource type="Resource" path="res://data/skill/frozen_ground.tres" id="skill_frozen_ground"]
+[ext_resource type="Resource" uid="uid://du1iwouonupmm" path="res://data/skill/frozen_ground.tres" id="skill_frozen_ground"]
+
+[sub_resource type="Resource" id="Resource_mgsqb"]
+script = ExtResource("26_mv47j")
+id = "unarmed_attack"
+display_name = "Unarmed Attack"
+animation_template = ExtResource("24_mgsqb")
+is_unarmed = true
+base_damage = 1
+damage_type = "blunt"
+traits = [ExtResource("27_aempt"), ExtResource("28_d8f8g"), ExtResource("29_qn4w5"), ExtResource("30_ax7ba")]
 
 [resource]
 script = ExtResource("1_character_data")
@@ -39,6 +55,8 @@ class_attribute_choices = Array[int]([2])
 level = 3
 base_max_hp = 0
 base_max_ap = 4
+strength = 14
+unarmed_attack = SubResource("Resource_mgsqb")
 equipment_inventory = [ExtResource("3_xo044"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_dagger_offhand"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")]
 item_inventory = Array[ExtResource("13_yufwi")]([ExtResource("item_minor_healing_potion")])
 starting_equipment = [ExtResource("item_dagger"), ExtResource("item_dagger_offhand")]

@@ -29,6 +29,8 @@ func _init() -> void:
 			check(not node.next_node_ids.is_empty(), "%s must have a route forward." % node.id, failures)
 		if not node.encounter_pool_id.is_empty():
 			check(node.encounter_data != null, "%s must resolve its EncounterData from the catalog." % node.id, failures)
+		if node.node_type == MapNodeData.NodeType.EVENT:
+			check(node.event_table != null and node.event_table.entries.size() >= 2, "%s must receive the weighted EventTable." % node.id, failures)
 	for failure in failures:
 		push_error(failure)
 	print("RUN_MAP_SYSTEM_TEST: PASS" if failures.is_empty() else "RUN_MAP_SYSTEM_TEST: FAIL (%d)" % failures.size())

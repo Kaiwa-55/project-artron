@@ -7,3 +7,12 @@ enum Type {
 	MOVE,
 	SKILL
 }
+
+
+enum Maneuver {
+	GRAB,
+	PUSH,
+	PULL,
+	TRIP,
+	STAND
+}

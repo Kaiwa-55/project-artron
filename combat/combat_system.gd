@@ -19,11 +19,15 @@ const EquipmentActionExecutorScript = preload("res://combat/equipment/equipment_
 const TurnCoordinatorScript = preload("res://combat/turn/turn_coordinator.gd")
 const CombatActionExecutorScript = preload("res://combat/action/combat_action_executor.gd")
 const EscapeActionExecutorScript = preload("res://combat/action/escape_action_executor.gd")
+const ManeuverActionExecutorScript = preload("res://combat/action/maneuver_action_executor.gd")
+const HideActionExecutorScript = preload("res://combat/action/hide_action_executor.gd")
+const SearchActionExecutorScript = preload("res://combat/action/search_action_executor.gd")
 const ConsumableItemExecutorScript = preload("res://combat/item/consumable_item_executor.gd")
 const ReactionResolverScript = preload("res://combat/reaction/reaction_resolver.gd")
 const AreaActionExecutorScript = preload("res://combat/targeting/area_action_executor.gd")
 const AttackSequenceExecutorScript = preload("res://combat/attack/attack_sequence_executor.gd")
 const ProgressionSystemScript = preload("res://combat/progression/progression_system.gd")
+const EncounterObjectiveSystemScript = preload("res://encounter/encounter_objective_system.gd")
 
 var combat_state: CombatState
 
@@ -50,12 +54,16 @@ var equipment_system
 var ancestry_system
 var class_system
 var progression_system
+var encounter_objective_system
 
 var event_system: EventSystem
 var turn_coordinator
 var equipment_action_executor
 var combat_action_executor
 var escape_action_executor
+var maneuver_action_executor
+var hide_action_executor
+var search_action_executor
 var consumable_item_executor
 var reaction_resolver
 var pending_action: ActionRequest:
@@ -162,6 +170,8 @@ func _init() -> void:
 	ancestry_system = AncestrySystemScript.new()
 	class_system = ClassSystemScript.new()
 	progression_system = ProgressionSystemScript.new()
+	encounter_objective_system = EncounterObjectiveSystemScript.new()
+	encounter_objective_system.all_required_completed.connect(_on_required_objectives_completed)
 
 	action_system = ActionSystem.new(
 		attack_system,
@@ -184,12 +194,24 @@ func _init() -> void:
 	turn_coordinator = TurnCoordinatorScript.new(self)
 	combat_action_executor = CombatActionExecutorScript.new(self)
 	escape_action_executor = EscapeActionExecutorScript.new(self)
+	maneuver_action_executor = ManeuverActionExecutorScript.new(self)
+	hide_action_executor = HideActionExecutorScript.new(self)
+	search_action_executor = SearchActionExecutorScript.new(self)
 	consumable_item_executor = ConsumableItemExecutorScript.new(self)
 
 func start_combat(
 	combatants: Array[CombatantState]
 ) -> void:
 	turn_coordinator.start_combat(combatants)
+
+
+func configure_encounter_objectives(encounter: EncounterData) -> void:
+	var configured: Array[EncounterObjective] = encounter.objectives if encounter != null else []
+	encounter_objective_system.setup(self, configured)
+
+
+func get_objective_states() -> Array[Dictionary]:
+	return encounter_objective_system.get_states()
 
 func execute_action(
 	request: ActionRequest
@@ -199,6 +221,18 @@ func execute_action(
 
 func execute_escape(combatant_id: String, status_id: String) -> ActionResult:
 	return escape_action_executor.execute(combatant_id, status_id)
+
+
+func use_basic_maneuver(combatant_id: String, target_id: String, maneuver: ActionTypes.Maneuver) -> ActionResult:
+	return maneuver_action_executor.execute(combatant_id, target_id, maneuver)
+
+
+func use_hide(combatant_id: String) -> ActionResult:
+	return hide_action_executor.execute(combatant_id)
+
+
+func use_search(combatant_id: String, target_id: String) -> ActionResult:
+	return search_action_executor.execute(combatant_id, target_id)
 
 
 func use_consumable_item(combatant_id: String, item_id: String, target_id: String = "") -> ActionResult:
@@ -391,6 +425,8 @@ func clear_hidden(combatant: CombatantState, reason: String) -> void:
 
 
 func check_for_combat_end() -> bool:
+	if maneuver_action_executor != null:
+		maneuver_action_executor.refresh_grabs()
 	if combat_state == null or combat_state.is_finished():
 		return combat_state != null and combat_state.is_finished()
 
@@ -405,18 +441,28 @@ func check_for_combat_end() -> bool:
 	var winning_team := 0
 	if living_teams.size() == 1:
 		winning_team = int(living_teams.keys()[0])
+	if winning_team == 1:
+		finish_combat(CombatEnums.CombatResult.VICTORY, winning_team)
+	else:
+		finish_combat(CombatEnums.CombatResult.DEFEAT, winning_team)
+	return true
+
+
+func finish_combat(result: CombatEnums.CombatResult, winning_team: int = 0, from_objective: bool = false) -> bool:
+	if combat_state == null or combat_state.is_finished() or result == CombatEnums.CombatResult.IN_PROGRESS:
+		return false
 	combat_state.winner_team = winning_team
+	combat_state.combat_result = result
 	combat_state.turn_state = CombatEnums.TurnState.END
 	for combatant in combat_state.combatants.values():
 		effect_system.clear_all_effects(combatant)
-
-	if winning_team == 1:
-		combat_state.combat_result = CombatEnums.CombatResult.VICTORY
-		event_system.emit(CombatEvent.new(EventTypes.Type.COMBAT_VICTORY, "", "", {"winner_team": winning_team}))
-	else:
-		combat_state.combat_result = CombatEnums.CombatResult.DEFEAT
-		event_system.emit(CombatEvent.new(EventTypes.Type.COMBAT_DEFEAT, "", "", {"winner_team": winning_team}))
+	var event_type := EventTypes.Type.COMBAT_VICTORY if result == CombatEnums.CombatResult.VICTORY else EventTypes.Type.COMBAT_DEFEAT
+	event_system.emit(CombatEvent.new(event_type, "", "", {"winner_team": winning_team, "objective_result": from_objective}))
 	return true
+
+
+func _on_required_objectives_completed() -> void:
+	finish_combat(CombatEnums.CombatResult.VICTORY, 1, true)
 
 
 func emit_effect_resolutions(

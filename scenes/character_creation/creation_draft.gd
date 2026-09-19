@@ -22,6 +22,8 @@ var class_choices: Array[int] = []
 var learned_ids: Array[String] = []
 var learned_spell_ids: Array[String] = []
 var equipment_slots: Dictionary = {}
+var owned_equipment: Array = []
+var gold: int = 0
 var preview: CombatantState
 var notice: String = ""
 var progression = ProgressionRules.new()
@@ -34,9 +36,9 @@ func setup(source_catalog) -> void:
 	# Portrait presets are class presentation only. A created character uses an
 	# image explicitly chosen from the computer.
 	portrait_id = ""
-	var initial: CombatantState = catalog.base_character.create_combatant_state()
-	equipment_rules.initialize_combatant(initial)
-	equipment_slots = initial.equipped_items.duplicate()
+	equipment_slots.clear()
+	owned_equipment.clear()
+	gold = catalog.starting_gold
 	rebuild()
 
 func select_ancestry(value) -> void:
@@ -93,8 +95,17 @@ func raw_character() -> CharacterData:
 	result.character_class = character_class
 	result.level = level
 	result.experience = 0
+	result.creation_gold = gold
 	result.ancestry_attribute_choices = ancestry_choices.duplicate()
 	result.class_attribute_choices = class_choices.duplicate()
+	# Character Creation starts from the universal attribute baseline, not the
+	# authored player-template values used by prototype encounters.
+	result.strength = 10
+	result.dexterity = 10
+	result.constitution = 10
+	result.intelligence = 10
+	result.wisdom = 10
+	result.charisma = 10
 	if result.has_meta("selected_class_attribute_choices"):
 		result.remove_meta("selected_class_attribute_choices")
 	result.available_abilities = []
@@ -111,7 +122,7 @@ func raw_character() -> CharacterData:
 	result.equipped_weapon_attack = null
 	result.starting_equipment = []
 	result.starting_equipment_slots = {}
-	result.equipment_inventory = catalog.equipment.duplicate()
+	result.equipment_inventory = owned_equipment.duplicate()
 	for slot in [0, 3, 1]:
 		var item = equipment_slots.get(slot)
 		if item != null and not result.starting_equipment.has(item):
@@ -191,8 +202,6 @@ func is_spell_training_allowed(training: AbilityData) -> bool:
 func get_spell_learning_failure_reason(training: AbilityData) -> String:
 	if training == null or training.granted_skills.is_empty():
 		return "Spell Training is invalid."
-	if character_class == null or not training.required_trait_ids.has(character_class.id):
-		return "This spell is not available to the selected class."
 	if level < training.required_level:
 		return "%s requires Level %d." % [training.granted_skills[0].display_name, training.required_level]
 	if not is_spell_training_allowed(training):
@@ -226,7 +235,7 @@ func _rebuild_spell_choices() -> void:
 		var training: AbilityData = catalog.find_ability(training_id)
 		if training == null or training.granted_skills.is_empty() or level < training.required_level:
 			continue
-		if character_class == null or not training.required_trait_ids.has(character_class.id) or not is_spell_training_allowed(training):
+		if not is_spell_training_allowed(training):
 			continue
 		retained.append(training_id)
 		for skill in training.granted_skills:
@@ -255,8 +264,8 @@ func choose_attribute(kind: String, index: int, attribute: int) -> void:
 
 func equip(item, slot: int) -> void:
 	notice = ""
-	if not catalog.equipment.has(item):
-		notice = "This item is not in the starting inventory."
+	if not owned_equipment.has(item):
+		notice = "Buy this item before equipping it."
 		return
 	var temporary := CombatantState.new()
 	temporary.equipped_items = equipment_slots.duplicate()
@@ -267,6 +276,24 @@ func equip(item, slot: int) -> void:
 		equipment_rules.equip_hand_item_without_cost(temporary, item, slot)
 	equipment_slots = temporary.equipped_items.duplicate()
 	rebuild()
+
+
+func buy_equipment(item) -> bool:
+	notice = ""
+	if item == null or not catalog.equipment.has(item):
+		notice = "This item is not available in Character Creation."
+		return false
+	if owned_equipment.has(item):
+		notice = "%s is already owned." % item.display_name
+		return false
+	if gold < item.purchase_price:
+		notice = "Not enough Gold for %s." % item.display_name
+		return false
+	gold -= item.purchase_price
+	owned_equipment.append(item)
+	notice = "Bought %s for %d Gold." % [item.display_name, item.purchase_price]
+	rebuild()
+	return true
 
 func clear_slot(slot: int) -> void:
 	var item = equipment_slots.get(slot)
@@ -337,4 +364,16 @@ func finish() -> CharacterData:
 		for skill in training.granted_skills:
 			if skill != null and not result.skills.has(skill):
 				result.skills.append(skill)
+	result.learned_spell_ids = learned_spell_ids.duplicate()
+	var assigned: Array[String] = []
+	for grantor in get_active_spell_grantors():
+		var choices: Array[String] = []
+		for training_id in learned_spell_ids:
+			if choices.size() >= grantor.spell_choices_granted or assigned.has(training_id):
+				continue
+			var training: AbilityData = catalog.find_ability(training_id)
+			if spell_training_matches_grantor(training, grantor):
+				choices.append(training_id)
+				assigned.append(training_id)
+		result.spell_choices_by_grantor[grantor.id] = choices
 	return result

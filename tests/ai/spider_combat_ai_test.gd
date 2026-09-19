@@ -48,7 +48,7 @@ func _init() -> void:
 		var destination: Vector2 = decision.get("target_position", spider.position)
 		check(system.map_rules.validate_movement_path(spider, destination, system.combat_state.combatants).success, "Gridless planning only proposes an unblocked detour")
 	else:
-		check(decision.type == AI.DecisionType.END_TURN, "Spider ends its turn when no unblocked route exists")
+		check(decision.type in [AI.DecisionType.END_TURN, AI.DecisionType.SEARCH], "Spider ends its turn or Searches when no unblocked route exists")
 	for failure in failures:
 		push_error(failure)
 	print("SPIDER_COMBAT_AI_TEST: " + ("PASS" if failures.is_empty() else "FAIL"))

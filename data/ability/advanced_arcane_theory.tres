@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "advanced_arcane_theory"
+display_name = "Advanced Arcane Theory"
+required_level = 3
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("2"), ExtResource("3")]
+is_passive = true
+description = "Choose one Arcane Skill of Spell Level 2. This spell choice does not spend Ability Points."
+spell_choices_granted = 1
+spell_required_trait_ids = Array[String](["arcane"])
+spell_min_level = 2
+spell_max_level = 2

@@ -115,6 +115,9 @@ func sync_movement() -> bool:
 
 
 func _input(event: InputEvent) -> void:
+	var console := get_tree().get_first_node_in_group("gm_console")
+	if console != null and console.accepts_debug_input(event):
+		return
 	if (event is InputEventMouseButton or event is InputEventKey) and sync_movement():
 		get_viewport().set_input_as_handled()
 

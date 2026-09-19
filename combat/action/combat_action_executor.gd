@@ -188,6 +188,8 @@ func execute(
 		combat_system.clear_hidden(actor, "Offensive Skill used")
 
 	combat_system.emit_events(result.events)
+	if result.success:
+		combat_system.maneuver_action_executor.refresh_grabs()
 
 	combat_system.check_for_combat_end()
 

@@ -27,6 +27,9 @@ func _init() -> void:
 		failures.append("Long Reach must grant +2 feet through the shared effect system")
 	if attack.range_feet + ability_system.get_attack_range_bonus(player, attack) != 10.0:
 		failures.append("Long Spear effective range must remain 10 feet")
+	var shortbow: AttackData = load("res://data/attack/shortbow.tres")
+	if ability_system.get_attack_range_bonus(player, shortbow) != 0.0:
+		failures.append("Long Reach must not grant range to non-Melee attacks")
 	if ability_system.get_attack_abilities(player, attack).filter(func(entry): return entry.id == "long_reach").size() != 1:
 		failures.append("Weapon Ability must not be duplicated")
 

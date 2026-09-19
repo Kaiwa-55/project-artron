@@ -4,13 +4,15 @@
 [ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1_attack_data"]
 [ext_resource type="Resource" uid="uid://djmux2p5ya8a0" path="res://animation/arcane_bolt.tres" id="1_t3jf5"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="2_63e2a"]
+[ext_resource type="Resource" path="res://data/trait/arcane.tres" id="3_arcane"]
 
 [resource]
 script = ExtResource("1_attack_data")
 id = "arcane_bolt_attack"
 display_name = "Arcane Bolt"
 animation_template = ExtResource("1_t3jf5")
-attack_attribute = 3
+attack_attribute = 6
 base_damage = 6
 range_feet = 30.0
 damage_type = "arcane"
+traits = [ExtResource("3_arcane")]

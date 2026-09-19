@@ -3,6 +3,8 @@ extends Resource
 
 signal node_entered(node: MapNodeData)
 
+const STARTING_GOLD := 200
+
 @export var seed: int = 0
 @export var act: int = 1
 @export var nodes: Array[MapNodeData] = []
@@ -35,7 +37,7 @@ func setup(p_seed: int, generated_nodes: Array[MapNodeData]) -> void:
 	completed_node_ids = []
 	reward_claimed_node_ids = []
 	reward_history = []
-	gold = 0
+	gold = STARTING_GOLD
 	party_max_hp_bonus = 0
 	party_ability_point_bonus = 0
 	game_state = GameState.new()

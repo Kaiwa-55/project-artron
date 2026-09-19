@@ -2,8 +2,15 @@ extends "res://scenes/prototype/prototype_ui_controller.gd"
 
 const REWARD_SCENE := "res://scenes/run/RewardSelection.tscn"
 const RUN_MAP_SCENE := "res://scenes/run/RunMap.tscn"
+const PreCombatStatusSystemScript := preload("res://encounter/pre_combat_status_system.gd")
 
 var post_combat_transition_started: bool = false
+var objective_panel: PanelContainer
+var objective_list: VBoxContainer
+
+
+func reset_combat() -> void:
+	get_tree().reload_current_scene()
 
 func start_test_combat() -> void:
 	combat_system = CombatSystem.new()
@@ -14,11 +21,15 @@ func start_test_combat() -> void:
 	_configure_encounter_background(active_encounter, map_size_world)
 	$BattlefieldCamera.configure(combat_system.map_rules.playable_bounds, Vector2.ZERO)
 	for object_data in _get_encounter_objects(active_encounter):
-		if String(object_data.get("kind", "")) != "obstacle" or not bool(object_data.get("blocks_movement", true)):
+		if String(object_data.get("kind", "")) != "obstacle":
+			continue
+		var blocks_movement := bool(object_data.get("blocks_movement", true))
+		var blocks_line_of_sight := bool(object_data.get("blocks_line_of_sight", blocks_movement))
+		if not blocks_movement and not blocks_line_of_sight:
 			continue
 		var center: Vector2 = Vector2(object_data.get("position_feet", Vector2.ZERO)) * combat_system.map_rules.world_units_per_foot
 		var radius: float = float(object_data.get("radius_feet", 0.0)) * combat_system.map_rules.world_units_per_foot
-		combat_system.map_rules.add_circular_obstacle(center, radius, String(object_data.get("label", "Obstacle")))
+		combat_system.map_rules.add_circular_obstacle(center, radius, String(object_data.get("label", "Obstacle")), blocks_movement, blocks_line_of_sight)
 	move_mode = false
 	selected_target_id = ""
 	var party: Array[CombatantState] = create_encounter_player_party(active_encounter)
@@ -27,7 +38,9 @@ func start_test_combat() -> void:
 	setup_enemy_nodes(enemies)
 	var combatants: Array[CombatantState] = party.duplicate()
 	combatants.append_array(enemies)
+	PreCombatStatusSystemScript.new().apply(active_encounter, combatants, combat_system.effect_system)
 	combat_system.start_combat(combatants)
+	combat_system.configure_encounter_objectives(active_encounter)
 	if not enemies.is_empty():
 		selected_target_id = enemies[0].id
 	$UILayer/Control.reset_for_combat()
@@ -119,7 +132,15 @@ func apply_active_run_bonuses(state: CombatantState) -> void:
 	if progression_state != null:
 		apply_run_progression_state(state, progression_state)
 	combat_system.refresh_stats(state)
-	state.hp = state.max_hp
+	if progression_state != null:
+		restore_run_resources(state, progression_state)
+
+
+func restore_run_resources(target: CombatantState, source: CombatantState) -> void:
+	if target == null or source == null:
+		return
+	target.hp = clampi(source.hp, 0, target.max_hp)
+	target.mana = clampi(source.mana, 0, target.max_mana)
 
 
 func apply_run_progression_state(target: CombatantState, source: CombatantState) -> void:
@@ -153,6 +174,9 @@ func apply_run_progression_state(target: CombatantState, source: CombatantState)
 	target.granted_ability_ids = source.granted_ability_ids.duplicate()
 	target.available_abilities = source.available_abilities.duplicate()
 	target.equipped_abilities = source.equipped_abilities.duplicate()
+	target.available_skills = source.available_skills.duplicate()
+	target.learned_spell_ids = source.learned_spell_ids.duplicate()
+	target.spell_choices_by_grantor = source.spell_choices_by_grantor.duplicate(true)
 	target.item_inventory = duplicate_item_inventory(source.item_inventory)
 	target.set_meta("creation_rules_applied", true)
 	var catalog = load("res://data/creation/default_creation_catalog.tres")
@@ -172,7 +196,7 @@ func duplicate_item_inventory(source_inventory: Array[ItemStack]) -> Array[ItemS
 	return result
 
 
-func sync_run_item_inventories() -> void:
+func sync_run_party_state() -> void:
 	if not get_tree().has_meta("active_run_state"):
 		return
 	var active_run = get_tree().get_meta("active_run_state")
@@ -183,7 +207,29 @@ func sync_run_item_inventories() -> void:
 			continue
 		var progression_state: CombatantState = active_run.party_progression_states.get(combatant.id)
 		if progression_state != null:
-			progression_state.item_inventory = duplicate_item_inventory(combatant.item_inventory)
+			sync_combatant_to_run_state(combatant, progression_state)
+
+
+func sync_combatant_to_run_state(source: CombatantState, target: CombatantState) -> void:
+	if source == null or target == null:
+		return
+	target.strength = source.strength
+	target.dexterity = source.dexterity
+	target.constitution = source.constitution
+	target.intelligence = source.intelligence
+	target.wisdom = source.wisdom
+	target.charisma = source.charisma
+	target.available_skills = source.available_skills.duplicate()
+	target.item_inventory = duplicate_item_inventory(source.item_inventory)
+	target.effects.clear()
+	target.life_state = source.life_state
+	# The active combatant already includes the Run-wide Max HP reward. Keep that
+	# derived input on the Run copy so HP above the character's original maximum
+	# is not accidentally discarded by a later progression refresh.
+	target.max_hp_bonus = source.max_hp_bonus
+	StatSystem.new().refresh_combatant(target)
+	target.hp = clampi(source.hp, 0, target.max_hp)
+	target.mana = clampi(source.mana, 0, target.max_mana)
 
 
 func setup_party_nodes(states: Array[CombatantState]) -> void:
@@ -260,9 +306,11 @@ func get_all_combatant_nodes() -> Array:
 
 
 func refresh_combatant_nodes() -> void:
+	var observer: CombatantState = get_displayed_party_member()
 	for node in get_all_combatant_nodes():
 		if is_instance_valid(node) and node.state != null:
 			node.refresh_from_state()
+			node.set_concealment_against(observer, combat_system.map_rules)
 
 
 func run_enemy_ai_if_needed() -> void:
@@ -368,6 +416,9 @@ func update_target_selection() -> void:
 	var show_as_enemy: bool = inspected != null and primary != null and inspected.team != primary.team
 	$UILayer/Control.set_selected_target(inspected.display_name if show_as_enemy else "None", inspected.id if show_as_enemy else "")
 	refresh_essential_hud()
+	# A selected party member changes whose Concealment is displayed at each
+	# enemy Token; refresh immediately rather than waiting for the next frame.
+	refresh_combatant_nodes()
 
 
 func get_displayed_party_member() -> CombatantState:
@@ -376,7 +427,7 @@ func get_displayed_party_member() -> CombatantState:
 	var state = combat_system.get_combat_state()
 	var selected_character: CombatantState = state.get_combatant(selected_character_id)
 	var primary: CombatantState = state.get_combatant("player")
-	if selected_character != null and primary != null and selected_character.team == primary.team:
+	if selected_character != null and primary != null and selected_character.team == primary.team and selected_character.is_alive():
 		return selected_character
 	return get_player_controlled_actor()
 
@@ -423,11 +474,64 @@ func _ready() -> void:
 	$UILayer/Controllers/ReactionPrompt.setup($UILayer/Control)
 	$UILayer/Controllers/CombatLog.setup($UILayer/Control)
 	_apply_prototype_layout()
+	_build_objective_panel()
 	_build_obstacle_visuals()
 	_build_inventory_drawer()
 	$UILayer/Control/DefeatOverlay/Panel/Margin/Column/RestartButton.pressed.connect(restart_run_after_defeat)
 	$UILayer/Control/DefeatOverlay.hide()
 	$UILayer/Control.update_ui()
+
+
+func _build_objective_panel() -> void:
+	objective_panel = PanelContainer.new()
+	objective_panel.name = "ObjectivePanel"
+	objective_panel.position = Vector2(8, 52)
+	objective_panel.custom_minimum_size = Vector2(210, 0)
+	objective_panel.z_index = 12
+	var panel_style := UITheme.style(UITheme.CARD_BACKGROUND, UITheme.CARD_BORDER, 0)
+	objective_panel.add_theme_stylebox_override("panel", panel_style)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	objective_panel.add_child(margin)
+	objective_list = VBoxContainer.new()
+	objective_list.add_theme_constant_override("separation", 3)
+	margin.add_child(objective_list)
+	$UILayer/Control.add_child(objective_panel)
+	if not combat_system.encounter_objective_system.objective_updated.is_connected(_on_objective_updated):
+		combat_system.encounter_objective_system.objective_updated.connect(_on_objective_updated)
+	_refresh_objective_panel()
+
+
+func _on_objective_updated(_objective: EncounterObjective, _completed: bool) -> void:
+	_refresh_objective_panel()
+
+
+func _refresh_objective_panel() -> void:
+	if objective_panel == null or objective_list == null:
+		return
+	for child in objective_list.get_children():
+		objective_list.remove_child(child)
+		child.queue_free()
+	var states := combat_system.get_objective_states()
+	objective_panel.visible = not states.is_empty()
+	if states.is_empty():
+		return
+	var title := Label.new()
+	title.text = "OBJECTIVES"
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", UITheme.GOLD)
+	objective_list.add_child(title)
+	for state in states:
+		var label := Label.new()
+		var completed := bool(state.get("completed", false))
+		label.text = "%s %s%s" % ["✓" if completed else "□", String(state.get("text", "Objective")), "" if bool(state.get("required", true)) else " (Optional)"]
+		label.add_theme_font_size_override("font_size", CombatTheme.BODY)
+		label.add_theme_color_override("font_color", UITheme.HEALTH_FILL if completed else UITheme.TEXT)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		objective_list.add_child(label)
 
 
 func _build_obstacle_visuals() -> void:
@@ -444,7 +548,9 @@ func _build_obstacle_visuals() -> void:
 		visual.name = String(object_data.get("id", obstacle.label)).replace(" ", "")
 		$BattlefieldWorld.add_child(visual)
 		visual.setup(float(obstacle.radius), String(obstacle.label))
-		visual.position = Vector2(obstacle.center)
+		# ObstacleVisual draws its circle around local (radius, radius), so its
+		# Control origin must be one radius above/left of the rules-space center.
+		visual.position = Vector2(obstacle.center) - Vector2.ONE * float(obstacle.radius)
 
 
 func _process(_delta: float) -> void:
@@ -453,12 +559,18 @@ func _process(_delta: float) -> void:
 	var state = combat_system.get_combat_state()
 	if state.is_finished() and get_tree().has_meta("active_event_encounter") and not post_combat_transition_started:
 		post_combat_transition_started = true
-		sync_run_item_inventories()
+		var active_encounter := get_active_encounter_data() as EncounterDataScript
+		if state.combat_result == CombatEnums.CombatResult.DEFEAT and active_encounter != null:
+			if active_encounter.event_defeat_outcome == EncounterDataScript.EventDefeatOutcome.END_RUN:
+				restart_run_after_defeat()
+				return
+			revive_party_after_event_defeat()
+		sync_run_party_state()
 		return_to_event_flow_after_combat(state.combat_result)
 		return
 	if state.is_finished() and state.combat_result == CombatEnums.CombatResult.VICTORY and get_tree().has_meta("active_run_state") and not post_combat_transition_started:
 		post_combat_transition_started = true
-		sync_run_item_inventories()
+		sync_run_party_state()
 		open_reward_after_victory()
 	$UILayer/Control/DefeatOverlay.visible = state.is_finished() and state.combat_result == CombatEnums.CombatResult.DEFEAT
 	var reaction_locked: bool = combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement()
@@ -476,6 +588,15 @@ func _process(_delta: float) -> void:
 	refresh_area_skill_button()
 	$UILayer/Controllers/ActionBar.refresh()
 	queue_redraw()
+
+
+func revive_party_after_event_defeat() -> void:
+	if combat_system == null or combat_system.get_combat_state() == null:
+		return
+	for combatant in combat_system.get_combat_state().combatants.values():
+		if combatant != null and combat_system.is_player_controlled(combatant) and combatant.hp <= 0:
+			combatant.hp = 1
+			combatant.life_state = CombatEnums.LifeState.ALIVE
 
 
 func open_reward_after_victory() -> void:
@@ -522,6 +643,8 @@ func refresh_end_turn_lock() -> void:
 		or combat_system.has_pending_step_back_move() \
 		or combat_system.has_pending_ability_movement() \
 		or pending_target_attack != null \
+		or pending_basic_maneuver >= 0 \
+		or pending_search_targeting \
 		or not pending_single_target_kind.is_empty() \
 		or not ground_targeting_id.is_empty() \
 		or is_inactive_friendly_selected()
@@ -536,7 +659,7 @@ func _draw() -> void:
 	if combat_system == null:
 		return
 	draw_active_auras()
-	if pending_target_attack != null:
+	if pending_target_attack != null or pending_basic_maneuver >= 0 or pending_search_targeting:
 		draw_attack_targeting()
 	if not pending_single_target_kind.is_empty():
 		draw_single_targeting()
@@ -582,15 +705,20 @@ func draw_active_auras() -> void:
 	var state = combat_system.get_combat_state()
 	if state == null:
 		return
-	var scale_per_foot: float = combat_system.map_rules.world_units_per_foot
 	for source in state.combatants.values():
 		if source == null or source.is_dying():
 			continue
 		for instance in source.effects:
 			if instance == null or instance.data == null or instance.data.aura_radius_feet <= 0.0:
 				continue
-			var radius: float = instance.data.aura_radius_feet * scale_per_foot
+			var radius: float = get_aura_visual_radius_world_units(source, instance.data)
 			var fill: Color = instance.data.aura_color
 			var outline := Color(fill.r, fill.g, fill.b, minf(fill.a + 0.55, 1.0))
 			draw_circle(source.position, radius, fill)
 			draw_arc(source.position, radius, 0.0, TAU, 64, outline, 2.0)
+
+
+func get_aura_visual_radius_world_units(source: CombatantState, effect) -> float:
+	if combat_system == null or source == null or effect == null:
+		return 0.0
+	return combat_system.map_rules.get_targeting_preview_radius_world_units(source, effect.aura_radius_feet)

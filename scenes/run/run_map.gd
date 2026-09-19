@@ -18,6 +18,8 @@ const DEFAULT_PARTY_ENCOUNTER := preload("res://data/encounter/prototype_encount
 @onready var party_inventory: HBoxContainer = $Margin/Layout/Footer/PartyInventory
 @onready var character_panel: CharacterPanel = $CharacterPanel
 @onready var event_panel: EventPanel = $EventPanel
+@onready var rest_panel: Control = $RestPanel
+@onready var shop_panel: Control = $ShopPanel
 
 var run_state: RunState
 var node_buttons: Dictionary = {}
@@ -27,12 +29,20 @@ var event_manager: EventManager
 var encounter_manager: EncounterManager
 var pending_encounter_from_event: bool = false
 
+const REST_RECOVERY_RATIO := 0.5
+
 
 func _ready() -> void:
 	$Margin/Layout/Header/NewRunButton.pressed.connect(start_from_input)
 	continue_button.pressed.connect(confirm_selected_node)
 	level_up_button.pressed.connect(open_level_up)
 	level_up_panel.choices_committed.connect(on_level_up_committed)
+	rest_panel.action_selected.connect(resolve_rest_action)
+	rest_panel.rest_completed.connect(finish_rest)
+	shop_panel.purchase_requested.connect(purchase_shop_item)
+	shop_panel.shop_closed.connect(finish_shop)
+	if not character_panel.equipment_change_requested.is_connected(on_run_map_equipment_change):
+		character_panel.equipment_change_requested.connect(on_run_map_equipment_change)
 	if get_tree().has_meta("restart_run_seed"):
 		var restart_seed := int(get_tree().get_meta("restart_run_seed"))
 		get_tree().remove_meta("restart_run_seed")
@@ -67,6 +77,10 @@ func start_run(seed_value: int, reset_party_to_level_one: bool = false) -> void:
 	run_state.setup(seed_value, generated_nodes)
 	if get_tree().has_meta("active_party_characters"):
 		run_state.party_character_data.assign(get_tree().get_meta("active_party_characters"))
+		run_state.gold = 0
+		for member in run_state.party_character_data:
+			if member != null:
+				run_state.gold += maxi(0, member.creation_gold)
 	get_tree().set_meta("active_run_state", run_state)
 	get_tree().remove_meta("active_run_node_id")
 	get_tree().remove_meta("active_encounter_data")
@@ -111,6 +125,9 @@ func ensure_player_progression_state() -> void:
 			ProgressionSystem.new().initialize_character(member)
 			EquipmentSystem.new().initialize_combatant(member)
 			EquipmentSystem.new().refresh_equipment(member)
+			# A new Run starts with its party fully recovered after all derived stats
+			# from Ancestry, Class, Progression, and Equipment have been applied.
+			StatSystem.new().initialize_combatant(member)
 			member.set_meta("creation_rules_applied", true)
 		var applied := int(run_state.applied_party_ability_point_bonuses.get(member_id, 0))
 		var unapplied := run_state.party_ability_point_bonus - applied
@@ -185,8 +202,17 @@ func open_party_inventory(member_id: String) -> void:
 	if member == null:
 		return
 	level_up_panel.hide()
-	character_panel.setup_standalone(member, "inventory")
+	character_panel.setup_standalone(member, "inventory", true)
 	character_panel.show()
+
+
+func on_run_map_equipment_change(item, slot: int) -> void:
+	var member: CombatantState = character_panel.standalone_character
+	if member == null:
+		return
+	var result := EquipmentSystem.new().toggle_equipment_without_cost(member, item, slot)
+	location_label.text = "Equipment updated: %s" % item.display_name if result.success else "Equipment failed: %s" % result.failure_reason
+	character_panel.refresh()
 
 
 func on_level_up_committed() -> void:
@@ -268,8 +294,13 @@ func confirm_selected_node() -> void:
 	selected_node_id = ""
 	continue_button.disabled = true
 	refresh_map_state()
-	if node.event_data != null:
-		event_manager.start_event(node.event_data, get_event_context())
+	if start_node_event(node):
+		return
+	if node.node_type == MapNodeData.NodeType.REST:
+		open_rest(node)
+		return
+	if node.node_type == MapNodeData.NodeType.SHOP:
+		open_shop(node)
 		return
 	if node.encounter_data != null:
 		present_encounter(node.encounter_data, false)
@@ -277,6 +308,100 @@ func confirm_selected_node() -> void:
 	get_tree().remove_meta("active_run_node_id")
 	get_tree().remove_meta("active_encounter_data")
 	location_label.text = "Entered %s — this Node does not start Combat." % node.get_display_name()
+
+
+func open_rest(_node: MapNodeData) -> void:
+	var party: Array[CombatantState] = []
+	for member in run_state.party_progression_states.values():
+		if member is CombatantState:
+			party.append(member)
+	rest_panel.open_for_party(party)
+
+
+func resolve_rest_action(actor_id: String, action_id: String) -> void:
+	var member: CombatantState = run_state.party_progression_states.get(actor_id)
+	if member == null:
+		return
+	match action_id:
+		"wounds":
+			member.hp = mini(member.max_hp, member.hp + maxi(1, ceili(member.max_hp * REST_RECOVERY_RATIO)))
+		"focus":
+			member.mana = mini(member.max_mana, member.mana + maxi(1, ceili(member.max_mana * REST_RECOVERY_RATIO)))
+		"training":
+			member.ability_points += 1
+
+
+func finish_rest() -> void:
+	location_label.text = "Camp complete: each party member chose their own recovery."
+	build_party_inventory_buttons()
+	refresh_level_up_button()
+
+
+func open_shop(_node: MapNodeData) -> void:
+	var party: Array[CombatantState] = []
+	for member in run_state.party_progression_states.values():
+		if member is CombatantState:
+			party.append(member)
+	shop_panel.open_for_party(party, run_state.gold, _node.shop_data if _node != null else null)
+
+
+func purchase_shop_item(actor_id: String, product: Resource, quantity: int, price: int) -> void:
+	var member: CombatantState = run_state.party_progression_states.get(actor_id)
+	if member == null or product == null or quantity <= 0 or price < 0 or run_state.gold < price:
+		return
+	run_state.gold -= price
+	if product is ItemData:
+		add_run_item(member, product, quantity)
+	elif product is EquipmentData:
+		for index in range(quantity):
+			member.equipment_inventory.append(product.duplicate(true))
+	else:
+		run_state.gold += price
+		return
+	shop_panel.refresh_gold(run_state.gold)
+	location_label.text = "%s bought %d %s." % [member.display_name, quantity, product.get("display_name")]
+
+
+func add_run_item(member: CombatantState, item: ItemData, quantity: int) -> void:
+	var remaining := quantity
+	for stack in member.item_inventory:
+		if stack != null and stack.item == item and stack.quantity < item.maximum_stack_size:
+			var added := mini(remaining, item.maximum_stack_size - stack.quantity)
+			stack.quantity += added
+			remaining -= added
+			if remaining <= 0:
+				return
+	while remaining > 0:
+		var added := mini(remaining, item.maximum_stack_size)
+		member.item_inventory.append(ItemStack.new(item, added))
+		remaining -= added
+
+
+func finish_shop() -> void:
+	location_label.text = "Left the Shop with %d Gold." % run_state.gold
+	build_party_inventory_buttons()
+
+func start_node_event(node: MapNodeData) -> bool:
+	if node == null:
+		return false
+	if node.event_data != null:
+		event_manager.start_event(node.event_data, get_event_context())
+		return true
+	if node.event_table == null:
+		return false
+	var context := get_event_context()
+	var selected_entry := node.event_table.pick_entry(context)
+	if selected_entry == null:
+		location_label.text = "Entered Event — no eligible Event was found."
+		return true
+	var selected_event: EventData = selected_entry.event
+	var node_event := selected_event.duplicate(true) as EventData
+	node_event.id = StringName("%s_%s" % [selected_event.id, node.id])
+	node.event_data = node_event
+	if selected_entry.remove_after_victory:
+		node.removable_event_table_entry_key = node.event_table.get_entry_key(selected_entry)
+	event_manager.start_event(node_event, context, true)
+	return true
 
 
 func setup_event_flow() -> void:
@@ -337,6 +462,10 @@ func resume_event_encounter_result() -> void:
 	get_tree().remove_meta("active_event_encounter")
 	get_tree().remove_meta("active_event_encounter_data")
 	get_tree().remove_meta("active_encounter_data")
+	if result_type == EncounterResult.Type.VICTORY:
+		var current_node := run_state.get_current_node()
+		if current_node != null and not current_node.removable_event_table_entry_key.is_empty():
+			run_state.game_state.remove_event_table_entry(current_node.removable_event_table_entry_key)
 	if data != null and encounter_manager.resume_encounter(data, get_event_context()):
 		encounter_manager.finish_encounter(EncounterResult.new(result_type))
 

@@ -21,6 +21,7 @@ func complete_attributes(draft) -> void:
 func run_tests() -> void:
 	var draft = Draft.new()
 	draft.setup(Catalog)
+	check(draft.preview.strength == 10, "Character Creation starts Strength from the universal baseline, not the prototype player template")
 	check(draft.portrait_id.is_empty() and draft.custom_portrait == null, "Identity starts without a preset portrait")
 	check(draft.level == 1, "Normal creation starts at Level 1")
 	check(not draft.validation_error().is_empty(), "Missing Attribute choices block confirmation")
@@ -67,6 +68,7 @@ func run_tests() -> void:
 	# Output contains raw inputs, not already-applied bonuses.
 	var character: CharacterData = draft.finish()
 	check(character != null and character.portrait == custom_portrait, "Valid output persists a custom portrait")
+	check(character != null and character.creation_gold == draft.gold, "Character Creation persists unspent Gold on the created character")
 	check(character.token_texture != null and character.token_texture.get_size() == Vector2(256, 256), "Customized circular Token survives character creation")
 	var state: CombatantState = character.create_combatant_state()
 	var system := CombatSystem.new()
@@ -74,12 +76,17 @@ func run_tests() -> void:
 	for key in ["max_hp", "max_mana", "max_ap", "speed", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "reflex", "fortitude", "will", "ability_points"]:
 		check(state.get(key) == draft.preview.get(key), "Preview matches actual Combat for " + key)
 	check(state.equipped_abilities.has("step_back"), "Learned ability survives handoff")
-	check(state.active_reactions.any(func(reaction): return reaction.id == "step_back"), "Learned Reaction is wired during combat initialization")
+	check(state.active_reactions.any(func(reaction): return reaction != null and reaction.id == "step_back"), "Learned Reaction is wired during combat initialization")
 
 	var spear = load("res://data/equipment/long_spear.tres")
 	var shield = load("res://data/equipment/buckler.tres")
+	var gold_before_equipment: int = draft.gold
+	check(draft.owned_equipment.is_empty(), "Character Creation does not grant the entire equipment catalog for free")
+	check(draft.buy_equipment(spear) and draft.gold == gold_before_equipment - spear.purchase_price, "Character Creation buys equipment with starting Gold")
+	check(not draft.buy_equipment(spear), "Character Creation cannot buy the same equipment twice")
 	draft.equip(spear, 0)
 	check(draft.equipment_slots.get(0) == spear and draft.equipment_slots.get(3) == spear, "Two-Handed occupies both slots")
+	check(draft.buy_equipment(shield), "Character Creation can buy a second equipment item")
 	draft.equip(shield, 3)
 	check(not draft.equipment_slots.has(0) and draft.equipment_slots.get(3) == shield, "Shield replaces a Two-Handed weapon correctly")
 	character = draft.finish()
@@ -87,6 +94,7 @@ func run_tests() -> void:
 	system = CombatSystem.new()
 	system.start_combat([state])
 	check(state.equipped_items.get(3) == shield and not state.equipped_items.has(0), "Hand 2 assignment survives handoff")
+	check(state.equipment_inventory.has(spear) and state.equipment_inventory.has(shield), "Only purchased equipment survives the Character Creation handoff")
 	check(state.ap == state.max_ap, "Creation equipment costs no AP")
 
 	# New catalog classes/abilities require no UI special cases.
@@ -137,6 +145,11 @@ func run_tests() -> void:
 	wizard.draft.select_class(Catalog.classes[0])
 	wizard.show_step(0)
 	await process_frame
+	check(wizard.center.find_child("TokenZoom", true, false) != null, "Identity provides token zoom controls")
+	var level_selector := wizard.center.find_children("*", "SpinBox", true, false)[0] as SpinBox
+	level_selector.value = 3
+	check(wizard.draft.level == 3 and wizard.draft.preview.level == 3, "Identity Starting Level updates the draft and preview")
+	level_selector.value = 1
 	var identity_buttons: Array = wizard.left.get_children().filter(func(node): return node is Button)
 	check(identity_buttons.size() == 1 and identity_buttons[0].text == "CHOOSE IMAGE FROM COMPUTER", "Identity offers only the computer image picker and no preset portrait")
 	wizard.character_created.connect(func(data): emitted = data)
@@ -152,6 +165,12 @@ func run_tests() -> void:
 		wizard.show_step(index)
 		await process_frame
 		check(wizard.center.get_child_count() > 0, "Page renders: " + str(index))
+	wizard.show_step(6)
+	var inspected_weapon = wizard.catalog.equipment.filter(func(item): return item.weapon_attack != null)[0]
+	wizard.focused_item = inspected_weapon
+	wizard.show_step(6)
+	var shows_equipment_trait: bool = wizard.center.find_children("*", "Label", true, false).any(func(label): return label.text.contains(inspected_weapon.weapon_attack.traits[0].display_name))
+	check(shows_equipment_trait, "Weapon detail shows its Attack Traits")
 	for filter_index in range(7):
 		wizard.ability_filter = filter_index
 		wizard.show_step(4)

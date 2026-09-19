@@ -109,13 +109,39 @@ func toggle_equipment(combatant: CombatantState, item, target_slot: int = -1) ->
 
 
 func toggle_hand_item(combatant: CombatantState, item, target_slot: int) -> ActionResult:
+	return _toggle_hand_item(combatant, item, target_slot, true)
+
+
+func toggle_equipment_without_cost(combatant: CombatantState, item, target_slot: int = -1) -> ActionResult:
+	if combatant == null or item == null:
+		return ActionResult.failure("Equipment does not exist.")
+	if not combatant.equipment_inventory.has(item):
+		return ActionResult.failure("Item is not in this character's inventory.")
+	var result: ActionResult
+	if item.slot == EquipmentDataScript.Slot.ARMOR:
+		if combatant.equipped_items.get(item.slot) == item:
+			combatant.equipped_items.erase(item.slot)
+		else:
+			combatant.equipped_items[item.slot] = item
+		result = ActionResult.success_result()
+	elif item.slot == EquipmentDataScript.Slot.WEAPON or item.slot == EquipmentDataScript.Slot.SHIELD:
+		result = _toggle_hand_item(combatant, item, target_slot, false)
+	else:
+		return ActionResult.failure("Unsupported equipment slot.")
+	if result.success:
+		refresh_equipment(combatant)
+	return result
+
+
+func _toggle_hand_item(combatant: CombatantState, item, target_slot: int, spend_action_point: bool) -> ActionResult:
 	if target_slot != WEAPON_SLOT_1 and target_slot != WEAPON_SLOT_2:
 		target_slot = find_hand_slot(combatant, item)
 		if target_slot < 0:
 			target_slot = WEAPON_SLOT_1 if combatant.equipped_items.get(WEAPON_SLOT_1) == null else WEAPON_SLOT_2
-	if combatant.ap < 1:
+	if spend_action_point and combatant.ap < 1:
 		return ActionResult.failure("Not enough AP to change equipment.")
-	combatant.spend_ap(1)
+	if spend_action_point:
+		combatant.spend_ap(1)
 	var current_slot := find_hand_slot(combatant, item)
 	if current_slot >= 0:
 		remove_hand_item_from_all_slots(combatant, item)
@@ -168,6 +194,7 @@ func refresh_equipment(combatant: CombatantState) -> void:
 		active_weapon = combatant.equipped_items.get(combatant.active_weapon_slot)
 	if active_weapon != null and active_weapon.weapon_attack != null:
 		combatant.equipped_weapon_attack = active_weapon.weapon_attack
+	StatSystem.new().refresh_combatant(combatant)
 
 
 func equip_hand_item_without_cost(combatant: CombatantState, item, target_slot: int) -> void:

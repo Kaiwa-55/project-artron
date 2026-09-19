@@ -4,16 +4,20 @@
 [ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2_effect_data"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_mxrl1"]
 [ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_fcuci"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="4_passive"]
 
 [sub_resource type="Resource" id="AbilityEffect_reach"]
 script = ExtResource("2_effect_data")
 effect_type = 2
+to_hit_bonus_per_stack = 0
 passive_value = 2
+required_attack_trait_ids = Array[String](["melee"])
 
 [resource]
 script = ExtResource("1_ability_data")
 id = "long_reach"
 display_name = "Long Reach"
-auto_equip_on_grant = true
+traits = [ExtResource("4_passive")]
 is_passive = true
+description = "Basic Passive. Your Melee Attacks gain +2 ft Range."
 effects = [SubResource("AbilityEffect_reach")]

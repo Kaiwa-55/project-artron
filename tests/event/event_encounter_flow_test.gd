@@ -1,5 +1,7 @@
 extends SceneTree
 
+const EncounterObjectiveScript := preload("res://data/encounter/encounter_objective.gd")
+
 var failures: Array[String] = []
 
 
@@ -8,9 +10,11 @@ func _init() -> void:
 
 
 func run_test() -> void:
-	var authored_event := load("res://data/event/strange_caravan.tres") as EventData
+	test_global_continue_without_actor()
+	var authored_event := load("res://data/event/Strange Caravan/strange_caravan.tres") as EventData
 	check(authored_event != null and authored_event.choices.size() == 3, "Authored .tres Event chain should load with three Choices.")
 	check(authored_event.choices[1].encounter != null and authored_event.choices[1].encounter.enemies.size() == 1, "Authored Event should link to a playable EncounterData resource.")
+	check(authored_event.choices[1].encounter.objectives.size() == 1 and authored_event.choices[1].encounter.objectives[0].type == EncounterObjectiveScript.Type.DEFEAT_ALL, "Authored Encounter should demonstrate a DefeatAll Objective.")
 	check(authored_event.choices[2].actor_mode == EventChoice.ActorMode.SELECT_ONE, "Authored tracking Choice should demonstrate character selection.")
 
 	var world := GameState.new()
@@ -179,6 +183,21 @@ func run_test() -> void:
 			push_error(failure)
 		print("EVENT_ENCOUNTER_FLOW_TEST: FAIL (%d)" % failures.size())
 		quit(1)
+
+
+func test_global_continue_without_actor() -> void:
+	var choice := EventChoice.new()
+	choice.text = "Continue the journey"
+	var event := EventData.new()
+	event.id = "global_continue_without_actor"
+	event.choices = [choice]
+	var manager := EventManager.new()
+	manager.configure(GameState.new())
+	check(manager.start_event(event, EventContext.new(manager.game_state)), "A global terminal Event should start without a party actor.")
+	var states := manager.get_choice_states()
+	check(states.size() == 1 and bool(states[0].get("enabled", false)), "A global Choice should remain enabled without a context actor.")
+	check(manager.choose(0) and manager.active_event == null, "A global Continue Choice should finish without a context actor.")
+	manager.queue_free()
 
 
 func check(condition: bool, message: String) -> void:

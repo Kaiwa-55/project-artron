@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_ltuch"]
 [ext_resource type="Resource" path="res://data/attack/judgment_wave_attack.tres" id="3"]
 [ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_bqhl2"]
-[ext_resource type="Resource" path="res://data/status/prone.tres" id="4"]
+[ext_resource type="Resource" uid="uid://diksrwfguiq6p" path="res://data/status/prone.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/divine.tres" id="6"]
 [ext_resource type="Resource" path="res://data/trait/cone.tres" id="7"]

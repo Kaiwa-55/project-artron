@@ -1,7 +1,7 @@
 class_name EnemyAISystem
 extends RefCounted
 
-enum DecisionType { END_TURN, ATTACK, MOVE, SKILL, ABILITY }
+enum DecisionType { END_TURN, ATTACK, MOVE, SKILL, ABILITY, SEARCH }
 
 const StandardProfile = preload("res://data/ai/standard_ai_profile.tres")
 const AIContextScript = preload("res://combat/ai/ai_context.gd")
@@ -38,6 +38,7 @@ func choose_decision(system: CombatSystem, actor: CombatantState) -> Dictionary:
 
 func collect_candidates(system: CombatSystem, context) -> Array:
 	var candidates: Array = []
+	collect_search_candidates(system, context, candidates)
 	collect_attack_candidates(system, context, candidates)
 	collect_skill_candidates(system, context, candidates)
 	collect_ability_candidates(system, context, candidates)
@@ -52,6 +53,25 @@ func collect_candidates(system: CombatSystem, context) -> Array:
 	end_turn.reason = "End turn."
 	candidates.append(end_turn)
 	return candidates
+
+
+func collect_search_candidates(system: CombatSystem, context, candidates: Array) -> void:
+	if not can_spend_for_action(context, 1):
+		return
+	for target in context.enemies:
+		var visibility: Dictionary = system.map_rules.get_visibility(context.actor, target)
+		if not visibility.not_visible:
+			continue
+		var candidate = CandidateScript.new()
+		candidate.type = CandidateScript.Type.SEARCH
+		candidate.actor_id = context.actor.id
+		candidate.target_id = target.id
+		# Search is a Utility action: it wins over wandering toward a known but
+		# unseen target, while direct damage still wins whenever it is legal.
+		candidate.status_value = 40.0
+		candidate.resource_cost = profile.ap_cost_weight
+		candidate.reason = "Search for %s, who is not visible." % target.display_name
+		candidates.append(candidate)
 
 
 func collect_attack_candidates(system: CombatSystem, context, candidates: Array) -> void:
@@ -119,7 +139,7 @@ func collect_skill_candidates(system: CombatSystem, context, candidates: Array) 
 			var validation: ActionResult = system.skill_system.validate_skill(context.actor, target, skill, system.attack_system)
 			if not validation.success:
 				continue
-			var attack: AttackData = system.skill_system.get_attack_data(skill)
+			var attack: AttackData = system.skill_system.get_attack_data(skill, context.actor)
 			var candidate = CandidateScript.new()
 			candidate.type = CandidateScript.Type.SKILL
 			candidate.actor_id = context.actor.id
@@ -541,7 +561,9 @@ func build_action_request(system: CombatSystem, decision: Dictionary) -> ActionR
 
 func execute_decision(system: CombatSystem, decision: Dictionary) -> ActionResult:
 	var result: ActionResult
-	if int(decision.get("type", DecisionType.END_TURN)) == DecisionType.ABILITY:
+	if int(decision.get("type", DecisionType.END_TURN)) == DecisionType.SEARCH:
+		result = system.use_search(decision.get("actor_id", ""), decision.get("target_id", ""))
+	elif int(decision.get("type", DecisionType.END_TURN)) == DecisionType.ABILITY:
 		var candidate = decision.get("candidate")
 		if candidate.source_data.target_mode == AbilityData.TargetMode.GROUND:
 			result = system.execute_ground_ability(candidate.actor_id, candidate.source_data.id, candidate.target_position)

@@ -125,8 +125,6 @@ func build_class(host) -> void:
 	UI.label(host.center, character_class.display_name.to_upper(), 34, UI.PAPER, true)
 	var visual = host.catalog.visual_for(character_class.id)
 	UI.label(host.center, visual.subtitle if visual != null else UI.traits_text(character_class), 15, UI.GOLD)
-	if visual != null:
-		UI.art(host.center, visual.artwork, 140)
 	UI.label(host.center, character_class.description, 16, UI.MUTED)
 	var shown: Dictionary = {}
 	var bonus_parts: PackedStringArray = []
@@ -349,13 +347,15 @@ func matches_filter(host, ability: AbilityData) -> bool:
 	return true
 
 func build_equipment(host) -> void:
-	UI.label(host.left, "STARTING INVENTORY", 18, UI.GOLD, true)
-	UI.label(host.left, "All items below belong to your starting kit. Equipping costs no AP here.", 14, UI.MUTED)
+	UI.label(host.left, "EQUIPMENT SHOP", 18, UI.GOLD, true)
+	UI.label(host.left, "Gold: %d" % host.draft.gold, 16, UI.GOLD)
+	UI.label(host.left, "Buy equipment for your character, then equip it without an AP cost.", 14, UI.MUTED)
 	for item in host.catalog.equipment:
-		UI.card(host.left, item.display_name, ["Weapon", "Armor", "Shield"][item.slot], null, host.focused_item == item, func():
+		var owned: bool = host.draft.owned_equipment.has(item)
+		UI.card(host.left, item.display_name, "%s · %d Gold%s" % [["Weapon", "Armor", "Shield"][item.slot], item.purchase_price, " · OWNED" if owned else ""], null, host.focused_item == item, func():
 			host.focused_item = item
 			host.refresh())
-	UI.label(host.center, "EQUIPMENT", 32, UI.PAPER, true)
+	UI.label(host.center, "EQUIPMENT SHOP", 32, UI.PAPER, true)
 	for slot in [0, 3, 1]:
 		var item = host.draft.equipment_slots.get(slot)
 		var slot_name: String = {0: "HAND 1", 3: "HAND 2", 1: "ARMOR"}[slot]
@@ -376,6 +376,7 @@ func build_equipment(host) -> void:
 	var selected_item = item
 	UI.label(host.center, item.display_name, 26, UI.PAPER, true)
 	UI.label(host.center, item.description, 16, UI.MUTED)
+	UI.label(host.center, "Price: %d Gold · %s" % [item.purchase_price, "Owned" if host.draft.owned_equipment.has(item) else "Not owned"], 16, UI.GOLD)
 	if item.weapon_attack != null:
 		var attack: AttackData = item.weapon_attack
 		UI.label(host.center, "%s\nDamage %d · %.0f ft · %d AP" % [attack.display_name, attack.base_damage, attack.range_feet, attack.ap_cost], 17)
@@ -387,6 +388,12 @@ func build_equipment(host) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	host.center.add_child(row)
+	if not host.draft.owned_equipment.has(item):
+		var buy_button := UI.button(row, "BUY FOR %d GOLD" % item.purchase_price, func():
+			host.draft.buy_equipment(selected_item)
+			host.refresh())
+		buy_button.disabled = host.draft.gold < item.purchase_price
+		return
 	if item.slot == EquipmentData.Slot.ARMOR:
 		UI.button(row, "EQUIP ARMOR", func():
 			host.draft.equip(selected_item, 1)

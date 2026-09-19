@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://6ob8b6ncvd1j"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2_effect"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_wonf4"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3_passive"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_xdlm2"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4_arcanist"]
+
+[sub_resource type="Resource" id="ArcaneFocusDiscount"]
+script = ExtResource("2_effect")
+effect_type = 13
+skill_mana_discount = 1
+minimum_skill_mana_cost = 1
+
+[resource]
+script = ExtResource("1_ability")
+id = "arcane_focus"
+display_name = "Arcane Focus"
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("3_passive"), ExtResource("4_arcanist")]
+is_passive = true
+description = "Passive. Your Skills cost 1 less Mana, to a minimum cost of 1 Mana."
+effects = [SubResource("ArcaneFocusDiscount")]

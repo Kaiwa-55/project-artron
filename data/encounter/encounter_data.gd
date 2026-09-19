@@ -10,6 +10,12 @@ enum Type {
 	BOSS,
 }
 
+## Author-controlled result for an Event Encounter when the party is defeated.
+enum EventDefeatOutcome {
+	END_RUN,
+	REVIVE_AT_ONE_HP,
+}
+
 @export var id: String = ""
 @export var display_name: String = ""
 @export var encounter_name: String = ""
@@ -20,7 +26,8 @@ enum Type {
 @export var battlefield: PackedScene
 @export var map_size_feet: Vector2 = Vector2(250.0, 250.0)
 # Positions and radii are authored in feet relative to the map center.
-# "obstacle" objects currently feed both MapRules and battlefield visuals.
+# "obstacle" objects may independently use `blocks_movement` and
+# `blocks_line_of_sight`; either defaults to true for older encounter data.
 @export var map_objects: Array[Dictionary] = []
 # Each entry supports: character (CharacterData), id, display_name,
 # position_feet and use_created_character. Positions are map-center relative.
@@ -33,10 +40,12 @@ enum Type {
 # Optional data-driven extensions. The existing prototype can continue using
 # `enemies`, while authored encounters may group enemies and define objectives.
 @export var enemy_groups: Array[Resource] = []
-@export var objectives: Array[Resource] = []
+@export var pre_combat_statuses: Array[Resource] = []
+@export var objectives: Array[EncounterObjective] = []
 @export var victory_event: Resource
 @export var partial_victory_event: Resource
 @export var defeat_event: Resource
+@export var event_defeat_outcome: EventDefeatOutcome = EventDefeatOutcome.END_RUN
 @export var escape_event: Resource
 @export var rewards: Array[Resource] = []
 

@@ -3,6 +3,7 @@ extends RefCounted
 
 const DyingStatus = preload("res://data/status/dying.tres")
 const AbilityEffectDataScript = preload("res://data/ability/ability_effect_data.gd")
+const SkillProficienciesScript = preload("res://combat/skill/skill_proficiencies.gd")
 
 var token_texture: Texture2D
 var token_scale: float = 1.0
@@ -20,6 +21,14 @@ var class_id: String = ""
 var class_display_name: String = ""
 # Radius in feet. Targeting and movement measure from a character's edge.
 var collision_radius_feet: float = 2.5
+# Per-observer sight and per-target concealment use the same 0..4 scale.
+var vision: int = 2
+var base_concealment: int = 1
+var dark_vision: int = 0
+var concealment_bonus: int = 0
+var concealment_bonus_by_observer: Dictionary = {}
+var concealment_reduction_by_observer: Dictionary = {}
+var vision_penalty: int = 0
 
 var level: int = 1
 var class_dc: int:
@@ -110,6 +119,9 @@ var active_weapon_slot: int = 0
 var starting_equipment: Array = []
 var starting_equipment_slots: Dictionary = {}
 var available_skills: Array = []
+var skill_ranks: Dictionary = SkillProficienciesScript.default_ranks()
+var learned_spell_ids: Array[String] = []
+var spell_choices_by_grantor: Dictionary = {}
 var skill_cooldowns: Dictionary = {}
 var ability_cooldowns: Dictionary = {}
 var ability_cooldown_skip_next_reduction: Dictionary = {}
@@ -131,6 +143,34 @@ var life_state: CombatEnums.LifeState = \
 
 func get_modifier(value: int) -> int:
 	return floori((value - 10) / 2.0)
+
+
+func get_skill_rank(skill_id: String) -> int:
+	return maxi(0, int(skill_ranks.get(skill_id, 0)))
+
+
+func get_concealment_bonus_against(observer_id: String) -> int:
+	return maxi(0, int(concealment_bonus_by_observer.get(observer_id, 0)))
+
+
+func grant_concealment_against(observer_id: String, amount: int) -> int:
+	if observer_id.is_empty() or amount <= 0:
+		return get_concealment_bonus_against(observer_id)
+	var value := get_concealment_bonus_against(observer_id) + amount
+	concealment_bonus_by_observer[observer_id] = value
+	return value
+
+
+func get_concealment_reduction_against(observer_id: String) -> int:
+	return maxi(0, int(concealment_reduction_by_observer.get(observer_id, 0)))
+
+
+func reveal_concealment_against(observer_id: String, amount: int) -> int:
+	if observer_id.is_empty() or amount <= 0:
+		return get_concealment_reduction_against(observer_id)
+	var value := get_concealment_reduction_against(observer_id) + amount
+	concealment_reduction_by_observer[observer_id] = value
+	return value
 
 
 func get_class_dc() -> int:

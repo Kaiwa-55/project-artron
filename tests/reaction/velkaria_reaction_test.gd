@@ -49,5 +49,6 @@ func run_test() -> void:
 		push_error("Velkaria must move out of range with Skittering Guard and turn the attack into a Miss without taking damage.")
 		print("CHECKS result=", result.success, " triggered=", triggered, " missed=", attack_missed, " hit=", attack_hit, " no_damage=", avoided_damage, " once=", limited_once_per_round, " moved=", boss.position != origin, " max_ap=", boss.effective_max_ap)
 		print("REACTIONS=" + str(boss.active_reactions) + " EVENTS=" + str(result.events.map(func(event): return {"type": event.type, "data": event.data})))
-	print("VELKARIA_REACTION_TEST: " + ("PASS" if success else "FAIL") + " from=" + str(origin) + " to=" + str(boss.position) + " AP=" + str(boss.ap))
+	print("VELKARIA_REACTION_DETAILS: from=" + str(origin) + " to=" + str(boss.position) + " AP=" + str(boss.ap))
+	print("VELKARIA_REACTION_TEST: " + ("PASS" if success else "FAIL"))
 	quit(0 if success else 1)

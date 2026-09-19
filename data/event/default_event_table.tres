@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EventTable" format=3 uid="uid://c57sy2lqhc8ft"]
+
+[ext_resource type="Script" uid="uid://cwu0onx44aflj" path="res://data/event/event_table.gd" id="1_table"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_bpv1s"]
+[ext_resource type="Script" uid="uid://r7oflsoiydsx" path="res://data/event/event_table_entry.gd" id="2_entry"]
+[ext_resource type="Resource" uid="uid://es4q141m7c8y" path="res://data/event/Strange Caravan/strange_caravan.tres" id="3_5jlbe"]
+[ext_resource type="Resource" uid="uid://cutkb3uuqdjpm" path="res://data/event/Other/wandering_healer.tres" id="4_healer"]
+[ext_resource type="Resource" uid="uid://be0elcdhcoiji" path="res://data/event/A Gift from Old Man/A Gift from Old Man.tres" id="5_5jlbe"]
+
+[sub_resource type="Resource" id="Entry_caravan"]
+script = ExtResource("2_entry")
+id = &"strange_caravan"
+event = ExtResource("3_5jlbe")
+weight = 3.0
+remove_after_victory = true
+
+[sub_resource type="Resource" id="Entry_healer"]
+script = ExtResource("2_entry")
+id = &"wandering_healer"
+event = ExtResource("4_healer")
+
+[sub_resource type="Resource" id="Resource_dpp1q"]
+script = ExtResource("2_entry")
+event = ExtResource("5_5jlbe")
+weight = 10.0
+remove_after_victory = true
+metadata/_custom_type_script = "uid://r7oflsoiydsx"
+
+[resource]
+script = ExtResource("1_table")
+id = &"default_run_events"
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_caravan"), SubResource("Entry_healer"), SubResource("Resource_dpp1q")])

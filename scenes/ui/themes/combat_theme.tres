@@ -1,0 +1,11 @@
+[gd_resource type="Theme" format=3]
+
+[resource]
+resource_name = "Artron / Compact Combat"
+default_font_size = 9
+Button/font_sizes/font_size = 9
+Label/font_sizes/font_size = 9
+HBoxContainer/constants/separation = 6
+VBoxContainer/constants/separation = 3
+GridContainer/constants/h_separation = 4
+GridContainer/constants/v_separation = 4

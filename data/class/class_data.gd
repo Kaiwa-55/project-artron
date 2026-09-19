@@ -4,6 +4,7 @@ extends Resource
 @export var id: String = ""
 @export var display_name: String = ""
 @export_multiline var description: String = ""
+@export var main_attribute: AttributeTypes.Type = AttributeTypes.Type.STRENGTH
 # Negative values mean the class does not set that base value.
 @export var base_speed_feet: float = -1.0
 @export var base_mana: int = -1

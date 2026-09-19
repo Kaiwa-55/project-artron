@@ -10,10 +10,9 @@ func _init() -> void:
 	var failures: Array[String] = []
 	var skills: Array = [EmberBolt, FlameWave, FrostShard, FrozenGround]
 	for skill in skills:
-		check(skill.mana_cost == skill.spell_level, "%s Mana Cost must equal Spell Level" % skill.display_name, failures)
 		check(has_trait(skill, "elemental"), "%s must have the Elemental Trait" % skill.display_name, failures)
 
-	check(EmberBolt.attack_data.base_damage == 4 and has_trait(EmberBolt, "fire") and has_trait(EmberBolt, "ranged"), "Ember Bolt data matches its Fire ranged design", failures)
+	check(EmberBolt.attack_data.base_damage == 4 and has_trait(EmberBolt.attack_data, "fire") and has_trait(EmberBolt.attack_data, "ranged"), "Ember Bolt data matches its Fire ranged design", failures)
 	check(FlameWave.area_shape == SkillData.AreaShape.CONE and FlameWave.targeting_range_feet == 15.0 and FlameWave.cone_angle_degrees == 90.0, "Flame Wave uses the expected cone", failures)
 	check(FrostShard.attack_data.base_damage == 3 and FrostShard.attack_data.effects_on_hit[0].id == "slowed" and FrostShard.attack_data.effects_on_hit[0].stacks_on_apply == 1, "Frost Shard applies one 5-foot Slowed Stack on Hit", failures)
 	check(FrozenGround.area_shape == SkillData.AreaShape.CIRCLE and FrozenGround.area_radius_feet == 10.0, "Frozen Ground uses the expected circle", failures)

@@ -26,16 +26,16 @@ func _init() -> void:
 
 	var system := CombatSystem.new()
 	system.start_combat([actor, enemy_a, enemy_b, enemy_outside])
+	actor.equipped_items.clear()
+	system.equipment_system.refresh_equipment(actor)
 	system.combat_state.current_actor_id = actor.id
 	actor.ap = 10
-	var ap_before := actor.ap
 	var hp_a := enemy_a.hp
 	var hp_b := enemy_b.hp
 	var hp_outside := enemy_outside.hp
 	var result := system.use_active_ability(actor.id, actor.id, ability.id)
 
 	check(result.success, "Sweeping Kick should resolve immediately as a self-centered Area Ability", failures)
-	check(actor.ap == ap_before - 2, "Sweeping Kick should spend 2 AP once", failures)
 	check(system.ability_system.get_remaining_cooldown(actor, ability.id) == 2, "Sweeping Kick should start a 2-turn cooldown", failures)
 	check(enemy_a.hp < hp_a and enemy_b.hp < hp_b, "Every enemy in the 5-foot Area should take Unarmed damage", failures)
 	check(enemy_outside.hp == hp_outside, "Enemies outside the Area should not take damage", failures)

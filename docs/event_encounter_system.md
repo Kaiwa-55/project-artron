@@ -157,6 +157,26 @@ Encounter รองรับ Type ได้แก่ `COMBAT`, `AMBUSH`, `DEFENS
 
 `EncounterManager` เข้าใจผล `VICTORY`, `PARTIAL_VICTORY`, `DEFEAT` และ `ESCAPE` แต่ Combat scene ปัจจุบันส่งกลับอัตโนมัติเฉพาะ Victory และ Defeat
 
+### Objective System
+
+Encounter สามารถเพิ่ม `EncounterObjective` ใน Array `objectives` ได้ ระบบจะแสดงรายการเป้าหมายใน Combat HUD และประเมินใหม่เมื่อมี Combat Event
+
+| Type | ช่องที่ต้องตั้ง | เงื่อนไขสำเร็จ |
+| --- | --- | --- |
+| `DEFEAT_ALL` | `target_team` | ไม่มีตัวละครที่ยังต่อสู้ได้ในทีมเป้าหมาย |
+| `DEFEAT_TARGET` | `target_id` | ตัวละคร id เป้าหมายเข้าสถานะ Dying แม้ศัตรูอื่นยังอยู่ |
+| `SURVIVE_TURNS` | `turn_count` | ผ่านจำนวนรอบเต็มที่กำหนด เช่น 3 จะสำเร็จเมื่อเริ่ม Round 4 |
+| `REACH_AREA` | `actor_id` หรือ `actor_team`, `area_center_feet`, `area_radius_feet` | ตัวละครที่กำหนดและยังไม่ Dying เข้าไปในรัศมี |
+
+ช่องร่วม:
+
+- `id` เป็นรหัส Objective ภายใน Encounter
+- `description` เป็นข้อความที่แสดงใน Combat HUD
+- `required = true` หมายถึง Objective บังคับ
+- `required = false` หมายถึง Objective เสริมและไม่ขวางการจบ Encounter
+
+เมื่อ Objective บังคับทุกข้อสำเร็จ ObjectiveSystem จะขอให้ CombatSystem จบด้วย Victory แล้ว flow เดิมจะส่งผลไป EncounterManager ระบบ Objective ไม่คำนวณ Damage, Turn หรือการเคลื่อนที่เอง
+
 ## 3. วิธีสร้าง Event ใหม่ใน Godot Editor
 
 ### ขั้นที่ 1: สร้าง EventData
@@ -167,7 +187,11 @@ Encounter รองรับ Type ได้แก่ `COMBAT`, `AMBUSH`, `DEFENS
 4. บันทึกเป็นชื่อที่สื่อความหมาย เช่น `ancient_shrine.tres`
 5. ตั้ง `id` เช่น `ancient_shrine`
 6. ใส่ `title`, `description` และลาก Texture เข้า `illustration` หากต้องการภาพ
-7. ตั้ง `can_repeat` ตามกฎของ Event
+7. ลากไฟล์เสียงเข้า `narration_audio` หากต้องการเสียงบรรยาย
+8. ตั้ง `narration_autoplay` และ `narration_volume_db` ตามต้องการ
+9. ตั้ง `can_repeat` ตามกฎของ Event
+
+เมื่อ Event เปิด ระบบจะเล่น `narration_audio` อัตโนมัติหากเปิด `narration_autoplay` และจะหยุดเสียงเมื่อจบ Event, เปลี่ยนไปหน้า Encounter หรือเปิด Event ถัดไป หากปิด Autoplay สามารถสั่ง `EventPanel.play_narration()` จาก UI ภายนอกเพื่อเล่นเสียงได้
 
 อย่าใช้ `id` ซ้ำกันสำหรับ Event คนละเหตุการณ์ เพราะ Event ที่ `can_repeat = false` ใช้ id นี้ตรวจประวัติการเล่น
 
@@ -288,30 +312,129 @@ bool_value = true
 7. เพิ่ม EventEffect ใน `rewards` หาก Encounter ต้องให้รางวัลก่อนเปิด Victory Event
 8. ใน EventChoice ลาก EncounterData นี้เข้า `encounter`
 
+### การเพิ่ม Objective
+
+1. ขยาย Array `objectives` ของ EncounterData
+2. เลือก **New EncounterObjective**
+3. ตั้ง `id`, `description`, `type` และ `required`
+4. กรอกช่องเฉพาะ Type ตามตาราง Objective System
+
+ตัวอย่างกำจัดศัตรูทั้งหมด:
+
+```text
+id = defeat_all_bandits
+description = กำจัดโจรทั้งหมด
+type = DEFEAT_ALL
+required = true
+target_team = 2
+```
+
+ตัวอย่างไปถึงจุดหลบหนี:
+
+```text
+id = reach_exit
+description = ไปถึงพื้นที่หลบหนี
+type = REACH_AREA
+required = true
+actor_team = 1
+actor_id = เว้นว่างเพื่อให้สมาชิกทีม 1 คนใดก็ได้ทำสำเร็จ
+area_center_feet = (100, 20)
+area_radius_feet = 8
+```
+
 เมื่อผู้เล่นเลือก Choice ระบบจะแสดงชื่อ คำอธิบาย และ `encounter_image` พร้อมปุ่ม **BEGIN ENCOUNTER** ก่อนเปลี่ยน Scene ไป Combat
 
 ดูตัวอย่างได้ที่:
 
-- `res://data/event/strange_caravan.tres`
+- `res://data/event/Strange Caravan/strange_caravan.tres`
 - `res://data/encounter/bandit_ambush_event.tres`
-- `res://data/event/bandit_victory.tres`
-- `res://data/event/bandit_defeat.tres`
+- `res://data/event/Strange Caravan/bandit_victory.tres`
+- `res://data/event/Strange Caravan/bandit_defeat.tres`
 
 ## 5. วิธีนำ Event ไปใช้บน RunMap
 
-`MapNodeData` มีช่อง `event_data` สำหรับกำหนด Event ของโหนดชนิด `EVENT`
+### การใส่ Status ก่อนเริ่ม Combat
 
-ระบบสร้าง Run แบบ procedural ปัจจุบันใช้ `RunGenerator.DEFAULT_EVENT` เป็นต้นแบบ แล้ว duplicate ให้แต่ละ Event node พร้อม id เฉพาะโหนด เพื่อไม่ให้การเล่น Event หนึ่งครั้งไปล็อก Event node อื่น
+ใน `EncounterData` ให้ขยาย Array `pre_combat_statuses` แล้วเลือก **New PreCombatStatus** จากนั้นกำหนด:
 
-หากต้องการเปลี่ยน Event เริ่มต้นของทุกโหนด ให้แก้ `DEFAULT_EVENT` ใน `res://run/run_generator.gd`
+- `effect` — Status ที่ต้องการใส่ เช่น Poisoned, Slowed หรือ Frightened
+- `target_mode` — กลุ่มเป้าหมาย ได้แก่ `PLAYER_PARTY`, `ENEMIES`, `TEAM`, `CHARACTER_ID` หรือ `ALL_COMBATANTS`
+- `team` — ใช้เมื่อเลือก `TEAM`
+- `character_id` — ใช้เมื่อเลือก `CHARACTER_ID` และต้องตรงกับ ID ของ Combatant
+- `applications` — จำนวนครั้งที่ใส่ Status ใช้เพิ่ม Stack ได้เมื่อ Status นั้นรองรับการซ้อน Stack
+
+สามารถลาก `EffectData` เช่น Poisoned เข้า Array โดยตรงได้เช่นกัน รูปแบบย่อนี้จะใส่ Status ให้ผู้เล่นทุกคนคนละ 1 ครั้ง หากต้องการเลือกเป้าหมายหรือจำนวน Stack ให้ใช้ `PreCombatStatus`
+
+ระบบจะใส่ Status หลังสร้างผู้เล่นและศัตรูครบ แต่ก่อนเริ่ม Turn แรก จึงมีผลต่อค่า Defense, Speed, AP และ Trigger ต้น Turn ทันที หากเป้าหมายมีภูมิคุ้มกัน Status จะไม่ถูกใส่ และเมื่อ Combat จบ Status จะถูกล้างทั้งหมดตามกฎเดิม
+
+ตัวอย่าง: ให้ผู้เล่นทุกคนติด Poisoned ตอนเริ่มไฟต์
+
+```text
+effect = Poisoned
+target_mode = PLAYER_PARTY
+applications = 1
+```
+
+ตัวอย่าง: ให้หัวหน้าศัตรูติด Slowed ตอนเริ่มไฟต์
+
+```text
+effect = Slowed
+target_mode = CHARACTER_ID
+character_id = enemy_leader
+applications = 1
+```
+
+`MapNodeData` รองรับทั้ง `event_data` สำหรับกำหนด Event โดยตรง และ `event_table` สำหรับสุ่ม Event ตามน้ำหนัก
+
+ระบบสร้าง Run แบบ procedural ใช้ `RunGenerator.DEFAULT_EVENT_TABLE_PATH` ซึ่งชี้ไปที่ `res://data/event/default_event_table.tres` ทุก Event node จะสุ่มเมื่อผู้เล่นเข้าโหนด โดยใช้ Run Seed ร่วมกับ Node ID จึงได้ผลเดิมเสมอเมื่อเล่น Seed เดิม
+
+### การสร้าง weighted EventTable
+
+1. สร้าง Resource ชนิด `EventTable` ใน `res://data/event/`
+2. เพิ่มสมาชิกใน Array `entries`
+3. ในแต่ละสมาชิกเลือก **New EventTableEntry**
+4. ลาก `EventData` เข้า `event`
+5. กำหนด `weight` มากกว่า 0 เช่น Event ทั่วไปใช้ 3 และ Event หายากใช้ 1
+6. เพิ่ม `EventCondition` ใน `conditions` หาก Entry นี้ต้องมีเงื่อนไขก่อนเข้าสู่กองสุ่ม
+7. เปิด `remove_after_victory` หากต้องการนำ Entry ออกจากตารางหลังผู้เล่นชนะ Encounter ของ Event นี้
+8. ลาก EventTable เข้า `MapNodeData.event_table` หรือเปลี่ยน `DEFAULT_EVENT_TABLE_PATH` ใน `res://run/run_generator.gd`
+
+น้ำหนักเป็นสัดส่วน ไม่จำเป็นต้องรวมเป็น 100 เช่นน้ำหนัก 3 กับ 1 หมายถึงโอกาสประมาณ 75% กับ 25% ระบบจะตัด Entry ที่ไม่มี Event, น้ำหนักเป็น 0 หรือติดลบ และ Event ที่ `start_conditions` ไม่ผ่านออกก่อนสุ่ม หากไม่มี Event ที่ใช้ได้ โหนดจะแจ้งว่าไม่พบ Event ที่เข้าเงื่อนไขและไม่เปิด EventPanel
+
+ตัวอย่าง Event ที่เข้าสู่กองสุ่มเมื่อมี Flag เท่านั้น:
+
+```text
+EventTableEntry
+id = secret_shrine_entry
+event = Secret Shrine EventData
+weight = 1
+
+conditions[0]
+type = FLAG
+key = discovered_secret_shrine
+comparison = EQUAL
+value_type = BOOLEAN
+required_bool = true
+```
+
+ถ้า `GameState.flags["discovered_secret_shrine"]` ยังไม่มีหรือเป็น `false` Entry นี้จะไม่ถูกนำมาคำนวณน้ำหนัก เมื่อ Flag เปลี่ยนเป็น `true` จึงเริ่มมีโอกาสถูกสุ่ม สามารถตั้ง `required_bool = false` เพื่อให้สุ่มเฉพาะตอน Flag เป็น false หรือเพิ่มหลาย Condition เพื่อบังคับให้ผ่านทุกข้อได้
+
+ควรกำหนด `id` ให้ทั้ง EventTable และ EventTableEntry ไม่ซ้ำกัน ระบบจะใช้รหัสคู่ `EventTable:Entry` บันทึกใน GameState เมื่อชนะ หาก `remove_after_victory = true` Entry นั้นจะไม่เข้ากองสุ่มอีกตลอด Run ปัจจุบัน การแพ้หรือจบ Event โดยไม่เข้า Combat จะไม่นำ Entry ออก
+
+Event ที่สุ่มได้จะถูก duplicate และเติม Node ID ต่อท้าย id เช่น `strange_caravan_f2_n1` เพื่อให้แต่ละโหนดเก็บสถานะจบ Event แยกจากกัน หลังสุ่มแล้วผลจะถูกเก็บใน `MapNodeData.event_data` จึงไม่สุ่มใหม่ระหว่างกลับจาก Combat หรือใช้ RunState เดิมต่อ
+
+ตัวอย่างพร้อมใช้งานอยู่ที่ `res://data/event/default_event_table.tres`:
+
+- Strange Caravan — weight 3
+- Wandering Healer — weight 1
 
 หากสร้าง MapNodeData เอง:
 
 1. ตั้ง `node_type = EVENT`
-2. ลาก EventData ที่ต้องการเข้า `event_data`
+2. ลาก EventData ที่ต้องการเข้า `event_data` หรือ EventTable เข้า `event_table`
 3. เมื่อผู้เล่นเข้าโหนด RunMap จะเรียก EventManager และเปิด EventPanel ให้อัตโนมัติ
 
-ปัจจุบันยังไม่มี Event Catalog หรือ weighted EventTable สำหรับสุ่ม Event คนละแบบในแต่ละโหนด
+หากกำหนดทั้ง `event_data` และ `event_table` ระบบจะใช้ `event_data` ก่อน เพื่อรักษาการกำหนด Event แบบเจาะจง
 
 ## 6. การทำ Event chain และ Result Event
 
@@ -338,6 +461,8 @@ Encounter ที่เริ่มจาก Event จะบันทึกสถ
 - `GameState` และ RunState เดิมถูกนำกลับมาใช้ต่อ
 
 Encounter ที่เริ่มจากโหนด Combat ปกติยังใช้ Reward Selection flow เดิมของ Run
+
+เมื่อ Combat จบ ระบบจะบันทึก HP และ Mana ที่เหลือของสมาชิกปาร์ตี้กลับเข้า RunState ค่าเหล่านี้จึงถูกใช้ต่อใน Combat ถัดไป ตัวละครที่จบ Combat ด้วย HP 0 จะกลับมาที่ RunMap ด้วย HP 1 และ Status ทั้งหมดจะถูกล้าง
 
 ## 7. การเรียกใช้จาก Scene อื่น
 
@@ -371,17 +496,16 @@ Signal ที่ UI หรือ Scene Flow สามารถรับได้
 
 ## 8. สิ่งที่ยังไม่รองรับครบ
 
-- Objective runtime เช่น DefeatTarget, SurviveTurns, ProtectUnit หรือ CapturePoint
+- Objective ที่ยังไม่มี ได้แก่ ProtectUnit, ProtectObject, Escape, CapturePoint, InteractObject และ PreventEscape
 - Boss Phase และการเปลี่ยน Ability/สนามระหว่าง Combat
 - Combat Event ที่ trigger จาก Turn, HP, Unit death, Area หรือ Objective
-- weighted Random Event ผ่าน EventTable
 - Dynamic enemy groups ที่ประเมิน Condition แล้ว spawn อัตโนมัติ
 - การใช้ข้อมูล `TELEPORT` และ `REWARD` โดยระบบปลายทางอัตโนมัติ
 - Result แบบ Partial Victory และ Escape จาก Combat scene โดยอัตโนมัติ
 - Save/Load ของ GameState ลงไฟล์ถาวร
 - Localization และ rich text สำหรับเนื้อหา Event
 
-ช่อง `enemy_groups` และ `objectives` ใน EncounterData เป็นจุดเตรียมขยายข้อมูล ยังไม่มีตัวประเมิน Objective หรือ spawner สำหรับกลุ่มศัตรู
+ช่อง `enemy_groups` ยังเป็นจุดเตรียมขยายข้อมูลและยังไม่มี spawner สำหรับกลุ่มศัตรู ส่วน `objectives` รองรับ DefeatAll, DefeatTarget, SurviveTurns และ ReachArea แล้ว
 
 ## 9. การทดสอบ
 
@@ -397,6 +521,12 @@ powershell -ExecutionPolicy Bypass -File tests/run_regression.ps1 -Target tests/
 powershell -ExecutionPolicy Bypass -File tests/run_regression.ps1 -Target tests/run
 ```
 
+ทดสอบ Objective ทั้งสี่แบบ:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/run_regression.ps1 -Target tests/encounter
+```
+
 ผลที่ควรได้:
 
 - Event `.tres` โหลดได้
@@ -409,3 +539,4 @@ powershell -ExecutionPolicy Bypass -File tests/run_regression.ps1 -Target tests/
 - Encounter ต้องยืนยันก่อนเข้า Combat
 - Victory/Defeat กลับมาเปิด Result Event
 - Event คนละโหนดไม่ใช้ completion id ร่วมกัน
+- DefeatAll, DefeatTarget, SurviveTurns และ ReachArea จบ Combat เมื่อเงื่อนไขบังคับครบ

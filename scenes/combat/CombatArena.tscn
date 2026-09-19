@@ -97,7 +97,7 @@ text = "End Turn"
 layout_mode = 1
 mouse_filter = 2
 
-[node name="Enemy_panel" type="NinePatchRect" parent="UILayer/Control" unique_id=1573275925]
+[node name="Enemy_panel" type="Panel" parent="UILayer/Control" unique_id=1573275925]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
 anchors_preset = -1
@@ -108,12 +108,6 @@ anchor_bottom = 0.8472222
 offset_bottom = 1.5258789e-05
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("11_u1yet")
-region_rect = Rect2(293, 95, 38, 38)
-patch_margin_left = 7
-patch_margin_top = 18
-patch_margin_right = 7
-patch_margin_bottom = 5
 metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control/Enemy_panel" unique_id=1930457242]
@@ -152,10 +146,10 @@ autowrap_mode = 2
 layout_mode = 1
 anchors_preset = 0
 anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 280.0
-offset_bottom = 143.0
+offset_left = -2.0
+offset_top = -162.0
+offset_right = 278.0
+offset_bottom = -19.0
 grow_vertical = 1
 
 [node name="ReactionPrompt" type="Panel" parent="UILayer/Control" unique_id=629339134]

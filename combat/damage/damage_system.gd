@@ -52,7 +52,7 @@ func calculate_damage(
 	if attack.uses_attribute_damage_modifier:
 		attribute_modifier = attribute_system.get_attribute_modifier(
 			attacker,
-			attack.attack_attribute
+			attack.resolve_attack_attribute(attacker)
 		)
 
 	var buff_bonus := \
@@ -77,7 +77,7 @@ func calculate_critical_damage(
 	if attack.uses_attribute_damage_modifier:
 		attribute_modifier = attribute_system.get_attribute_modifier(
 			attacker,
-			attack.attack_attribute
+			attack.resolve_attack_attribute(attacker)
 		)
 	var buff_bonus := get_buff_damage_bonus(attacker, attack)
 

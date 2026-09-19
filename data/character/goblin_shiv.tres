@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://baabp6lsttosk" path="res://assets/token/goblin shiv.png" id="5_hbe17"]
 [ext_resource type="Script" uid="uid://cbbtyxme0klmg" path="res://data/item/item_stack_data.gd" id="5_jdpgy"]
 [ext_resource type="Resource" path="res://data/trait/humanoid.tres" id="6"]
-[ext_resource type="Resource" path="res://data/ai/goblin_shiv_ai_profile.tres" id="7"]
+[ext_resource type="Resource" uid="uid://b27w0mgywybbi" path="res://data/ai/goblin_shiv_ai_profile.tres" id="7"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="7_jdpgy"]
 [ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="10_gev85"]
 

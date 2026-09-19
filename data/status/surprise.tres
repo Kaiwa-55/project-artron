@@ -10,3 +10,4 @@ display_name = "Surprise"
 icon_texture = ExtResource("1_svt4g")
 status_kind = 11
 status_tags = Array[String](["status", "control", "mental"])
+can_be_cleansed = false

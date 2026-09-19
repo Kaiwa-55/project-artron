@@ -11,6 +11,7 @@ var margin: int = 0
 
 var attack_modifier: int = 0
 var repeated_attack_penalty: int = 0
+var visibility_penalty: int = 0
 
 var damage: int = 0
 var conditional_damage_bonus: int = 0

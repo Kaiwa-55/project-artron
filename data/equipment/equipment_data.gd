@@ -6,6 +6,7 @@ enum Slot { WEAPON, ARMOR, SHIELD }
 @export var id: String = ""
 @export var display_name: String = ""
 @export_multiline var description: String = ""
+@export_range(0, 9999) var purchase_price: int = 25
 @export var slot: Slot = Slot.WEAPON
 @export var weapon_attack: AttackData
 @export var reflex_bonus: int = 0

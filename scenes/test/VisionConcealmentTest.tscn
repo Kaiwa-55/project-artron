@@ -1,0 +1,137 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/test/vision_concealment_test.gd" id="1_script"]
+
+[node name="VisionConcealmentTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.055, 0.067, 0.09, 1)
+show_behind_parent = true
+
+[node name="Title" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 12.0
+offset_right = 620.0
+offset_bottom = 39.0
+theme_override_font_sizes/font_size = 20
+text = "VISION / CONCEALMENT — WHITE-BOX TEST"
+horizontal_alignment = 1
+
+[node name="Controls" type="GridContainer" parent="."]
+offset_left = 24.0
+offset_top = 52.0
+offset_right = 616.0
+offset_bottom = 152.0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 5
+columns = 4
+
+[node name="VisionLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Vision"
+[node name="VisionInput" type="SpinBox" parent="Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+max_value = 4.0
+value = 2.0
+[node name="DarkVisionLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Dark Vision"
+[node name="DarkVisionInput" type="SpinBox" parent="Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+max_value = 4.0
+
+[node name="BaseLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Base Concealment"
+[node name="BaseInput" type="SpinBox" parent="Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+max_value = 20.0
+value = 1.0
+[node name="BonusLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Effect Bonus"
+[node name="BonusInput" type="SpinBox" parent="Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+max_value = 20.0
+value = 2.0
+
+[node name="LightLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Light"
+[node name="LightInput" type="OptionButton" parent="Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+[node name="LosLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Line of Sight"
+[node name="LosInput" type="CheckButton" parent="Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Clear (uncheck to block)"
+
+[node name="TargetZoneLabel" type="Label" parent="Controls"]
+layout_mode = 2
+text = "Target zone"
+[node name="TargetZoneInput" type="OptionButton" parent="Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+
+[node name="ResultPanel" type="PanelContainer" parent="."]
+offset_left = 410.0
+offset_top = 185.0
+offset_right = 620.0
+offset_bottom = 326.0
+
+[node name="Margin" type="MarginContainer" parent="ResultPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Column" type="VBoxContainer" parent="ResultPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="Label" parent="ResultPanel/Margin/Column"]
+layout_mode = 2
+text = "RESULT"
+horizontal_alignment = 1
+[node name="ResultLabel" type="Label" parent="ResultPanel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "NOT VISIBLE"
+horizontal_alignment = 1
+autowrap_mode = 2
+[node name="FormulaLabel" type="Label" parent="ResultPanel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Total: 5 | Effective: 4 | Vision: 2"
+horizontal_alignment = 1
+autowrap_mode = 2

@@ -30,6 +30,7 @@ const CATALOG := preload("res://data/creation/default_creation_catalog.tres")
 var character: CombatantState
 var progression_system := ProgressionSystem.new()
 var selected_abilities: Array[AbilityData] = []
+var selected_spells: Dictionary = {}
 var staged_attributes: Dictionary = {}
 var party: Array[CombatantState] = []
 
@@ -78,6 +79,7 @@ func _apply_responsive_size() -> void:
 	_set_margins(choice_margin, 8 if compact else 20, 6 if compact else 18)
 	var choice_column: VBoxContainer = $Layout/ContentScroll/Content/ChoiceZone/Margin/Column
 	choice_column.add_theme_constant_override("separation", 5 if compact else 12)
+	ability_list.add_theme_constant_override("separation", 3 if compact else 9)
 	$Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AbilityHeader/Title.add_theme_font_size_override("font_size", 12 if compact else 17)
 	ability_hint.add_theme_font_size_override("font_size", 9 if compact else 16)
 	$Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeHeader/Title.add_theme_font_size_override("font_size", 12 if compact else 17)
@@ -92,6 +94,7 @@ func _apply_responsive_size() -> void:
 	roster.custom_minimum_size.y = 52.0 if compact else 92.0
 	var roster_margin: MarginContainer = party_roster_margin
 	_set_margins(roster_margin, 10 if compact else 20, 5 if compact else 8)
+	party_roster_label.visible = not compact
 	party_roster_label.custom_minimum_size.x = 65.0 if compact else 125.0
 	party_roster_label.add_theme_font_size_override("font_size", 9 if compact else 16)
 	party_roster_label.text = "PARTY\nHERO" if compact else "PARTY\nSELECT HERO"
@@ -106,10 +109,11 @@ func _apply_responsive_size() -> void:
 	elif not compact and party_roster_row.get_parent() != party_roster_margin:
 		party_roster_row.reparent(party_roster_margin)
 	party_roster_panel.visible = not compact
-	party_roster_row.custom_minimum_size.x = 202.0 if compact else 0.0
+	party_roster_row.custom_minimum_size.x = 116.0 if compact else 0.0
 	party_roster_row.size_flags_horizontal = Control.SIZE_FILL
 	status_label.add_theme_font_size_override("font_size", 9 if compact else 12)
 	status_label.clip_text = compact
+	status_label.visible = not compact
 	var cancel_button: Button = $Layout/Footer/Margin/Row/Cancel
 	cancel_button.custom_minimum_size = Vector2(72.0, 32.0) if compact else Vector2(120.0, 42.0)
 	confirm_button.custom_minimum_size = Vector2(126.0, 32.0) if compact else Vector2(190.0, 42.0)
@@ -117,14 +121,16 @@ func _apply_responsive_size() -> void:
 	confirm_button.add_theme_font_size_override("font_size", 10 if compact else 16)
 	for ability_card in ability_list.get_children():
 		if ability_card is Button:
-			ability_card.custom_minimum_size.y = 46.0 if compact else 68.0
+			ability_card.custom_minimum_size.y = 34.0 if compact else 68.0
+			ability_card.add_theme_font_size_override("font_size", 8 if compact else 13)
 	for attribute_card in attribute_list.get_children():
 		if attribute_card is PanelContainer and attribute_card.get_child_count() > 0:
-			attribute_card.get_child(0).custom_minimum_size = Vector2(145.0, 44.0) if compact else Vector2(185.0, 62.0)
+			attribute_card.get_child(0).custom_minimum_size = Vector2(145.0, 38.0) if compact else Vector2(185.0, 62.0)
 	for member_button in party_roster.get_children():
 		if member_button is Button:
-			member_button.custom_minimum_size = Vector2(125.0, 40.0) if compact else Vector2(170.0, 68.0)
-			member_button.add_theme_constant_override("icon_max_width", 30 if compact else 52)
+			member_button.custom_minimum_size = Vector2(110.0, 32.0) if compact else Vector2(170.0, 68.0)
+			member_button.add_theme_font_size_override("font_size", 8 if compact else 13)
+			member_button.add_theme_constant_override("icon_max_width", 24 if compact else 52)
 
 
 func _set_margins(container: MarginContainer, horizontal: int, vertical: int) -> void:
@@ -155,7 +161,9 @@ func open_for_party(p_party: Array[CombatantState], selected_id: String = "") ->
 	if character == null:
 		return
 	selected_abilities.clear()
+	selected_spells.clear()
 	staged_attributes.clear()
+	_normalize_spell_choice_tracking()
 	status_label.text = "Choices apply only after Confirm. Unspent Ability Points are kept."
 	show()
 	rebuild()
@@ -167,7 +175,9 @@ func select_party_member(member: CombatantState) -> void:
 		return
 	character = member
 	selected_abilities.clear()
+	selected_spells.clear()
 	staged_attributes.clear()
+	_normalize_spell_choice_tracking()
 	status_label.text = "Now improving %s. Unconfirmed choices on the previous hero were discarded." % member.display_name
 	rebuild()
 	build_party_roster()
@@ -179,10 +189,11 @@ func build_party_roster() -> void:
 		if member == null:
 			continue
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(125, 40) if _uses_compact_layout() else Vector2(170, 68)
+		button.custom_minimum_size = Vector2(110, 32) if _uses_compact_layout() else Vector2(170, 68)
 		button.icon = member.token_texture
 		button.expand_icon = true
-		button.add_theme_constant_override("icon_max_width", 30 if _uses_compact_layout() else 52)
+		button.add_theme_font_size_override("font_size", 8 if _uses_compact_layout() else 13)
+		button.add_theme_constant_override("icon_max_width", 24 if _uses_compact_layout() else 52)
 		button.text = "%s\nLv.%d  •  %d choice%s" % [member.display_name, member.level, member.ability_points + member.attribute_points, "s" if member.ability_points + member.attribute_points != 1 else ""]
 		button.tooltip_text = "Select %s for Level Up" % member.display_name
 		button.add_theme_stylebox_override("normal", _ability_card_style(member == character))
@@ -192,6 +203,7 @@ func build_party_roster() -> void:
 
 func cancel() -> void:
 	selected_abilities.clear()
+	selected_spells.clear()
 	staged_attributes.clear()
 	hide()
 	closed.emit()
@@ -214,14 +226,21 @@ func rebuild() -> void:
 	_clear(ability_list)
 	_clear(attribute_list)
 	_build_abilities()
-	_build_attributes()
+	var show_attributes := character.attribute_points > 0
+	$Layout/ContentScroll/Content/ChoiceZone/Margin/Column/Separator.visible = show_attributes
+	$Layout/ContentScroll/Content/ChoiceZone/Margin/Column/AttributeHeader.visible = show_attributes
+	attribute_list.visible = show_attributes
+	if show_attributes:
+		_build_attributes()
 	_build_preview()
-	confirm_button.disabled = character.attribute_points > 0 and _attribute_points_left() > 0
+	confirm_button.disabled = (character.attribute_points > 0 and _attribute_points_left() > 0) or _has_unfilled_selected_spell_choices()
 
 
 func _build_abilities() -> void:
 	for ability in CATALOG.get_abilities():
 		if ability == null:
+			continue
+		if not ability.granted_skills.is_empty():
 			continue
 		var learned := character.selected_ability_ids.has(ability.id) or character.granted_ability_ids.has(ability.id)
 		var reason := progression_system.get_learn_ability_failure_reason(character, ability)
@@ -229,9 +248,11 @@ func _build_abilities() -> void:
 		if not reason.is_empty() and not learned and not selected:
 			continue
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(0, 46 if _uses_compact_layout() else 68)
+		card.custom_minimum_size = Vector2(0, 34 if _uses_compact_layout() else 68)
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		card.text = "%s\n%s · Level %d · %d Point%s" % [ability.display_name, "Selected" if selected else ("Learned" if learned else _type_text(ability)), ability.required_level, ability.ability_point_cost, "s" if ability.ability_point_cost != 1 else ""]
+		card.add_theme_font_size_override("font_size", 8 if _uses_compact_layout() else 13)
+		var spell_grant_text := " · Choose %d Spells" % ability.spell_choices_granted if ability.spell_choices_granted > 0 else ""
+		card.text = "%s\n%s · Level %d · %d Point%s%s" % [ability.display_name, "Selected" if selected else ("Learned" if learned else _type_text(ability)), ability.required_level, ability.ability_point_cost, "s" if ability.ability_point_cost != 1 else "", spell_grant_text]
 		card.tooltip_text = ability.description
 		card.disabled = learned or (not selected and ability.ability_point_cost > _ability_points_left())
 		card.add_theme_stylebox_override("normal", _ability_card_style(selected))
@@ -239,6 +260,8 @@ func _build_abilities() -> void:
 		card.add_theme_color_override("font_color", Color("edf2f7"))
 		card.pressed.connect(toggle_ability.bind(ability))
 		ability_list.add_child(card)
+		if ability.spell_choices_granted > 0 and (selected or learned):
+			_build_spell_choices(ability)
 	if ability_list.get_child_count() == 0:
 		_add_note(ability_list, "No Ability is learnable now. You may keep the point for a later Level.")
 
@@ -246,8 +269,43 @@ func _build_abilities() -> void:
 func toggle_ability(ability: AbilityData) -> void:
 	if selected_abilities.has(ability):
 		selected_abilities.erase(ability)
+		selected_spells.erase(ability.id)
 	elif ability.ability_point_cost <= _ability_points_left():
 		selected_abilities.append(ability)
+	rebuild()
+
+
+func _build_spell_choices(grantor: AbilityData) -> void:
+	var remaining := _spell_choices_left(grantor)
+	_add_note(ability_list, "Choose %d Spell%s for %s — no additional Ability Points" % [grantor.spell_choices_granted, "s" if grantor.spell_choices_granted != 1 else "", grantor.display_name])
+	for training in CATALOG.get_abilities():
+		if training == null or training.granted_skills.is_empty() or not progression_system.spell_training_matches_grantor(training, grantor):
+			continue
+		if character.level < training.required_level:
+			continue
+		var skill: SkillData = training.granted_skills[0]
+		var staged: Array = selected_spells.get(grantor.id, [])
+		var selected := staged.has(training)
+		var learned := character.learned_spell_ids.has(training.id) or character.available_skills.has(skill)
+		var card := Button.new()
+		card.custom_minimum_size = Vector2(0, 30 if _uses_compact_layout() else 58)
+		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		card.add_theme_font_size_override("font_size", 8 if _uses_compact_layout() else 12)
+		card.text = "  > %s  |  %s  |  Spell Lv.%d  |  Free" % [skill.display_name, "Selected" if selected else ("Learned" if learned else "Available"), skill.spell_level]
+		card.tooltip_text = skill.description
+		card.disabled = learned or (not selected and remaining <= 0)
+		card.add_theme_stylebox_override("normal", _ability_card_style(selected))
+		card.pressed.connect(toggle_spell.bind(training, grantor))
+		ability_list.add_child(card)
+
+
+func toggle_spell(training: AbilityData, grantor: AbilityData) -> void:
+	var staged: Array = selected_spells.get(grantor.id, []).duplicate()
+	if staged.has(training):
+		staged.erase(training)
+	elif _spell_choices_left(grantor) > 0:
+		staged.append(training)
+	selected_spells[grantor.id] = staged
 	rebuild()
 
 
@@ -255,21 +313,24 @@ func _build_attributes() -> void:
 	var entries := [["Strength", AttributeTypes.Type.STRENGTH, character.strength], ["Dexterity", AttributeTypes.Type.DEXTERITY, character.dexterity], ["Constitution", AttributeTypes.Type.CONSTITUTION, character.constitution], ["Intelligence", AttributeTypes.Type.INTELLIGENCE, character.intelligence], ["Wisdom", AttributeTypes.Type.WISDOM, character.wisdom], ["Charisma", AttributeTypes.Type.CHARISMA, character.charisma]]
 	for entry in entries:
 		var row := HBoxContainer.new()
-		row.custom_minimum_size = Vector2(145, 44) if _uses_compact_layout() else Vector2(185, 62)
+		row.custom_minimum_size = Vector2(145, 38) if _uses_compact_layout() else Vector2(185, 62)
 		var panel := PanelContainer.new()
 		panel.add_theme_stylebox_override("panel", _attribute_card_style())
 		panel.add_child(row)
 		var label := Label.new()
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_font_size_override("font_size", 8 if _uses_compact_layout() else 14)
 		var added := int(staged_attributes.get(entry[1], 0))
 		label.text = "%s  %d\n%s" % [String(entry[0]).left(3).to_upper(), entry[2] + added, "+%d selected" % added if added > 0 else "No change"]
 		row.add_child(label)
 		var minus := Button.new()
+		minus.add_theme_font_size_override("font_size", 9 if _uses_compact_layout() else 16)
 		minus.text = "−"
 		minus.disabled = added <= 0
 		minus.pressed.connect(change_attribute.bind(entry[1], -1))
 		row.add_child(minus)
 		var plus := Button.new()
+		plus.add_theme_font_size_override("font_size", 9 if _uses_compact_layout() else 16)
 		plus.text = "+"
 		plus.disabled = _attribute_points_left() <= 0
 		plus.pressed.connect(change_attribute.bind(entry[1], 1))
@@ -302,6 +363,13 @@ func confirm() -> void:
 		if not result.success:
 			status_label.text = result.failure_reason
 			return
+	for grantor_id in selected_spells:
+		var grantor: AbilityData = CATALOG.find_ability(grantor_id)
+		for training in selected_spells[grantor_id]:
+			var spell_result = progression_system.learn_spell(character, training, grantor)
+			if not spell_result.success:
+				status_label.text = spell_result.failure_reason
+				return
 	for attribute in staged_attributes:
 		for index in range(int(staged_attributes[attribute])):
 			var result = progression_system.increase_attribute(character, attribute)
@@ -309,6 +377,7 @@ func confirm() -> void:
 				status_label.text = result.failure_reason
 				return
 	selected_abilities.clear()
+	selected_spells.clear()
 	staged_attributes.clear()
 	choices_committed.emit()
 	hide()
@@ -340,16 +409,62 @@ func _attribute_points_left() -> int:
 
 
 func _selected_ability_names() -> String:
-	if selected_abilities.is_empty():
+	if selected_abilities.is_empty() and selected_spells.is_empty():
 		return "None"
 	var names: Array[String] = []
 	for ability in selected_abilities:
 		names.append(ability.display_name)
+	for grantor_id in selected_spells:
+		for training in selected_spells[grantor_id]:
+			if not training.granted_skills.is_empty():
+				names.append("Spell: %s" % training.granted_skills[0].display_name)
 	return "\n".join(names)
 
 
 func _type_text(ability: AbilityData) -> String:
+	if ability.spell_choices_granted > 0:
+		return "Spell School"
 	return "Passive" if ability.is_passive else ("Reaction" if ability.reaction_only else "Active")
+
+
+func _spell_choices_left(grantor: AbilityData) -> int:
+	var committed: Array = character.spell_choices_by_grantor.get(grantor.id, [])
+	var staged: Array = selected_spells.get(grantor.id, [])
+	return maxi(0, grantor.spell_choices_granted - committed.size() - staged.size())
+
+
+func _has_unfilled_selected_spell_choices() -> bool:
+	for ability in selected_abilities:
+		if ability.spell_choices_granted > 0 and _spell_choices_left(ability) > 0:
+			return true
+	return false
+
+
+func _normalize_spell_choice_tracking() -> void:
+	for training in CATALOG.get_abilities():
+		if training == null or training.granted_skills.is_empty():
+			continue
+		if character.available_skills.has(training.granted_skills[0]) and not character.learned_spell_ids.has(training.id):
+			character.learned_spell_ids.append(training.id)
+	var assigned: Array[String] = []
+	for choices in character.spell_choices_by_grantor.values():
+		for training_id in choices:
+			if not assigned.has(training_id):
+				assigned.append(training_id)
+	for grantor in CATALOG.get_abilities():
+		if grantor == null or grantor.spell_choices_granted <= 0:
+			continue
+		if not character.selected_ability_ids.has(grantor.id) and not character.granted_ability_ids.has(grantor.id):
+			continue
+		var choices: Array = character.spell_choices_by_grantor.get(grantor.id, []).duplicate()
+		for training_id in character.learned_spell_ids:
+			if choices.size() >= grantor.spell_choices_granted or assigned.has(training_id):
+				continue
+			var training: AbilityData = CATALOG.find_ability(training_id)
+			if progression_system.spell_training_matches_grantor(training, grantor):
+				choices.append(training_id)
+				assigned.append(training_id)
+		character.spell_choices_by_grantor[grantor.id] = choices
 
 
 func _class_name() -> String:

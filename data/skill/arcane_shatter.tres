@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/arcane_shatter.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/arcane.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "arcane_shatter"
+display_name = "Arcane Shatter"
+spell_level = 2
+traits = [ExtResource("3")]
+description = "Fire an arcane blast at an enemy within 30 ft. Deal 6 Arcane damage and apply Dazed on Hit."
+mana_cost = 3
+ap_cost = 2
+cooldown_turns = 2
+attack_data = ExtResource("2")

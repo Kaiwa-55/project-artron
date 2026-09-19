@@ -38,6 +38,9 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 		and ability.requires_line_of_sight \
 		and not combat_system.map_rules.has_line_of_sight(actor.position, target.position):
 		return ActionResult.failure("Line of sight to the target is blocked.")
+	if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT and target != actor \
+		and combat_system.map_rules.get_visibility(actor, target).not_visible:
+		return ActionResult.failure("Target is not visible.")
 	var source_attack: AttackData = combat_system.ability_system.get_attack_data(actor, ability)
 	var result: ActionResult
 	if source_attack != null:

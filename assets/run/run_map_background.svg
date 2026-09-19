@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#0d1b28"/><stop offset="1" stop-color="#132638"/></linearGradient>
+    <radialGradient id="mist"><stop stop-color="#668b83" stop-opacity=".18"/><stop offset="1" stop-color="#668b83" stop-opacity="0"/></radialGradient>
+    <pattern id="grain" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M2 8l7-2m9 16l5-1M8 25l3-1" stroke="#d8c89a" stroke-opacity=".06" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <path d="M0 90 C160 42 220 168 368 108 S630 48 760 124 S1040 42 1280 108 L1280 0H0Z" fill="#233c4a" opacity=".62"/>
+  <path d="M0 610 C170 515 230 640 390 566 S650 526 790 620 S1070 514 1280 570 V720H0Z" fill="#192f3b" opacity=".85"/>
+  <path d="M80 0 L220 180 360 0 M450 0 L580 156 710 0 M890 0 L1030 170 1190 0" fill="none" stroke="#71908b" stroke-opacity=".2" stroke-width="22"/>
+  <path d="M0 250 C170 205 240 300 385 254 S590 198 730 262 S1000 300 1280 220" fill="none" stroke="#587a77" stroke-opacity=".26" stroke-width="34"/>
+  <path d="M0 250 C170 205 240 300 385 254 S590 198 730 262 S1000 300 1280 220" fill="none" stroke="#b7a76e" stroke-opacity=".2" stroke-width="2" stroke-dasharray="12 18"/>
+  <path d="M690 -20 C610 110 760 180 650 292 S700 450 580 560 S620 680 520 750" fill="none" stroke="#6f9b9b" stroke-opacity=".32" stroke-width="28"/>
+  <path d="M690 -20 C610 110 760 180 650 292 S700 450 580 560 S620 680 520 750" fill="none" stroke="#b9c7a0" stroke-opacity=".35" stroke-width="3"/>
+  <g fill="#274a48" opacity=".6">
+    <path d="M80 390l28-52 30 46 26-68 34 70 40-42 32 56z"/><path d="M930 402l28-62 22 44 38-78 32 72 35-46 32 70z"/>
+    <path d="M200 130l30-54 28 48 32-70 36 64 35-39 27 60z"/><path d="M1010 625l28-48 27 39 29-57 36 58 28-34 32 51z"/>
+  </g>
+  <g fill="url(#mist)"><ellipse cx="310" cy="300" rx="280" ry="150"/><ellipse cx="930" cy="280" rx="300" ry="170"/><ellipse cx="640" cy="610" rx="340" ry="130"/></g>
+  <rect width="1280" height="720" fill="url(#grain)"/>
+  <rect x="12" y="12" width="1256" height="696" rx="12" fill="none" stroke="#c7a95b" stroke-opacity=".16" stroke-width="2"/>
+</svg>

@@ -11,6 +11,9 @@ enum NodeType { START, COMBAT, ELITE, EVENT, REST, SHOP, TREASURE, BOSS }
 @export var encounter_pool_id: String = ""
 @export var encounter_data: EncounterData
 @export var event_data: EventData
+@export var event_table: EventTable
+@export var shop_data: Resource
+@export var removable_event_table_entry_key: String = ""
 @export var reward_pool_id: String = "default"
 @export var threat: int = 1
 

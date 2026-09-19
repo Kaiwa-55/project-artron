@@ -24,14 +24,14 @@ func configure(p_game_state: GameState, p_encounter_manager: EncounterManager = 
 		encounter_manager.event_requested.connect(_on_result_event_requested)
 
 
-func start_event(data: EventData, event_context: EventContext = null) -> bool:
+func start_event(data: EventData, event_context: EventContext = null, start_conditions_checked: bool = false) -> bool:
 	if data == null:
 		return false
 	var next_context := event_context if event_context != null else EventContext.new(game_state)
 	if game_state == null:
 		game_state = next_context.game_state
 	next_context.game_state = game_state
-	if not data.can_start(next_context):
+	if not start_conditions_checked and not data.can_start(next_context):
 		return false
 	context = next_context
 	active_event = data
@@ -67,7 +67,10 @@ func refresh_choices() -> void:
 		var eligible_actor_ids := _get_eligible_actor_ids(choice)
 		var enabled := global_enabled
 		match choice.actor_mode:
-			EventChoice.ActorMode.CONTEXT_ACTOR, EventChoice.ActorMode.SELECT_ONE:
+			EventChoice.ActorMode.CONTEXT_ACTOR:
+				if choice.requires_choice_actor():
+					enabled = enabled and not eligible_actor_ids.is_empty()
+			EventChoice.ActorMode.SELECT_ONE:
 				enabled = enabled and not eligible_actor_ids.is_empty()
 			EventChoice.ActorMode.ALL_PARTY:
 				enabled = enabled and not context.party.is_empty() and eligible_actor_ids.size() == context.party.size()
@@ -104,9 +107,12 @@ func choose(choice_index: int) -> bool:
 	if choice.actor_mode == EventChoice.ActorMode.SELECT_ONE:
 		character_selection_requested.emit(choice_index, eligible_actor_ids)
 		return true
-	var actor_ids := eligible_actor_ids
+	var actor_ids: Array[String] = eligible_actor_ids.duplicate()
 	if choice.actor_mode == EventChoice.ActorMode.CONTEXT_ACTOR:
-		actor_ids = [context.get_actor().id]
+		actor_ids.clear()
+		var context_actor := context.get_actor()
+		if context_actor != null:
+			actor_ids.append(context_actor.id)
 	return _resolve_choice(choice_index, actor_ids)
 
 

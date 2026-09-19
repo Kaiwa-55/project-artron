@@ -66,6 +66,11 @@ enum StackMode {
 @export_range(0, 99) var potency: int = 0
 
 @export var attack_bonus: int = 0
+@export var vision_bonus: int = 0
+@export var dark_vision_bonus: int = 0
+@export var concealment_bonus: int = 0
+@export var reveal_concealment: int = 0
+@export var true_sight_concealment: int = 0
 @export var damage_bonus: int = 0
 # Optional Attack Trait filter for bonuses granted by temporary effects such as
 # Stances. Empty means the bonus applies to every Attack.

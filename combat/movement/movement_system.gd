@@ -64,6 +64,8 @@ func validate_move(
 		)
 	if actor.has_status("rooted"):
 		return ActionResult.failure("Rooted characters cannot Move.")
+	if actor.has_status("grabbed"):
+		return ActionResult.failure("Grabbed characters cannot Move.")
 
 	if not actor.movement_in_progress and actor.ap < movement.ap_cost:
 		return ActionResult.failure(

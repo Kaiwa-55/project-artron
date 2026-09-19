@@ -1,7 +1,7 @@
 class_name AIActionCandidate
 extends RefCounted
 
-enum Type { END_TURN, ATTACK, MOVE, SKILL, ABILITY }
+enum Type { END_TURN, ATTACK, MOVE, SKILL, ABILITY, SEARCH }
 
 var type: Type = Type.END_TURN
 var actor_id: String = ""

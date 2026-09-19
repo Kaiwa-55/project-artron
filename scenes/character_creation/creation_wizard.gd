@@ -21,6 +21,12 @@ var summary_column: VBoxContainer
 var footer_message: Label
 var next_button: Button
 var back_button: Button
+var _margin: MarginContainer
+var _brand: VBoxContainer
+var _body: HBoxContainer
+var _list_panel: PanelContainer
+var _summary_panel: PanelContainer
+var _layout: VBoxContainer
 var focused_ability_id: String = ""
 var focused_spell_id: String = ""
 var focused_item
@@ -36,6 +42,8 @@ func _ready() -> void:
 	draft.setup(catalog)
 	pages = pages_script.new()
 	build_shell()
+	resized.connect(_apply_responsive_layout)
+	call_deferred("_apply_responsive_layout")
 	show_step(0)
 
 func build_shell() -> void:
@@ -44,20 +52,20 @@ func build_shell() -> void:
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
-	var margin := MarginContainer.new()
-	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_margin = MarginContainer.new()
+	_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 20)
-	add_child(margin)
-	var layout := UI.column(margin, 16)
+		_margin.add_theme_constant_override("margin_" + side, 20)
+	add_child(_margin)
+	_layout = UI.column(_margin, 16)
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 18)
-	layout.add_child(header)
-	var brand := UI.column(header, 3)
-	brand.custom_minimum_size.x = 268
-	brand.size_flags_horizontal = Control.SIZE_FILL
-	UI.label(brand, "PROJECT ARTRON", 15, UI.GOLD, true)
-	UI.label(brand, "CREATE CHARACTER", 22, UI.PAPER, true)
+	_layout.add_child(header)
+	_brand = UI.column(header, 3)
+	_brand.custom_minimum_size.x = 268
+	_brand.size_flags_horizontal = Control.SIZE_FILL
+	UI.label(_brand, "PROJECT ARTRON", 15, UI.GOLD, true)
+	UI.label(_brand, "CREATE CHARACTER", 22, UI.PAPER, true)
 	var step_scroll := ScrollContainer.new()
 	step_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	step_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -72,26 +80,26 @@ func build_shell() -> void:
 		node.add_theme_font_size_override("font_size", 12)
 		node.custom_minimum_size = Vector2(84, 64)
 		step_buttons.append(node)
-	UI.line(layout)
-	var body := HBoxContainer.new()
-	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 12)
-	layout.add_child(body)
-	var list_panel := UI.panel(body)
-	list_panel.custom_minimum_size.x = 240
-	left = UI.scroll_column(list_panel)
-	var detail_panel := UI.panel(body)
+	UI.line(_layout)
+	_body = HBoxContainer.new()
+	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_body.add_theme_constant_override("separation", 12)
+	_layout.add_child(_body)
+	_list_panel = UI.panel(_body)
+	_list_panel.custom_minimum_size.x = 240
+	left = UI.scroll_column(_list_panel)
+	var detail_panel := UI.panel(_body)
 	detail_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	center = UI.scroll_column(detail_panel)
 	center.add_theme_constant_override("separation", 10)
-	var summary_panel := UI.panel(body)
-	summary_panel.custom_minimum_size.x = 278
-	summary_column = UI.scroll_column(summary_panel)
+	_summary_panel = UI.panel(_body)
+	_summary_panel.custom_minimum_size.x = 278
+	summary_column = UI.scroll_column(_summary_panel)
 	summary_column.add_theme_constant_override("separation", 7)
-	UI.line(layout)
+	UI.line(_layout)
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 18)
-	layout.add_child(footer)
+	_layout.add_child(footer)
 	back_button = UI.button(footer, "BACK", go_back)
 	back_button.custom_minimum_size.x = 190
 	back_button.size_flags_horizontal = Control.SIZE_FILL
@@ -101,11 +109,40 @@ func build_shell() -> void:
 	next_button.custom_minimum_size.x = 265
 	next_button.size_flags_horizontal = Control.SIZE_FILL
 
+
+func _apply_responsive_layout() -> void:
+	if _margin == null:
+		return
+	var compact := size.x < 900.0
+	var outer_margin := 6 if compact else 20
+	for side in ["left", "right", "top", "bottom"]:
+		_margin.add_theme_constant_override("margin_" + side, outer_margin)
+	_layout.add_theme_constant_override("separation", 6 if compact else 16)
+	_brand.custom_minimum_size.x = 140 if compact else 268
+	_list_panel.custom_minimum_size.x = 158 if compact else 240
+	_summary_panel.visible = not compact
+	_body.add_theme_constant_override("separation", 8 if compact else 12)
+	back_button.custom_minimum_size = Vector2(100, 30) if compact else Vector2(190, 42)
+	next_button.custom_minimum_size = Vector2(145, 30) if compact else Vector2(265, 42)
+	footer_message.visible = not compact
+	for label in _brand.get_children():
+		if label is Label:
+			label.autowrap_mode = TextServer.AUTOWRAP_OFF
+			label.add_theme_font_size_override("font_size", 10 if compact and label.get_index() == 0 else (12 if compact else (15 if label.get_index() == 0 else 22)))
+	for step_button in step_buttons:
+		step_button.custom_minimum_size = Vector2(60, 36) if compact else Vector2(84, 64)
+		step_button.add_theme_font_size_override("font_size", 8 if compact else 12)
+	var desired_density := 0.76 if compact else 1.0
+	if not is_equal_approx(UI.density_scale, desired_density):
+		UI.set_compact_density(compact)
+		call_deferred("refresh")
+
 func navigate(index: int) -> void:
 	if index <= furthest_step:
 		show_step(index)
 
 func show_step(index: int) -> void:
+	UI.set_compact_density(size.x < 900.0)
 	step_index = clampi(index, 0, catalog.steps.size() - 1)
 	UI.clear(left)
 	UI.clear(center)

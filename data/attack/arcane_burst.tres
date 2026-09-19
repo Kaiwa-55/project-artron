@@ -4,15 +4,17 @@
 [ext_resource type="Resource" uid="uid://c3mirwwtvpr5m" path="res://animation/arcane_circle.tres" id="1_mwxot"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_mwiln"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_hh5na"]
+[ext_resource type="Resource" path="res://data/trait/arcane.tres" id="4_arcane"]
 
 [resource]
 script = ExtResource("1")
 id = "arcane_burst_attack"
 display_name = "Arcane Burst"
 animation_template = ExtResource("1_mwxot")
-attack_attribute = 3
+attack_attribute = 6
 defense_type = 1
 ap_cost = 0
 base_damage = 6
 range_feet = 20.0
 damage_type = "arcane"
+traits = [ExtResource("4_arcane")]

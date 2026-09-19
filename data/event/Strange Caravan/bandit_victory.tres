@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://dmhwp8ecylm5q"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_guesj"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_lkqis"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_xj0m5"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="4_g3irl"]
+
+[sub_resource type="Resource" id="Choice_continue"]
+script = ExtResource("1_guesj")
+text = "Continue the journey"
+
+[sub_resource type="Resource" id="Effect_victory_flag"]
+script = ExtResource("3_xj0m5")
+key = &"defeated_bandit_ambush"
+
+[resource]
+script = ExtResource("4_g3irl")
+id = &"bandit_ambush_victory"
+title = "The Ambush Is Broken"
+description = "เหล่าโจรที่รอดชีวิตต่างแตกหนีไป ทำให้เส้นทางปลอดภัยในขณะนี้"
+choices = Array[ExtResource("1_guesj")]([SubResource("Choice_continue")])
+on_start_effects = Array[ExtResource("3_xj0m5")]([SubResource("Effect_victory_flag")])

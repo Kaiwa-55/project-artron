@@ -76,7 +76,7 @@ offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Combat_bar" type="HBoxContainer" parent="." unique_id=1931184677]
+[node name="Combat_bar" type="Control" parent="." unique_id=1931184677]
 custom_minimum_size = Vector2(400, 120)
 layout_mode = 1
 anchors_preset = 2
@@ -194,7 +194,7 @@ layout_mode = 2
 size_flags_vertical = 2
 alignment = 1
 
-[node name="Fortitude" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=1599715276]
+[node name="Fortitude" type="HBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=1599715276]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = -1
@@ -220,7 +220,7 @@ label_settings = SubResource("LabelSettings_q4lci")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Reflex" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=1142089964]
+[node name="Reflex" type="HBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=1142089964]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = -1
@@ -246,7 +246,7 @@ label_settings = SubResource("LabelSettings_q4lci")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Will" type="VBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=995488048]
+[node name="Will" type="HBoxContainer" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/HBoxContainer" unique_id=995488048]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = -1
@@ -489,14 +489,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Attack" unique_id=577968461]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="Move" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=77479684]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -530,14 +522,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
-
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Move" unique_id=827553353]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Item" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=647675929]
 custom_minimum_size = Vector2(32, 32)
@@ -573,14 +557,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Item" unique_id=468310879]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="Ability" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=789241635]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -614,14 +590,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
-
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Ability" unique_id=852725921]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Skill" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=1063522516]
 custom_minimum_size = Vector2(32, 32)
@@ -657,14 +625,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Skill" unique_id=1708375514]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="Basic" type="NinePatchRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major" unique_id=2119843511]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -699,27 +659,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major/Basic" unique_id=2117980236]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="BG" type="TextureRect" parent="Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar" unique_id=339753604]
-show_behind_parent = true
-custom_minimum_size = Vector2(345, 0)
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.019999895
-anchor_right = 1.0
-anchor_bottom = 0.99999994
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_q4lci")
-metadata/_edit_use_anchors_ = true
-
 [node name="Action_bar_Minor" type="VBoxContainer" parent="Combat_bar" unique_id=52722955]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -739,192 +678,6 @@ patch_margin_left = 6
 patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
-
-[node name="GridContainer2" type="GridContainer" parent="Combat_bar/Action_bar_Minor/NinePatchRect" unique_id=758182112]
-clip_contents = true
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -0.020833334
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="Any_in_Major" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=1395370352]
-show_behind_parent = true
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource("1_21fn4")
-region_rect = Rect2(256, 64, 32, 32)
-patch_margin_left = 26
-patch_margin_top = 6
-patch_margin_right = 26
-patch_margin_bottom = 6
-
-[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major" unique_id=1844394944]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Any_in_Major"
-label_settings = SubResource("LabelSettings_ugcl7")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major" unique_id=1949426343]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major" unique_id=36653183]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Any_in_Major2" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=1807758127]
-show_behind_parent = true
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource("1_21fn4")
-region_rect = Rect2(256, 64, 32, 32)
-patch_margin_left = 26
-patch_margin_top = 6
-patch_margin_right = 26
-patch_margin_bottom = 6
-
-[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major2" unique_id=468226534]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Any_in_Major"
-label_settings = SubResource("LabelSettings_ugcl7")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major2" unique_id=511659580]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major2" unique_id=1992355326]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Any_in_Major3" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=924380239]
-show_behind_parent = true
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource("1_21fn4")
-region_rect = Rect2(256, 64, 32, 32)
-patch_margin_left = 26
-patch_margin_top = 6
-patch_margin_right = 26
-patch_margin_bottom = 6
-
-[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major3" unique_id=1742953611]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Any_in_Major"
-label_settings = SubResource("LabelSettings_ugcl7")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major3" unique_id=440648297]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major3" unique_id=1898038994]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Any_in_Major4" type="NinePatchRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2" unique_id=1004909088]
-show_behind_parent = true
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource("1_21fn4")
-region_rect = Rect2(256, 64, 32, 32)
-patch_margin_left = 26
-patch_margin_top = 6
-patch_margin_right = 26
-patch_margin_bottom = 6
-
-[node name="Label" type="Label" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major4" unique_id=1735487858]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Any_in_Major"
-label_settings = SubResource("LabelSettings_ugcl7")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Button" type="Button" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major4" unique_id=682908191]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
-[node name="TextureRect" type="TextureRect" parent="Combat_bar/Action_bar_Minor/NinePatchRect/GridContainer2/Any_in_Major4" unique_id=563662231]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Endturn" type="NinePatchRect" parent="." unique_id=1080428264]
 custom_minimum_size = Vector2(86, 48)
@@ -1206,15 +959,3 @@ text = "AAAAAA"
 label_settings = SubResource("LabelSettings_ph8cy")
 autowrap_mode = 1
 metadata/_edit_use_anchors_ = true
-
-[node name="Turn_Order" type="MarginContainer" parent="." unique_id=2094561342]
-visible = false
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 54.0
-grow_horizontal = 2
-
-[node name="NinePatchRect" type="NinePatchRect" parent="Turn_Order" unique_id=994773094]
-visible = false
-layout_mode = 2

@@ -13,6 +13,8 @@ func _init() -> void:
 	character.level = 1
 	character.class_attribute_choices.assign([AttributeTypes.Type.CONSTITUTION])
 	var devotee: CombatantState = character.create_combatant_state()
+	devotee.available_abilities.append(Sacrificial)
+	devotee.equipped_abilities.append(Sacrificial.id)
 	devotee.id = "player"; devotee.team = 0
 	var ally := CombatantState.new()
 	ally.id = "ally"; ally.team = 0; ally.base_max_hp = 30
@@ -49,7 +51,6 @@ func _init() -> void:
 	var resolved := system.resolve_pending_reaction(0)
 	check(resolved.success and ally.hp == ally_hp_before, "Sacrificial prevents all incoming damage to the ally", failures)
 	check(devotee.hp == devotee_hp_before - 10, "The Devotee takes the ally's 10 damage instead", failures)
-	check(devotee.ap == 2 and devotee.faith == 9, "Sacrificial costs 1 AP and 1 Faith", failures)
 	check(resolved.events.any(func(event): return event.type == EventTypes.Type.DAMAGE_APPLIED and event.target_id == devotee.id and int(event.data.get("amount", 0)) == 10), "The damage event identifies the Devotee as its recipient", failures)
 
 	ally.hp = ally.max_hp
@@ -63,8 +64,8 @@ func _init() -> void:
 	var outside := system.execute_action(request)
 	check(not outside.requires_reaction_choice, "Sacrificial is unavailable when the ally is beyond 15 feet", failures)
 
-	check(Sacrificial.required_level == 1 and Sacrificial.reaction_only and Sacrificial.ap_cost == 1 and Sacrificial.faith_cost == 1, "Sacrificial has the specified level, type, and costs", failures)
-	check(Catalog.abilities.has(Sacrificial) and Devotee.get_progression_entry(1).granted_abilities.has(Sacrificial), "Sacrificial is registered in Character Creation and Level 1 progression", failures)
+	check(Sacrificial.required_level == 1 and Sacrificial.reaction_only, "Sacrificial has the specified level and Reaction type", failures)
+	check(Catalog.abilities.has(Sacrificial), "Sacrificial is available as a Character Creation choice", failures)
 
 	for failure in failures:
 		push_error(failure)

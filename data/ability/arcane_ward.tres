@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://q5xr80alowec"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="2_use"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_ygjcw"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="3_effect"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4_arcanist"]
+
+[sub_resource type="Resource" id="ArcaneWardEffect"]
+script = ExtResource("3_effect")
+id = "arcane_ward"
+display_name = "Arcane Ward"
+expire_at_start_of_turn = true
+reflex_bonus = 1
+fortitude_bonus = 1
+will_bonus = 1
+
+[sub_resource type="Resource" id="ArcaneWardUse"]
+script = ExtResource("2_use")
+effect = SubResource("ArcaneWardEffect")
+
+[resource]
+script = ExtResource("1_ability")
+id = "arcane_ward"
+display_name = "Arcane Ward"
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("4_arcanist")]
+ap_cost = 1
+cooldown_turns = 2
+description = "Weave an Arcane Ward around yourself. Gain +1 Reflex, Fortitude, and Will until the start of your next turn."
+target_mode = 1
+use_effects = [SubResource("ArcaneWardUse")]

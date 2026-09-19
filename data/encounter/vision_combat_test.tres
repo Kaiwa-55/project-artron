@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3]
+
+[ext_resource type="Script" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/character/player.tres" id="2"]
+[ext_resource type="Resource" path="res://data/character/enemy.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "vision_combat_test"
+display_name = "Vision Combat Test"
+encounter_name = "Vision Combat Test"
+encounter_description = "Move between bright, dim, and dark zones. The central stone blocks line of sight."
+map_size_feet = Vector2(80, 40)
+player_party = [{
+"character": ExtResource("2"),
+"id": "player",
+"display_name": "Player",
+"position_feet": Vector2(-30, 0),
+}]
+enemies = [ExtResource("3"), ExtResource("3")]
+player_spawn_positions_feet = [Vector2(-30, 0)]
+map_objects = [{
+"id": "central_stone",
+"kind": "obstacle",
+"label": "Central Stone",
+"position_feet": Vector2(0, 0),
+"radius_feet": 5.0,
+"blocks_movement": true,
+}]

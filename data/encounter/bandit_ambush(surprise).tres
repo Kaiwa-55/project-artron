@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://d3q3m2js707sq"]
+
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="1_bd25i"]
+[ext_resource type="Resource" uid="uid://ch12gmxupgn43" path="res://data/event/Strange Caravan/bandit_defeat.tres" id="2_k0o0c"]
+[ext_resource type="Texture2D" uid="uid://b81onujq6yl8v" path="res://assets/events/strange_caravan_anime.png" id="3_q43n2"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="4_3x1kx"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="5_r7xl5"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="6_opnnb"]
+[ext_resource type="Resource" uid="uid://trovvhu3naek" path="res://data/status/surprise.tres" id="7_k0o0c"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="7_qvv2f"]
+[ext_resource type="Script" uid="uid://cdnrdivpik1ng" path="res://data/encounter/pre_combat_status.gd" id="8_q43n2"]
+[ext_resource type="Resource" uid="uid://dmhwp8ecylm5q" path="res://data/event/Strange Caravan/bandit_victory.tres" id="8_yl875"]
+[ext_resource type="Resource" uid="uid://oeioptks3bgs" path="res://data/status/stunned.tres" id="9_3x1kx"]
+
+[sub_resource type="Resource" id="Objective_defeat_all"]
+script = ExtResource("6_opnnb")
+id = &"defeat_all_bandits"
+description = "Defeat all bandits"
+
+[sub_resource type="Resource" id="Resource_3x1kx"]
+script = ExtResource("8_q43n2")
+effect = ExtResource("7_k0o0c")
+
+[sub_resource type="Resource" id="Resource_r7xl5"]
+script = ExtResource("8_q43n2")
+effect = ExtResource("9_3x1kx")
+
+[resource]
+script = ExtResource("7_qvv2f")
+id = "bandit_ambush_surprise"
+display_name = "Bandit Ambush Surprise"
+encounter_name = "Bandit Ambush Surprise"
+encounter_description = "เหล่าโจรปรากฏตัวออกมาจากที่ซ่อนรอบๆ ขบวนคาราวานที่พลิกคว่ำอยู่ โดยที่คุณยังไม่ทันตั้งตัว"
+encounter_image = ExtResource("3_q43n2")
+type = 1
+battlefield_texture = ExtResource("1_bd25i")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-35, 0), Vector2(-50, 20), Vector2(-50, -20)])
+enemies = Array[ExtResource("4_3x1kx")]([ExtResource("5_r7xl5")])
+pre_combat_statuses = Array[Resource]([SubResource("Resource_3x1kx"), SubResource("Resource_r7xl5")])
+objectives = Array[ExtResource("6_opnnb")]([SubResource("Objective_defeat_all")])
+victory_event = ExtResource("8_yl875")
+defeat_event = ExtResource("2_k0o0c")

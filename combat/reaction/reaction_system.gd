@@ -208,6 +208,8 @@ func get_ally_damage_reaction_prompt(attacker, target, attack: AttackData, attac
 				continue
 			if reaction.requires_line_of_sight and not map_rules.has_line_of_sight(reactor.position, target.position):
 				continue
+			if reaction.requires_line_of_sight and map_rules.get_visibility(reactor, target).not_visible:
+				continue
 			if get_effect(reaction, ReactionEffectDataScript.Type.DAMAGE_MODIFIER) == null:
 				continue
 			available_reactions.append(reaction)

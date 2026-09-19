@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/ability/effect/arcane_aim_to_hit.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "arcane_aim"
+display_name = "Arcane Aim"
+required_level = 2
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("3"), ExtResource("4")]
+is_passive = true
+description = "Passive. Your attacks from Arcane Skills gain +1 To Hit."
+effects = [ExtResource("2")]

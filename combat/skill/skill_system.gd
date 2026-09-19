@@ -94,6 +94,9 @@ func get_attack_data(skill, actor: CombatantState = null) -> AttackData:
 		return null
 	var skill_attack: AttackData = skill.attack_data.duplicate()
 	skill_attack.ap_cost = skill.ap_cost
+	var character_class = actor.get_meta("class_data") if actor != null and actor.has_meta("class_data") else null
+	if character_class != null:
+		skill_attack.attack_attribute = AttackData.AttackAttribute.CLASS_MAIN_ATTRIBUTE
 	if actor != null and ability_system != null:
 		skill_attack.base_damage += ability_system.get_skill_damage_bonus(actor)
 		skill_attack.range_feet += ability_system.get_skill_range_bonus(actor)

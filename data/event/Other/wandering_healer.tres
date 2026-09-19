@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://cutkb3uuqdjpm"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_hth18"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_g2tld"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_absf1"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="4_fs8kk"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="5_gw656"]
+
+[sub_resource type="Resource" id="Effect_heal"]
+script = ExtResource("3_absf1")
+type = 1
+amount = 10
+
+[sub_resource type="Resource" id="Choice_accept"]
+script = ExtResource("1_hth18")
+text = "รับคำอวยพรจากผู้รักษา"
+actor_mode = 2
+effects = Array[ExtResource("3_absf1")]([SubResource("Effect_heal")])
+
+[sub_resource type="Resource" id="Choice_decline"]
+script = ExtResource("1_hth18")
+text = "ขอบคุณผู้รักษาแล้วไปต่อ"
+
+[resource]
+script = ExtResource("5_gw656")
+id = &"wandering_healer"
+title = "Wandering Healer"
+description = "นักเยียวยาผู้โดดเดี่ยวเสนอคำอวยพรแก่คณะเดินทาง ก่อนที่เส้นทางเบื้องหน้าจะกลายเป็นหนทางอันตราย"
+illustration = ExtResource("4_fs8kk")
+choices = Array[ExtResource("1_hth18")]([SubResource("Choice_accept"), SubResource("Choice_decline")])

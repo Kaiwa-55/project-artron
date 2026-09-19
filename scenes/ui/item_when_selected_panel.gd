@@ -58,7 +58,7 @@ func _trait_text(data, attack) -> String:
 func _value_text(data, attack) -> String:
 	if attack != null:
 		return "%s\n%s\n%+d\n%s\n%d %s\n%s ft" % [
-			_enum_name(AttributeTypes.Type, attack.attack_attribute),
+			_enum_name(AttackData.AttackAttribute, attack.attack_attribute),
 			_enum_name(DefenseTypes.Type, attack.defense_type),
 			attack.to_hit_bonus,
 			"Attribute" if attack.uses_attribute_damage_modifier else "+0",

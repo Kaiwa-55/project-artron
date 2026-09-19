@@ -34,6 +34,13 @@ func _init() -> void:
 	check(actor.ap == 4 - dual_strike.ap_cost, "Dual Strike should spend its configured AP cost once.", failures)
 	var attack_results := result.events.filter(func(event): return event.type == EventTypes.Type.ATTACK_HIT or event.type == EventTypes.Type.ATTACK_MISS)
 	check(attack_results.size() == 2, "Dual Strike should resolve both weapon attacks.", failures)
+	var dual_penalties: Array[int] = []
+	for attack_result in attack_results:
+		dual_penalties.append(int(attack_result.data.get("repeated_attack_penalty", 0)))
+	check(dual_penalties == [0, -2], "Dual Strike counts both weapon attacks for Repeated Attack Penalty.", failures)
+	check(actor.attacks_declared_this_turn == 2, "Dual Strike counts as two declared Attacks.", failures)
+	var next_attack: AttackData = actor.equipped_items.get(EquipmentSystem.WEAPON_SLOT_1).weapon_attack
+	check(system.attack_system.declare_attack_action(actor, next_attack) == -4, "The Attack after Dual Strike receives the -4 Repeated Attack Penalty.", failures)
 	check(target.hp <= before_hp, "Dual Strike must never restore target HP.", failures)
 
 	var shield_actor: CombatantState = load("res://data/character/player.tres").create_combatant_state()

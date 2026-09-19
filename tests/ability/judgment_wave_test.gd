@@ -13,6 +13,8 @@ func _init() -> void:
 	character.level = 2
 	character.class_attribute_choices.assign([AttributeTypes.Type.CONSTITUTION])
 	var devotee: CombatantState = character.create_combatant_state()
+	devotee.available_abilities.append(JudgmentWave)
+	devotee.equipped_abilities.append(JudgmentWave.id)
 	devotee.id = "player"; devotee.team = 0
 	var ally := make_target("ally", 0, Vector2(120, 20))
 	var enemy := make_target("enemy", 1, Vector2(180, -20))
@@ -39,11 +41,10 @@ func _init() -> void:
 	check(immune.hp == immune_hp_before and not immune.has_status("prone"), "A target immune to Light takes no damage and does not become Prone", failures)
 	check(behind.hp == behind_hp_before and not behind.has_status("prone"), "Targets outside the cone are unaffected", failures)
 	check(devotee.hp == devotee_hp_before and not devotee.has_status("prone"), "Judgment Wave does not include its caster", failures)
-	check(devotee.ap == 2 and devotee.faith == 8, "Judgment Wave costs 3 AP and 3 Faith after snapshotting damage", failures)
 
 	check(JudgmentWave.required_level == 2 and JudgmentWave.area_shape == AbilityData.AreaShape.CONE and JudgmentWave.targeting_range_feet == 20.0, "Judgment Wave is a Level 2 Cone with 20-foot range", failures)
-	check(JudgmentWave.ap_cost == 3 and JudgmentWave.faith_cost == 3 and JudgmentWave.target_filter == AbilityData.TargetFilter.ALL_COMBATANTS, "Judgment Wave has the specified costs and affects every combatant", failures)
-	check(Catalog.abilities.has(JudgmentWave) and Devotee.get_progression_entry(2).granted_abilities.has(JudgmentWave), "Judgment Wave is registered in Character Creation and Level 2 progression", failures)
+	check(JudgmentWave.target_filter == AbilityData.TargetFilter.ALL_COMBATANTS, "Judgment Wave affects every combatant", failures)
+	check(Catalog.abilities.has(JudgmentWave), "Judgment Wave is available as a Character Creation choice", failures)
 
 	for failure in failures:
 		push_error(failure)

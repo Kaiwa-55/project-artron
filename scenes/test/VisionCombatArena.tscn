@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/prototype/PrototypeCombat.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scenes/test/vision_combat_arena.gd" id="2_script"]
+[ext_resource type="Resource" path="res://data/encounter/vision_combat_test.tres" id="3_encounter"]
+[ext_resource type="Script" path="res://scenes/test/vision_light_zones.gd" id="4_zones"]
+
+[node name="VisionCombatArena" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+encounter_data = ExtResource("3_encounter")
+
+[node name="LightZones" type="Node2D" parent="BattlefieldWorld"]
+z_index = -10
+script = ExtResource("4_zones")

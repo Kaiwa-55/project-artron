@@ -5,6 +5,9 @@ extends Resource
 @export var title: String = ""
 @export_multiline var description: String = ""
 @export var illustration: Texture2D
+@export var narration_audio: AudioStream
+@export var narration_autoplay: bool = true
+@export_range(-80.0, 24.0, 0.1) var narration_volume_db: float = 0.0
 @export var choices: Array[EventChoice] = []
 @export var start_conditions: Array[EventCondition] = []
 @export var on_start_effects: Array[EventEffect] = []

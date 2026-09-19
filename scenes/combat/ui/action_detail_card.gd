@@ -1,9 +1,17 @@
-extends PanelContainer
+extends Control
+
+const UITheme := preload("res://scenes/ui/artron_ui_theme.gd")
 
 
 func setup(source: Resource, actor: CombatantState, system, description: String) -> void:
-	custom_minimum_size.x = 360
-	get_node("Column/Description").text = description
+	$Background.add_theme_stylebox_override("panel", UITheme.style(UITheme.WINDOW_BACKGROUND, UITheme.GOLD, 0))
+	$Column/Title.add_theme_color_override("font_color", UITheme.GOLD)
+	$Column/Traits.add_theme_color_override("font_color", UITheme.ALLY)
+	$Column/Stats.add_theme_color_override("font_color", UITheme.TEXT)
+	$Column/DescriptionViewport/Description.add_theme_color_override("default_color", UITheme.MUTED)
+	custom_minimum_size = Vector2(200, 240)
+	size = custom_minimum_size
+	get_node("Column/DescriptionViewport/Description").text = description
 	if source == null:
 		return
 	get_node("Column/Title").text = source.display_name

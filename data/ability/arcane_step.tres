@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cfg3e0f21qtko"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="2_effect"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_uvhof"]
+[ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3_arcanist"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_ss2il"]
+
+[sub_resource type="Resource" id="ArcaneStepMovement"]
+script = ExtResource("2_effect")
+effect_type = 5
+movement_distance_feet = 10.0
+movement_triggers_reactions = false
+
+[resource]
+script = ExtResource("1_ability")
+id = "arcane_step"
+display_name = "Arcane Step"
+required_trait_ids = Array[String](["arcanist"])
+traits = [ExtResource("3_arcanist")]
+ap_cost = 1
+cooldown_turns = 1
+description = "Move up to 10 ft without triggering Reactions. The path cannot pass through creatures or obstacles."
+effects = [SubResource("ArcaneStepMovement")]
+target_mode = 1

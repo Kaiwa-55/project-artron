@@ -1,7 +1,6 @@
 extends SceneTree
 
-const Scene := preload("res://InventoryandMore.tscn")
-const PlayerData := preload("res://data/character/player.tres")
+var failures: Array[String] = []
 
 
 func _init() -> void:
@@ -9,79 +8,69 @@ func _init() -> void:
 
 
 func run_test() -> void:
-	var failures: Array[String] = []
-	var panel = Scene.instantiate()
+	var panel = load("res://InventoryandMore.tscn").instantiate()
 	root.add_child(panel)
+	var player: CombatantState = load("res://data/character/player.tres").create_combatant_state()
+	StatSystem.new().refresh_combatant(player)
+	panel.setup_standalone(player, "equipment", true)
 	await process_frame
-	var player: CombatantState = PlayerData.create_combatant_state()
-	panel.setup_standalone(player, "inventory")
-	await process_frame
-	check(panel.active_tab == "inventory", "Inventory tab opens", failures)
-	check(panel.get_visible_entry_count() == player.item_inventory.size() + player.equipment_inventory.size(), "Inventory reads CombatantState", failures)
-	check(panel.item_grid.get_child_count() == 16, "Inventory keeps sixteen authored slots", failures)
-	check(panel.page_number.text.begins_with("1 / "), "Pagination is initialized", failures)
-	check(panel.summary.get_child_count() > 4 and panel.tab_buttons.size() == 3, "CharacterPanel compatibility API remains complete", failures)
-	if not player.equipment_inventory.is_empty():
-		var source: Control = panel.item_grid.get_child(0).get_node("EntryButton")
-		check(source.tooltip_text.is_empty(), "Inventory items do not show the default black description tooltip", failures)
-		panel._show_item_preview(player.equipment_inventory[0], source)
-		check(panel.item_preview.visible and panel.item_preview.entry == player.equipment_inventory[0], "Hover opens ItemWhenSelectedPanel with the hovered entry", failures)
-		panel._hide_item_preview()
-		check(not panel.item_preview.visible, "Leaving an Item hides ItemWhenSelectedPanel", failures)
+	check(not panel.has_node("PanelContainer"), "Old authored UI is removed")
+	check(panel.tab_buttons.size() == 3, "Three functional tabs share one shell")
+	check(panel.equipment_entries.get_child_count() == player.equipment_inventory.size(), "All equipment appears in the new list")
+	var gear: EquipmentData = player.equipment_inventory.filter(func(item): return item != null and item.slot != EquipmentData.Slot.ARMOR).front()
+	panel._select_entry(gear)
+	var requests: Array = []
+	panel.equipment_change_requested.connect(func(item, slot): requests.append([item, slot]))
+	panel.equipment_action_bar.get_child(0).pressed.emit()
+	check(requests.size() == 1 and requests[0][0] == gear, "Equip button routes the selected equipment")
+	panel.set_changes_locked(true)
+	check(panel.equipment_action_bar.get_children().all(func(button): return button.disabled), "Read-only gear cannot be changed")
 	panel.set_changes_locked(false)
-	var used_items: Array = []
-	panel.item_use_requested.connect(func(item): used_items.append(item))
-	if not player.item_inventory.is_empty():
-		panel._select_entry(player.item_inventory[0])
-		panel.use_button.pressed.emit()
-	check(player.item_inventory.is_empty() or used_items.size() == 1, "Use button emits the selected Item through the API", failures)
-	panel.set_tab("equipment")
-	check(panel.get_visible_entry_count() == player.equipment_inventory.size(), "Equipment tab reads Equipment inventory", failures)
-	check(panel.page_title.text == "Equipment", "Authored header follows active tab", failures)
-	if not player.equipment_inventory.is_empty():
-		panel._select_entry(player.equipment_inventory[0])
-		check(panel.equipment_action_bar.visible and panel.equipment_action_bar.get_child_count() > 0, "Selecting Equipment shows slot choice buttons", failures)
-	for index in range(4):
-		var ability := AbilityData.new()
-		ability.id = "profile_page_test_%d" % index
-		ability.display_name = "Profile Test %d" % index
-		ability.required_trait_ids.append("devotee")
-		player.available_abilities.append(ability)
-	panel.set_tab("abilities")
-	check(panel.profile_view.visible and not panel.equipment_view.visible, "Character tab switches authored panels", failures)
-	check(panel.profile_ability_scroll != null and panel.profile_ability_scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_AUTO, "Ability list supports vertical scrolling", failures)
-	check(panel.profile_runtime_ability_cards.size() >= 3, "Overflowing Ability categories render every card in the scroll list", failures)
-	check(panel.profile_ability_slots[0].get_node_or_null("AbilityButton") != null, "Class Ability is rendered in the Class card", failures)
-	var profile_ability_button := panel.profile_ability_slots[0].get_node_or_null("AbilityButton") as Button
-	check(profile_ability_button == null or profile_ability_button.tooltip_text.is_empty(), "Profile Abilities do not show the default black description tooltip", failures)
-	for slot in panel.profile_ability_slots:
-		check(slot.get_node_or_null("frame") != null, "Every Ability category reuses the authored card component", failures)
-	var class_card_name: Label = panel.profile_ability_slots[0].get_node("frame").find_child("Name", true, false) as Label
-	check(class_card_name != null and class_card_name.text != "Name", "Runtime Ability data replaces authored placeholder text", failures)
-	check(panel.profile_next_button == null or not panel.profile_next_button.is_visible_in_tree(), "Ability pagination controls are hidden", failures)
-	var profile_name: Label = panel.profile_view.get_node("Profilecontainer/VBoxContainer/HBoxContainer/CharacterDetail/VBox/Name")
-	check(profile_name.text == player.display_name, "Profile fields read CombatantState", failures)
-	panel.set_tab("craft")
-	check(panel.detail_label.text == "Crafting API is not available yet", "Unavailable crafting is explicit", failures)
-	var closed_events: Array[bool] = []
-	panel.closed.connect(func(): closed_events.append(true))
+	var armor: EquipmentData = player.equipment_inventory.filter(func(item): return item != null and item.slot == EquipmentData.Slot.ARMOR).front()
+	panel._select_entry(armor)
+	check(not panel.equipment_action_bar.get_child(0).disabled, "Armor can be changed outside combat")
+	var system := CombatSystem.new()
+	system.combat_state = CombatState.new()
+	system.combat_state.add_combatant(player)
+	panel.setup(system, player.id)
+	panel._select_entry(armor)
+	check(panel.equipment_action_bar.get_child(0).disabled, "Armor stays locked during combat")
+	player.ap = 0
+	panel._select_entry(gear)
+	check(panel.equipment_action_bar.get_children().all(func(button): return button.disabled), "No AP disables hand changes")
+	panel.setup_standalone(player, "abilities", true)
+	check(panel.profile_view.visible and not panel.equipment_view.visible, "Character tab opens the new profile")
+	check(panel.defense_labels["Fortitude"].text == "Fortitude  %d" % panel._displayed_defenses(player)[0], "Profile shows derived defenses")
+	check(panel.profile_abilities.get_child_count() > 2, "Character includes abilities and skills")
 	var exit_position: Vector2 = panel.exit_button.global_position
-	panel.profile_ability_scroll.scroll_vertical = 100
-	await process_frame
-	check(panel.exit_button.global_position.is_equal_approx(exit_position), "ExitButton remains fixed while Ability content scrolls", failures)
+	for tab in ["abilities", "equipment", "inventory"]:
+		panel.tab_buttons[tab].pressed.emit()
+		check(panel.active_tab == tab, "Navigation opens " + tab)
+		if tab == "equipment":
+			panel._select_entry(gear)
+		panel.offset_top = 60
+		panel.offset_bottom = -16
+		for frame in range(4):
+			await process_frame
+		check(panel.get_global_rect().encloses(panel.inventory_view.get_global_rect()), "Window fits combat space on " + tab)
+		check(panel.inventory_view.get_global_rect().encloses(panel.exit_button.get_global_rect()), "Close stays within " + tab)
+		if "--character-screenshots" in OS.get_cmdline_user_args():
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png("res://work/redesign-%s.png" % tab)
+	panel.setup_standalone(CombatantState.new(), "equipment", true)
+	check(panel.selected_entry == null and panel.equipment_action_bar.get_child_count() == 0, "Changing owner clears old equipment actions")
+	var closed_events: Array = []
+	panel.closed.connect(func(): closed_events.append(true))
 	panel.exit_button.pressed.emit()
-	check(not panel.visible and closed_events.size() == 1, "ExitButton closes Inventory And More through the panel API", failures)
+	check(not panel.visible and closed_events.size() == 1, "Close hides the whole panel")
 	panel.queue_free()
 	await process_frame
-	if failures.is_empty():
-		print("INVENTORY_AND_MORE_TEST: PASS")
-		quit(0)
-	else:
-		for failure in failures:
-			push_error(failure)
-		quit(1)
+	for failure in failures:
+		push_error(failure)
+	print("INVENTORY_AND_MORE_TEST: " + ("PASS" if failures.is_empty() else "FAIL"))
+	quit(0 if failures.is_empty() else 1)
 
 
-func check(condition: bool, message: String, failures: Array[String]) -> void:
+func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)

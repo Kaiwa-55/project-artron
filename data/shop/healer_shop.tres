@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ShopData" format=3 uid="uid://cr625yidoxvs5"]
+
+[ext_resource type="Script" uid="uid://puwk2c6cvm6q" path="res://data/shop/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://di4maw5cs6h6d" path="res://data/shop/shop_offer_data.gd" id="2_offer"]
+[ext_resource type="Resource" path="res://data/item/minor_healing_potion.tres" id="3_potion"]
+
+[sub_resource type="Resource" id="PotionOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("3_potion")
+price = 25
+
+[resource]
+script = ExtResource("1_shop")
+id = "healer"
+display_name = "WAYFARER'S APOTHECARY"
+description = "Fresh supplies for the road."
+offers = Array[Resource]([SubResource("PotionOffer")])

@@ -9,7 +9,7 @@
 
 [resource]
 script = ExtResource("1")
-id = "martial_sense"
+id = "c"
 display_name = "Martial Sense"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("2"), ExtResource("3")]

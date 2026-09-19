@@ -21,6 +21,11 @@ enum ActorMode {
 @export var failed_condition_presentation: FailedConditionPresentation = FailedConditionPresentation.DISABLED
 
 
+func requires_choice_actor() -> bool:
+	return conditions.any(func(condition): return condition != null and condition.uses_choice_actor()) \
+		or effects.any(func(effect): return effect != null and effect.uses_choice_actor())
+
+
 func conditions_met(context: EventContext) -> bool:
 	return conditions.all(func(condition): return condition != null and condition.is_met(context))
 

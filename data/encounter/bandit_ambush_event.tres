@@ -2,22 +2,29 @@
 
 [ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
 [ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="2"]
+[ext_resource type="Resource" uid="uid://ch12gmxupgn43" path="res://data/event/Strange Caravan/bandit_defeat.tres" id="2_8fofw"]
 [ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="3"]
-[ext_resource type="Resource" uid="uid://dmhwp8ecylm5q" path="res://data/event/bandit_victory.tres" id="4"]
 [ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="4_ud7bg"]
-[ext_resource type="Resource" uid="uid://ch12gmxupgn43" path="res://data/event/bandit_defeat.tres" id="5"]
 [ext_resource type="Texture2D" uid="uid://b81onujq6yl8v" path="res://assets/events/strange_caravan_anime.png" id="6"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="7"]
+[ext_resource type="Resource" uid="uid://dmhwp8ecylm5q" path="res://data/event/Strange Caravan/bandit_victory.tres" id="8_vln3f"]
+
+[sub_resource type="Resource" id="Objective_defeat_all"]
+script = ExtResource("7")
+id = &"defeat_all_bandits"
+description = "Defeat all bandits"
 
 [resource]
 script = ExtResource("1")
 id = "bandit_ambush"
 display_name = "Bandit Ambush"
 encounter_name = "Bandit Ambush"
-encounter_description = "Bandits emerge from concealment around the overturned caravan."
+encounter_description = "เหล่าโจรปรากฏตัวออกมาจากที่ซ่อนรอบๆ ขบวนคาราวานที่พลิกคว่ำอยู่"
 encounter_image = ExtResource("6")
 type = 1
 battlefield_texture = ExtResource("3")
 player_spawn_positions_feet = Array[Vector2]([Vector2(-35, 0), Vector2(-50, 20), Vector2(-50, -20)])
 enemies = Array[ExtResource("4_ud7bg")]([ExtResource("2")])
-victory_event = ExtResource("4")
-defeat_event = ExtResource("5")
+objectives = Array[ExtResource("7")]([SubResource("Objective_defeat_all")])
+victory_event = ExtResource("8_vln3f")
+defeat_event = ExtResource("2_8fofw")

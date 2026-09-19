@@ -9,6 +9,8 @@ layer = 100
 visible = false
 script = ExtResource("1")
 
+[node name="NarrationPlayer" type="AudioStreamPlayer" parent="."]
+
 [node name="Backdrop" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15

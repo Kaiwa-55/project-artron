@@ -17,6 +17,7 @@ var floating_value_labels: Array[Label] = []
 var status_icon_layer: Control
 var status_icon_signature: String = ""
 var selection_frame: Sprite2D
+var concealment_badge: Label
 
 
 func clear_no_damage_feedback() -> void:
@@ -315,6 +316,8 @@ var visual_offset: Vector2 = Vector2.ZERO:
 			status_icon_layer.position = visual_offset
 		if is_instance_valid(selection_frame):
 			selection_frame.position = visual_offset
+		if is_instance_valid(concealment_badge):
+			concealment_badge.position = get_concealment_badge_position()
 		queue_redraw()
 
 
@@ -396,6 +399,40 @@ func refresh_from_state() -> void:
 		global_position = state.position
 	refresh_status_icons()
 	queue_redraw()
+
+
+func set_concealment_against(observer: CombatantState, map_rules) -> void:
+	ensure_concealment_badge()
+	if state == null or observer == null or map_rules == null or state.team == observer.team or state.is_dying():
+		concealment_badge.visible = false
+		return
+	var concealment: int = VisionSystem.effective_concealment(state, observer, map_rules.get_light_level_at(observer.position))
+	concealment_badge.text = "C %d" % concealment
+	concealment_badge.tooltip_text = "Your Concealment against %s: %d / 4" % [state.display_name, concealment]
+	concealment_badge.position = get_concealment_badge_position()
+	concealment_badge.visible = true
+
+
+func ensure_concealment_badge() -> void:
+	if is_instance_valid(concealment_badge):
+		return
+	concealment_badge = Label.new()
+	concealment_badge.name = "ConcealmentBadge"
+	concealment_badge.size = Vector2(34, 18)
+	concealment_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	concealment_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	concealment_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	concealment_badge.z_index = 5
+	concealment_badge.add_theme_font_size_override("font_size", 11)
+	concealment_badge.add_theme_color_override("font_color", Color("f8d477"))
+	concealment_badge.add_theme_color_override("font_outline_color", Color(0.02, 0.03, 0.05, 1.0))
+	concealment_badge.add_theme_constant_override("outline_size", 3)
+	add_child(concealment_badge)
+
+
+func get_concealment_badge_position() -> Vector2:
+	var token_radius := state.collision_radius_feet * 12.0 if state != null else 30.0
+	return visual_offset + Vector2(token_radius - 9.0, -token_radius - 12.0)
 
 
 func set_selected(value: bool) -> void:
@@ -504,7 +541,7 @@ func refresh_status_icons(force: bool = false) -> void:
 		var label := Label.new()
 		label.name = "StackOrFallback"
 		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		label.text = str(instance.stack_count) if instance.stack_count > 1 else (get_status_abbreviation(instance.data.status_kind) if instance.data.icon_texture == null else "")
+		label.text = get_status_abbreviation(instance.data.status_kind) if instance.data.icon_texture == null else ""
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -514,6 +551,20 @@ func refresh_status_icons(force: bool = false) -> void:
 		label.add_theme_constant_override("shadow_offset_x", 1)
 		label.add_theme_constant_override("shadow_offset_y", 1)
 		content.add_child(label)
+		if instance.stack_count > 1:
+			var stack_badge := Label.new()
+			stack_badge.name = "StackCount"
+			stack_badge.text = str(instance.stack_count)
+			stack_badge.position = Vector2(13, 13)
+			stack_badge.size = Vector2(14, 14)
+			stack_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			stack_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			stack_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			stack_badge.add_theme_font_size_override("font_size", 9)
+			stack_badge.add_theme_color_override("font_color", Color.WHITE)
+			stack_badge.add_theme_color_override("font_outline_color", Color(0.02, 0.03, 0.05, 1.0))
+			stack_badge.add_theme_constant_override("outline_size", 2)
+			content.add_child(stack_badge)
 		status_icon_layer.add_child(icon)
 
 

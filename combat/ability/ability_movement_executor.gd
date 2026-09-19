@@ -36,6 +36,8 @@ func begin(combatant_id: String, requested_ability_id: String) -> ActionResult:
 		return ActionResult.failure("This Ability does not provide movement.")
 	if actor.has_status("rooted"):
 		return ActionResult.failure("Rooted characters cannot Move.")
+	if actor.has_status("grabbed"):
+		return ActionResult.failure("Grabbed characters cannot Move.")
 	actor_id = actor.id
 	ability_id = ability.id
 	return ActionResult.success_result()
@@ -47,7 +49,7 @@ func execute(destination: Vector2) -> ActionResult:
 	var actor: CombatantState = combat_system.combat_state.get_combatant(actor_id)
 	var ability = combat_system.ability_system.get_available_ability(actor, ability_id) if actor != null else null
 	var movement_effect = combat_system.ability_system.get_movement_effect(ability)
-	if actor == null or ability == null or movement_effect == null or actor.is_dying() or actor.has_status("rooted"):
+	if actor == null or ability == null or movement_effect == null or actor.is_dying() or actor.has_status("rooted") or actor.has_status("grabbed"):
 		clear_pending()
 		return ActionResult.failure("The character cannot complete this movement.")
 	var maximum_distance: float = movement_effect.movement_distance_feet * combat_system.map_rules.world_units_per_foot
@@ -62,6 +64,7 @@ func execute(destination: Vector2) -> ActionResult:
 	combat_system.cancel_remaining_movement(actor)
 	var origin := actor.position
 	actor.position = clamped_destination
+	combat_system.maneuver_action_executor.refresh_grabs()
 	actor.ability_uses_this_turn[ability.id] = int(actor.ability_uses_this_turn.get(ability.id, 0)) + 1
 	combat_system.ability_system.start_cooldown(actor, ability)
 	clear_pending()

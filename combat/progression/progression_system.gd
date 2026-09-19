@@ -131,6 +131,57 @@ func get_learn_ability_failure_reason(character: CombatantState, ability: Abilit
 	return ""
 
 
+func learn_spell(character: CombatantState, training: AbilityData, grantor: AbilityData) -> RefCounted:
+	var reason := get_learn_spell_failure_reason(character, training, grantor)
+	if not reason.is_empty():
+		return AbilityLearningResultScript.failure(reason)
+	var choices: Array = character.spell_choices_by_grantor.get(grantor.id, []).duplicate()
+	choices.append(training.id)
+	character.spell_choices_by_grantor[grantor.id] = choices
+	character.learned_spell_ids.append(training.id)
+	_grant_ability_skills(character, training)
+	var result = AbilityLearningResultScript.new()
+	result.success = true
+	result.ability_id = training.id
+	result.ability_name = training.granted_skills[0].display_name
+	result.points_spent = 0
+	result.remaining_ability_points = character.ability_points
+	return result
+
+
+func get_learn_spell_failure_reason(character: CombatantState, training: AbilityData, grantor: AbilityData) -> String:
+	if character == null or training == null or training.granted_skills.is_empty():
+		return "Spell choice is invalid."
+	if grantor == null or grantor.spell_choices_granted <= 0:
+		return "A spell-granting Ability is required."
+	if not character.selected_ability_ids.has(grantor.id) and not character.granted_ability_ids.has(grantor.id):
+		return "%s is not learned." % grantor.display_name
+	if not spell_training_matches_grantor(training, grantor):
+		return "%s does not match %s." % [training.granted_skills[0].display_name, grantor.display_name]
+	if character.level < training.required_level:
+		return "%s requires Level %d." % [training.granted_skills[0].display_name, training.required_level]
+	if character.learned_spell_ids.has(training.id) or character.available_skills.has(training.granted_skills[0]):
+		return "%s is already learned." % training.granted_skills[0].display_name
+	var choices: Array = character.spell_choices_by_grantor.get(grantor.id, [])
+	if choices.size() >= grantor.spell_choices_granted:
+		return "%s has no Spell Choices remaining." % grantor.display_name
+	return ""
+
+
+func spell_training_matches_grantor(training: AbilityData, grantor: AbilityData) -> bool:
+	if training == null or training.granted_skills.is_empty() or grantor == null or grantor.spell_choices_granted <= 0:
+		return false
+	var skill: SkillData = training.granted_skills[0]
+	if skill == null or skill.spell_level < grantor.spell_min_level:
+		return false
+	if grantor.spell_max_level > 0 and skill.spell_level > grantor.spell_max_level:
+		return false
+	for trait_id in grantor.spell_required_trait_ids:
+		if not skill.traits.any(func(trait_data): return trait_data != null and trait_data.id == trait_id):
+			return false
+	return true
+
+
 func get_learnable_abilities(character: CombatantState, ability_catalog: Array) -> Array[AbilityData]:
 	var learnable: Array[AbilityData] = []
 	for ability in ability_catalog:

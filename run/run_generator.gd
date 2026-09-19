@@ -4,7 +4,8 @@ extends RefCounted
 const DEFAULT_FLOORS := 9
 const MIN_LANES := 2
 const MAX_LANES := 4
-const DEFAULT_EVENT := preload("res://data/event/strange_caravan.tres")
+const DEFAULT_EVENT_TABLE_PATH := "res://data/event/default_event_table.tres"
+const DEFAULT_SHOP_CATALOG_PATH := "res://data/shop/default_shop_catalog.tres"
 
 
 func generate(seed_value: int, floor_count: int = DEFAULT_FLOORS, encounter_catalog: RunEncounterCatalog = null) -> Array[MapNodeData]:
@@ -27,6 +28,7 @@ func generate(seed_value: int, floor_count: int = DEFAULT_FLOORS, encounter_cata
 		output.append_array(floor_nodes)
 	if encounter_catalog != null:
 		assign_encounters(output, encounter_catalog, seed_value)
+	assign_shops(output, load(DEFAULT_SHOP_CATALOG_PATH), seed_value)
 	return output
 
 
@@ -34,6 +36,14 @@ func assign_encounters(nodes: Array[MapNodeData], catalog: RunEncounterCatalog, 
 	for node in nodes:
 		if not node.encounter_pool_id.is_empty():
 			node.encounter_data = catalog.pick_encounter(node.encounter_pool_id, seed_value, node.id)
+
+
+func assign_shops(nodes: Array[MapNodeData], catalog: Resource, seed_value: int) -> void:
+	if catalog == null or not catalog.has_method("pick_shop"):
+		return
+	for node in nodes:
+		if node.node_type == MapNodeData.NodeType.SHOP:
+			node.shop_data = catalog.pick_shop(seed_value, node.id)
 
 
 func create_node(node_id: String, type: MapNodeData.NodeType, floor_index: int, lane_index: int, threat: int) -> MapNodeData:
@@ -46,8 +56,7 @@ func create_node(node_id: String, type: MapNodeData.NodeType, floor_index: int, 
 	if type in [MapNodeData.NodeType.COMBAT, MapNodeData.NodeType.ELITE, MapNodeData.NodeType.BOSS]:
 		node.encounter_pool_id = ["", "normal", "elite", "", "", "", "", "boss"][type]
 	elif type == MapNodeData.NodeType.EVENT:
-		node.event_data = DEFAULT_EVENT.duplicate(true)
-		node.event_data.id = StringName("%s_%s" % [DEFAULT_EVENT.id, node_id])
+		node.event_table = load(DEFAULT_EVENT_TABLE_PATH) as EventTable
 	return node
 
 

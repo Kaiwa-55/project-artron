@@ -48,11 +48,20 @@ func run_test() -> void:
 	var cancel_button: Button = panel.get_node("Layout/Footer/Margin/Row/Cancel")
 	check(panel.party_roster_row.get_parent() == panel.footer_row, "Compact Party selector should move into the footer", failures)
 	check(absf(hero_button.get_global_rect().position.y - cancel_button.get_global_rect().position.y) <= 1.0, "Selected Hero and Cancel should share the same vertical level", failures)
+	check(hero_button.custom_minimum_size.x <= 110.0, "Compact hero selector leaves room for footer actions", failures)
+	check(not panel.status_label.visible, "Compact footer hides the long status copy so it cannot overlap actions", failures)
 	check(panel.ability_list.get_child_count() > 0, "Panel lists learnable or learned Abilities from the shared catalog", failures)
-	var dexterity_card: PanelContainer = panel.attribute_list.get_child(1)
-	check(dexterity_card.get_child(0).custom_minimum_size.x <= 145.0, "Attribute cards use compact widths at 640x360", failures)
-	var dexterity_text: String = dexterity_card.get_child(0).get_child(0).text
-	check(dexterity_text.contains(str(character.dexterity)), "Level Up Attribute cards must show the post-Ancestry and post-Class value", failures)
+	var first_ability_card := panel.ability_list.get_child(0)
+	if first_ability_card is Button:
+		check(first_ability_card.custom_minimum_size.y <= 34.0, "Ability cards stay compact at 640x360", failures)
+		check(first_ability_card.get_theme_font_size("font_size") >= 8, "Compact Ability text remains readable", failures)
+	if character.attribute_points > 0:
+		var dexterity_card: PanelContainer = panel.attribute_list.get_child(1)
+		check(dexterity_card.get_child(0).custom_minimum_size.x <= 145.0, "Attribute cards use compact widths at 640x360", failures)
+		var dexterity_text: String = dexterity_card.get_child(0).get_child(0).text
+		check(dexterity_text.contains(str(character.dexterity)), "Level Up Attribute cards must show the post-Ancestry and post-Class value", failures)
+	else:
+		check(not panel.attribute_list.visible, "Attribute section stays hidden when the hero has no Attribute Improve points", failures)
 	var original_dexterity := character.dexterity
 	var original_points := character.attribute_points
 	if original_points > 0:

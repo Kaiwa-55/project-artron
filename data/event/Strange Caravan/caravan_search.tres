@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://buib3ur3rbi6w"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_ef2p4"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_ykacx"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_46vif"]
+[ext_resource type="Resource" uid="uid://d3q3m2js707sq" path="res://data/encounter/bandit_ambush(surprise).tres" id="4_f17bj"]
+[ext_resource type="Texture2D" uid="uid://dk8v46m62vwxo" path="res://assets/events/caravan_search_anime.png" id="6_52fvf"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="7_0jw2l"]
+
+[sub_resource type="Resource" id="Choice_leave"]
+script = ExtResource("1_ef2p4")
+text = "กลับออกไป "
+actor_mode = 2
+
+[sub_resource type="Resource" id="Resource_mxx2m"]
+script = ExtResource("1_ef2p4")
+text = "พยายามค้นหาของภายใน"
+actor_mode = 2
+encounter = ExtResource("4_f17bj")
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[resource]
+script = ExtResource("7_0jw2l")
+id = &"caravan_search"
+title = "Inside the Caravan"
+description = "ข้างในไม่มีอะไรหลงเหลืออยู่เลย."
+illustration = ExtResource("6_52fvf")
+choices = Array[ExtResource("1_ef2p4")]([SubResource("Choice_leave"), SubResource("Resource_mxx2m")])

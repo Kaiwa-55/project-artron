@@ -8,15 +8,15 @@
 [ext_resource type="Resource" path="res://data/trait/circle.tres" id="5"]
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="5_8kr6y"]
 [ext_resource type="Resource" path="res://data/trait/elemental.tres" id="6"]
-[ext_resource type="Resource" path="res://animation/frozen_ground_circle.tres" id="7"]
+[ext_resource type="Resource" uid="uid://tkoppy0q22ep" path="res://animation/frozen_ground_circle.tres" id="7"]
 
 [resource]
 script = ExtResource("1")
 id = "frozen_ground_attack"
 display_name = "Frozen Ground"
 animation_template = ExtResource("7")
-attack_attribute = 3
-defense_type = 0
+attack_attribute = 6
+defense_type = 1
 ap_cost = 0
 base_damage = 3
 range_feet = 30.0

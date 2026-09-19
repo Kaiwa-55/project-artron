@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://es4q141m7c8y"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_4u3dd"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_jfbnl"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_8y1ln"]
+[ext_resource type="Resource" uid="uid://buib3ur3rbi6w" path="res://data/event/Strange Caravan/caravan_search.tres" id="4_gkiav"]
+[ext_resource type="Resource" uid="uid://bm07ftbkjqr5f" path="res://data/encounter/bandit_ambush_event.tres" id="5_uku6i"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="6_q4sps"]
+[ext_resource type="Texture2D" uid="uid://b81onujq6yl8v" path="res://assets/events/strange_caravan_anime.png" id="7_vxwlx"]
+
+[sub_resource type="Resource" id="Choice_search"]
+script = ExtResource("1_4u3dd")
+text = "ตรวจสอบรถคาราวานที่พลิกคว่ำ"
+next_event = ExtResource("4_gkiav")
+
+[sub_resource type="Resource" id="Choice_call"]
+script = ExtResource("1_4u3dd")
+text = "[ตะโกน]มีใครอยู่ในนั้นม้ายยย!!!"
+encounter = ExtResource("5_uku6i")
+
+[sub_resource type="Resource" id="Condition_reflex"]
+script = ExtResource("2_jfbnl")
+type = 0
+key = &"wisdom"
+required_number = 12.0
+failure_reason = "Requires Wisdom 12. "
+
+[sub_resource type="Resource" id="Resource_6ma0e"]
+script = ExtResource("1_4u3dd")
+text = "ใครอยู่ในนั้น ออกมาซะ"
+encounter = ExtResource("5_uku6i")
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_75gco"]
+script = ExtResource("1_4u3dd")
+text = "ปล่อยผ่านไป ไม่ยุ่งดีกว่า"
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sffvj"]
+load_path = "res://.godot/imported/strange_caravan_anime.png-6c9c30b93a4e657bc2be9d8c8aa4a993.ctex"
+
+[sub_resource type="Resource" id="Resource_jaevc"]
+script = ExtResource("6_q4sps")
+id = &"observe_strange_caravan"
+title = "observe strange caravan"
+description = "รอบๆนี่... มีรอยเท้าของอะไรบางอย่าง"
+illustration = SubResource("CompressedTexture2D_sffvj")
+choices = Array[ExtResource("1_4u3dd")]([SubResource("Resource_6ma0e"), SubResource("Resource_75gco")])
+metadata/_custom_type_script = "uid://w32bv4ws7ufq"
+
+[sub_resource type="Resource" id="Choice_tracks"]
+script = ExtResource("1_4u3dd")
+text = "สังเกตรอบๆ"
+actor_mode = 1
+conditions = Array[ExtResource("2_jfbnl")]([SubResource("Condition_reflex")])
+next_event = SubResource("Resource_jaevc")
+
+[resource]
+script = ExtResource("6_q4sps")
+id = &"strange_caravan"
+title = "Strange Caravan"
+description = "“นั่นมัน...คาราวาน?” “สภาพแบบนั้น คงไม่ได้แค่เจอพายุแน่...”
+"
+illustration = ExtResource("7_vxwlx")
+choices = Array[ExtResource("1_4u3dd")]([SubResource("Choice_search"), SubResource("Choice_call"), SubResource("Choice_tracks")])

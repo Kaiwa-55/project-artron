@@ -3,6 +3,7 @@ extends Resource
 
 const StatsSystemScript = preload("res://combat/stat/stat_system.gd")
 const DefaultUnarmedAttack = preload("res://data/attack/unarmed_attack.tres")
+const SkillProficienciesScript = preload("res://combat/skill/skill_proficiencies.gd")
 
 @export var id: String = ""
 @export var display_name: String = ""
@@ -17,9 +18,13 @@ const DefaultUnarmedAttack = preload("res://data/attack/unarmed_attack.tres")
 @export var character_class: Resource
 @export var class_attribute_choices: Array[int] = []
 @export_range(0.1, 50.0, 0.1) var collision_radius_feet: float = 2.5
+@export_range(0, 4) var vision: int = 2
+@export_range(0, 4) var dark_vision: int = 0
+@export_range(0, 4) var base_concealment: int = 1
 
 @export_range(1, 10) var level: int = 1
 @export var experience: int = 0
+@export_range(0, 9999) var creation_gold: int = 200
 @export var ability_points: int = 0
 @export var attribute_points: int = 0
 @export var progression_rewards_granted_through_level: int = 0
@@ -68,6 +73,9 @@ const DefaultUnarmedAttack = preload("res://data/attack/unarmed_attack.tres")
 @export var starting_equipment: Array = []
 @export var starting_equipment_slots: Dictionary = {}
 @export var skills: Array = []
+@export var skill_ranks: Dictionary = SkillProficienciesScript.default_ranks()
+@export var learned_spell_ids: Array[String] = []
+@export var spell_choices_by_grantor: Dictionary = {}
 @export var traits: Array = []
 @export var reactions: Array = []
 @export var ai_profile: Resource
@@ -90,6 +98,9 @@ func create_combatant_state() -> CombatantState:
 	state.set_meta("ancestry_data", ancestry)
 	state.set_meta("class_data", character_class)
 	state.collision_radius_feet = collision_radius_feet
+	state.vision = vision
+	state.dark_vision = dark_vision
+	state.base_concealment = base_concealment
 
 	state.level = level
 	state.experience = experience
@@ -139,6 +150,9 @@ func create_combatant_state() -> CombatantState:
 	state.starting_equipment = starting_equipment.duplicate()
 	state.starting_equipment_slots = starting_equipment_slots.duplicate()
 	state.available_skills = skills.duplicate()
+	state.skill_ranks = SkillProficienciesScript.normalized_ranks(skill_ranks)
+	state.learned_spell_ids = learned_spell_ids.duplicate()
+	state.spell_choices_by_grantor = spell_choices_by_grantor.duplicate(true)
 	state.active_traits = traits.duplicate()
 	state.active_reactions = reactions.duplicate()
 	state.ai_profile = ai_profile

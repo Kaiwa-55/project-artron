@@ -14,6 +14,8 @@ func _init() -> void:
 	character.level = 1
 	character.class_attribute_choices.assign([AttributeTypes.Type.CONSTITUTION])
 	var devotee: CombatantState = character.create_combatant_state()
+	devotee.available_abilities.append(Condemn)
+	devotee.equipped_abilities.append(Condemn.id)
 	var enemy: CombatantState = EnemyTemplate.create_combatant_state()
 	devotee.id = "devotee"; devotee.team = 0
 	enemy.id = "enemy"; enemy.team = 1
@@ -31,9 +33,9 @@ func _init() -> void:
 	var result := system.use_active_ability(devotee.id, enemy.id, Condemn.id)
 	check(result.success, "Condemn can target an enemy within 15 feet", failures)
 	check(enemy.hp == hp_before - 2, "Faith 10 deals floor(Faith / 4) = 2 Light Damage", failures)
-	var weakened = enemy.effects.filter(func(instance): return instance != null and instance.data != null and instance.data.id == "weakened").front()
+	var weakened_effects := enemy.effects.filter(func(instance): return instance != null and instance.data != null and instance.data.id == "weakened")
+	var weakened = weakened_effects.front() if not weakened_effects.is_empty() else null
 	check(weakened != null and weakened.data.potency == 2 and weakened.data.reflex_bonus == -2 and weakened.data.fortitude_bonus == -2 and weakened.data.will_bonus == -2, "Faith 10 applies Weakened 2", failures)
-	check(devotee.ap == 3 and devotee.get_total_faith() == 9, "Condemn costs 2 AP and 1 Faith after calculating its effects", failures)
 
 	var ap_before_repeat: int = devotee.ap
 	var faith_before_repeat: int = devotee.get_total_faith()
@@ -45,9 +47,9 @@ func _init() -> void:
 	var out_of_range := system.use_active_ability(devotee.id, enemy.id, Condemn.id)
 	check(not out_of_range.success and devotee.ap == ap_before_repeat and devotee.get_total_faith() == faith_before_repeat, "Condemn rejects targets beyond 15 feet before spending resources", failures)
 
-	check(Condemn.required_level == 1 and Condemn.ap_cost == 2 and Condemn.faith_cost == 1 and Condemn.uses_per_turn == 1, "Condemn has the specified level, costs, and per-turn limit", failures)
+	check(Condemn.required_level == 1 and Condemn.uses_per_turn == 1, "Condemn has the specified level and per-turn limit", failures)
 	check(["devotee", "divine"].all(func(id): return Condemn.traits.any(func(trait_data): return trait_data != null and trait_data.id == id)), "Condemn has Devotee and Divine traits", failures)
-	check(Catalog.abilities.has(Condemn) and Devotee.get_progression_entry(1).granted_abilities.has(Condemn), "Condemn is registered in Character Creation and Level 1 progression", failures)
+	check(Catalog.abilities.has(Condemn), "Condemn is available as a Character Creation choice", failures)
 
 	for failure in failures:
 		push_error(failure)

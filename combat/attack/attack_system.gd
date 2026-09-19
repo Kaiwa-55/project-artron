@@ -63,8 +63,10 @@ func validate_attack(
 			"Not enough AP."
 		)
 
-	if target.has_status("hidden") and attacker.team != target.team:
-		return ActionResult.failure("Target is Hidden and has not been detected.")
+	if map_rules != null and attacker.team != target.team:
+		var visibility: Dictionary = map_rules.get_visibility(attacker, target)
+		if visibility.not_visible:
+			return ActionResult.failure("Target is not visible.")
 
 	if attacker.team == target.team:
 		return ActionResult.failure(
@@ -131,11 +133,15 @@ func resolve_attack(
 
 	# To Hit
 	if attack.requires_to_hit:
+		var visibility_penalty := 0
+		if map_rules != null:
+			visibility_penalty = int(map_rules.get_visibility(attacker, target).attack_penalty)
+		result.visibility_penalty = visibility_penalty
 		var attack_modifier: int = attacker.get_attribute_modifier(
-			attack.attack_attribute
+			attack.resolve_attack_attribute(attacker)
 		) + attack.to_hit_bonus + effect_system.get_attack_bonus(attacker) \
 			+ ability_system.get_to_hit_bonus(attacker, attack, get_target_edge_distance_feet(attacker, target)) \
-			+ repeated_attack_penalty
+			+ repeated_attack_penalty + visibility_penalty
 		result.roll = dice_system.roll_3d8()
 		result.attack_modifier = attack_modifier
 		# Always read Defense from the target before deciding whether the attack

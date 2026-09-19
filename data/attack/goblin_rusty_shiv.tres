@@ -15,6 +15,6 @@ display_name = "Rusty Shiv"
 animation_template = ExtResource("2")
 attack_attribute = 1
 to_hit_bonus = 1
-base_damage = 3
+base_damage = 1
 damage_type = "pierce"
 traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]

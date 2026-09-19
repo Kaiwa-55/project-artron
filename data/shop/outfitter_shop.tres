@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ShopData" format=3 uid="uid://dhsfhrklcmo1k"]
+
+[ext_resource type="Texture2D" uid="uid://cx2767i875fhu" path="res://assets/events/DesertCaravan.jpg" id="1_cwg3q"]
+[ext_resource type="Script" uid="uid://puwk2c6cvm6q" path="res://data/shop/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://di4maw5cs6h6d" path="res://data/shop/shop_offer_data.gd" id="2_offer"]
+[ext_resource type="Resource" path="res://data/item/minor_healing_potion.tres" id="3_potion"]
+[ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="4_dagger"]
+
+[sub_resource type="Resource" id="PotionOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("3_potion")
+price = 50
+
+[sub_resource type="Resource" id="DaggerOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("4_dagger")
+price = 45
+
+[resource]
+script = ExtResource("1_shop")
+id = "outfitter"
+display_name = "TRAILSIDE OUTFITTER"
+description = "Reliable tools for dangerous paths."
+banner_texture = ExtResource("1_cwg3q")
+offers = Array[Resource]([SubResource("PotionOffer"), SubResource("DaggerOffer")])

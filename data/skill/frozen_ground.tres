@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=6 format=3]
-[ext_resource type="Script" path="res://data/skill/skill_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/frozen_ground.tres" id="2"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://du1iwouonupmm"]
+
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://c6bevsmvycibg" path="res://data/attack/frozen_ground.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/cold.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/circle.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/elemental.tres" id="5"]
+
 [resource]
 script = ExtResource("1")
 id = "frozen_ground"
@@ -19,4 +21,3 @@ target_mode = 2
 area_shape = 1
 targeting_range_feet = 30.0
 area_radius_feet = 10.0
-area_blocked_by_obstacles = true

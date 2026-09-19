@@ -1,0 +1,102 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://be0elcdhcoiji"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_t803s"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="2_2nt1k"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="3_5cnos"]
+[ext_resource type="Texture2D" uid="uid://bti5egvoct3gf" path="res://assets/events/wandering_oldmen(1).png" id="4_5cnos"]
+[ext_resource type="Script" uid="uid://cbhi2hgurc0db" path="res://data/item/item_data.gd" id="4_458ym"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="4_g3fy6"]
+[ext_resource type="Texture2D" uid="uid://bi10ofro04nhn" path="res://assets/events/wandering_oldmen.png" id="6_g3fy6"]
+
+[sub_resource type="Resource" id="Resource_s1ixs"]
+script = ExtResource("4_458ym")
+id = "white_jade"
+display_name = "white jade"
+description = "หยกสีขาวที่ห่อด้วยผ้าสีขาวขาดรุ่งริ่ง"
+category = 1
+metadata/_custom_type_script = "uid://cbhi2hgurc0db"
+
+[sub_resource type="Resource" id="Resource_1bp6i"]
+script = ExtResource("2_2nt1k")
+type = 2
+item = SubResource("Resource_s1ixs")
+metadata/_custom_type_script = "uid://tj14nr7yv2rr"
+
+[sub_resource type="Resource" id="Resource_shjwc"]
+script = ExtResource("1_t803s")
+text = "รับไว้"
+effects = Array[ExtResource("2_2nt1k")]([SubResource("Resource_1bp6i")])
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_uoyid"]
+script = ExtResource("2_2nt1k")
+type = 2
+item = SubResource("Resource_s1ixs")
+metadata/_custom_type_script = "uid://tj14nr7yv2rr"
+
+[sub_resource type="Resource" id="Resource_57g36"]
+script = ExtResource("1_t803s")
+text = "รับไว้"
+effects = Array[ExtResource("2_2nt1k")]([SubResource("Resource_uoyid")])
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_wujos"]
+script = ExtResource("1_t803s")
+text = "ไม่รับ"
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_m50en"]
+script = ExtResource("3_5cnos")
+id = &"a_gift_from_old_man1_1_2"
+title = "A Gift From Old Man"
+description = "ชายชรา:\"มันคือกุญแจสู่โลกใหม่... มันเลือกเจ้าแล้ว\""
+illustration = ExtResource("4_5cnos")
+choices = Array[ExtResource("1_t803s")]([SubResource("Resource_57g36"), SubResource("Resource_wujos")])
+metadata/_custom_type_script = "uid://w32bv4ws7ufq"
+
+[sub_resource type="Resource" id="Resource_627x1"]
+script = ExtResource("1_t803s")
+text = "มันคืออะไร"
+next_event = SubResource("Resource_m50en")
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_nidfm"]
+script = ExtResource("1_t803s")
+text = "ไม่รับ"
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_0v66b"]
+script = ExtResource("3_5cnos")
+id = &"a_gift_from_old_man1_1"
+title = "A Gift From Old Man"
+description = "ชายชรายื่นวัตถุชิ้นเล็กออกมา มันถูกพันด้วยผ้าสีขาวขาดรุ่งริ่ง
+ชายชรา:\"เอาไปเสีย... เจ้าอาจต้องการมัน\""
+illustration = ExtResource("4_5cnos")
+choices = Array[ExtResource("1_t803s")]([SubResource("Resource_shjwc"), SubResource("Resource_627x1"), SubResource("Resource_nidfm")])
+metadata/_custom_type_script = "uid://w32bv4ws7ufq"
+
+[sub_resource type="Resource" id="Resource_ckgyg"]
+script = ExtResource("1_t803s")
+text = "เดินเข้าไป"
+next_event = SubResource("Resource_0v66b")
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_0t4ks"]
+script = ExtResource("1_t803s")
+text = "ไม่สนใจเดินผ่านไป"
+metadata/_custom_type_script = "uid://bvaeeo3eqywqf"
+
+[sub_resource type="Resource" id="Resource_50awb"]
+script = ExtResource("2_2nt1k")
+key = &"A Gift From Old Man"
+metadata/_custom_type_script = "uid://tj14nr7yv2rr"
+
+[resource]
+script = ExtResource("3_5cnos")
+id = &"a_gift_from_old_man"
+title = "A Gift From Old Man"
+description = "\"นั่นใครน่ะ...\""
+illustration = ExtResource("6_g3fy6")
+choices = Array[ExtResource("1_t803s")]([SubResource("Resource_ckgyg"), SubResource("Resource_0t4ks")])
+on_start_effects = Array[ExtResource("2_2nt1k")]([SubResource("Resource_50awb")])
+metadata/_custom_type_script = "uid://w32bv4ws7ufq"

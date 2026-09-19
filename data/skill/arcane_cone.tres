@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://k6apocdyw1ee"]
 
 [ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1_skill"]
-[ext_resource type="Resource" path="res://data/attack/arcane_cone_attack.tres" id="2_attack"]
+[ext_resource type="Resource" uid="uid://8os7i0kfqffw" path="res://data/attack/arcane_cone_attack.tres" id="2_attack"]
 [ext_resource type="Resource" path="res://data/trait/arcane.tres" id="3_arcane"]
 
 [resource]

@@ -48,7 +48,12 @@ func update_ui() -> void:
 
 	if enemy != null:
 		$Enemy_panel/VBoxContainer/Hp.text = "HP: %d / %d" % [enemy.hp, enemy.max_hp]
-		$Enemy_panel/VBoxContainer/Effects.text = "Effects: %s" % get_effect_names(enemy)
+		var observer: CombatantState = player if player != null else primary_player
+		var visibility_text := "Unknown"
+		if observer != null:
+			var visibility: Dictionary = combat_system.map_rules.get_visibility(observer, enemy)
+			visibility_text = ["Visible", "Partially Visible (-4 Attack)", "Not Visible"][int(visibility.visibility)]
+		$Enemy_panel/VBoxContainer/Effects.text = "Visibility: %s\nEffects: %s" % [visibility_text, get_effect_names(enemy)]
 	$CombatLogPanel/Margin/VBoxContainer/Turn.text = "ROUND %d  •  %s TURN" % [
 		state.current_round,
 		state.current_actor_id.to_upper()
@@ -441,7 +446,8 @@ func should_show_combat_event(event: CombatEvent) -> bool:
 		EventTypes.Type.REACTION_TRIGGERED, \
 		EventTypes.Type.COMBAT_VICTORY, \
 		EventTypes.Type.COMBAT_DEFEAT, \
-		EventTypes.Type.SKILL_CAST:
+		EventTypes.Type.SKILL_CAST, \
+		EventTypes.Type.MANEUVER_USED:
 			return true
 		EventTypes.Type.ESCAPE_ATTEMPTED:
 			return true
@@ -501,6 +507,12 @@ func create_combat_log_card_data(event: CombatEvent, details: String) -> Diction
 			outcome = "SUCCESS" if event.data.get("succeeded", false) else "FAILED"
 			tone = "heal" if event.data.get("succeeded", false) else "damage"
 			roll_text = "%d vs DC %d" % [event.data.get("total", 0), event.data.get("dc", 0)]
+		EventTypes.Type.MANEUVER_USED:
+			action_name = event.data.get("maneuver", "Maneuver")
+			type_name = "ACTION"
+			outcome = "SUCCESS" if event.data.get("succeeded", false) else "FAILED"
+			tone = "heal" if event.data.get("succeeded", false) else "damage"
+			roll_text = "%d vs %d" % [event.data.get("total", 0), event.data.get("defense", 0)] if event.data.has("total") else ""
 		EventTypes.Type.ITEM_USED:
 			action_name = event.data.get("item_name", "Item")
 			type_name = "ITEM"
@@ -608,7 +620,7 @@ func format_combat_event(event: CombatEvent) -> String:
 				event.data.get("attack_total", 0),
 				event.data.get("defense", 0),
 				event.data.get("final_damage", 0),
-				format_repeated_attack_penalty(event)
+				format_attack_penalties(event)
 			]
 
 		EventTypes.Type.ATTACK_MISS:
@@ -620,7 +632,7 @@ func format_combat_event(event: CombatEvent) -> String:
 				event.data.get("attack_modifier", 0),
 				event.data.get("attack_total", 0),
 				event.data.get("defense", 0),
-				format_repeated_attack_penalty(event)
+				format_attack_penalties(event)
 			]
 
 		EventTypes.Type.EFFECT_APPLIED:
@@ -744,6 +756,22 @@ func format_combat_event(event: CombatEvent) -> String:
 				"escaped" if event.data.get("succeeded", false) else "failed"
 			]
 
+		EventTypes.Type.MANEUVER_USED:
+			if event.data.get("maneuver", "") == "Hide":
+				return "%s uses Hide — 3d8 %d + Stealth %d = %d: %s." % [
+					event.source_id.capitalize(), event.data.get("roll", 0), event.data.get("stealth", 0), event.data.get("total", 0), "Concealment +1 against detected enemies" if event.data.get("succeeded", false) else "failed against every enemy"
+				]
+			if event.data.get("maneuver", "") == "Search":
+				return "%s uses Search on %s — 3d8 %d + Perception %d = %d vs DC %d: %s." % [
+					event.source_id.capitalize(), event.target_id.capitalize(), event.data.get("roll", 0), event.data.get("perception", 0), event.data.get("total", 0), event.data.get("dc", 0), "Concealment -1" if event.data.get("succeeded", false) else "failed"
+				]
+			var result_text := "succeeds" if event.data.get("succeeded", false) else "fails"
+			return "%s uses %s: %s." % [
+				event.source_id.capitalize(),
+				event.data.get("maneuver", "a Maneuver"),
+				result_text
+			]
+
 		EventTypes.Type.ITEM_USED:
 			var effect_text := ""
 			if int(event.data.get("healing", 0)) > 0:
@@ -774,7 +802,7 @@ func format_attack_hit(event: CombatEvent) -> String:
 		event.data.get("attack_total", 0),
 		event.data.get("defense", 0)
 	]
-	attack_text += format_repeated_attack_penalty(event)
+	attack_text += format_attack_penalties(event)
 
 	if event.data.get("immune", false):
 		return "%s %s is immune to %s damage." % [
@@ -806,3 +834,11 @@ func format_attack_hit(event: CombatEvent) -> String:
 func format_repeated_attack_penalty(event: CombatEvent) -> String:
 	var penalty: int = int(event.data.get("repeated_attack_penalty", 0))
 	return " Repeated Attack Penalty: %d." % penalty if penalty < 0 else ""
+
+
+func format_attack_penalties(event: CombatEvent) -> String:
+	var text := format_repeated_attack_penalty(event)
+	var visibility_penalty: int = int(event.data.get("visibility_penalty", 0))
+	if visibility_penalty < 0:
+		text += " Partially Visible: %d." % visibility_penalty
+	return text

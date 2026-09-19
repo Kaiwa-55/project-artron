@@ -15,6 +15,8 @@ var ground_skill_mode: String = ""
 var ground_targeting_kind: String = ""
 var ground_targeting_id: String = ""
 var pending_target_attack: AttackData
+var pending_basic_maneuver: int = -1
+var pending_search_targeting: bool = false
 var pending_single_target_kind: String = ""
 var pending_single_target_source
 var movement_presentation
@@ -26,14 +28,35 @@ func get_all_combatant_nodes() -> Array:
 	return get_children().filter(func(child): return child is Combatant)
 
 
+func focus_camera_on_current_actor(duration: float = 0.35) -> bool:
+	if combat_system == null or combat_system.get_combat_state() == null:
+		return false
+	var actor: CombatantState = combat_system.get_combat_state().get_current_actor()
+	if actor == null:
+		return false
+	for combatant_node in get_all_combatant_nodes():
+		if is_instance_valid(combatant_node) and combatant_node.state != null and combatant_node.state.id == actor.id:
+			var camera: BattlefieldCameraController = $BattlefieldCamera
+			camera.pan_to(camera.get_parent().to_local(combatant_node.global_position), duration)
+			return true
+	return false
+
+
 func get_player_controlled_actor() -> CombatantState:
 	if combat_system == null or combat_system.get_combat_state() == null:
 		return null
 	var state = combat_system.get_combat_state()
 	var primary: CombatantState = state.get_combatant("player")
 	var current: CombatantState = state.get_current_actor()
-	if primary != null and current != null and current.team == primary.team:
+	if primary != null and current != null and current.team == primary.team and current.is_alive():
 		return current
+	if primary != null and primary.is_alive():
+		return primary
+	if primary != null:
+		for combatant_id in state.turn_order:
+			var party_member: CombatantState = state.get_combatant(combatant_id)
+			if party_member != null and party_member.team == primary.team and party_member.is_alive():
+				return party_member
 	return primary
 
 
@@ -233,6 +256,8 @@ func begin_move() -> void:
 		$UILayer/Control.set_mode_hint("Cannot Move: no Speed or AP available.")
 		return
 	pending_target_attack = null
+	pending_basic_maneuver = -1
+	pending_search_targeting = false
 	pending_single_target_kind = ""
 	pending_single_target_source = null
 	ground_targeting_id = ""
@@ -286,6 +311,8 @@ func cancel_ground_targeting() -> void:
 
 func cancel_attack_targeting() -> void:
 	pending_target_attack = null
+	pending_basic_maneuver = -1
+	pending_search_targeting = false
 	$UILayer/Control.set_mode_hint("Choose an action.")
 	queue_redraw()
 
@@ -360,7 +387,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		cancel_single_targeting()
 		get_viewport().set_input_as_handled()
 		return
-	if pending_target_attack != null and ((event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed) or event.is_action_pressed("ui_cancel")):
+	if (pending_target_attack != null or pending_basic_maneuver >= 0 or pending_search_targeting) and ((event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed) or event.is_action_pressed("ui_cancel")):
 		cancel_attack_targeting()
 		get_viewport().set_input_as_handled()
 		return
@@ -381,7 +408,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			confirm_single_target(mouse_position)
 			get_viewport().set_input_as_handled()
 			return
-		if pending_target_attack != null:
+		if pending_target_attack != null or pending_basic_maneuver >= 0 or pending_search_targeting:
 			confirm_attack_target(mouse_position)
 			get_viewport().set_input_as_handled()
 			return

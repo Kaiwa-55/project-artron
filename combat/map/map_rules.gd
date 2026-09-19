@@ -1,10 +1,30 @@
 class_name MapRules
 extends RefCounted
 
+const VisionSystemScript = preload("res://combat/vision/vision_system.gd")
+
 # Gridless map scale. Positions, collision radii, and obstacles use world units.
 var world_units_per_foot: float = 12.0
 var obstacles: Array[Dictionary] = []
 var playable_bounds: Rect2 = Rect2()
+# 0 bright, 1 normal, 2 dim, 3 darkness. Effects may lower this value.
+var light_level: int = 1
+var light_areas: Array[Dictionary] = []
+
+
+func set_light_level(level: int) -> void:
+	light_level = clampi(level, 0, 3)
+
+
+func add_light_area(area: Rect2, level: int, label: String = "Light Area") -> void:
+	light_areas.append({"area": area, "level": clampi(level, 0, 3), "label": label})
+
+
+func get_light_level_at(position: Vector2) -> int:
+	for area in light_areas:
+		if Rect2(area.get("area", Rect2())).has_point(position):
+			return int(area.get("level", light_level))
+	return light_level
 
 
 func set_playable_bounds(size_feet: Vector2, origin: Vector2 = Vector2.ZERO) -> void:
@@ -18,11 +38,13 @@ func has_playable_bounds() -> bool:
 	return playable_bounds.size.x > 0.0 and playable_bounds.size.y > 0.0
 
 
-func add_circular_obstacle(center: Vector2, radius_world_units: float, label: String = "Obstacle") -> void:
+func add_circular_obstacle(center: Vector2, radius_world_units: float, label: String = "Obstacle", blocks_movement: bool = true, blocks_line_of_sight: bool = true) -> void:
 	obstacles.append({
 		"center": center,
 		"radius": maxf(0.0, radius_world_units),
-		"label": label
+		"label": label,
+		"blocks_movement": blocks_movement,
+		"blocks_line_of_sight": blocks_line_of_sight,
 	})
 
 
@@ -55,11 +77,22 @@ func is_target_in_range(attacker, target, range_feet: float) -> bool:
 
 func has_line_of_sight(start: Vector2, finish: Vector2) -> bool:
 	for obstacle in obstacles:
+		if not bool(obstacle.get("blocks_line_of_sight", true)):
+			continue
 		var center: Vector2 = obstacle.get("center", Vector2.ZERO)
 		var radius: float = float(obstacle.get("radius", 0.0))
 		if segment_distance_to_point(start, finish, center) < radius:
 			return false
 	return true
+
+
+func get_visibility(observer, target) -> Dictionary:
+	return VisionSystemScript.get_visibility_result(
+		observer,
+		target,
+		get_light_level_at(target.position),
+		has_line_of_sight(observer.position, target.position)
+	)
 
 
 func validate_movement_path(actor, destination: Vector2, combatants: Dictionary) -> ActionResult:
@@ -76,6 +109,8 @@ func validate_movement_path(actor, destination: Vector2, combatants: Dictionary)
 			return ActionResult.failure("Movement path is blocked by %s." % other.display_name)
 
 	for obstacle in obstacles:
+		if not bool(obstacle.get("blocks_movement", true)):
+			continue
 		var obstacle_center: Vector2 = obstacle.get("center", Vector2.ZERO)
 		var obstacle_radius: float = float(obstacle.get("radius", 0.0))
 		if segment_distance_to_point(actor.position, destination, obstacle_center) < get_combatant_radius_world_units(actor) + obstacle_radius:

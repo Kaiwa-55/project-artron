@@ -1,13 +1,22 @@
 class_name AttackData
 extends Resource
 
+enum AttackAttribute {
+	STRENGTH,
+	DEXTERITY,
+	CONSTITUTION,
+	INTELLIGENCE,
+	WISDOM,
+	CHARISMA,
+	CLASS_MAIN_ATTRIBUTE,
+}
 
 @export var id: String = ""
 @export var display_name: String = ""
 @export var animation_template: Resource
 
-@export var attack_attribute: AttributeTypes.Type = \
-	AttributeTypes.Type.STRENGTH
+@export_enum("Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma", "Class Main Attribute")
+var attack_attribute: int = AttackAttribute.STRENGTH
 
 @export var defense_type: DefenseTypes.Type = \
 	DefenseTypes.Type.HIGHEST
@@ -43,3 +52,13 @@ var active_damage_bonus_source: String = ""
 @export var effects_on_miss: Array[EffectData] = []
 @export var traits: Array = []
 @export var granted_abilities: Array[AbilityData] = []
+
+
+func resolve_attack_attribute(combatant: CombatantState) -> int:
+	if attack_attribute != AttackAttribute.CLASS_MAIN_ATTRIBUTE:
+		return attack_attribute
+	if combatant != null and combatant.has_meta("class_data"):
+		var character_class = combatant.get_meta("class_data")
+		if character_class != null:
+			return character_class.main_attribute
+	return AttributeTypes.Type.STRENGTH

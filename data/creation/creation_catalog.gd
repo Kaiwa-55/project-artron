@@ -1,6 +1,7 @@
 extends Resource
 ## Explicit, export-safe catalog. Add content here rather than editing UI code.
 @export var base_character: CharacterData
+@export_range(0, 9999) var starting_gold: int = 200
 @export var ancestries: Array[Resource] = []
 @export var classes: Array[Resource] = []
 @export var abilities: Array[AbilityData] = []
@@ -29,9 +30,21 @@ func get_abilities() -> Array[AbilityData]:
 			result.append(ability)
 	return result
 
+
+func get_skills() -> Array[SkillData]:
+	var result: Array[SkillData] = []
+	var ids: Dictionary = {}
+	var sources: Array = base_character.skills.duplicate() if base_character != null else []
+	for ability in get_abilities():
+		sources.append_array(ability.granted_skills)
+	for skill in sources:
+		if skill != null and not ids.has(skill.id):
+			ids[skill.id] = true
+			result.append(skill)
+	return result
+
 func visual_for(source_id: String):
 	for visual in visuals:
 		if visual.source_id == source_id:
 			return visual
 	return null
-

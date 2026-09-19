@@ -56,6 +56,8 @@ func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0) -> i
 			var effect = ability.effects[effect_index]
 			if effect == null or not attack_matches(effect, attack):
 				continue
+			if not effect.required_attack_trait_ids.all(func(trait_id): return attack_has_trait(attack, trait_id)):
+				continue
 			if effect.effect_type == AbilityEffectDataScript.Type.STACKED_TO_HIT_BONUS:
 				total_bonus += get_stack_count(combatant, ability.id, effect_index) * effect.to_hit_bonus_per_stack
 			elif effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_TO_HIT_BONUS:
@@ -104,7 +106,8 @@ func get_attack_range_bonus(combatant, attack) -> float:
 		for effect in ability.effects:
 			if effect != null \
 				and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_ATTACK_RANGE_BONUS_FEET \
-				and attack_matches(effect, attack):
+				and attack_matches(effect, attack) \
+				and effect.required_attack_trait_ids.all(func(trait_id): return attack_has_trait(attack, trait_id)):
 				total_bonus += effect.passive_value
 	return total_bonus
 
@@ -606,6 +609,8 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 			return ActionResult.failure("Choose a valid target.")
 		if not target_filter_matches(combatant, target, ability):
 			return ActionResult.failure("That target is not valid for this Ability.")
+		if target != combatant and map_rules != null and map_rules.get_visibility(combatant, target).not_visible:
+			return ActionResult.failure("Target is not visible.")
 	return ActionResult.success_result()
 
 

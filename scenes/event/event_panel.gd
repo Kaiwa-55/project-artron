@@ -7,6 +7,7 @@ signal encounter_confirmed(data: EncounterData)
 @onready var image_rect: TextureRect = $Backdrop/BackgroundImage
 @onready var description_label: Label = $Backdrop/SafeArea/Content/Narrative/Margin/Bottom/Description
 @onready var choice_list: VBoxContainer = $Backdrop/SafeArea/Content/Narrative/Margin/Bottom/ChoiceScroll/Choices
+@onready var narration_player: AudioStreamPlayer = $NarrationPlayer
 
 var event_manager: EventManager
 var pending_encounter: EncounterData
@@ -38,6 +39,10 @@ func show_event(data: EventData) -> void:
 	description_label.text = data.description
 	_set_image(data.illustration)
 	visible = true
+	if data.narration_autoplay:
+		play_narration(data)
+	else:
+		stop_narration()
 
 
 func show_choices(states: Array[Dictionary]) -> void:
@@ -91,6 +96,7 @@ func show_character_selection(choice_index: int, eligible_actor_ids: Array[Strin
 
 
 func show_encounter(data: EncounterData) -> void:
+	stop_narration()
 	pending_encounter = data
 	title_label.text = data.get_encounter_name()
 	description_label.text = data.encounter_description
@@ -110,6 +116,7 @@ func show_encounter(data: EncounterData) -> void:
 
 
 func close() -> void:
+	stop_narration()
 	pending_encounter = null
 	pending_choice_index = -1
 	visible = false
@@ -129,8 +136,30 @@ func _select_actor(actor_id: String) -> void:
 func _return_to_choices() -> void:
 	if event_manager == null or event_manager.active_event == null:
 		return
-	show_event(event_manager.active_event)
+	var data := event_manager.active_event
+	title_label.text = data.title
+	description_label.text = data.description
+	_set_image(data.illustration)
 	show_choices(event_manager.get_choice_states())
+
+
+func play_narration(data: EventData = null) -> void:
+	var narration_data := data
+	if narration_data == null and event_manager != null:
+		narration_data = event_manager.active_event
+	if narration_data == null or narration_data.narration_audio == null:
+		stop_narration()
+		return
+	narration_player.stop()
+	narration_player.stream = narration_data.narration_audio
+	narration_player.volume_db = narration_data.narration_volume_db
+	narration_player.play()
+
+
+func stop_narration() -> void:
+	if narration_player != null:
+		narration_player.stop()
+		narration_player.stream = null
 
 
 func _confirm_encounter() -> void:

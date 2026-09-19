@@ -13,6 +13,7 @@ func _init() -> void:
 	test_move_toward_closest_target()
 	test_single_target_skill_candidate()
 	test_single_target_ability_candidate()
+	test_search_when_target_is_not_visible()
 	test_status_value_and_duplicate_suppression()
 	if failures.is_empty():
 		print("ENEMY_AI_SYSTEM_TEST: PASS")
@@ -115,6 +116,26 @@ func test_single_target_ability_candidate() -> void:
 	var ai = EnemyAIScript.new()
 	var decision: Dictionary = ai.choose_decision(system, enemy)
 	check(decision.type == EnemyAIScript.DecisionType.ABILITY, "A stronger valid single-target Active Ability should become the highest-scoring Candidate.")
+
+
+func test_search_when_target_is_not_visible() -> void:
+	var enemy: CombatantState = EnemyData.create_combatant_state()
+	var player: CombatantState = PlayerData.create_combatant_state()
+	enemy.position = Vector2(100, 100)
+	player.position = Vector2(150, 100)
+	enemy.skill_ranks["perception"] = 7
+	enemy.vision_penalty = 7
+	player.base_concealment = 4
+	var system := CombatSystem.new()
+	system.start_combat([enemy, player])
+	system.combat_state.current_actor_id = enemy.id
+	enemy.ap = enemy.max_ap
+	var ai = EnemyAIScript.new()
+	var decision: Dictionary = ai.choose_decision(system, enemy)
+	check(decision.type == EnemyAIScript.DecisionType.SEARCH, "Enemy AI should Search when its target is not visible.")
+	var result: ActionResult = ai.execute_decision(system, decision)
+	check(result.success and enemy.ap == enemy.max_ap - 1, "AI Search should resolve as a 1 AP Utility action.")
+	check(player.get_concealment_reduction_against(enemy.id) == 1, "A successful AI Search should reduce the target's Concealment only against that enemy.")
 
 
 func test_status_value_and_duplicate_suppression() -> void:

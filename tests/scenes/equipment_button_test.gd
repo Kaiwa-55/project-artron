@@ -23,7 +23,7 @@ func run_test() -> void:
 	panel.show()
 	panel.set_tab("equipment")
 	await process_frame
-	var item_button: Button = panel.item_grid.get_child(0).get_node_or_null("EntryButton")
+	var item_button: Button = panel.equipment_entries.get_child(0) as Button
 	var success: bool = item_button != null
 	if item_button != null:
 		item_button.pressed.emit()

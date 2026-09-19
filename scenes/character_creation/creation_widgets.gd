@@ -1,16 +1,22 @@
 extends RefCounted
 ## Shared visual vocabulary for every creation page and future extensions.
-const GOLD = Color("#d8b568")
-const INK = Color("#0d1316")
-const PAPER = Color("#e6ddc7")
-const MUTED = Color("#9aaba7")
+const ArtronTheme = preload("res://scenes/ui/artron_ui_theme.gd")
+const GOLD = ArtronTheme.GOLD
+const INK = ArtronTheme.WINDOW_BACKGROUND
+const PAPER = ArtronTheme.TEXT
+const MUTED = ArtronTheme.MUTED
+static var density_scale := 1.0
+
+
+static func set_compact_density(compact: bool) -> void:
+	density_scale = 0.76 if compact else 1.0
 
 static func box(color: Color, border: Color, width: int = 1) -> StyleBoxFlat:
 	var result := StyleBoxFlat.new()
 	result.bg_color = color
 	result.border_color = border
 	result.set_border_width_all(width)
-	result.set_corner_radius_all(3)
+	result.set_corner_radius_all(4)
 	result.content_margin_left = 14
 	result.content_margin_right = 14
 	result.content_margin_top = 10
@@ -22,18 +28,18 @@ static func make_theme() -> Theme:
 	var font := SystemFont.new()
 	font.font_names = PackedStringArray(["Segoe UI", "Noto Sans"])
 	result.default_font = font
-	result.default_font_size = 16
+	result.default_font_size = ArtronTheme.FONT_SIZE
 	result.set_color("font_color", "Label", PAPER)
 	result.set_color("font_color", "Button", PAPER)
 	result.set_color("font_hover_color", "Button", Color.WHITE)
 	result.set_color("font_disabled_color", "Button", Color("#78817d"))
-	result.set_stylebox("normal", "Button", box(Color("#151d20"), Color("#65573b")))
-	result.set_stylebox("hover", "Button", box(Color("#26302e"), GOLD))
-	result.set_stylebox("pressed", "Button", box(Color("#433721"), GOLD, 2))
-	result.set_stylebox("disabled", "Button", box(Color("#101719"), Color("#303937")))
+	result.set_stylebox("normal", "Button", box(ArtronTheme.BUTTON_BACKGROUND, ArtronTheme.BUTTON_BORDER))
+	result.set_stylebox("hover", "Button", box(ArtronTheme.BUTTON_HOVER, GOLD))
+	result.set_stylebox("pressed", "Button", box(ArtronTheme.BUTTON_PRESSED, GOLD, 2))
+	result.set_stylebox("disabled", "Button", box(ArtronTheme.DISABLED_BACKGROUND, ArtronTheme.DISABLED_BORDER))
 	result.set_stylebox("focus", "Button", box(Color(0, 0, 0, 0), GOLD, 2))
-	result.set_stylebox("normal", "LineEdit", box(Color("#111c20"), Color("#756446")))
-	result.set_stylebox("focus", "LineEdit", box(Color("#17262a"), GOLD))
+	result.set_stylebox("normal", "LineEdit", box(ArtronTheme.BUTTON_BACKGROUND, ArtronTheme.BUTTON_BORDER))
+	result.set_stylebox("focus", "LineEdit", box(ArtronTheme.BUTTON_HOVER, GOLD))
 	result.set_color("font_color", "LineEdit", PAPER)
 	return result
 
@@ -41,7 +47,7 @@ static func label(parent: Node, text: String, size: int = 16, color: Color = PAP
 	var node := Label.new()
 	node.text = text
 	node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	node.add_theme_font_size_override("font_size", size)
+	node.add_theme_font_size_override("font_size", maxi(8, roundi(size * density_scale)))
 	node.add_theme_color_override("font_color", color)
 	node.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if serif:
@@ -54,7 +60,7 @@ static func label(parent: Node, text: String, size: int = 16, color: Color = PAP
 static func button(parent: Node, text: String, callback: Callable, selected: bool = false) -> Button:
 	var node := Button.new()
 	node.text = text
-	node.custom_minimum_size.y = 42
+	node.custom_minimum_size.y = roundi(42 * density_scale)
 	node.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if callback.is_valid():
 		node.pressed.connect(callback)
@@ -73,7 +79,7 @@ static func column(parent: Node, spacing: int = 12) -> VBoxContainer:
 
 static func panel(parent: Node) -> PanelContainer:
 	var node := PanelContainer.new()
-	node.add_theme_stylebox_override("panel", box(Color("#10191de8"), Color("#68583b")))
+	node.add_theme_stylebox_override("panel", box(ArtronTheme.CARD_BACKGROUND, ArtronTheme.CARD_BORDER))
 	parent.add_child(node)
 	return node
 
@@ -100,7 +106,7 @@ static func art(parent: Node, texture: Texture2D, height: float) -> TextureRect:
 	node.texture = texture
 	node.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	node.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	node.custom_minimum_size.y = height
+	node.custom_minimum_size.y = height * density_scale
 	node.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(node)
@@ -114,7 +120,7 @@ static func art(parent: Node, texture: Texture2D, height: float) -> TextureRect:
 static func square_art(parent: Node, texture: Texture2D, side: float) -> TextureRect:
 	var node := art(parent, texture, side)
 	node.name = "PortraitArt"
-	node.custom_minimum_size = Vector2(side, side)
+	node.custom_minimum_size = Vector2(side, side) * density_scale
 	node.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	node.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	return node
@@ -130,7 +136,7 @@ static func fit_art(node: TextureRect, atlas: AtlasTexture, texture: Texture2D) 
 
 static func card(parent: Node, title: String, subtitle: String, texture: Texture2D, selected: bool, callback: Callable, square_texture: bool = false) -> Button:
 	var node := button(parent, "", callback, selected)
-	node.custom_minimum_size.y = 214 if texture != null else 94
+	node.custom_minimum_size.y = (214 if texture != null else 94) * density_scale
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:

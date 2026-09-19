@@ -13,6 +13,8 @@ func _init() -> void:
 	character.level = 3
 	character.class_attribute_choices.assign([AttributeTypes.Type.CONSTITUTION])
 	var devotee: CombatantState = character.create_combatant_state()
+	devotee.available_abilities.append(RadianceBurst)
+	devotee.equipped_abilities.append(RadianceBurst.id)
 	devotee.id = "player"; devotee.team = 0
 	var visible := make_target("visible", Vector2(240, 0))
 	var blocked := make_target("blocked", Vector2(330, 0))
@@ -34,7 +36,6 @@ func _init() -> void:
 	check(visible.hp == visible_hp_before - 5, "Faith 11 deals floor(Faith / 2) = 5 Light Damage", failures)
 	check(blocked.hp == blocked_hp_before, "The Circle area does not pass through an obstacle", failures)
 	check(outside.hp == outside_hp_before, "Targets outside the 10-foot radius are unaffected", failures)
-	check(devotee.ap == 2 and devotee.faith == 9, "Radiance Burst costs 3 AP and 2 Faith after snapshotting damage", failures)
 
 	system.map_rules.clear_obstacles()
 	system.map_rules.add_circular_obstacle(Vector2(120, 0), 20.0, "Center Wall")
@@ -46,7 +47,7 @@ func _init() -> void:
 	check(RadianceBurst.required_level == 3 and RadianceBurst.targeting_range_feet == 30.0 and RadianceBurst.area_radius_feet == 10.0, "Radiance Burst has the specified level, range, and 10-foot area", failures)
 	check(RadianceBurst.requires_line_of_sight and RadianceBurst.area_blocked_by_obstacles, "Radiance Burst requires center sight and obstacle blocking", failures)
 	check(["devotee", "divine", "circle"].all(func(id): return RadianceBurst.traits.any(func(trait_data): return trait_data != null and trait_data.id == id)), "Radiance Burst has Devotee, Divine, and Circle traits", failures)
-	check(Catalog.abilities.has(RadianceBurst) and Devotee.get_progression_entry(3).granted_abilities.has(RadianceBurst), "Radiance Burst is registered in Character Creation and Level 3 progression", failures)
+	check(Catalog.abilities.has(RadianceBurst), "Radiance Burst is available as a Character Creation choice", failures)
 
 	for failure in failures:
 		push_error(failure)

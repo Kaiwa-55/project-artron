@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "grabbing"
+display_name = "Grabbing"
+persists_until_combat_end = true
+status_tags = Array[String](["status", "grab"])
+can_be_cleansed = false
