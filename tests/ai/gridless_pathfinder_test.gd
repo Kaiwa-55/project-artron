@@ -29,5 +29,6 @@ func run_test() -> void:
 				break
 	if not success:
 		push_error("Gridless pathfinder must route around a blocking combatant.")
-	print("GRIDLESS_PATHFINDER_TEST: " + ("PASS" if success else "FAIL") + " " + str(path))
+	print("PATH=", path)
+	print("GRIDLESS_PATHFINDER_TEST: " + ("PASS" if success else "FAIL"))
 	quit(0 if success else 1)

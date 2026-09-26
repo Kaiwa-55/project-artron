@@ -20,6 +20,7 @@ func run_test() -> void:
 
 	var system := CombatSystem.new()
 	var player: CombatantState = PlayerData.create_combatant_state()
+	check(player.unarmed_attack.base_damage == 3, "Prototype Player Unarmed Attack has 3 base damage")
 	var target: CombatantState = EnemyData.create_combatant_state()
 	player.position = Vector2.ZERO
 	target.position = Vector2(100, 0)

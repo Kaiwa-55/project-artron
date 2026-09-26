@@ -41,6 +41,9 @@ func run_test() -> void:
 	panel.setup_standalone(player, "abilities", true)
 	check(panel.profile_view.visible and not panel.equipment_view.visible, "Character tab opens the new profile")
 	check(panel.defense_labels["Fortitude"].text == "Fortitude  %d" % panel._displayed_defenses(player)[0], "Profile shows derived defenses")
+	var proficiencies: GridContainer = panel.summary.get_node("SkillProficiencies")
+	check(proficiencies.columns == 1, "Skill proficiencies use the full card width")
+	check(proficiencies.get_child_count() == 5 and proficiencies.get_children().all(func(label): return label is Label and label.autowrap_mode == TextServer.AUTOWRAP_OFF), "Skill names stay on one line")
 	check(panel.profile_abilities.get_child_count() > 2, "Character includes abilities and skills")
 	var exit_position: Vector2 = panel.exit_button.global_position
 	for tab in ["abilities", "equipment", "inventory"]:

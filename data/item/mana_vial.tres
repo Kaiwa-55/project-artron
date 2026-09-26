@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3]
+
+[ext_resource type="Script" path="res://data/item/consumable_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/consumable.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="3"]
+[ext_resource type="Resource" path="res://data/item/effect/mana_vial_restore.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "mana_vial"
+display_name = "Mana Vial"
+description = "Spend 1 AP to restore up to 2 Mana. Cannot be used at full Mana."
+traits = [ExtResource("2"), ExtResource("3")]
+maximum_stack_size = 10
+sell_price = 12
+requires_missing_mana = true
+effects = Array[EffectData]([ExtResource("4")])

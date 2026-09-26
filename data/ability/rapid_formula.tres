@@ -20,5 +20,5 @@ required_level = 3
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Reduce the cooldown assigned by each Skill by 1 Turn, to a minimum of 0."
+description = "ลดคูลดาวน์ที่สกิลกำหนดลง 1 เทิร์น แต่ไม่ต่ำกว่า 0"
 effects = [SubResource("Cooldown")]

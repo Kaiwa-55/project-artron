@@ -21,6 +21,6 @@ traits = [ExtResource("3")]
 auto_equip_on_grant = true
 ap_cost = 1
 cooldown_turns = 2
-description = "Move up to 20 ft without triggering Reactions. Cannot pass through creatures or obstacles."
+description = "ใช้ 1 AP เคลื่อนที่ได้สูงสุด 20 ฟุตโดยไม่กระตุ้นปฏิกิริยาตอบโต้ และผ่านตัวละครหรือสิ่งกีดขวางไม่ได้ คูลดาวน์ 2 เทิร์น"
 effects = [SubResource("Movement")]
 target_mode = 1

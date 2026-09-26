@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_kj8yy"]
 [ext_resource type="Resource" path="res://data/trait/basic.tres" id="2_basic"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_livtr"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="3_move"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4_reactive"]
 [ext_resource type="Resource" uid="uid://3mrdcavehvpc" path="res://data/reaction/step_back_reaction.tres" id="5_reaction"]
@@ -14,5 +15,5 @@ display_name = "Step Back"
 traits = [ExtResource("2_basic"), ExtResource("3_move"), ExtResource("4_reactive")]
 ap_cost = 1
 cooldown_turns = 1
-description = " after an enemy finishes an attack against you, spend 1 AP to Move up to half your Speed."
+description = "หลังศัตรูโจมตีคุณเสร็จ ใช้ปฏิกิริยาตอบโต้ 1 AP เพื่อเคลื่อนที่ได้สูงสุดครึ่งหนึ่งของความเร็ว คูลดาวน์ 1 เทิร์น"
 granted_reactions = [ExtResource("5_reaction")]

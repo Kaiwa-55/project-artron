@@ -22,8 +22,10 @@ func execute(actor_id: String, target_id: String) -> ActionResult:
 	var stealth: int = target.get_skill_rank("stealth")
 	var dc: int = 10 + stealth
 	var succeeded: bool = total >= dc
+	var concealment_reduced := false
 	if succeeded:
-		target.reveal_concealment_against(actor.id, 1)
+		var previous_reduction := target.get_concealment_reduction_against(actor.id)
+		concealment_reduced = target.reveal_concealment_against(actor.id, 1) > previous_reduction
 	var result := ActionResult.success_result()
 	result.events.append(CombatEvent.new(EventTypes.Type.MANEUVER_USED, actor.id, target.id, {
 		"maneuver": "Search",
@@ -33,9 +35,10 @@ func execute(actor_id: String, target_id: String) -> ActionResult:
 		"stealth": stealth,
 		"total": total,
 		"dc": dc,
+		"concealment_reduced": concealment_reduced,
 		"ap_cost": 1,
 	}))
-	if succeeded:
+	if concealment_reduced:
 		result.events.append(CombatEvent.new(EventTypes.Type.EFFECT_APPLIED, actor.id, target.id, {"effect_name": "Concealment -1 against %s" % actor.display_name, "ability_name": "Search"}))
 	combat_system.emit_events(result.events)
 	return result

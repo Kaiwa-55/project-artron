@@ -85,6 +85,7 @@ enum StackMode {
 # positions whenever a relevant action resolves.
 @export var aura_radius_feet: float = 0.0
 @export var aura_attack_bonus: int = 0
+@export var aura_defense_bonus: int = 0
 @export var aura_affects_allies: bool = true
 @export var aura_includes_source: bool = true
 @export var aura_color: Color = Color(0.96, 0.78, 0.32, 0.18)

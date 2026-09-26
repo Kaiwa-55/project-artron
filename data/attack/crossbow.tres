@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/trait/advanced.tres" id="advanced"]
+[ext_resource type="Resource" path="res://data/trait/ranged.tres" id="ranged"]
+[ext_resource type="Resource" path="res://data/trait/two_handed.tres" id="two_handed"]
+[ext_resource type="Resource" path="res://data/trait/pierce.tres" id="pierce"]
+[ext_resource type="Resource" path="res://data/trait/reload.tres" id="reload"]
+
+[resource]
+script = ExtResource("script")
+id = "crossbow_attack"
+display_name = "Crossbow"
+attack_attribute = 1
+ammunition_capacity = 1
+ammunition_item_ids = Array[String](["crossbow_bolt"])
+base_damage = 5
+range_feet = 30.0
+damage_type = "pierce"
+traits = [ExtResource("advanced"), ExtResource("ranged"), ExtResource("two_handed"), ExtResource("pierce"), ExtResource("reload")]

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dv3yi4xh6oy81"]
+
+[ext_resource type="Script" uid="uid://cbhi2hgurc0db" path="res://data/item/item_data.gd" id="script"]
+
+[resource]
+script = ExtResource("script")
+id = "crossbow_bolt"
+display_name = "ลูกหน้าไม้"
+description = "กระสุนสำหรับ Crossbow ใช้หนึ่งดอกต่อการยิง"
+category = 2
+sell_price = 1

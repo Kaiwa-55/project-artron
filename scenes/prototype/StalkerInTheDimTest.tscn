@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://k8ym0hq0tyvg"]
+
+[ext_resource type="PackedScene" uid="uid://cvus305vq1ew2" path="res://scenes/prototype/PrototypeCombat.tscn" id="1_base"]
+[ext_resource type="Resource" uid="uid://dmv6cjnbggdqj" path="res://data/encounter/event_stalker_in_the_dim.tres" id="2_encounter"]
+
+[node name="PrototypeCombat" unique_id=2117943692 instance=ExtResource("1_base")]
+encounter_data = ExtResource("2_encounter")

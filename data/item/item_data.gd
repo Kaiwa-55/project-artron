@@ -14,6 +14,9 @@ enum Category {
 @export var category: Category = Category.CONSUMABLE
 @export var traits: Array = []
 @export_range(1, 999) var maximum_stack_size: int = 99
+@export_range(0, 9999) var sell_price: int = 0
+@export var ammunition_damage_bonus: int = 0
+@export var ammunition_to_hit_bonus: int = 0
 
 
 func has_trait(trait_id: String) -> bool:

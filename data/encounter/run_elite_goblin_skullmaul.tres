@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3]
+
+[ext_resource type="Script" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Script" path="res://data/character/character_data.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/Map/Desert 1.png" id="3"]
+[ext_resource type="Resource" path="res://data/character/goblin_skullmaul.tres" id="4"]
+[ext_resource type="Resource" path="res://data/character/goblin_shiv.tres" id="5"]
+[ext_resource type="Resource" path="res://data/character/goblin_slinger.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = "run_elite_goblin_skullmaul"
+display_name = "Skullmaul Warband"
+battlefield_texture = ExtResource("3")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-40, -83.3333), Vector2(-56, -65.3333), Vector2(-24, -65.3333)])
+enemies = Array[ExtResource("2")]([ExtResource("4"), ExtResource("5"), ExtResource("6")])

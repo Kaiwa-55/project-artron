@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://c8asqcahpdevv"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_75aar"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_mxdbf"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/trait/stance.tres" id="stance"]
+[ext_resource type="Resource" path="res://data/effect/bulwark_stance.tres" id="stance_effect"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="use"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="Apply"]
+script = ExtResource("use")
+effect = ExtResource("stance_effect")
+
+[resource]
+script = ExtResource("ability")
+id = "bulwark_stance"
+display_name = "Bulwark Stance"
+required_trait_ids = Array[String](["warrior"])
+replaces_active_stance = true
+traits = [ExtResource("warrior"), ExtResource("stance")]
+ap_cost = 1
+description = "ใช้ 1 AP เข้าสู่ Bulwark Stance ได้ Defense +1 และใช้ท่าสายป้องกัน การเปลี่ยนท่ายืนจะแทนที่ท่าเดิม"
+target_mode = 1
+use_effects = [SubResource("Apply")]

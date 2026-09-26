@@ -1,0 +1,81 @@
+[gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://dfrdbl8g4p6a5"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="9_bp8vt"]
+[ext_resource type="Resource" uid="uid://txp5vuvucxwo" path="res://data/ability/advanced_weapon_training.tres" id="advanced_training"]
+[ext_resource type="Resource" uid="uid://bpc8mtg1tyeq" path="res://data/ability/assault_stance.tres" id="assault_stance"]
+[ext_resource type="Resource" uid="uid://c8asqcahpdevv" path="res://data/ability/bulwark_stance.tres" id="bulwark_stance"]
+[ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="class"]
+[ext_resource type="Resource" path="res://data/ability/counterattack.tres" id="counterattack"]
+[ext_resource type="Resource" uid="uid://caimbur74seqs" path="res://data/ability/duelist_stance.tres" id="duelist_stance"]
+[ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="progression"]
+[ext_resource type="Resource" uid="uid://cm1xiy6krh40g" path="res://data/ability/simple_weapon_training.tres" id="simple_training"]
+[ext_resource type="Resource" uid="uid://bvted75uyg4de" path="res://data/ability/stand_firm.tres" id="stand_firm"]
+[ext_resource type="Resource" uid="uid://cadko4detjmfp" path="res://data/ability/steady_assault.tres" id="steady_assault"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="Level1"]
+script = ExtResource("progression")
+max_hp_gain = 8
+granted_abilities = Array[ExtResource("9_bp8vt")]([ExtResource("simple_training"), ExtResource("advanced_training"), ExtResource("steady_assault"), ExtResource("stand_firm"), ExtResource("counterattack"), ExtResource("assault_stance"), ExtResource("bulwark_stance"), ExtResource("duelist_stance")])
+
+[sub_resource type="Resource" id="Level2"]
+script = ExtResource("progression")
+level = 2
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level3"]
+script = ExtResource("progression")
+level = 3
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level4"]
+script = ExtResource("progression")
+level = 4
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level5"]
+script = ExtResource("progression")
+level = 5
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level6"]
+script = ExtResource("progression")
+level = 6
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level7"]
+script = ExtResource("progression")
+level = 7
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level8"]
+script = ExtResource("progression")
+level = 8
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level9"]
+script = ExtResource("progression")
+level = 9
+max_hp_gain = 6
+
+[sub_resource type="Resource" id="Level10"]
+script = ExtResource("progression")
+level = 10
+max_hp_gain = 6
+
+[resource]
+script = ExtResource("class")
+id = "warrior"
+display_name = "Warrior"
+description = "นักรบแนวหน้าที่โจมตีด้วยอาวุธได้สม่ำเสมอ ยืนรับการโจมตีและโต้กลับเมื่อศัตรูพลาด"
+base_speed_feet = 5.0
+base_mana = 0
+fixed_attribute_bonuses = {
+0: 1
+}
+attribute_choice_count = 1
+attribute_choice_options = Array[int]([2, 1])
+granted_abilities = [ExtResource("simple_training"), ExtResource("advanced_training"), ExtResource("steady_assault"), ExtResource("stand_firm"), ExtResource("counterattack"), ExtResource("assault_stance"), ExtResource("bulwark_stance"), ExtResource("duelist_stance")]
+traits = [ExtResource("warrior")]
+auto_equipped_ability_ids = Array[String](["simple_weapon_training", "advanced_weapon_training", "steady_assault", "stand_firm", "counterattack", "assault_stance", "bulwark_stance", "duelist_stance"])
+progression_entries = Array[Resource]([SubResource("Level1"), SubResource("Level2"), SubResource("Level3"), SubResource("Level4"), SubResource("Level5"), SubResource("Level6"), SubResource("Level7"), SubResource("Level8"), SubResource("Level9"), SubResource("Level10")])

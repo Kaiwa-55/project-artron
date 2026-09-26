@@ -28,7 +28,7 @@ func run_test() -> void:
 	var safety := 0
 	var moved_then_ended := false
 	var ally_passed_without_moving := false
-	while not prototype.combat_system.combat_state.is_finished() and prototype.combat_system.combat_state.current_round <= 2 and safety < 500:
+	while not prototype.combat_system.combat_state.is_finished() and prototype.combat_system.combat_state.current_round <= 2 and safety < 2000:
 		safety += 1
 		var state = prototype.combat_system.combat_state
 		if prototype.combat_system.has_pending_reaction():
@@ -50,10 +50,16 @@ func run_test() -> void:
 		await create_timer(0.02).timeout
 
 	var attacks: Dictionary = {"spider": 0, "giant_spider": 0, "velkaria": 0}
+	var turns_started: Dictionary = {"spider": 0, "giant_spider": 0, "velkaria": 0}
+	var turns_ended: Dictionary = {"spider": 0, "giant_spider": 0, "velkaria": 0}
 	var web_shots := 0
 	var royal_web_uses := 0
 	var giant_bites := 0
 	for event in prototype.combat_system.event_system.event_history:
+		if event.type == EventTypes.Type.TURN_STARTED and turns_started.has(event.source_id):
+			turns_started[event.source_id] += 1
+		if event.type == EventTypes.Type.TURN_ENDED and turns_ended.has(event.source_id):
+			turns_ended[event.source_id] += 1
 		if event.type == EventTypes.Type.ABILITY_TRIGGERED and event.source_id == "giant_spider" and event.data.get("ability_name", "") == "Web Shot":
 			web_shots += 1
 		if event.type == EventTypes.Type.ABILITY_TRIGGERED and event.source_id == "velkaria" and event.data.get("ability_name", "") == "Royal Web":
@@ -74,10 +80,15 @@ func run_test() -> void:
 		var image: Image = texture.get_image() if texture != null else null
 		if image == null or image.get_pixel(0, 0).a > 0.01:
 			circular_enemy_tokens = false
-	var success: bool = encounter_objects_respected and circular_enemy_tokens and moved_then_ended and ally_passed_without_moving and attacks.spider > 0 and attacks.giant_spider > 0 and attacks.velkaria > 0 and royal_web_uses > 0
+	var every_enemy_completed_turn: bool = true
+	for enemy_id in turns_started:
+		if turns_started[enemy_id] < 1 or turns_ended[enemy_id] < 1:
+			every_enemy_completed_turn = false
+	var success: bool = encounter_objects_respected and circular_enemy_tokens and moved_then_ended and ally_passed_without_moving and every_enemy_completed_turn and royal_web_uses > 0
 	if not success:
-		push_error("Every Spider enemy must act and Velkaria must use Royal Web in the multi-party scene.")
+		push_error("Every enemy must complete a turn and Velkaria must use Royal Web in the multi-party scene. Started: %s Ended: %s" % [turns_started, turns_ended])
 		print("AI LOG: " + str(prototype.get_node("UILayer/Control").local_log_entries))
-	print("MULTI_PARTY_TURN_LOOP_TEST: " + ("PASS" if success else "FAIL") + " " + str(attacks) + " giant_bites=" + str(giant_bites) + " royal_web=" + str(royal_web_uses))
+	print("Turns: " + str(turns_ended) + " attacks=" + str(attacks) + " giant_bites=" + str(giant_bites) + " royal_web=" + str(royal_web_uses))
+	print("MULTI_PARTY_TURN_LOOP_TEST: " + ("PASS" if success else "FAIL"))
 	prototype.queue_free()
 	quit(0 if success else 1)

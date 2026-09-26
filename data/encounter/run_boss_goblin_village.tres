@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://bqcs6ode7fr2o"]
+
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="2"]
+[ext_resource type="Resource" uid="uid://nafk4084m580" path="res://data/world/goblin_entry/goblin_village_battle_map.tres" id="3"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="3_s1366"]
+[ext_resource type="Resource" path="res://data/character/goblin_skullmaul.tres" id="4"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="5"]
+[ext_resource type="Resource" uid="uid://ob8fqcae5xgu" path="res://data/character/goblin_slinger.tres" id="6"]
+[ext_resource type="Texture2D" uid="uid://y8q1ocegygxr" path="res://assets/cutscenes/goblin_boss/village.png" id="7"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="8_kg048"]
+
+[sub_resource type="Resource" id="Boss"]
+script = ExtResource("2")
+id = "village_skullmaul"
+enemy = ExtResource("4")
+spawn_center_feet = Vector2(28, 0)
+
+[sub_resource type="Resource" id="Shiv"]
+script = ExtResource("2")
+id = "village_shiv"
+enemy = ExtResource("5")
+spawn_center_feet = Vector2(16, -19)
+
+[sub_resource type="Resource" id="Slinger"]
+script = ExtResource("2")
+id = "village_slinger"
+enemy = ExtResource("6")
+spawn_center_feet = Vector2(20, 21)
+
+[resource]
+script = ExtResource("1")
+id = "run_boss_goblin_village"
+display_name = "Goblin Village: Final Stand"
+encounter_description = "กลางหมู่บ้าน Skullmaul ยืนรอพร้อมกองกำลังสุดท้าย นี่คือศึกตัดสิน"
+cutscene_image = ExtResource("7")
+type = 5
+building_map = ExtResource("3")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-35, 0), Vector2(-43, -12), Vector2(-43, 12)])
+enemy_groups = Array[Resource]([SubResource("Boss"), SubResource("Shiv"), SubResource("Slinger")])

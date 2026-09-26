@@ -14,7 +14,32 @@ var id: String = ""
 var display_name: String = ""
 var team: int = 0
 
-var position: Vector2 = Vector2.ZERO
+var world_position: Vector3 = Vector3.ZERO
+var body_height_feet: float:
+	get:
+		return collision_radius_feet * 2.0
+var eye_offset: Vector3:
+	get:
+		return Vector3.UP * body_height_feet * (5.0 / 6.0)
+var spatial_units_per_foot: float = 12.0
+# Compatibility view for the existing combat API; the stored position is 3D.
+var position: Vector2:
+	get:
+		return Vector2(world_position.x, world_position.z) * spatial_units_per_foot
+	set(value):
+		world_position.x = value.x / spatial_units_per_foot
+		world_position.z = value.y / spatial_units_per_foot
+## Vertical presentation/navigation state. `position` remains the established
+## centered X/Z combat coordinate so existing combat rules stay compatible.
+var surface_id: StringName = &"ground"
+var elevation_feet: float:
+	get:
+		return world_position.y
+	set(value):
+		world_position.y = value
+var requested_surface_id: StringName = &""
+var movement_path_3d: PackedVector3Array = []
+var is_airborne: bool = false
 var ancestry_id: String = ""
 var ancestry_display_name: String = ""
 var class_id: String = ""
@@ -61,6 +86,10 @@ var will_stat_bonus: int = 0
 var equipment_reflex_bonus: int = 0
 var equipment_fortitude_bonus: int = 0
 var equipment_will_bonus: int = 0
+var equipment_stealth_bonus: int = 0
+var equipment_max_mana_bonus: int = 0
+var focus_draught_ready_bonus: int = 0
+var focus_draught_skill_bonus: int = 0
 
 var hp: int = 0
 var max_hp: int = 0
@@ -110,6 +139,8 @@ var status_immunities: Array[String] = []
 var available_abilities: Array = []
 var equipped_abilities: Array = []
 var equipped_weapon_attack: AttackData
+## Remaining ammunition keyed by attack id. Reload weapons are initialized full.
+var ammunition: Dictionary = {}
 var natural_attack: AttackData
 var unarmed_attack: AttackData
 var equipment_inventory: Array = []
@@ -126,6 +157,8 @@ var skill_cooldowns: Dictionary = {}
 var ability_cooldowns: Dictionary = {}
 var ability_cooldown_skip_next_reduction: Dictionary = {}
 var ability_stacks: Dictionary = {}
+var next_attack_target_id: String = ""
+var next_attack_to_hit_bonus: int = 0
 var ability_uses_this_turn: Dictionary = {}
 var attacks_declared_this_turn: int = 0
 var active_traits: Array = []
@@ -146,7 +179,7 @@ func get_modifier(value: int) -> int:
 
 
 func get_skill_rank(skill_id: String) -> int:
-	return maxi(0, int(skill_ranks.get(skill_id, 0)))
+	return maxi(0, int(skill_ranks.get(skill_id, 0)) + (equipment_stealth_bonus if skill_id == "stealth" else 0))
 
 
 func get_concealment_bonus_against(observer_id: String) -> int:
@@ -156,7 +189,7 @@ func get_concealment_bonus_against(observer_id: String) -> int:
 func grant_concealment_against(observer_id: String, amount: int) -> int:
 	if observer_id.is_empty() or amount <= 0:
 		return get_concealment_bonus_against(observer_id)
-	var value := get_concealment_bonus_against(observer_id) + amount
+	var value := 1
 	concealment_bonus_by_observer[observer_id] = value
 	return value
 
@@ -168,9 +201,14 @@ func get_concealment_reduction_against(observer_id: String) -> int:
 func reveal_concealment_against(observer_id: String, amount: int) -> int:
 	if observer_id.is_empty() or amount <= 0:
 		return get_concealment_reduction_against(observer_id)
-	var value := get_concealment_reduction_against(observer_id) + amount
+	var value := mini(get_concealment_bonus_against(observer_id), get_concealment_reduction_against(observer_id) + amount)
 	concealment_reduction_by_observer[observer_id] = value
 	return value
+
+
+func clear_hide_concealment() -> void:
+	concealment_bonus_by_observer.clear()
+	concealment_reduction_by_observer.clear()
 
 
 func get_class_dc() -> int:
@@ -212,6 +250,7 @@ func apply_damage(amount: int) -> void:
 
 	hp = max(0, hp - amount)
 	remove_status("hidden")
+	clear_hide_concealment()
 
 	if hp == 0:
 		life_state = CombatEnums.LifeState.DYING
@@ -408,6 +447,8 @@ func get_passive_damage_resistance(damage_type: String) -> int:
 
 func get_ability_damage_resistance(ability, damage_type: String) -> int:
 	var total := 0
+	if not ability.required_stance_id.is_empty() and not effects.any(func(instance): return instance != null and instance.is_stance and instance.source_ability_id == ability.required_stance_id):
+		return total
 	var key := damage_type.strip_edges().to_lower()
 	for ability_effect in ability.effects:
 		if ability_effect == null or ability_effect.effect_type != AbilityEffectDataScript.Type.PASSIVE_DAMAGE_RESISTANCE:

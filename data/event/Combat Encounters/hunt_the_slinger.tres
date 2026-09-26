@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://815xs470gm31"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_yi22r"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_e33yg"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_p8nan"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4_35tui"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_gocps"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="6_ismsu"]
+[ext_resource type="Resource" uid="uid://ob8fqcae5xgu" path="res://data/character/goblin_slinger.tres" id="7_dldjd"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="8_13gbc"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="9_2pfwc"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="10_dhal3"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="11_2skmn"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="12_7weov"]
+[ext_resource type="Resource" path="res://data/item/mana_vial.tres" id="reward_item_0"]
+
+[sub_resource type="Resource" id="Resource_blycp"]
+script = ExtResource("8_13gbc")
+id = "captain"
+enemy = ExtResource("7_dldjd")
+spawn_center_feet = Vector2(38, 0)
+
+[sub_resource type="Resource" id="Resource_k118u"]
+script = ExtResource("8_13gbc")
+id = "guards"
+enemy = ExtResource("9_2pfwc")
+count = 2
+spawn_center_feet = Vector2(4, 0)
+
+[sub_resource type="Resource" id="Resource_xdp3x"]
+script = ExtResource("10_dhal3")
+id = &"goal_hunt_the_slinger"
+description = "กำจัดกอบลินผู้บัญชาการ"
+type = 1
+target_id = "captain_goblin_slinger"
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Reward_0"]
+script = ExtResource("3_p8nan")
+type = 2
+amount = 1
+item = ExtResource("reward_item_0")
+
+[sub_resource type="Resource" id="Reward_xp"]
+script = ExtResource("3_p8nan")
+type = 11
+amount = 75
+
+[sub_resource type="Resource" id="Victory_choice"]
+script = ExtResource("1_yi22r")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Victory_event"]
+script = ExtResource("12_7weov")
+id = &"victory_hunt_the_slinger"
+title = "กำจัดผู้บัญชาการ"
+description = "คุณพบขวดมานา 1 ขวดในสัมภาระของมือสลิง และทุกคนได้รับ 75 XP"
+illustration = ExtResource("5_gocps")
+choices = Array[ExtResource("1_yi22r")]([SubResource("Victory_choice")])
+
+[sub_resource type="Resource" id="Resource_lu660"]
+script = ExtResource("11_2skmn")
+id = "event_hunt_the_slinger"
+display_name = "ล่ามือสลิง"
+encounter_name = "ล่ามือสลิง"
+encounter_description = "กำจัดกอบลินถือสลิงที่คอยสั่งการพวกยาม"
+encounter_image = ExtResource("5_gocps")
+battlefield_texture = ExtResource("4_35tui")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-45, 0), Vector2(-53, -10), Vector2(-53, 10)])
+enemy_groups = Array[Resource]([SubResource("Resource_blycp"), SubResource("Resource_k118u")])
+objectives = Array[ExtResource("10_dhal3")]([SubResource("Resource_xdp3x")])
+victory_event = SubResource("Victory_event")
+rewards = Array[Resource]([SubResource("Reward_0"), SubResource("Reward_xp")])
+
+[sub_resource type="Resource" id="Resource_40xsg"]
+script = ExtResource("1_yi22r")
+text = "บุกเข้าหาผู้บัญชาการ"
+encounter = SubResource("Resource_lu660")
+
+[sub_resource type="Resource" id="Resource_8yh1c"]
+script = ExtResource("1_yi22r")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("12_7weov")
+id = &"hunt_the_slinger"
+title = "ล่ามือสลิง"
+description = "กอบลินตัวหนึ่งสั่งการอยู่แนวหลัง ขณะที่พวกยามจับตาดูคุณและรอจังหวะเข้าขวาง"
+illustration = ExtResource("5_gocps")
+choices = Array[ExtResource("1_yi22r")]([SubResource("Resource_40xsg"), SubResource("Resource_8yh1c")])

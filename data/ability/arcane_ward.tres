@@ -27,6 +27,6 @@ required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("4_arcanist")]
 ap_cost = 1
 cooldown_turns = 2
-description = "Weave an Arcane Ward around yourself. Gain +1 Reflex, Fortitude, and Will until the start of your next turn."
+description = "ใช้ 1 AP เพิ่ม Reflex, Fortitude และ Will อย่างละ 1 จนถึงต้นเทิร์นถัดไปของตนเอง คูลดาวน์ 2 เทิร์น"
 target_mode = 1
 use_effects = [SubResource("ArcaneWardUse")]

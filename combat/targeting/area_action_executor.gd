@@ -12,17 +12,17 @@ func _init(p_combat_system) -> void:
 	combat_system = p_combat_system
 
 
-func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2) -> ActionResult:
+func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2, target_world: Vector3 = Vector3.INF) -> ActionResult:
 	var start_validation := validate_skill_start(combatant_id, skill_id)
 	if not start_validation.success:
 		return start_validation
 	var actor: CombatantState = combat_system.combat_state.get_combatant(combatant_id)
 	var skill = get_skill(actor, skill_id)
 	var effective_range: float = combat_system.skill_system.get_effective_range_feet(actor, skill)
-	var point_validation: ActionResult = combat_system.targeting_system.validate_target_point(actor, target_point, skill, combat_system.map_rules, effective_range)
+	var point_validation: ActionResult = combat_system.targeting_system.validate_target_point(actor, target_point, skill, combat_system.map_rules, effective_range, target_world)
 	if not point_validation.success:
 		return point_validation
-	var targets: Array[CombatantState] = combat_system.targeting_system.collect_targets(actor, target_point, skill, combat_system.combat_state, combat_system.map_rules, effective_range)
+	var targets: Array[CombatantState] = combat_system.targeting_system.collect_targets(actor, target_point, skill, combat_system.combat_state, combat_system.map_rules, effective_range, target_world)
 	if targets.is_empty():
 		return ActionResult.failure("There are no valid targets in the selected area.")
 	if not actor.spend_ap(skill.ap_cost):
@@ -30,28 +30,30 @@ func execute_skill(combatant_id: String, skill_id: String, target_point: Vector2
 	combat_system.skill_system.consume_skill_costs(actor, skill)
 	combat_system.cancel_remaining_movement(actor)
 	combat_system.clear_hidden(actor, "Offensive Skill used")
-	var area_attack: AttackData = combat_system.skill_system.get_attack_data(skill, actor)
+	var area_attack: AttackData = combat_system.skill_system.get_attack_data(skill, actor, true)
 	if uses_single_area_animation(area_attack.animation_template):
 		area_attack.animation_template = null
 	area_attack.ap_cost = 0
 	pending_context = AreaActionContextScript.new()
-	pending_context.setup_skill(actor, skill, target_point, area_attack, targets)
+	pending_context.setup_skill(actor, skill, target_point, area_attack, targets, target_world)
 	pending_context.repeated_attack_penalty = combat_system.attack_system.declare_attack_action(actor, area_attack)
 	pending_context.costs_consumed = true
 	pending_context.cooldown_started = combat_system.skill_system.get_remaining_cooldown(actor, skill.id) > 0
 	return continue_action()
 
 
-func execute_ability(combatant_id: String, ability_id: String, target_point: Vector2) -> ActionResult:
+func execute_ability(combatant_id: String, ability_id: String, target_point: Vector2, target_world: Vector3 = Vector3.INF) -> ActionResult:
 	var start_validation := validate_ability_start(combatant_id, ability_id)
 	if not start_validation.success:
 		return start_validation
 	var actor: CombatantState = combat_system.combat_state.get_combatant(combatant_id)
 	var ability = combat_system.ability_system.get_available_ability(actor, ability_id)
-	var point_validation: ActionResult = combat_system.targeting_system.validate_target_point(actor, target_point, ability, combat_system.map_rules)
+	var point_validation: ActionResult = combat_system.targeting_system.validate_target_point(actor, target_point, ability, combat_system.map_rules, -1.0, target_world)
 	if not point_validation.success:
 		return point_validation
-	var targets: Array[CombatantState] = combat_system.targeting_system.collect_targets(actor, target_point, ability, combat_system.combat_state, combat_system.map_rules)
+	var targets: Array[CombatantState] = combat_system.targeting_system.collect_targets(actor, target_point, ability, combat_system.combat_state, combat_system.map_rules, -1.0, target_world)
+	if ability.max_area_targets > 0 and targets.size() > ability.max_area_targets:
+		targets.resize(ability.max_area_targets)
 	if targets.is_empty():
 		return ActionResult.failure("There are no valid targets in the selected area.")
 	var source_attack: AttackData = combat_system.ability_system.get_attack_data(actor, ability)
@@ -84,7 +86,7 @@ func execute_ability(combatant_id: String, ability_id: String, target_point: Vec
 	actor.ability_uses_this_turn[ability.id] = int(actor.ability_uses_this_turn.get(ability.id, 0)) + 1
 	var cooldown: int = combat_system.ability_system.start_cooldown(actor, ability)
 	pending_context = AreaActionContextScript.new()
-	pending_context.setup_ability(actor, ability, target_point, area_attack, targets)
+	pending_context.setup_ability(actor, ability, target_point, area_attack, targets, target_world)
 	pending_context.repeated_attack_penalty = combat_system.attack_system.declare_attack_action(actor, area_attack)
 	pending_context.costs_consumed = true
 	pending_context.cooldown_started = cooldown > 0
@@ -203,16 +205,21 @@ func continue_action(carried_events: Array[CombatEvent] = []) -> ActionResult:
 			context.cancel(AreaActionContextScript.CancelScope.REMAINING_TARGETS, "The Area Action user became Dying during resolution.")
 			break
 	context.finish()
+	if ability != null:
+		for resolved_target in context.targets:
+			if resolved_target != null and resolved_target.is_dying():
+				combat_system.offer_on_kill_movement(actor, resolved_target, result)
+				break
 	if skill != null:
 		var skill_event_data := {"skill_name": skill.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(actor, skill), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(actor, skill), "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}
 		var skill_animation = skill.attack_data.animation_template if skill.attack_data != null else null
 		if uses_single_area_animation(skill_animation):
-			append_area_animation_data(skill_event_data, skill_animation, actor, context.target_point, skill)
+			append_area_animation_data(skill_event_data, skill_animation, actor, context.target_point, skill, context.target_world)
 		result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, actor.id, "", skill_event_data))
 	else:
 		var ability_event_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": ability.cooldown_turns, "area_target_count": context.targets.size(), "area_resolved_count": context.target_results.size(), "target_point": context.target_point}
 		if uses_single_area_animation(ability.animation_template):
-			append_area_animation_data(ability_event_data, ability.animation_template, actor, context.target_point, ability)
+			append_area_animation_data(ability_event_data, ability.animation_template, actor, context.target_point, ability, context.target_world)
 		result.events.push_front(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, "", ability_event_data))
 	pending_context = null
 	combat_system.emit_events(result.events)
@@ -224,10 +231,15 @@ func uses_single_area_animation(template) -> bool:
 	return template != null and template.animation_type in [AttackAnimationData.Type.ATTACHED_DIRECTIONAL, AttackAnimationData.Type.CONE_BURST, AttackAnimationData.Type.CIRCLE_GROUND]
 
 
-func append_area_animation_data(event_data: Dictionary, template, actor: CombatantState, target_point: Vector2, source) -> void:
+func append_area_animation_data(event_data: Dictionary, template, actor: CombatantState, target_point: Vector2, source, target_world: Vector3 = Vector3.INF) -> void:
 	event_data["animation_template"] = template
 	event_data["animation_origin"] = actor.position
 	event_data["animation_target"] = target_point
+	event_data["animation_world_origin"] = actor.world_position
+	event_data["animation_world_target"] = target_world
+	event_data["area_shape"] = source.area_shape
+	event_data["line_width_feet"] = source.line_width_feet
+	event_data["line_length_feet"] = source.line_length_feet
 	if source.area_shape == source.AreaShape.CONE:
 		event_data["area_length_feet"] = source.targeting_range_feet
 		event_data["cone_angle_degrees"] = source.cone_angle_degrees

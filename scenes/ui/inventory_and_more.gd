@@ -4,7 +4,7 @@ signal item_use_requested(item)
 
 const InventoryViewScript := preload("res://scenes/ui/inventory_view.gd")
 const UITheme := preload("res://scenes/ui/artron_ui_theme.gd")
-const SLOT_NAMES := {0: "Hand 1", 3: "Hand 2", 1: "Body"}
+const SLOT_NAMES := EquipmentSystem.SLOT_NAMES
 var inventory_view: PanelContainer
 var equipment_view: HBoxContainer
 var profile_view: HBoxContainer
@@ -109,7 +109,7 @@ func _build_equipment() -> void:
 
 func _render_equipment(player: CombatantState) -> void:
 	_clear(equipment_slots)
-	for slot in SLOT_NAMES:
+	for slot in EquipmentSystem.LOADOUT_SLOTS:
 		var item = player.equipped_items.get(slot)
 		var button: Button = inventory_view._button("%s: %s" % [SLOT_NAMES[slot], item.display_name if item != null else "Empty"], _select_entry.bind(item))
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -145,18 +145,18 @@ func _render_equipment_details(player: CombatantState) -> void:
 	var item := selected_entry as EquipmentData
 	equipment_name.text = item.display_name if item != null else "Select equipment"
 	equipment_detail.text = item.description if item != null else "Choose gear from the list or your equipped slots."
-	equipment_hint.text = "Viewing only" if changes_locked else ("Hand changes cost 1 AP. Armor is locked in combat." if combat_system != null else "Equipment changes are free outside combat.")
+	equipment_hint.text = "Viewing only" if changes_locked else ("Hand changes cost 1 AP. Worn gear is locked in combat." if combat_system != null else "Equipment changes are free outside combat.")
 	if item == null:
 		return
 	equipment_detail.text += "\nFortitude %+d / Reflex %+d / Will %+d" % [item.fortitude_bonus, item.reflex_bonus, item.will_bonus]
-	var slots: Array = [1] if item.slot == EquipmentData.Slot.ARMOR else ([0] if _is_two_handed(item) else [0, 3])
+	var slots: Array = [0] if _is_two_handed(item) else EquipmentSystem.new().get_valid_slots(item)
 	for slot in slots:
 		var equipped: bool = player.equipped_items.get(slot) == item
 		var caption: String = ("Unequip " if equipped else "Equip ") + ("Both Hands" if _is_two_handed(item) else SLOT_NAMES[slot])
-		if combat_system != null and slot != 1:
+		if combat_system != null and (slot == 0 or slot == 3):
 			caption += " - 1 AP"
 		var button: Button = inventory_view._button(caption, _request_equipment_change.bind(item, slot))
-		button.disabled = changes_locked or (combat_system != null and (slot == 1 or player.ap < 1))
+		button.disabled = changes_locked or (combat_system != null and (slot != 0 and slot != 3 or player.ap < 1))
 		equipment_action_bar.add_child(button)
 
 
@@ -164,7 +164,7 @@ func _request_equipment_change(item: EquipmentData, slot: int) -> void:
 	var player := _get_character()
 	if player == null or changes_locked or not player.equipment_inventory.has(item):
 		return
-	if combat_system != null and (slot == 1 or player.ap < 1):
+	if combat_system != null and (slot != 0 and slot != 3 or player.ap < 1):
 		return
 	equipment_change_requested.emit(item, slot)
 	refresh()
@@ -199,12 +199,14 @@ func _render_profile(player: CombatantState) -> void:
 		attributes.add_child(value)
 	summary.add_child(_label("SKILL PROFICIENCIES", 9, inventory_view.GOLD))
 	var proficiencies := GridContainer.new()
-	proficiencies.columns = 2
+	proficiencies.name = "SkillProficiencies"
+	proficiencies.columns = 1
 	proficiencies.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	proficiencies.add_theme_constant_override("h_separation", 12)
 	summary.add_child(proficiencies)
 	for entry in [["Stealth", "stealth"], ["Perception", "perception"], ["Athletics", "athletics"], ["Acrobatics", "acrobatics"], ["Survival", "survival"]]:
-		proficiencies.add_child(_label("%s  %d" % [entry[0], player.get_skill_rank(entry[1])], 11))
+		var proficiency := _label("%s  %d" % [entry[0], player.get_skill_rank(entry[1])], 11)
+		proficiency.autowrap_mode = TextServer.AUTOWRAP_OFF
+		proficiencies.add_child(proficiency)
 	summary.add_child(_label("DEFENSES", 9, inventory_view.GOLD))
 	var values := _displayed_defenses(player)
 	for index in range(3):

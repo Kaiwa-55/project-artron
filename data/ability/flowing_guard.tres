@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/ability/effect/flowing_guard_move.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_8e74p"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_7fo5r"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="4"]
 
 [resource]
@@ -15,5 +16,5 @@ prerequisite_id = "build_up_body"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. After moving at least 5 ft during your Turn, gain +1 Reflex until the start of your next Turn. This bonus does not stack."
+description = "หลังเคลื่อนที่อย่างน้อย 5 ฟุตในเทิร์นของตน ได้รับ Reflex +1 จนถึงต้นเทิร์นถัดไป โบนัสนี้ไม่ซ้อนกัน"
 effects = [ExtResource("2")]

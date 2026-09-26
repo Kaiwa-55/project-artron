@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://c6s6l8yvilry3"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_clkbf"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_02xea"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_4ngpa"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4_g4wrc"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_1p3gm"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="6_73oc3"]
+[ext_resource type="Resource" uid="uid://ob8fqcae5xgu" path="res://data/character/goblin_slinger.tres" id="7_5vr8u"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="8_msa73"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="9_tmgn1"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="10_teqmi"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="11_gxyjo"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="12_5so1f"]
+[ext_resource type="Resource" uid="uid://d2qqwwh5i6son" path="res://data/item/minor_healing_potion.tres" id="reward_item_0"]
+
+[sub_resource type="Resource" id="Resource_srx2q"]
+script = ExtResource("8_msa73")
+id = "slingers"
+enemy = ExtResource("7_5vr8u")
+spawn_center_feet = Vector2(30, -18)
+
+[sub_resource type="Resource" id="Resource_u0t0d"]
+script = ExtResource("8_msa73")
+id = "flank"
+enemy = ExtResource("9_tmgn1")
+count = 2
+spawn_center_feet = Vector2(14, 18)
+
+[sub_resource type="Resource" id="Resource_b3c5c"]
+script = ExtResource("10_teqmi")
+id = &"goal_goblin_crossfire"
+description = "กำจัดกอบลินที่ซุ่มโจมตี"
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Reward_0"]
+script = ExtResource("3_4ngpa")
+type = 2
+amount = 1
+item = ExtResource("reward_item_0")
+
+[sub_resource type="Resource" id="Reward_xp"]
+script = ExtResource("3_4ngpa")
+type = 11
+amount = 60
+
+[sub_resource type="Resource" id="Victory_choice"]
+script = ExtResource("1_clkbf")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Victory_event"]
+script = ExtResource("12_5so1f")
+id = &"victory_goblin_crossfire"
+title = "ฝ่าวงล้อมสำเร็จ"
+description = "คุณเก็บยารักษาจากเสบียงของกอบลินได้ 1 ขวด และทุกคนได้รับ 60 XP"
+illustration = ExtResource("5_1p3gm")
+choices = Array[ExtResource("1_clkbf")]([SubResource("Victory_choice")])
+
+[sub_resource type="Resource" id="Resource_386gh"]
+script = ExtResource("11_gxyjo")
+id = "event_goblin_crossfire"
+display_name = "กอบลินยิงประสาน"
+encounter_name = "กอบลินยิงประสาน"
+encounter_description = "กอบลินถือสลิงหลบหลังเกวียนพัง ขณะที่พวกถือมีดเข้าประชิดจากด้านข้าง"
+encounter_image = ExtResource("5_1p3gm")
+battlefield_texture = ExtResource("4_g4wrc")
+map_objects = Array[Dictionary]([{
+"kind": "obstacle",
+"label": "เกวียนพัง",
+"position_feet": Vector2(12, -12),
+"radius_feet": 6.0
+}])
+player_spawn_positions_feet = Array[Vector2]([Vector2(-45, 0), Vector2(-53, -10), Vector2(-53, 10)])
+enemy_groups = Array[Resource]([SubResource("Resource_srx2q"), SubResource("Resource_u0t0d")])
+objectives = Array[ExtResource("10_teqmi")]([SubResource("Resource_b3c5c")])
+victory_event = SubResource("Victory_event")
+rewards = Array[Resource]([SubResource("Reward_0"), SubResource("Reward_xp")])
+
+[sub_resource type="Resource" id="Resource_qfmwv"]
+script = ExtResource("1_clkbf")
+text = "ฝ่าวงล้อมกอบลิน"
+encounter = SubResource("Resource_386gh")
+
+[sub_resource type="Resource" id="Resource_x4wbh"]
+script = ExtResource("1_clkbf")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("12_5so1f")
+id = &"goblin_crossfire"
+title = "กอบลินยิงประสาน"
+description = "ทางเดินเปิดออกสู่เกวียนที่พังอยู่กลางทาง ลูกหินจากสลิงกระแทกพื้นข้างตัว ขณะที่กอบลินกระจายกำลังหลังซากเกวียน"
+illustration = ExtResource("5_1p3gm")
+choices = Array[ExtResource("1_clkbf")]([SubResource("Resource_qfmwv"), SubResource("Resource_x4wbh")])

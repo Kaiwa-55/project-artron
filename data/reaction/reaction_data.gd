@@ -11,7 +11,8 @@ enum Trigger {
 	STATUS_WOULD_APPLY,
 	TURN_START,
 	TURN_END,
-	AFTER_SELF_RANGED_ATTACK_HIT
+	AFTER_SELF_RANGED_ATTACK_HIT,
+	ENEMY_MISSES_ME
 }
 
 enum AttackSource {
@@ -34,11 +35,14 @@ enum Resolution { DEFENSE_BONUS, TURN_HIT_TO_MISS }
 @export var auto_resolve: bool = true
 @export_range(0, 99) var ap_cost: int = 1
 @export_range(0, 99) var faith_cost: int = 0
+# A Reaction granted by a Skill spends that Skill's Mana and starts its cooldown.
+@export var source_skill_id: String = ""
 # Applied only while resolving this reaction.  This is the general AC/DEF bonus
 # used by defensive reactions such as Parry.
 @export var defense_bonus: int = 0
 @export var resolution: Resolution = Resolution.DEFENSE_BONUS
 @export var required_trait_id: String = ""
+@export var required_stance_id: String = ""
 @export var melee_only: bool = false
 @export_range(0, 99) var max_hit_margin: int = 0
 @export var effects: Array = []

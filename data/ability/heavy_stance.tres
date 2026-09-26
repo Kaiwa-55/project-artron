@@ -19,6 +19,6 @@ display_name = "Heavy Stance"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4")]
 ap_cost = 1
-description = "Enter a Heavy Stance. Your Unarmed Attacks deal +2 Damage and your Speed is reduced by 5 ft. You cannot use another Stance while this Stance is active."
+description = "ใช้ 1 AP เข้าสู่ท่ายืนหนัก การโจมตีมือเปล่าสร้างความเสียหายเพิ่ม 2 แต่ความเร็วลด 5 ฟุต ไม่สามารถใช้ท่ายืนอื่นพร้อมกัน"
 target_mode = 1
 use_effects = [SubResource("UseEffect_heavy_stance")]

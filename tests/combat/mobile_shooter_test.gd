@@ -32,7 +32,8 @@ func _init() -> void:
 	enemy.active_reactions.clear()
 	player.position = Vector2.ZERO
 	enemy.position = Vector2(180, 0)
-	var ranged: AttackData = load("res://data/attack/shortbow.tres").duplicate(true)
+	var bow: AttackData = load("res://data/attack/shortbow.tres")
+	var ranged: AttackData = system.equipment_system.create_ammunition_attack(bow, load("res://data/item/standard_arrow.tres"))
 	var mobile_ability = load("res://data/ability/mobile_shooter.tres")
 	var mobile = player.active_reactions.filter(func(reaction): return reaction != null and reaction.id == "mobile_shooter")
 	check(mobile.size() == 1 and mobile[0].ap_cost == 0, "Assassin gains free Mobile Shooter Reaction")

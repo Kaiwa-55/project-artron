@@ -14,5 +14,5 @@ display_name = "Spell Training: Ember Bolt"
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("5_inkn3"), ExtResource("6_e40d5")]
 is_passive = true
-description = "Add Ember Bolt to your available Skills."
+description = "เพิ่มสกิล Ember Bolt ในรายการสกิลที่ใช้ได้"
 granted_skills = Array[ExtResource("2_jk8y0")]([ExtResource("3_muo1h")])

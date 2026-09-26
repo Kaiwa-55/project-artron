@@ -99,6 +99,14 @@ func _apply_forced_movement(actor: CombatantState, target: CombatantState, maneu
 		target.position = destination
 	var outcome := {"from": origin, "to": destination, "distance_feet": moved_feet, "requested_distance_feet": requested_feet}
 	if maneuver == ActionTypes.Maneuver.PUSH:
+		var fall: Dictionary = combat_system.map_rules.get_fall_at(target, destination)
+		if not fall.is_empty():
+			target.surface_id = fall.surface_id
+			target.elevation_feet = fall.elevation_feet
+			var fall_damage := maxi(1, roundi(float(fall.distance_feet) / 5.0))
+			target.apply_damage(fall_damage)
+			outcome["fall_distance_feet"] = fall.distance_feet
+			outcome["fall_damage"] = fall_damage
 		var collision_damage: int = floori(maxf(0.0, requested_feet - moved_feet) * 2.0)
 		if collision_damage > 0:
 			target.apply_damage(collision_damage)
@@ -134,6 +142,8 @@ func _finish(actor: CombatantState, target: CombatantState, maneuver: ActionType
 		result.events.append(CombatEvent.new(EventTypes.Type.POSITION_CHANGED, target.id, actor.id, details))
 	if int(details.get("collision_damage", 0)) > 0:
 		result.events.append(CombatEvent.new(EventTypes.Type.DAMAGE_APPLIED, actor.id, target.id, {"amount": details["collision_damage"], "damage_type": "blunt"}))
+	if int(details.get("fall_damage", 0)) > 0:
+		result.events.append(CombatEvent.new(EventTypes.Type.DAMAGE_APPLIED, actor.id, target.id, {"amount": details["fall_damage"], "damage_type": "fall"}))
 	combat_system.emit_events(result.events)
 	refresh_grabs()
 	combat_system.check_for_combat_end()

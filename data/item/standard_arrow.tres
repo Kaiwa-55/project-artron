@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b05p7lehmcf6e"]
+
+[ext_resource type="Script" uid="uid://cbhi2hgurc0db" path="res://data/item/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "standard_arrow"
+display_name = "ลูกธนูธรรมดา"
+description = "ลูกธนูสำหรับ Shortbow ความเสียหายปกติ 4 Pierce ใช้ 1 ดอกต่อการยิง"
+category = 2
+sell_price = 1

@@ -1,12 +1,15 @@
 class_name AIActionCandidate
 extends RefCounted
 
-enum Type { END_TURN, ATTACK, MOVE, SKILL, ABILITY, SEARCH }
+enum Type { END_TURN, ATTACK, MOVE, SKILL, ABILITY, SEARCH, OPEN_DOOR }
 
 var type: Type = Type.END_TURN
 var actor_id: String = ""
 var target_id: String = ""
 var target_position: Vector2 = Vector2.ZERO
+var target_world_position: Vector3 = Vector3.INF
+var target_surface_id: StringName = &""
+var door_id: StringName = &""
 var source_data
 var expected_damage: float = 0.0
 var kill_value: float = 0.0
@@ -20,7 +23,7 @@ var reason: String = ""
 
 
 func stable_key() -> String:
-	return "%02d|%s|%s|%.2f|%.2f" % [type, target_id, get_source_id(), target_position.x, target_position.y]
+	return "%02d|%s|%s|%s|%.2f|%.2f" % [type, target_id, get_source_id(), door_id, target_position.x, target_position.y]
 
 
 func get_source_id() -> String:
@@ -35,6 +38,8 @@ func to_decision() -> Dictionary:
 		"actor_id": actor_id,
 		"target_id": target_id,
 		"target_position": target_position,
+		"target_surface_id": target_surface_id,
+		"door_id": door_id,
 		"score": score,
 		"status_value": status_value,
 		"follow_up_value": follow_up_value,

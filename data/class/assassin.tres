@@ -5,11 +5,13 @@
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="3_ahyno"]
 [ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4_assassin"]
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5_progression"]
+[ext_resource type="Resource" uid="uid://txp5vuvucxwo" path="res://data/ability/advanced_weapon_training.tres" id="advanced_weapon_training"]
+[ext_resource type="Resource" uid="uid://cm1xiy6krh40g" path="res://data/ability/simple_weapon_training.tres" id="simple_weapon_training"]
 
 [sub_resource type="Resource" id="Progression_L1"]
 script = ExtResource("5_progression")
 max_hp_gain = 4
-granted_abilities = Array[ExtResource("3_ahyno")]([ExtResource("2_killer_instinct")])
+granted_abilities = Array[ExtResource("3_ahyno")]([ExtResource("2_killer_instinct"), ExtResource("simple_weapon_training"), ExtResource("advanced_weapon_training")])
 
 [sub_resource type="Resource" id="Progression_L2"]
 script = ExtResource("5_progression")
@@ -78,7 +80,7 @@ fixed_attribute_bonuses = {
 }
 attribute_choice_count = 1
 attribute_choice_options = Array[int]([3, 4])
-granted_abilities = [ExtResource("2_killer_instinct")]
+granted_abilities = [ExtResource("2_killer_instinct"), ExtResource("simple_weapon_training"), ExtResource("advanced_weapon_training")]
 traits = [ExtResource("4_assassin")]
-auto_equipped_ability_ids = Array[String](["killer_instinct"])
+auto_equipped_ability_ids = Array[String](["killer_instinct", "simple_weapon_training", "advanced_weapon_training"])
 progression_entries = Array[Resource]([SubResource("Progression_L1"), SubResource("Progression_L2"), SubResource("Progression_L3"), SubResource("Progression_L4"), SubResource("Progression_L5"), SubResource("Progression_L6"), SubResource("Progression_L7"), SubResource("Progression_L8"), SubResource("Progression_L9"), SubResource("Progression_L10")])

@@ -6,14 +6,18 @@ const SelectedFrameTexture = preload("res://assets/ui/ui03.png")
 
 
 var state: CombatantState
+var spatial_visual: Node3D
+
+func is_spatially_selectable() -> bool:
+	return not is_instance_valid(spatial_visual) or spatial_visual.is_pickable()
 var selected: bool = false
 var movement_tween: Tween
 var movement_target: Vector2
 var attack_tween: Tween
 var attack_sprite: Node2D
-var no_damage_icon: Sprite2D
+var no_damage_icon: Node
 var no_damage_tween: Tween
-var floating_value_labels: Array[Label] = []
+var floating_value_labels: Array[Node] = []
 var status_icon_layer: Control
 var status_icon_signature: String = ""
 var selection_frame: Sprite2D
@@ -32,15 +36,32 @@ func show_no_damage_feedback() -> void:
 	clear_no_damage_feedback()
 	if state == null:
 		return
-	no_damage_icon = Sprite2D.new()
-	no_damage_icon.texture = preload("res://assets/icon/skill_icons22.png")
-	no_damage_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	no_damage_icon.scale = Vector2(0.5, 0.5)
-	no_damage_icon.z_index = 30
-	no_damage_icon.position = Vector2(0, -state.collision_radius_feet * 12.0 - 28.0)
-	add_child(no_damage_icon)
+	if is_instance_valid(spatial_visual):
+		var spatial_icon := Sprite3D.new()
+		spatial_icon.texture = preload("res://assets/icon/skill_icons22.png")
+		spatial_icon.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		spatial_icon.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+		spatial_icon.rotation_degrees.x = -90.0
+		spatial_icon.pixel_size = 0.5 / state.spatial_units_per_foot
+		spatial_icon.position = Vector3(0, 1.0, -state.collision_radius_feet - 28.0 / state.spatial_units_per_foot)
+		spatial_visual.add_child(spatial_icon)
+		no_damage_icon = spatial_icon
+	else:
+		var canvas_icon := Sprite2D.new()
+		canvas_icon.texture = preload("res://assets/icon/skill_icons22.png")
+		canvas_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		canvas_icon.scale = Vector2(0.5, 0.5)
+		canvas_icon.z_index = 30
+		canvas_icon.position = Vector2(0, -state.collision_radius_feet * 12.0 - 28.0)
+		add_child(canvas_icon)
+		no_damage_icon = canvas_icon
 	no_damage_tween = create_tween().set_parallel(true)
-	no_damage_tween.tween_property(no_damage_icon, "position:y", no_damage_icon.position.y - 24.0, 0.8)
+	if no_damage_icon is Sprite3D:
+		var spatial_feedback := no_damage_icon as Sprite3D
+		no_damage_tween.tween_property(spatial_feedback, "position:z", spatial_feedback.position.z - 24.0 / state.spatial_units_per_foot, 0.8)
+	else:
+		var canvas_feedback := no_damage_icon as Sprite2D
+		no_damage_tween.tween_property(canvas_feedback, "position:y", canvas_feedback.position.y - 24.0, 0.8)
 	no_damage_tween.tween_property(no_damage_icon, "modulate:a", 0.0, 0.4).set_delay(0.4)
 	no_damage_tween.chain().tween_callback(func():
 		if is_instance_valid(no_damage_icon):
@@ -58,7 +79,27 @@ func clear_combat_value_feedback() -> void:
 func show_combat_value_feedback(amount: int, is_heal: bool) -> void:
 	if amount <= 0 or state == null:
 		return
-	floating_value_labels = floating_value_labels.filter(func(label: Label): return is_instance_valid(label))
+	floating_value_labels = floating_value_labels.filter(func(label: Node): return is_instance_valid(label))
+	if is_instance_valid(spatial_visual):
+		var spatial_label := Label3D.new()
+		spatial_label.name = "HealNumber" if is_heal else "DamageNumber"
+		spatial_label.text = ("+%d" if is_heal else "-%d") % amount
+		spatial_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		spatial_label.font_size = 26
+		spatial_label.pixel_size = 1.0 / state.spatial_units_per_foot
+		spatial_label.modulate = Color("62e6a7") if is_heal else Color("ff626e")
+		spatial_label.outline_size = 6
+		spatial_label.position = Vector3(0, 1.2, -state.collision_radius_feet - (54.0 + floating_value_labels.size() * 18.0) / state.spatial_units_per_foot)
+		spatial_visual.add_child(spatial_label)
+		floating_value_labels.append(spatial_label)
+		var spatial_tween := create_tween().set_parallel(true)
+		spatial_tween.tween_property(spatial_label, "position:z", spatial_label.position.z - 54.0 / state.spatial_units_per_foot, 0.9).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		spatial_tween.tween_property(spatial_label, "modulate:a", 0.0, 0.35).set_delay(0.55)
+		spatial_tween.chain().tween_callback(func():
+			floating_value_labels.erase(spatial_label)
+			if is_instance_valid(spatial_label):
+				spatial_label.queue_free())
+		return
 	var label := Label.new()
 	label.name = "HealNumber" if is_heal else "DamageNumber"
 	label.text = ("+%d" if is_heal else "-%d") % amount
@@ -355,6 +396,8 @@ func play_attack_animation(template: Resource, origin: Vector2, target: Vector2,
 
 
 func is_movement_animating() -> bool:
+	if is_instance_valid(spatial_visual):
+		return spatial_visual.is_moving()
 	return movement_tween != null and movement_tween.is_running()
 
 
@@ -386,6 +429,9 @@ func setup(p_state: CombatantState) -> void:
 func refresh_from_state() -> void:
 	if state == null:
 		return
+	if is_instance_valid(spatial_visual):
+		spatial_visual.sync_state()
+		return
 
 	if is_inside_tree() and not global_position.is_equal_approx(state.position):
 		if not is_movement_animating() or not movement_target.is_equal_approx(state.position):
@@ -406,7 +452,7 @@ func set_concealment_against(observer: CombatantState, map_rules) -> void:
 	if state == null or observer == null or map_rules == null or state.team == observer.team or state.is_dying():
 		concealment_badge.visible = false
 		return
-	var concealment: int = VisionSystem.effective_concealment(state, observer, map_rules.get_light_level_at(observer.position))
+	var concealment: int = VisionSystem.effective_concealment(state, observer, map_rules.get_light_level_at(observer.position, observer.surface_id))
 	concealment_badge.text = "C %d" % concealment
 	concealment_badge.tooltip_text = "Your Concealment against %s: %d / 4" % [state.display_name, concealment]
 	concealment_badge.position = get_concealment_badge_position()
@@ -432,7 +478,7 @@ func ensure_concealment_badge() -> void:
 
 func get_concealment_badge_position() -> Vector2:
 	var token_radius := state.collision_radius_feet * 12.0 if state != null else 30.0
-	return visual_offset + Vector2(token_radius - 9.0, -token_radius - 12.0)
+	return visual_offset + Vector2(token_radius + 7.0, token_radius * 0.2)
 
 
 func set_selected(value: bool) -> void:
@@ -547,9 +593,9 @@ func refresh_status_icons(force: bool = false) -> void:
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		label.add_theme_font_size_override("font_size", 10)
 		label.add_theme_color_override("font_color", Color.WHITE)
-		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
-		label.add_theme_constant_override("shadow_offset_x", 1)
-		label.add_theme_constant_override("shadow_offset_y", 1)
+		label.add_theme_color_override("font_shadow_color", Color.TRANSPARENT)
+		label.add_theme_constant_override("shadow_offset_x", 0)
+		label.add_theme_constant_override("shadow_offset_y", 0)
 		content.add_child(label)
 		if instance.stack_count > 1:
 			var stack_badge := Label.new()
@@ -618,3 +664,12 @@ func _draw() -> void:
 	else:
 		draw_circle(Vector2.ZERO, radius, fill_color)
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 32, Color.WHITE, 2.0)
+	if state != null:
+		var health_fraction := clampf(float(state.hp) / float(maxi(1, state.max_hp)), 0.0, 1.0)
+		var arc_radius := radius + 3.0
+		var arc_start := -PI * 0.5
+		var arc_length := PI * 0.5
+		draw_arc(Vector2.ZERO, arc_radius, arc_start, arc_start + arc_length, 24, Color("1d2930"), 4.0, true)
+		if health_fraction > 0.0:
+			var health_color := Color("5fcb91") if health_fraction > 0.3 else Color("e97564")
+			draw_arc(Vector2.ZERO, arc_radius, arc_start, arc_start + arc_length * health_fraction, 24, health_color, 4.0, true)

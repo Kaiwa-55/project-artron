@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuildingObjectPresetData" format=3]
+
+[ext_resource type="Script" path="res://data/world/building_object_preset_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+preset_id = &"crate"
+display_name = "Crate"
+default_size_pixels = Vector2(40, 40)
+height_feet = 3.0
+blocks_movement = true
+blocks_line_of_sight = true
+color = Color(0.54, 0.32, 0.16, 1)

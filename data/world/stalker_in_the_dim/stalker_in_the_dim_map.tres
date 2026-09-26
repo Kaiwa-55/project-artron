@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="BuildingMapData" format=3 uid="uid://bql7xi5nkl2wl"]
+
+[ext_resource type="Script" uid="uid://dwa7gyayp7org" path="res://data/world/building_map_data.gd" id="1_g3nh5"]
+[ext_resource type="Script" uid="uid://dxhodagv7ao8y" path="res://data/world/building_surface_data.gd" id="2_36r1p"]
+[ext_resource type="Script" uid="uid://dms6mgageamnx" path="res://data/world/building_door_data.gd" id="3_3nl27"]
+[ext_resource type="Script" uid="uid://bnaf2k38xl30b" path="res://data/world/building_object_data.gd" id="4_r03h2"]
+[ext_resource type="Texture2D" uid="uid://c0ipi4g8cl0nw" path="res://assets/maps/Other/Vlikai.png" id="5_pvhti"]
+[ext_resource type="Script" uid="uid://xciyd7037q4n" path="res://data/world/building_transition_data.gd" id="6_a8d1e"]
+
+[sub_resource type="Resource" id="Resource_g3nh5"]
+script = ExtResource("2_36r1p")
+surface_id = &"ground"
+display_name = "Ground"
+texture = ExtResource("5_pvhti")
+walkable_rects = Array[Rect2]([Rect2(0, 0, 1600, 1600)])
+invisible_wall_rects = Array[Rect2]([Rect2(10, 1550, 1590, 50), Rect2(1570, 0, 30, 1600), Rect2(0, 0, 1600, 60), Rect2(0, 0, 30, 1600)])
+
+[resource]
+script = ExtResource("1_g3nh5")
+map_id = &"stalker_in_the_dim"
+display_name = "stalker in the sandsttorm"
+surfaces = Array[ExtResource("2_36r1p")]([SubResource("Resource_g3nh5")])
+light_points = Array[Dictionary]([{
+"level": 2,
+"rect": Rect2(0, 0, 1600, 1600),
+"surface_id": &"ground"
+}])

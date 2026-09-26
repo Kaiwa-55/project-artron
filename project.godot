@@ -15,6 +15,10 @@ run/main_scene="uid://cki04qqhvvxl7"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+BoundedTooltips="*res://scenes/ui/bounded_tooltips.gd"
+
 [display]
 
 window/size/viewport_width=640
@@ -23,6 +27,15 @@ window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/encounter_builder/plugin.cfg")
+
+[gui]
+
+fonts/dynamic_fonts/use_oversampling=true
+timers/tooltip_delay_sec=86400.0
 
 [physics]
 

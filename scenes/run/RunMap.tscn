@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/event/EventPanel.tscn" id="4_event_panel"]
 [ext_resource type="PackedScene" path="res://scenes/run/RestPanel.tscn" id="5_rest_panel"]
 [ext_resource type="PackedScene" path="res://scenes/run/ShopPanel.tscn" id="6_shop_panel"]
-[ext_resource type="Texture2D" uid="uid://df42bfsgapjtm" path="res://assets/run/run_map_background.svg" id="7_run_bg"]
+[ext_resource type="Texture2D" path="res://assets/run/desert_run_map.png" id="7_run_bg"]
 
 [node name="RunMap" type="Control" unique_id=1652433532]
 layout_mode = 3
@@ -26,6 +26,7 @@ layout_mode = 1
 layout_mode = 1
 
 [node name="Background" type="TextureRect" parent="." unique_id=1305033665]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,6 +37,24 @@ mouse_filter = 2
 texture = ExtResource("7_run_bg")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="HeaderShade" type="ColorRect" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 42.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.08, 0.1, 0.12, 0.78)
+
+[node name="FooterShade" type="ColorRect" parent="."]
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0.08, 0.1, 0.12, 0.78)
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=90848620]
 layout_mode = 1
@@ -70,6 +89,13 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="GoldLabel" type="Label" parent="Margin/Layout/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91, 0.73, 0.34, 1)
+theme_override_font_sizes/font_size = 9
+text = "GOLD  0"
+vertical_alignment = 1
+
 [node name="SeedLabel" type="Label" parent="Margin/Layout/Header" unique_id=1874259942]
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
@@ -93,6 +119,30 @@ custom_minimum_size = Vector2(82, 28)
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
 text = "LEVEL UP"
+
+[node name="ExploreBuildingButton" type="Button" parent="Margin/Layout" unique_id=1627565423]
+visible = false
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+tooltip_text = "Explore the Dungeondraft map with your party leader. Return without spending a run node."
+theme_override_font_sizes/font_size = 10
+text = "EXPLORE BUILDING  •  2 FLOORS"
+
+[node name="TestWatchtowerButton" type="Button" parent="Margin/Layout" unique_id=1184454863]
+visible = false
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+tooltip_text = "Start a combat encounter on the Wooden Watchtower map without changing its map resource."
+theme_override_font_sizes/font_size = 10
+text = "TEST WOODEN WATCHTOWER  •  2 FLOORS"
+
+[node name="TestGoblinBossButton" type="Button" parent="Margin/Layout"]
+visible = false
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+tooltip_text = "Play all three Goblin boss encounters with the current party. This test uses the current Run's HP, Mana, items, and reward state."
+theme_override_font_sizes/font_size = 10
+text = "TEST GOBLIN BOSS  |  3 ENCOUNTERS"
 
 [node name="MapPanel" type="PanelContainer" parent="Margin/Layout" unique_id=1477989638]
 self_modulate = Color(1, 1, 1, 0)

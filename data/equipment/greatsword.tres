@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/attack/greatsword.tres" id="attack"]
+
+[resource]
+script = ExtResource("script")
+id = "greatsword"
+display_name = "Greatsword"
+description = "ดาบใหญ่สองมือ ระยะโจมตี 7 ฟุต ความเสียหายพื้นฐาน 6 Slash"
+weapon_attack = ExtResource("attack")

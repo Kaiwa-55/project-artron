@@ -20,6 +20,6 @@ required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3_arcanist")]
 ap_cost = 1
 cooldown_turns = 1
-description = "Move up to 10 ft without triggering Reactions. The path cannot pass through creatures or obstacles."
+description = "ใช้ 1 AP เคลื่อนที่ได้สูงสุด 10 ฟุตโดยไม่กระตุ้นปฏิกิริยาตอบโต้ เส้นทางต้องไม่ผ่านตัวละครหรือสิ่งกีดขวาง คูลดาวน์ 1 เทิร์น"
 effects = [SubResource("ArcaneStepMovement")]
 target_mode = 1

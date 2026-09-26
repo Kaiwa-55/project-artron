@@ -7,5 +7,5 @@
 script = ExtResource("script")
 id = "dagger"
 display_name = "Dagger"
-description = "A precise Dexterity weapon: +1 To Hit and 15% critical chance, but only 3 base damage."
+description = "A precise Dexterity weapon with 15% critical chance and 3 base damage."
 weapon_attack = ExtResource("attack")

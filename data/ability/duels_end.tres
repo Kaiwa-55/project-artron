@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[resource]
+script = ExtResource("ability")
+id = "duels_end"
+display_name = "Duel's End"
+required_level = 3
+prerequisite_id = "riposte_rhythm"
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "duelist_stance"
+traits = [ExtResource("warrior")]
+description = "ขณะอยู่ใน Duelist Stance ใช้ 2 AP โจมตีประชิด หากเป้าหมายมี HP ไม่เกินครึ่ง เพิ่มความเสียหาย +4 คูลดาวน์ 2 เทิร์น"
+ap_cost = 2
+active_target_hp_at_or_below_percent = 50
+active_conditional_damage_bonus = 4
+cooldown_turns = 2
+uses_equipped_weapon_attack = true
+required_attack_trait_ids = Array[String](["melee"])
+attack_source = 1

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="passive"]
+[ext_resource type="Resource" path="res://data/reaction/interpose_reaction.tres" id="reaction"]
+
+[resource]
+script = ExtResource("ability")
+id = "interpose"
+display_name = "Interpose"
+required_level = 2
+prerequisite_id = "shield_brace"
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "bulwark_stance"
+traits = [ExtResource("warrior")]
+description = "ขณะอยู่ใน Bulwark Stance และถือโล่ ใช้ Reaction และ 1 AP รับความเสียหายและผลจากการโจมตีแทนพันธมิตรในระยะ 5 ฟุต"
+is_passive = true
+traits = [ExtResource("warrior"), ExtResource("passive")]
+granted_reactions = [ExtResource("reaction")]

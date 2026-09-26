@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/attack/sweeping_kick_attack.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_nrq31"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_eovfe"]
 [ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
 
@@ -17,7 +18,7 @@ required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
 ap_cost = 2
 cooldown_turns = 2
-description = "Attack every enemy within 5 feet against the higher of Reflex or Fortitude. On Hit, deal Unarmed Attack damage once to each target. Requires a free hand."
+description = "ใช้ 2 AP โจมตีศัตรูทุกตัวในรัศมี 5 ฟุต เทียบกับค่าที่สูงกว่าระหว่าง Reflex และ Fortitude เมื่อโดนจะสร้างความเสียหายจากการโจมตีมือเปล่าหนึ่งครั้งต่อเป้าหมาย ต้องมีมือว่าง คูลดาวน์ 2 เทิร์น"
 target_mode = 1
 attack_source = 2
 attack_data = ExtResource("2")

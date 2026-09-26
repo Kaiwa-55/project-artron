@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://cfhjqa5w3bly5"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_xswl1"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_yh6b6"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_m6cmr"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4_eijnb"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_842kx"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="6_ietl1"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="7_b87vs"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="8_4xxqv"]
+[ext_resource type="Resource" uid="uid://cwpas6877a5rx" path="res://data/character/spider.tres" id="9_5qaw8"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="10_gfkp7"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="11_n3e25"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="12_t8ddb"]
+[ext_resource type="Resource" uid="uid://d2qqwwh5i6son" path="res://data/item/minor_healing_potion.tres" id="reward_item_0"]
+
+[sub_resource type="Resource" id="Resource_vmgr3"]
+script = ExtResource("8_4xxqv")
+id = "front"
+enemy = ExtResource("7_b87vs")
+count = 2
+spawn_center_feet = Vector2(22, 0)
+
+[sub_resource type="Resource" id="Resource_raiyo"]
+script = ExtResource("8_4xxqv")
+id = "rear"
+enemy = ExtResource("9_5qaw8")
+spawn_center_feet = Vector2(-28, 12)
+
+[sub_resource type="Resource" id="Resource_22wsv"]
+script = ExtResource("10_gfkp7")
+id = &"goal_hold_the_line"
+description = "เอาตัวรอดให้ครบ 3 รอบ"
+type = 2
+turn_count = 3
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Reward_0"]
+script = ExtResource("3_m6cmr")
+type = 2
+amount = 2
+item = ExtResource("reward_item_0")
+
+[sub_resource type="Resource" id="Reward_xp"]
+script = ExtResource("3_m6cmr")
+type = 11
+amount = 65
+
+[sub_resource type="Resource" id="Victory_choice"]
+script = ExtResource("1_xswl1")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Victory_event"]
+script = ExtResource("12_t8ddb")
+id = &"victory_hold_the_line"
+title = "ยืนหยัดจนศัตรูถอย"
+description = "คุณเก็บยารักษาได้ 2 ขวดหลังศัตรูล่าถอย และทุกคนได้รับ 65 XP"
+illustration = ExtResource("5_842kx")
+choices = Array[ExtResource("1_xswl1")]([SubResource("Victory_choice")])
+
+[sub_resource type="Resource" id="Resource_7l51i"]
+script = ExtResource("11_n3e25")
+id = "event_hold_the_line"
+display_name = "ตั้งรับกลางทางแคบ"
+encounter_name = "ตั้งรับกลางทางแคบ"
+encounter_description = "เอาตัวรอดให้ครบ 3 รอบจากศัตรูที่บุกเข้ามาทั้งสองด้าน"
+encounter_image = ExtResource("5_842kx")
+type = 3
+battlefield_texture = ExtResource("4_eijnb")
+player_spawn_positions_feet = Array[Vector2]([Vector2(0, 0), Vector2(-8, -8), Vector2(-8, 8)])
+enemy_groups = Array[Resource]([SubResource("Resource_vmgr3"), SubResource("Resource_raiyo")])
+objectives = Array[ExtResource("10_gfkp7")]([SubResource("Resource_22wsv")])
+victory_event = SubResource("Victory_event")
+rewards = Array[Resource]([SubResource("Reward_0"), SubResource("Reward_xp")])
+
+[sub_resource type="Resource" id="Resource_5dqfh"]
+script = ExtResource("1_xswl1")
+text = "ตั้งรับให้ครบ 3 รอบ"
+encounter = SubResource("Resource_7l51i")
+
+[sub_resource type="Resource" id="Resource_vwgt3"]
+script = ExtResource("1_xswl1")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("12_t8ddb")
+id = &"hold_the_line"
+title = "ตั้งรับกลางทางแคบ"
+description = "ทางเดินแคบลง กอบลินปรากฏตัวข้างหน้า ส่วนแมงมุมตัดทางถอยด้านหลัง คุณต้องยืนหยัดจนกว่าพวกมันจะล่าถอย"
+illustration = ExtResource("5_842kx")
+choices = Array[ExtResource("1_xswl1")]([SubResource("Resource_5dqfh"), SubResource("Resource_vwgt3")])

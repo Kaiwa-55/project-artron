@@ -5,12 +5,29 @@ const FLOOR_SPACING := 78.0
 const LANE_SPACING := 50.0
 const ENCOUNTER_CATALOG := preload("res://data/run/prototype_encounter_catalog.tres")
 const COMBAT_SCENE := "res://scenes/prototype/PrototypeCombat.tscn"
+const CUTSCENE_SCENE := "res://scenes/prototype/EncounterCutscene.tscn"
+const REWARD_SCENE := "res://scenes/run/RewardSelection.tscn"
+const ShopTrade := preload("res://run/shop_trade_system.gd")
 const PLAYER_DATA := preload("res://data/character/player.tres")
 const DEFAULT_PARTY_ENCOUNTER := preload("res://data/encounter/prototype_encounter.tres")
+const WATCHTOWER_MAP: BuildingMapData = preload("res://data/world/new_building/new_building_map.tres")
+const WATCHTOWER_ENCOUNTER: EncounterData = preload("res://data/encounter/run_normal_goblin_patrol.tres")
+const GOBLIN_BOSS_ENCOUNTER: EncounterData = preload("res://data/encounter/run_boss_goblin_entrance.tres")
+const NODE_ICONS := [
+	preload("res://assets/run/node_start.png"),
+	preload("res://assets/run/node_combat.png"),
+	preload("res://assets/run/node_elite.png"),
+	preload("res://assets/run/node_event.png"),
+	preload("res://assets/run/node_rest.png"),
+	preload("res://assets/run/node_shop.png"),
+	preload("res://assets/run/node_treasure.png"),
+	preload("res://assets/run/node_boss.png"),
+]
 
 @onready var map_canvas: Control = $Margin/Layout/MapPanel/MapScroll/MapCanvas
 @onready var seed_input: LineEdit = $Margin/Layout/Header/SeedInput
 @onready var seed_label: Label = $Margin/Layout/Header/SeedLabel
+@onready var gold_label: Label = $Margin/Layout/Header/GoldLabel
 @onready var location_label: Label = $Margin/Layout/Footer/LocationLabel
 @onready var continue_button: Button = $Margin/Layout/Footer/ContinueButton
 @onready var level_up_button: Button = $Margin/Layout/Header/LevelUpButton
@@ -28,11 +45,15 @@ var reset_party_to_level_one_on_start: bool = false
 var event_manager: EventManager
 var encounter_manager: EncounterManager
 var pending_encounter_from_event: bool = false
+var current_shop: Resource
 
 const REST_RECOVERY_RATIO := 0.5
 
 
 func _ready() -> void:
+	$Margin/Layout/ExploreBuildingButton.pressed.connect(open_building_exploration)
+	$Margin/Layout/TestWatchtowerButton.pressed.connect(open_watchtower_combat)
+	$Margin/Layout/TestGoblinBossButton.pressed.connect(open_goblin_boss_test)
 	$Margin/Layout/Header/NewRunButton.pressed.connect(start_from_input)
 	continue_button.pressed.connect(confirm_selected_node)
 	level_up_button.pressed.connect(open_level_up)
@@ -40,6 +61,7 @@ func _ready() -> void:
 	rest_panel.action_selected.connect(resolve_rest_action)
 	rest_panel.rest_completed.connect(finish_rest)
 	shop_panel.purchase_requested.connect(purchase_shop_item)
+	shop_panel.sale_requested.connect(sell_shop_item)
 	shop_panel.shop_closed.connect(finish_shop)
 	if not character_panel.equipment_change_requested.is_connected(on_run_map_equipment_change):
 		character_panel.equipment_change_requested.connect(on_run_map_equipment_change)
@@ -60,6 +82,47 @@ func _ready() -> void:
 	setup_event_flow()
 	refresh_level_up_button()
 	build_party_inventory_buttons()
+	if run_state.has_meta("exploration_selected_node"):
+		var previous_selection := String(run_state.get_meta("exploration_selected_node"))
+		run_state.remove_meta("exploration_selected_node")
+		if not previous_selection.is_empty():
+			select_node(previous_selection)
+
+
+func open_building_exploration() -> void:
+	run_state.set_meta("exploration_selected_node", selected_node_id)
+	get_tree().change_scene_to_file("res://scenes/exploration/DungeonExploration.tscn")
+
+
+func open_watchtower_combat() -> void:
+	var encounter: EncounterData = WATCHTOWER_ENCOUNTER.duplicate(true)
+	encounter.id = "test_wooden_watchtower"
+	encounter.display_name = "Wooden Watchtower"
+	encounter.encounter_name = "Wooden Watchtower Test"
+	encounter.building_map = WATCHTOWER_MAP
+	encounter.starting_surface_id = &"ground"
+	encounter.player_spawn_positions_feet = [Vector2(-42, -18), Vector2(-35, -18), Vector2(-42, -10)]
+	var enemy_copies: Array[CharacterData] = []
+	var enemy_positions := [Vector2(600, 600), Vector2(690, 600), Vector2(645, 690)]
+	for index in range(encounter.enemies.size()):
+		var enemy: CharacterData = encounter.enemies[index].duplicate(true)
+		enemy.position = enemy_positions[index] if index < enemy_positions.size() else Vector2(650, 650)
+		enemy_copies.append(enemy)
+	encounter.enemies = enemy_copies
+	get_tree().set_meta("active_run_state", run_state)
+	get_tree().set_meta("active_run_node_id", run_state.current_node_id)
+	get_tree().set_meta("active_encounter_data", encounter)
+	get_tree().remove_meta("use_dungeondraft_combat")
+	get_tree().remove_meta("active_event_encounter")
+	get_tree().remove_meta("active_event_encounter_data")
+	var change_error := get_tree().change_scene_to_file(COMBAT_SCENE)
+	if change_error != OK:
+		location_label.text = "Could not open Wooden Watchtower: %s" % error_string(change_error)
+
+
+func open_goblin_boss_test() -> void:
+	pending_encounter_from_event = false
+	start_presented_encounter(GOBLIN_BOSS_ENCOUNTER, "boss")
 
 
 func start_from_input() -> void:
@@ -260,8 +323,8 @@ func build_map() -> void:
 	for node in run_state.nodes:
 		for next_id in node.next_node_ids:
 			var line := Line2D.new()
-			line.width = 1.5
-			line.default_color = Color("34465f")
+			line.width = 1.25
+			line.default_color = Color(0.4, 0.27, 0.18, 0.65)
 			line.points = PackedVector2Array([positions[node.id] + NODE_SIZE * 0.5, positions[next_id] + NODE_SIZE * 0.5])
 			map_canvas.add_child(line)
 	for node in run_state.nodes:
@@ -269,8 +332,11 @@ func build_map() -> void:
 		button.name = node.id
 		button.position = positions[node.id]
 		button.size = NODE_SIZE
-		button.text = "%s\n%s" % [node.get_short_label(), node.get_display_name()]
-		button.add_theme_font_size_override("font_size", 7)
+		button.icon = NODE_ICONS[node.node_type]
+		button.expand_icon = true
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		button.add_theme_color_override("icon_disabled_color", Color.WHITE)
 		button.tooltip_text = "%s • Threat %d" % [node.get_display_name(), node.threat]
 		button.pressed.connect(select_node.bind(node.id))
 		map_canvas.add_child(button)
@@ -278,10 +344,13 @@ func build_map() -> void:
 
 
 func select_node(node_id: String) -> void:
+	var node := run_state.get_node(node_id)
+	if node != null and node.id == run_state.current_node_id and node.node_type == MapNodeData.NodeType.SHOP:
+		open_shop(node)
+		return
 	if not run_state.can_enter(node_id):
 		return
 	selected_node_id = node_id
-	var node := run_state.get_node(node_id)
 	location_label.text = "Selected: %s  •  Threat %d" % [node.get_display_name(), node.threat]
 	continue_button.disabled = false
 	refresh_map_state()
@@ -302,8 +371,18 @@ func confirm_selected_node() -> void:
 	if node.node_type == MapNodeData.NodeType.SHOP:
 		open_shop(node)
 		return
+	if node.node_type == MapNodeData.NodeType.TREASURE:
+		get_tree().set_meta("active_run_node_id", node.id)
+		var change_error := get_tree().change_scene_to_file(REWARD_SCENE)
+		if change_error != OK:
+			location_label.text = "Could not open Treasure: %s" % error_string(change_error)
+		return
 	if node.encounter_data != null:
-		present_encounter(node.encounter_data, false)
+		if node.encounter_data.cutscene_image != null:
+			pending_encounter_from_event = false
+			start_presented_encounter(node.encounter_data)
+		else:
+			present_encounter(node.encounter_data, false)
 		return
 	get_tree().remove_meta("active_run_node_id")
 	get_tree().remove_meta("active_encounter_data")
@@ -338,16 +417,24 @@ func finish_rest() -> void:
 
 
 func open_shop(_node: MapNodeData) -> void:
+	current_shop = _node.shop_data if _node != null else null
 	var party: Array[CombatantState] = []
 	for member in run_state.party_progression_states.values():
 		if member is CombatantState:
 			party.append(member)
-	shop_panel.open_for_party(party, run_state.gold, _node.shop_data if _node != null else null)
+	shop_panel.open_for_party(party, run_state.gold, current_shop)
 
 
 func purchase_shop_item(actor_id: String, product: Resource, quantity: int, price: int) -> void:
 	var member: CombatantState = run_state.party_progression_states.get(actor_id)
-	if member == null or product == null or quantity <= 0 or price < 0 or run_state.gold < price:
+	if member == null or product == null or quantity <= 0 or price < 0 or run_state.gold < price or current_shop == null or not shop_panel.visible:
+		return
+	var valid_offer := false
+	for offer in current_shop.get_offers():
+		if offer != null and offer.product == product and offer.quantity == quantity and offer.price == price:
+			valid_offer = true
+			break
+	if not valid_offer:
 		return
 	run_state.gold -= price
 	if product is ItemData:
@@ -359,7 +446,22 @@ func purchase_shop_item(actor_id: String, product: Resource, quantity: int, pric
 		run_state.gold += price
 		return
 	shop_panel.refresh_gold(run_state.gold)
+	refresh_gold_label()
 	location_label.text = "%s bought %d %s." % [member.display_name, quantity, product.get("display_name")]
+
+
+func sell_shop_item(actor_id: String, entry, quantity: int) -> void:
+	if current_shop == null or not shop_panel.visible:
+		return
+	var member: CombatantState = run_state.party_progression_states.get(actor_id)
+	var proceeds: int = ShopTrade.sell(member, entry, quantity)
+	if proceeds <= 0:
+		return
+	run_state.gold += proceeds
+	shop_panel.refresh_gold(run_state.gold)
+	refresh_gold_label()
+	var item_name: String = entry.item.display_name if entry is ItemStack else entry.display_name
+	location_label.text = "%s sold %d %s for %d Gold." % [member.display_name, quantity, item_name, proceeds]
 
 
 func add_run_item(member: CombatantState, item: ItemData, quantity: int) -> void:
@@ -378,7 +480,8 @@ func add_run_item(member: CombatantState, item: ItemData, quantity: int) -> void
 
 
 func finish_shop() -> void:
-	location_label.text = "Left the Shop with %d Gold." % run_state.gold
+	current_shop = null
+	location_label.text = "Use INV to unequip gear, then click Shop to return."
 	build_party_inventory_buttons()
 
 func start_node_event(node: MapNodeData) -> bool:
@@ -438,17 +541,21 @@ func present_encounter(data: EncounterData, from_event: bool = false) -> void:
 	event_panel.show_encounter(data)
 
 
-func start_presented_encounter(data: EncounterData) -> void:
+func start_presented_encounter(data: EncounterData, node_id_override: String = "") -> void:
 	get_tree().set_meta("active_run_state", run_state)
-	get_tree().set_meta("active_run_node_id", run_state.current_node_id)
+	get_tree().set_meta("active_run_node_id", node_id_override if not node_id_override.is_empty() else run_state.current_node_id)
 	get_tree().set_meta("active_encounter_data", data)
+	# Run Map encounters keep their authored battlefield (for example the
+	# original desert). Building encounters opt into a BuildingMapData resource.
+	get_tree().remove_meta("use_dungeondraft_combat")
 	if pending_encounter_from_event:
 		get_tree().set_meta("active_event_encounter", true)
 		get_tree().set_meta("active_event_encounter_data", data)
 	else:
 		get_tree().remove_meta("active_event_encounter")
 		get_tree().remove_meta("active_event_encounter_data")
-	var change_error := get_tree().change_scene_to_file(COMBAT_SCENE)
+	var destination := CUTSCENE_SCENE if data.cutscene_image != null else COMBAT_SCENE
+	var change_error := get_tree().change_scene_to_file(destination)
 	if change_error != OK:
 		location_label.text = "Could not open Encounter: %s" % error_string(change_error)
 
@@ -471,15 +578,23 @@ func resume_event_encounter_result() -> void:
 
 
 func refresh_map_state() -> void:
+	refresh_gold_label()
 	var available := run_state.get_available_node_ids()
 	for node_id in node_buttons:
 		var button: Button = node_buttons[node_id]
-		button.disabled = not available.has(node_id)
-		button.modulate = get_node_color(run_state.get_node(node_id), available.has(node_id), node_id == selected_node_id)
+		var node: MapNodeData = run_state.get_node(node_id)
+		var current_shop_node: bool = node_id == run_state.current_node_id and node.node_type == MapNodeData.NodeType.SHOP
+		button.disabled = not available.has(node_id) and not current_shop_node
+		button.tooltip_text = "Open Shop" if current_shop_node else "%s • Threat %d" % [node.get_display_name(), node.threat]
+		button.modulate = get_node_color(node, available.has(node_id), node_id == selected_node_id)
 	var current := run_state.get_current_node()
 	if selected_node_id.is_empty():
 		location_label.text = "Current: %s  •  Choose a connected route" % current.get_display_name()
 	continue_button.disabled = selected_node_id.is_empty()
+
+
+func refresh_gold_label() -> void:
+	gold_label.text = "GOLD  %d" % run_state.gold
 
 
 func get_node_color(node: MapNodeData, available: bool, selected: bool) -> Color:
@@ -488,7 +603,7 @@ func get_node_color(node: MapNodeData, available: bool, selected: bool) -> Color
 	if node.id == run_state.current_node_id:
 		return Color("67d5b5")
 	if run_state.is_completed(node.id):
-		return Color("5f6878")
+		return Color("9b958c")
 	if available:
 		return Color.WHITE
-	return Color("596171")
+	return Color("c5b7a4")

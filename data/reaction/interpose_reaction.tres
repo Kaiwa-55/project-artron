@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://do15s0kefb8dx"]
+
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="effect"]
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="reaction"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+
+[sub_resource type="Resource" id="Redirect"]
+script = ExtResource("effect")
+effect_type = 9
+target = 2
+redirect_damage_to_reactor = true
+redirect_hit_effects_to_reactor = true
+
+[resource]
+script = ExtResource("reaction")
+id = "interpose_reaction"
+display_name = "Interpose"
+traits = [ExtResource("reactive")]
+trigger = 5
+auto_resolve = false
+required_stance_id = "bulwark_stance"
+effects = [SubResource("Redirect")]
+can_target_self = false

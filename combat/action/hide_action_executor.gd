@@ -23,7 +23,7 @@ func execute(actor_id: String) -> ActionResult:
 	for enemy in combat_system.combat_state.combatants.values():
 		if enemy == actor or enemy.is_dying() or enemy.team == actor.team:
 			continue
-		var has_los: bool = combat_system.map_rules.has_line_of_sight(enemy.position, actor.position)
+		var has_los: bool = combat_system.map_rules.has_line_of_sight_between(enemy, actor)
 		var dc: int = 10 + enemy.get_skill_rank("perception") + (4 if has_los else 0)
 		var passed := total >= dc
 		checks.append({"enemy_id": enemy.id, "dc": dc, "has_line_of_sight": has_los, "succeeded": passed})

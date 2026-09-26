@@ -128,6 +128,7 @@ func test_search_when_target_is_not_visible() -> void:
 	player.base_concealment = 4
 	var system := CombatSystem.new()
 	system.start_combat([enemy, player])
+	player.grant_concealment_against(enemy.id, 1)
 	system.combat_state.current_actor_id = enemy.id
 	enemy.ap = enemy.max_ap
 	var ai = EnemyAIScript.new()

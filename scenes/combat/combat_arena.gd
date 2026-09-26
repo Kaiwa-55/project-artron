@@ -217,12 +217,12 @@ func resolve_reaction_choice(reaction_index: int) -> void:
 	$BattlefieldWorld/EnemyCharacter.refresh_from_state()
 	if result.requires_reaction_choice:
 		$UILayer/Control.show_reaction_prompt(result.reaction_prompt)
-		$UILayer/Control.set_mode_hint("Choose whether to use Step Back after the attack.")
+		$UILayer/Control.set_mode_hint("Choose a Reaction after the attack.")
 		$UILayer/Control.update_ui()
 		return
 	if combat_system.has_pending_step_back_move():
 		move_mode = true
-		$UILayer/Control.set_mode_hint("Step Back: click a destination up to half your Speed away.")
+		$UILayer/Control.set_mode_hint("%s: click a destination up to %.1f ft away." % [combat_system.pending_reaction_move_name, combat_system.step_back_move_distance_feet])
 		$UILayer/Control.update_ui()
 		return
 	if not combat_system.get_combat_state().is_finished() \
@@ -276,7 +276,7 @@ func begin_ground_ability(ability_id: String) -> void:
 
 func begin_ground_targeting(kind: String, source_id: String) -> void:
 	var actor_id := get_player_controlled_actor_id()
-	var validation: ActionResult = combat_system.validate_ground_skill_start(actor_id, source_id) if kind == "skill" else combat_system.validate_ground_ability_start(actor_id, source_id)
+	var validation: ActionResult = combat_system.consumable_item_executor.validate(actor_id, source_id) if kind == "item" else (combat_system.validate_ground_skill_start(actor_id, source_id) if kind == "skill" else combat_system.validate_ground_ability_start(actor_id, source_id))
 	if not validation.success:
 		$UILayer/Control.set_mode_hint("Cannot target: %s" % validation.failure_reason)
 		$UILayer/Control.add_log_message("Targeting failed: %s" % validation.failure_reason)
@@ -294,6 +294,9 @@ func get_ground_targeting_data():
 	if ground_targeting_id.is_empty() or combat_system == null:
 		return null
 	var player: CombatantState = get_player_controlled_actor()
+	if ground_targeting_kind == "item":
+		var stack = combat_system.consumable_item_executor.find_stack(player, ground_targeting_id)
+		return stack.item if stack != null else null
 	return combat_system.get_ground_skill(player, ground_targeting_id) if ground_targeting_kind == "skill" else combat_system.ability_system.get_available_ability(player, ground_targeting_id)
 
 
@@ -346,8 +349,12 @@ func cast_ground_skill(target_point: Vector2) -> void:
 
 
 func confirm_ground_targeting(target_point: Vector2) -> void:
+	if not target_point.is_finite():
+		$UILayer/Control.set_mode_hint("Choose a valid point on the map.")
+		return
 	var actor_id := get_player_controlled_actor_id()
-	var result := combat_system.execute_ground_skill(actor_id, ground_targeting_id, target_point) if ground_targeting_kind == "skill" else combat_system.execute_ground_ability(actor_id, ground_targeting_id, target_point)
+	var target_world := get_ground_target_world_position(target_point)
+	var result := combat_system.use_consumable_item(actor_id, ground_targeting_id, "", target_point, target_world) if ground_targeting_kind == "item" else (combat_system.execute_ground_skill(actor_id, ground_targeting_id, target_point, target_world) if ground_targeting_kind == "skill" else combat_system.execute_ground_ability(actor_id, ground_targeting_id, target_point, target_world))
 	if result.requires_reaction_choice:
 		ground_targeting_kind = ""; ground_targeting_id = ""; ground_skill_mode = ""
 		$UILayer/Control.show_reaction_prompt(result.reaction_prompt)
@@ -361,6 +368,9 @@ func confirm_ground_targeting(target_point: Vector2) -> void:
 		$UILayer/Control.set_mode_hint("Area Targeting failed: %s Choose another point." % result.failure_reason)
 	$UILayer/Control.record_action_result(result)
 	$UILayer/Control.update_ui()
+
+func get_ground_target_world_position(_target_point: Vector2) -> Vector3:
+	return Vector3.INF
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -403,7 +413,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton \
 		and event.button_index == MOUSE_BUTTON_LEFT \
 		and event.pressed:
-		var mouse_position := get_global_mouse_position()
+		var mouse_position := get_combat_pointer_position(event.position)
 		if not pending_single_target_kind.is_empty():
 			confirm_single_target(mouse_position)
 			get_viewport().set_input_as_handled()
@@ -430,6 +440,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		if move_mode:
 			move_player(mouse_position)
 		get_viewport().set_input_as_handled()
+
+
+func get_combat_pointer_position(_screen_position: Vector2) -> Vector2:
+	return get_global_mouse_position()
 
 
 func select_target_at(mouse_position: Vector2) -> bool:
@@ -484,7 +498,7 @@ func move_player(destination: Vector2) -> void:
 			if reaction_move_name == "Step Back" and not combat_system.get_combat_state().is_finished() and combat_system.get_combat_state().current_actor_id == "enemy":
 				combat_system.advance_turn()
 		else:
-			$UILayer/Control.set_mode_hint("Step Back failed: %s Choose another destination." % step_result.failure_reason)
+			$UILayer/Control.set_mode_hint("%s failed: %s Choose another destination." % [reaction_move_name, step_result.failure_reason])
 		$UILayer/Control.record_action_result(step_result)
 		$UILayer/Control.update_ui()
 		return

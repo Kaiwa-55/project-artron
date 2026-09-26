@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3]
+
+[ext_resource type="Script" path="res://data/item/consumable_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/consumable.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "warding_charm"
+display_name = "Warding Charm"
+description = "When an enemy hits you, use a Reaction to reduce that hit's damage by 4. Consumed on use."
+traits = [ExtResource("2"), ExtResource("3")]
+maximum_stack_size = 5
+sell_price = 18
+reaction_only = true

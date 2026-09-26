@@ -16,5 +16,5 @@ traits = [ExtResource("2"), ExtResource("3")]
 reaction_only = true
 ap_cost = 1
 faith_cost = 1
-description = "Reaction. When an ally within 15 ft would take damage, take that damage instead."
+description = "เมื่อพวกเดียวกันในระยะ 15 ฟุตกำลังจะรับความเสียหาย ใช้ปฏิกิริยาตอบโต้ 1 AP และ 1 Faith เพื่อรับความเสียหายนั้นแทน"
 granted_reactions = [ExtResource("4")]

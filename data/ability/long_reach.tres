@@ -19,5 +19,5 @@ id = "long_reach"
 display_name = "Long Reach"
 traits = [ExtResource("4_passive")]
 is_passive = true
-description = "Basic Passive. Your Melee Attacks gain +2 ft Range."
+description = "การโจมตีประชิดมีระยะเพิ่ม 2 ฟุต"
 effects = [SubResource("AbilityEffect_reach")]

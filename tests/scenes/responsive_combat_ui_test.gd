@@ -46,6 +46,7 @@ func run_test() -> void:
 			var control: Control = ui.get_node(path)
 			check(rect_fits(control, logical_size), "%s (%s, %s) must fit inside the %dx%d layout" % [path, control.position, control.size, int(logical_size.x), int(logical_size.y)])
 		var combat_bar: Control = ui.get_node("CombatUI/Combat_bar")
+		check(combat_bar.size.x <= 300.1, "Combat bar ends near the requested width")
 		var turn_hud: Control = ui.get_node("CombatUI/Endturn")
 		var portrait: TextureRect = ui.get_node("CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile/TextureRect")
 		var action_grid: GridContainer = ui.get_node("CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major")
@@ -61,6 +62,8 @@ func run_test() -> void:
 		check(not combat_bar.get_global_rect().intersects(turn_hud.get_global_rect()), "Combat bar should not overlap End Turn")
 		check(portrait.size.x <= 32.1 and portrait.size.y <= 32.1, "Character portrait must ignore its source image size")
 		check(combat_bar.get_global_rect().encloses(action_grid.get_global_rect()), "Character portrait must not push Action buttons outside the Combat bar")
+		for action_button in scene.action_category_buttons.values():
+			check(action_button.size.x + 0.1 >= action_button.get_combined_minimum_size().x, "Action button labels fit the narrower Combat bar")
 		check(not minor_actions.visible, "Empty Minor Action slots should stay hidden")
 		check(header.get_global_rect().encloses(initiative_timeline.get_global_rect()), "Turn Order must fit inside the combat header")
 		check(not combat_log_button.get_global_rect().intersects(initiative_timeline.get_global_rect()), "Combat Log button must not overlap Turn Order")
@@ -75,6 +78,23 @@ func run_test() -> void:
 			var log_entries: VBoxContainer = ui.get_node("CombatLogPanel/Margin/VBoxContainer/Scroll/Entries")
 			for card in log_entries.get_children():
 				check(card.custom_minimum_size.y <= 56.1, "Combat Log cards must use their narrow 640x360 height")
+	var objective := EncounterObjective.new()
+	objective.id = &"test_objective_toggle"
+	objective.description = "Defeat the enemy"
+	var objective_encounter := EncounterData.new()
+	objective_encounter.objectives.append(objective)
+	scene.combat_system.configure_encounter_objectives(objective_encounter)
+	scene._refresh_objective_panel()
+	var objectives: PanelContainer = scene.objective_panel
+	var objective_toggle: Button = scene.objective_toggle_button
+	check(objectives.visible and not objective_toggle.visible, "Objectives start open")
+	var objective_close: Button = scene.objective_list.get_child(0).get_node("Close")
+	objective_close.pressed.emit()
+	check(not objectives.visible and objective_toggle.visible, "Objective close button leaves a reopen button")
+	scene._refresh_objective_panel()
+	check(not objectives.visible and objective_toggle.visible, "Objective preference survives an objective update")
+	objective_toggle.pressed.emit()
+	check(objectives.visible and not objective_toggle.visible, "Objective reopen button restores the panel")
 	var state = scene.combat_system.get_combat_state()
 	var player: CombatantState = state.get_combatant("player")
 	var profile_path := "UILayer/Control/CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Profile"
@@ -84,6 +104,9 @@ func run_test() -> void:
 	check((scene.get_node("UILayer/Control/CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/StatusBar/Status") as Label).text.begins_with("STATUS: "), "Combat bar should show a compact Status strip")
 	check((scene.get_node("UILayer/Control/CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/DefenseAndResource/VBoxContainer/Hp/ProgressBar/Value") as Label).text.begins_with("HP "), "Combat resource bars should include their names")
 	scene.show_action_menu("attack")
+	var compact_dock: Control = scene.get_node("UILayer/Control/CombatUI/Combat_bar")
+	var minor_dock: Control = compact_dock.get_node("Action_bar_Minor")
+	check(minor_dock.size.x <= compact_dock.size.x + 0.1, "Open action choices stay within the compact dock width")
 	var has_cost_badge := false
 	for action in scene.action_menu_list.get_children():
 		if action is Button and action.get_node_or_null("CostBadge") != null:

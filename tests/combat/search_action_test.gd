@@ -14,10 +14,10 @@ func _init() -> void:
 	actor.skill_ranks["perception"] = 7
 	target.skill_ranks["stealth"] = 0
 	target.base_concealment = 3
-	target.grant_concealment_against(actor.id, 1)
-	var visibility_before: VisionSystem.Visibility = VisionSystem.get_visibility(actor, target, 1, true)
 	var system := CombatSystem.new()
 	system.start_combat([actor, target])
+	target.grant_concealment_against(actor.id, 1)
+	var visibility_before: VisionSystem.Visibility = VisionSystem.get_visibility(actor, target, 1, true)
 	system.combat_state.current_actor_id = actor.id
 	actor.ap = actor.max_ap
 	system.map_rules.add_circular_obstacle(Vector2(50, 0), 20, "Blocked Sight")

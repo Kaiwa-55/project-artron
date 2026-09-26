@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="AbilityData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://ca4t7olonnhtl"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_xo6w6"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_3n838"]
 [ext_resource type="Resource" path="res://data/trait/blue_blood.tres" id="3"]
 
 [resource]
@@ -11,7 +13,7 @@ display_name = "Element School"
 required_trait_ids = Array[String](["blue_blood"])
 traits = [ExtResource("2"), ExtResource("3")]
 is_passive = true
-description = "Study an elemental school and choose two Elemental Skills of Spell Level 1. Spell choices do not spend Ability Points."
+description = "เลือกสกิลธาตุระดับเวท 1 ได้ 2 สกิล โดยไม่ใช้แต้มความสามารถ"
 spell_choices_granted = 2
 spell_required_trait_ids = Array[String](["elemental"])
 spell_max_level = 1

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3]
+
+[ext_resource type="Script" path="res://data/item/consumable_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/consumable.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="3"]
+[ext_resource type="Resource" path="res://data/item/effect/emergency_bandage_4.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "emergency_bandage"
+display_name = "Emergency Bandage"
+description = "Spend 1 AP to restore up to 4 HP to yourself or an ally within 5 ft. Cannot target a Dying combatant. Consumed after use."
+traits = [ExtResource("2"), ExtResource("3")]
+maximum_stack_size = 10
+sell_price = 15
+target_mode = 1
+target_filter = 1
+range_feet = 5.0
+requires_missing_hp = true
+effects = Array[EffectData]([ExtResource("4")])

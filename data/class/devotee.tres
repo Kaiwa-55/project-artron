@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://cc0jbkieew8kx"]
 
 [ext_resource type="Script" uid="uid://barwiaatjayxc" path="res://data/class/class_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/ability/belief.tres" id="2"]
+[ext_resource type="Resource" uid="uid://covn8d5yf1a50" path="res://data/ability/belief.tres" id="2"]
 [ext_resource type="Resource" uid="uid://c4p6h14djslvg" path="res://data/ability/pray.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="4"]
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5"]

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://txp5vuvucxwo"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_bbstx"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_3rmog"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="effect"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="passive"]
+
+[sub_resource type="Resource" id="ToHit"]
+script = ExtResource("effect")
+effect_type = 1
+passive_value = 2
+required_attack_trait_ids = Array[String](["advanced"])
+
+[resource]
+script = ExtResource("ability")
+id = "advanced_weapon_training"
+display_name = "Advanced Weapon Training"
+required_level = 0
+traits = [ExtResource("passive")]
+auto_equip_on_grant = true
+is_passive = true
+description = "โจมตีด้วยอาวุธประเภท Advanced ได้โบนัส To Hit +2"
+effects = [SubResource("ToHit")]

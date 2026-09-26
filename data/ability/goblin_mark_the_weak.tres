@@ -19,6 +19,6 @@ display_name = "Mark the Weak"
 traits = [ExtResource("4")]
 ap_cost = 1
 cooldown_turns = 2
-description = "Apply Weakened 1 to an enemy within 30 ft."
+description = "ใช้ 1 AP ทำให้ศัตรูในระยะ 30 ฟุตติดอ่อนแอ 1 คูลดาวน์ 2 เทิร์น"
 use_effects = [SubResource("Apply")]
 targeting_range_feet = 30.0

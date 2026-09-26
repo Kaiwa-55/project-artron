@@ -37,6 +37,8 @@ func run_test() -> void:
 		actor.remove_status("grabbing")
 		actor.ap = actor.max_ap
 		combat.use_basic_maneuver(actor.id, target.id, maneuver)
+	actor.ap = actor.max_ap
+	var hide_result: ActionResult = combat.use_hide(actor.id)
 	var ui: Control = scene.get_node("UILayer/Control")
 	ui.update_combat_log()
 	var cards: Array = ui.get_node("CombatLogPanel/Margin/VBoxContainer/Scroll/Entries").get_children()
@@ -48,6 +50,21 @@ func run_test() -> void:
 				break
 		if not found:
 			failures.append("Combat Log should show a %s card." % maneuver_name)
+	var hide_card: Control
+	for card in cards:
+		if card.get_node("Margin/Content/Header/ActionName").text == "Hide":
+			hide_card = card
+			break
+	if hide_card == null or not hide_result.success:
+		failures.append("Combat Log should show a Hide card.")
+	else:
+		var roll_text: String = hide_card.get_node("Margin/Content/Resolution/Result/Roll").text
+		var details_text: String = hide_card.get_node("Margin/Content/Details").text
+		var expected_dc: int = hide_result.events[0].data.checks[0].dc
+		if not roll_text.contains("DC %d" % expected_dc) or roll_text.contains("vs 0"):
+			failures.append("Hide card should show the enemy's actual DC instead of zero.")
+		if details_text.contains("AP -"):
+			failures.append("Maneuver cards should omit AP cost.")
 	scene.queue_free()
 	await process_frame
 	for failure in failures:

@@ -10,6 +10,7 @@ var source_data
 var skill_data
 var ability_data
 var target_point: Vector2 = Vector2.ZERO
+var target_world: Vector3 = Vector3.INF
 var attack: AttackData
 var targets: Array[CombatantState] = []
 var current_index: int = 0
@@ -23,13 +24,14 @@ var cancel_scope: int = CancelScope.NONE
 var cancellation_reason: String = ""
 var completed: bool = false
 
-func setup_skill(p_actor: CombatantState, skill, p_target_point: Vector2, p_attack: AttackData, p_targets: Array[CombatantState]) -> void:
+func setup_skill(p_actor: CombatantState, skill, p_target_point: Vector2, p_attack: AttackData, p_targets: Array[CombatantState], p_target_world: Vector3 = Vector3.INF) -> void:
 	source_type = SourceType.SKILL
 	actor = p_actor
 	source_data = skill
 	skill_data = skill
 	ability_data = null
 	target_point = p_target_point
+	target_world = p_target_world
 	attack = p_attack
 	targets = p_targets.duplicate()
 	current_index = 0
@@ -40,13 +42,14 @@ func setup_skill(p_actor: CombatantState, skill, p_target_point: Vector2, p_atta
 	cancellation_reason = ""
 	completed = false
 
-func setup_ability(p_actor: CombatantState, ability, p_target_point: Vector2, p_attack: AttackData, p_targets: Array[CombatantState]) -> void:
+func setup_ability(p_actor: CombatantState, ability, p_target_point: Vector2, p_attack: AttackData, p_targets: Array[CombatantState], p_target_world: Vector3 = Vector3.INF) -> void:
 	source_type = SourceType.ABILITY
 	actor = p_actor
 	source_data = ability
 	skill_data = null
 	ability_data = ability
 	target_point = p_target_point
+	target_world = p_target_world
 	attack = p_attack
 	targets = p_targets.duplicate()
 	current_index = 0

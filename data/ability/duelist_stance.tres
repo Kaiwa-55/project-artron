@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://caimbur74seqs"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_e0q3j"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_a450l"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/trait/stance.tres" id="stance"]
+[ext_resource type="Resource" path="res://data/effect/duelist_stance.tres" id="stance_effect"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="use"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="Apply"]
+script = ExtResource("use")
+effect = ExtResource("stance_effect")
+
+[resource]
+script = ExtResource("ability")
+id = "duelist_stance"
+display_name = "Duelist Stance"
+required_trait_ids = Array[String](["warrior"])
+replaces_active_stance = true
+traits = [ExtResource("warrior"), ExtResource("stance")]
+ap_cost = 1
+description = "ใช้ 1 AP เข้าสู่ Duelist Stance ได้ความเร็วเพิ่ม 5 ฟุต และใช้ท่าสายนักดวล การเปลี่ยนท่ายืนจะแทนที่ท่าเดิม"
+target_mode = 1
+use_effects = [SubResource("Apply")]

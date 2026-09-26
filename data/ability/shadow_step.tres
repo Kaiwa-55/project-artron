@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_bmpra"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="2_move"]
 [ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="3_assassin"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_rm117"]
 [ext_resource type="Resource" path="res://data/ability/effect/shadow_step_movement.tres" id="4_effect"]
 
 [resource]
@@ -15,6 +16,6 @@ required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("2_move"), ExtResource("3_assassin")]
 ap_cost = 1
 uses_per_turn = 1
-description = "Spend 1 AP to Move up to 15 feet without triggering Reactions. The path cannot pass through obstacles or creatures. Once per turn."
+description = "ใช้ 1 AP เคลื่อนที่ได้สูงสุด 15 ฟุตโดยไม่กระตุ้นปฏิกิริยาตอบโต้ เส้นทางต้องไม่ผ่านตัวละครหรือสิ่งกีดขวาง ใช้ได้เทิร์นละครั้ง"
 effects = [ExtResource("4_effect")]
 target_mode = 1

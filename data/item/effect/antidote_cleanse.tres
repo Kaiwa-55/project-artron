@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "antidote_cleanse"
+display_name = "Antidote"
+effect_type = 4
+cleanse_status_ids = Array[String](["poisoned"])

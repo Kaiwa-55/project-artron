@@ -19,5 +19,5 @@ required_level = 2
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "+1 Max Faith at Level 2 and another +1 every 2 Levels thereafter."
+description = "Faith สูงสุดเพิ่ม 1 ที่เลเวล 2 และเพิ่มอีก 1 ทุก ๆ 2 เลเวลหลังจากนั้น"
 effects = [SubResource("MaxFaithByLevel")]

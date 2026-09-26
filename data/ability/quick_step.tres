@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/ability/effect/quick_step_movement.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_bqa2c"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_b27a3"]
 [ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
 
 [resource]
@@ -14,5 +15,5 @@ required_level = 3
 required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. Your first Move each Turn gains +5 ft."
+description = "การเคลื่อนที่ครั้งแรกของแต่ละเทิร์นมีระยะเพิ่ม 5 ฟุต"
 effects = [ExtResource("2")]

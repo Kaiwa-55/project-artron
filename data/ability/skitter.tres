@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/ability/effect/skitter_movement.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_wp33y"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_cugem"]
 
 [resource]
 script = ExtResource("1")
@@ -14,6 +15,6 @@ auto_equip_on_grant = true
 ap_cost = 1
 cooldown_turns = 1
 uses_per_turn = 1
-description = "Move up to 15 feet without triggering Reactions. Cannot pass through obstacles or creatures."
+description = "ใช้ 1 AP เคลื่อนที่ได้สูงสุด 15 ฟุตโดยไม่กระตุ้นปฏิกิริยาตอบโต้ และผ่านตัวละครหรือสิ่งกีดขวางไม่ได้ คูลดาวน์ 1 เทิร์น"
 effects = [ExtResource("2")]
 target_mode = 1

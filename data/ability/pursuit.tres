@@ -16,5 +16,5 @@ required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("3"), ExtResource("4")]
 reaction_only = true
 ap_cost = 1
-description = "Reactive. When an enemy leaves your Reach, spend 1 AP to Move up to 5 ft."
+description = "เมื่อศัตรูออกจากระยะโจมตีประชิด ใช้ปฏิกิริยาตอบโต้ 1 AP เพื่อเคลื่อนที่ตามได้สูงสุด 5 ฟุต"
 granted_reactions = [ExtResource("2")]

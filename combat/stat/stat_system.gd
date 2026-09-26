@@ -24,6 +24,7 @@ func refresh_combatant(
 		combatant.base_max_mana
 		+ combatant.ancestry_max_mana_bonus
 		+ combatant.max_mana_bonus
+		+ combatant.equipment_max_mana_bonus
 	)
 	combatant.max_ap = max(0, combatant.base_max_ap + combatant.max_ap_bonus)
 	combatant.max_faith = max(0, combatant.base_max_faith + AbilitySystem.new().get_passive_max_faith_bonus(combatant))

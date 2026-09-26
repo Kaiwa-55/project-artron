@@ -19,6 +19,6 @@ display_name = "Scurry"
 traits = [ExtResource("3")]
 ap_cost = 1
 cooldown_turns = 2
-description = "Move up to 10 ft without triggering Reactions."
+description = "ใช้ 1 AP เคลื่อนที่ได้สูงสุด 10 ฟุตโดยไม่กระตุ้นปฏิกิริยาตอบโต้ คูลดาวน์ 2 เทิร์น"
 effects = [SubResource("Movement")]
 target_mode = 1

@@ -23,5 +23,5 @@ required_level = 2
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "The first Skill each Turn with a base cost of at least 2 Mana costs 1 less Mana, to a minimum cost of 1."
+description = "สกิลแรกของแต่ละเทิร์นที่มีค่ามานาพื้นฐานอย่างน้อย 2 ใช้มานาลดลง 1 แต่ไม่ต่ำกว่า 1"
 effects = [SubResource("Mana")]

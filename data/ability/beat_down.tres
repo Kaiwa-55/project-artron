@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AbilityData" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://ppvl2n54fdls"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/attack/unarmed_attack.tres" id="2"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Resource" uid="uid://dbv4juslqjb0k" path="res://data/attack/unarmed_attack.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_f7o50"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_xbtg8"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
 
 [resource]
@@ -18,7 +20,7 @@ sequence_attack_count = 5
 sequence_counts_each_attack_for_penalty = true
 ap_cost = 3
 cooldown_turns = 2
-description = "Attack one enemy five times with Unarmed Attack. Every strike rolls To Hit, calculates Damage, and receives Repeated Attack Penalty separately. Requires a free hand."
+description = "ใช้ 3 AP โจมตีเป้าหมายเดียวด้วยมือเปล่า 5 ครั้ง แต่ละครั้งทอยโจมตี คำนวณความเสียหาย และรับโทษโจมตีซ้ำแยกกัน ต้องมีมือว่าง คูลดาวน์ 2 เทิร์น"
 attack_source = 2
 attack_data = ExtResource("2")
 required_attack_trait_ids = Array[String](["unarmed"])

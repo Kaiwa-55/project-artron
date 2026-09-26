@@ -45,6 +45,20 @@ func _init() -> void:
 	prototype.sync_combatant_to_run_state(active, persistent)
 	check(persistent.strength == 16 and persistent.constitution == 14 and persistent.available_skills == [ArcaneBolt], "GM attribute and Skill changes should persist from Combat to RunState.")
 
+	var ring := EquipmentData.new()
+	ring.id = "run_accessory"
+	ring.slot = EquipmentData.Slot.ACCESSORY
+	persistent.equipment_inventory.append(ring)
+	persistent.equipped_items[9] = ring
+	var next_combat := make_combatant("player")
+	next_combat.starting_equipment.append(ring)
+	prototype.apply_run_progression_state(next_combat, persistent)
+	EquipmentSystem.new().initialize_combatant(next_combat)
+	check(next_combat.equipped_items.get(9) == ring and next_combat.equipped_items.get(8) == null, "Accessory slot chosen on the Run map should survive entering Combat.")
+	next_combat.equipped_items.erase(9)
+	prototype.sync_combatant_to_run_state(next_combat, persistent)
+	check(persistent.equipped_items.get(9) == null and persistent.equipment_inventory.has(ring), "Unequipping an Accessory in Combat should persist after Combat.")
+
 	prototype.free()
 	for failure in failures:
 		push_error(failure)

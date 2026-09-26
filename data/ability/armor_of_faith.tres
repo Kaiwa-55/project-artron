@@ -18,5 +18,5 @@ display_name = "Armor of Faith"
 required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. Gain +1 Reflex, Fortitude, and Will for every 5 total Faith, rounded down."
+description = "ทุก 5 Faith รวม ให้ Reflex, Fortitude และ Will อย่างละ +1 โดยปัดเศษลง"
 effects = [SubResource("ArmorOfFaithEffect")]

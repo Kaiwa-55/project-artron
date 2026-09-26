@@ -9,7 +9,7 @@ func _init() -> void:
 	var spider: CombatantState = GiantSpiderData.create_combatant_state()
 	check(spider.id == "giant_spider", "resource creates the Giant Spider")
 	check(spider.level == 2 and spider.max_hp == 24 and spider.max_ap == 3, "core combat stats are initialized")
-	check(spider.get_effective_speed() == 30.0 and spider.collision_radius_feet == 5.0, "large movement profile is initialized")
+	check(spider.get_effective_speed() == 10.0 and spider.collision_radius_feet == 5.0, "large movement profile is initialized")
 	check(spider.equipped_weapon_attack != null and spider.equipped_weapon_attack.id == "venomous_bite", "Venomous Bite is equipped")
 	check(spider.equipped_weapon_attack.effects_on_hit.any(func(effect): return effect.id == "poisoned"), "Venomous Bite applies Poisoned")
 	check(spider.equipped_weapon_attack.granted_abilities.any(func(ability): return ability.id == "webbed_prey"), "Venomous Bite gains its webbed-target damage passive")

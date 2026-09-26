@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AIProfile" format=3]
+
+[ext_resource type="Script" path="res://data/ai/ai_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "goblin_skullmaul"
+display_name = "Goblin Skullmaul"
+damage_weight = 14.0
+position_weight = 18.0
+reaction_ap_reserve = 0

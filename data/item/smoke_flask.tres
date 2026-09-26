@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3]
+
+[ext_resource type="Script" path="res://data/item/consumable_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/consumable.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = "smoke_flask"
+display_name = "Smoke Flask"
+description = "Throw within 30 ft. Light in a 10 ft radius becomes one level dimmer for 3 rounds."
+traits = [ExtResource("2"), ExtResource("3")]
+maximum_stack_size = 5
+sell_price = 15
+target_mode = 2
+target_filter = 3
+targeting_range_feet = 30.0
+area_radius_feet = 10.0
+light_level_penalty = 1
+light_duration_rounds = 3

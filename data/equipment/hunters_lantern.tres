@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "hunters_lantern"
+display_name = "Hunter's Lantern"
+description = "While held, light within 30 ft is one level brighter."
+purchase_price = 60
+slot = 2
+light_radius_feet = 30.0
+light_level_bonus = 1

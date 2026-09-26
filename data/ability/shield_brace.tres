@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://dkminbuum53j5"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_ky1lm"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_5o3v6"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/effect/shield_brace.tres" id="brace_effect"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="use"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="Apply"]
+script = ExtResource("use")
+effect = ExtResource("brace_effect")
+
+[resource]
+script = ExtResource("ability")
+id = "shield_brace"
+display_name = "Shield Brace"
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "bulwark_stance"
+traits = [ExtResource("warrior")]
+ap_cost = 1
+description = "ขณะอยู่ใน Bulwark Stance และถือโล่ ใช้ 1 AP เพิ่ม Defense +2 จนถึงต้นเทิร์นถัดไป"
+target_mode = 1
+use_effects = [SubResource("Apply")]

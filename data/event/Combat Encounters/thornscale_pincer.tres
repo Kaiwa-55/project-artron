@@ -1,0 +1,87 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://cggovet15ygu3"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_uonyb"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_vrk8h"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_ldjvc"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4_4dwru"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_xahc4"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="6_6rot6"]
+[ext_resource type="Resource" uid="uid://ds82lj3p3nfhw" path="res://data/character/thornscale_ravager.tres" id="7_nnv14"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="8_a60e2"]
+[ext_resource type="Resource" uid="uid://4g4hfpn4l1x1" path="res://data/character/giant_spider.tres" id="9_2mo4m"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="10_lcxj3"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="11_ubw3a"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="12_bn3yi"]
+[ext_resource type="Resource" path="res://data/item/warding_charm.tres" id="reward_item_0"]
+
+[sub_resource type="Resource" id="Resource_3yhav"]
+script = ExtResource("8_a60e2")
+id = "right"
+enemy = ExtResource("7_nnv14")
+spawn_center_feet = Vector2(30, 0)
+
+[sub_resource type="Resource" id="Resource_0hlhc"]
+script = ExtResource("8_a60e2")
+id = "left"
+enemy = ExtResource("9_2mo4m")
+spawn_center_feet = Vector2(-35, 0)
+
+[sub_resource type="Resource" id="Resource_yaxj7"]
+script = ExtResource("10_lcxj3")
+id = &"goal_thornscale_pincer"
+description = "กำจัดศัตรูที่บุกจากสองด้าน"
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Reward_0"]
+script = ExtResource("3_ldjvc")
+type = 2
+amount = 1
+item = ExtResource("reward_item_0")
+
+[sub_resource type="Resource" id="Reward_xp"]
+script = ExtResource("3_ldjvc")
+type = 11
+amount = 130
+
+[sub_resource type="Resource" id="Victory_choice"]
+script = ExtResource("1_uonyb")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Victory_event"]
+script = ExtResource("12_bn3yi")
+id = &"victory_thornscale_pincer"
+title = "รอดจากกับดักสองด้าน"
+description = "คุณพบเครื่องรางคุ้มครอง 1 ชิ้นในซากสัมภาระ และทุกคนได้รับ 130 XP"
+illustration = ExtResource("5_xahc4")
+choices = Array[ExtResource("1_uonyb")]([SubResource("Victory_choice")])
+
+[sub_resource type="Resource" id="Resource_x1g13"]
+script = ExtResource("11_ubw3a")
+id = "event_thornscale_pincer"
+display_name = "กับดักสองด้าน"
+encounter_name = "กับดักสองด้าน"
+encounter_description = "แรเวเจอร์และแมงมุมยักษ์บุกจากคนละด้าน กำจัดทั้งคู่"
+encounter_image = ExtResource("5_xahc4")
+battlefield_texture = ExtResource("4_4dwru")
+player_spawn_positions_feet = Array[Vector2]([Vector2(0, 0), Vector2(-8, -8), Vector2(-8, 8)])
+enemy_groups = Array[Resource]([SubResource("Resource_3yhav"), SubResource("Resource_0hlhc")])
+objectives = Array[ExtResource("10_lcxj3")]([SubResource("Resource_yaxj7")])
+victory_event = SubResource("Victory_event")
+rewards = Array[Resource]([SubResource("Reward_0"), SubResource("Reward_xp")])
+
+[sub_resource type="Resource" id="Resource_2pmat"]
+script = ExtResource("1_uonyb")
+text = "รับมือศัตรูทั้งสองด้าน"
+encounter = SubResource("Resource_x1g13")
+
+[sub_resource type="Resource" id="Resource_4uvvy"]
+script = ExtResource("1_uonyb")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("12_bn3yi")
+id = &"thornscale_pincer"
+title = "กับดักสองด้าน"
+description = "พื้นดินด้านขวาสั่นสะเทือน แรเวเจอร์เกล็ดหนามกำลังตรงเข้ามา ขณะเดียวกันแมงมุมยักษ์ก็ปรากฏตัวด้านหลังกลุ่ม"
+illustration = ExtResource("5_xahc4")
+choices = Array[ExtResource("1_uonyb")]([SubResource("Resource_2pmat"), SubResource("Resource_4uvvy")])

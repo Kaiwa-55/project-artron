@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://d4bbkw7aaik4w"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/ability/effect/predator_rush_movement.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_oujxr"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_fhvrc"]
 
 [resource]
 script = ExtResource("1")
@@ -13,6 +15,6 @@ traits = [ExtResource("3")]
 auto_equip_on_grant = true
 ap_cost = 1
 cooldown_turns = 2
-description = "Move up to 20 ft without triggering Reactions."
+description = "ใช้ 1 AP เคลื่อนที่ได้สูงสุด 20 ฟุตโดยไม่กระตุ้นปฏิกิริยาตอบโต้ คูลดาวน์ 2 เทิร์น"
 effects = [ExtResource("2")]
 target_mode = 1

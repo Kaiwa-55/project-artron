@@ -27,7 +27,8 @@ enum Type {
 	PASSIVE_SPEED_BONUS_FEET,
 	PASSIVE_DAMAGE_RESISTANCE,
 	PASSIVE_DEFENSE_BONUS_FROM_FAITH,
-	PASSIVE_MAX_FAITH_BY_LEVEL
+	PASSIVE_MAX_FAITH_BY_LEVEL,
+	PASSIVE_DEFENSE_BONUS_WHILE_STATIONARY
 }
 
 enum ConditionMode {
@@ -50,6 +51,7 @@ enum ConditionMode {
 @export var requires_target_unattacked_this_round: bool = false
 @export_range(0, 100) var target_hp_below_percent: int = 0
 @export var required_target_status_ids: Array[String] = []
+@export var required_reaction_used_id: String = ""
 @export var required_attack_trait_ids: Array[String] = []
 @export var minimum_target_distance_feet: float = 0.0
 @export var first_successful_hit_per_turn: bool = false

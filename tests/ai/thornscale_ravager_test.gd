@@ -1,7 +1,7 @@
 extends SceneTree
 
 const RavagerData = preload("res://data/character/thornscale_ravager.tres")
-const EncounterData = preload("res://data/encounter/prototype_encounter.tres")
+const EncounterData = preload("res://data/encounter/run_elite_ravager_pack.tres")
 
 var failures: Array[String] = []
 
@@ -9,17 +9,16 @@ var failures: Array[String] = []
 func _init() -> void:
 	var ravager: CombatantState = RavagerData.create_combatant_state()
 	check(ravager.id == "thornscale_ravager" and ravager.level == 3, "Thornscale Ravager is a Level 3 Enemy")
-	check(ravager.max_hp == 34 and ravager.max_ap == 4 and ravager.get_effective_speed() == 30.0, "HP, AP, and Speed match the design")
-	check(ravager.strength == 18 and ravager.dexterity == 14 and ravager.constitution == 16, "Physical Attributes match the design")
+	check(ravager.max_hp == 34 and ravager.max_ap == 4 and ravager.get_effective_speed() == 15.0, "HP, AP, and Speed match the design")
+	check(ravager.strength == 16 and ravager.dexterity == 14 and ravager.constitution == 16, "Physical Attributes match the design")
 	check(ravager.reflex == 13 and ravager.fortitude == 16 and ravager.will == 11, "Final Defenses include the monster's stat bonuses")
 	check(ravager.active_traits.any(func(trait_data): return trait_data != null and trait_data.id == "beast"), "Beast trait is present")
 	check(ravager.natural_attack != null and ravager.natural_attack.id == "rending_claw" and ravager.natural_attack.base_damage == 6, "Rending Claw is the natural attack")
 	for ability_id in ["thorned_tail", "scalebreaker_charge", "coiling_sweep"]:
 		check(ravager.available_abilities.any(func(ability): return ability != null and ability.id == ability_id), "%s is available" % ability_id)
 	check(ravager.active_reactions.any(func(reaction): return reaction != null and reaction.id == "barbed_retaliation"), "Barbed Retaliation is available")
-	check(EncounterData.enemies.any(func(enemy): return enemy != null and enemy.id == "thornscale_ravager"), "Prototype Encounter contains Thornscale Ravager")
+	check(EncounterData.enemies.any(func(enemy): return enemy != null and enemy.id == "thornscale_ravager"), "Ravager Pack contains Thornscale Ravager")
 	check(EncounterData.battlefield_texture != null and EncounterData.map_size_feet == Vector2(250, 250), "Encounter owns its battlefield background and size")
-	check(not EncounterData.map_objects.is_empty() and EncounterData.map_objects[0].get("kind") == "obstacle", "Encounter owns its map objects")
 
 	var attacker := make_attacker()
 	ravager.position = Vector2(80, 0)

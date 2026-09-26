@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1_ability"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_1nkfb"]
 [ext_resource type="Resource" uid="uid://fiaexscng7xr" path="res://data/ability/effect/killer_instinct_damage.tres" id="2_effect"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_gwfl6"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="3_passive"]
-[ext_resource type="Resource" path="res://data/trait/assassin.tres" id="5_gwfl6"]
+[ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="5_gwfl6"]
 
 [resource]
 script = ExtResource("1_ability")
@@ -14,5 +15,5 @@ required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("3_passive"), ExtResource("5_gwfl6")]
 auto_equip_on_grant = true
 is_passive = true
-description = "Passive. Gain bonus damage equal to Level when attacking a target that has not been attacked this round or is below 50% HP. An attack counts when declared, even if it misses or is parried."
+description = "โจมตีเป้าหมายที่ยังไม่ถูกโจมตีในรอบนี้หรือมี HP ต่ำกว่าครึ่งหนึ่ง จะสร้างความเสียหายเพิ่มเท่ากับเลเวล การประกาศโจมตีนับว่าโจมตีแล้วแม้พลาดหรือถูกปัดป้อง"
 effects = [ExtResource("2_effect")]

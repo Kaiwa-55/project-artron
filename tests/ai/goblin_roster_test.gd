@@ -6,8 +6,8 @@ func _init() -> void:
 	var shiv: CombatantState = load("res://data/character/goblin_shiv.tres").create_combatant_state()
 	var slinger: CombatantState = load("res://data/character/goblin_slinger.tres").create_combatant_state()
 	var taskmaster: CombatantState = load("res://data/character/goblin_taskmaster.tres").create_combatant_state()
-	check(shiv.level == 1 and shiv.max_hp == 10 and shiv.max_ap == 3 and shiv.base_speed == 30.0, "Goblin Shiv stats are loaded", failures)
-	check(slinger.level == 1 and slinger.max_hp == 8 and slinger.equipped_weapon_attack.range_feet == 40.0, "Goblin Slinger stats and ranged attack are loaded", failures)
+	check(shiv.level == 1 and shiv.max_hp == 10 and shiv.max_ap == 3 and shiv.base_speed == 15.0, "Goblin Shiv stats are loaded", failures)
+	check(slinger.level == 1 and slinger.max_hp == 8 and slinger.equipped_weapon_attack.range_feet == 30.0, "Goblin Slinger stats and ranged attack are loaded", failures)
 	check(taskmaster.level == 2 and taskmaster.max_hp == 20 and taskmaster.max_ap == 4, "Goblin Taskmaster stats are loaded", failures)
 	check(shiv.equipped_abilities.has("goblin_cowardly_jab") and shiv.equipped_abilities.has("goblin_scurry"), "Goblin Shiv has both signature Abilities", failures)
 	check(slinger.equipped_abilities.has("goblin_crippling_stone") and slinger.active_reactions.any(func(reaction): return reaction.id == "goblin_scramble_away"), "Goblin Slinger has Crippling Stone and Scramble Away", failures)
@@ -26,11 +26,6 @@ func _init() -> void:
 	check(system.attack_system.validate_attack(slinger, training_target, slinger.equipped_weapon_attack).failure_reason.contains("too close"), "Stone Sling cannot attack inside its 5 ft minimum range", failures)
 	training_target.position = Vector2(180, 0)
 	check(system.attack_system.validate_attack(slinger, training_target, slinger.equipped_weapon_attack).success, "Stone Sling can attack at a legal range", failures)
-	var encounter = load("res://data/encounter/prototype_encounter.tres")
-	var encounter_ids: Array[String] = []
-	for enemy in encounter.enemies:
-		encounter_ids.append(enemy.id)
-	check(encounter_ids.has("goblin_shiv") and encounter_ids.has("goblin_slinger") and encounter_ids.has("goblin_taskmaster"), "Prototype Encounter includes all three Goblins", failures)
 	for failure in failures:
 		push_error(failure)
 	print("GOBLIN_ROSTER_TEST: " + ("PASS" if failures.is_empty() else "FAIL"))

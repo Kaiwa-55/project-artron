@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="effect"]
+[resource]
+script = ExtResource("effect")
+id = "hold_the_line"
+display_name = "Hold the Line"
+duration_turns = 1
+expire_at_start_of_turn = true
+aura_radius_feet = 5.0
+aura_defense_bonus = 2

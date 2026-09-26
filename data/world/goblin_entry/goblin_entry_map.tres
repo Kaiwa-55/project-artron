@@ -1,0 +1,135 @@
+[gd_resource type="Resource" script_class="BuildingMapData" format=3 uid="uid://ciqcfo48iwyy3"]
+
+[ext_resource type="Script" uid="uid://dwa7gyayp7org" path="res://data/world/building_map_data.gd" id="1_ghmgw"]
+[ext_resource type="Script" uid="uid://dxhodagv7ao8y" path="res://data/world/building_surface_data.gd" id="2_r5nrq"]
+[ext_resource type="Script" uid="uid://dms6mgageamnx" path="res://data/world/building_door_data.gd" id="3_80wy2"]
+[ext_resource type="Script" uid="uid://bnaf2k38xl30b" path="res://data/world/building_object_data.gd" id="4_5qxkx"]
+[ext_resource type="Texture2D" uid="uid://w12gv0daa45o" path="res://assets/maps/Goblin_Hideout/Entry.png" id="5_6rfm5"]
+[ext_resource type="Script" uid="uid://kenb47ssx3aw" path="res://data/world/building_wall_data.gd" id="6_gf2mj"]
+[ext_resource type="Script" uid="uid://xciyd7037q4n" path="res://data/world/building_transition_data.gd" id="7_6e11u"]
+
+[sub_resource type="Resource" id="Resource_ghmgw"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(920, 1550)
+to_position = Vector2(920, 1430)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_r5nrq"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(920, 1430)
+to_position = Vector2(930, 1360)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_80wy2"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(930, 1360)
+to_position = Vector2(960, 1260)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_5qxkx"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(960, 1260)
+to_position = Vector2(1000, 1160)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_6rfm5"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1000, 1160)
+to_position = Vector2(1070, 1060)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_gf2mj"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1070, 1060)
+to_position = Vector2(1110, 980)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_6e11u"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1110, 980)
+to_position = Vector2(1130, 930)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_2mlt2"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1200, 720)
+to_position = Vector2(1250, 610)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_3mnw5"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1250, 610)
+to_position = Vector2(1300, 500)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_ce4ew"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1300, 500)
+to_position = Vector2(1330, 410)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_o8551"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1330, 410)
+to_position = Vector2(1350, 320)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_r5hgv"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1350, 320)
+to_position = Vector2(1370, 250)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_mu31e"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1370, 250)
+to_position = Vector2(1430, 180)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_f1c0i"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1430, 180)
+to_position = Vector2(1520, 140)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_7pf7d"]
+script = ExtResource("6_gf2mj")
+from_position = Vector2(1520, 140)
+to_position = Vector2(1600, 100)
+width_feet = 0.8333333333333334
+height_feet = 2.1
+
+[sub_resource type="Resource" id="Resource_ir6h6"]
+script = ExtResource("2_r5nrq")
+surface_id = &"ground"
+display_name = "Ground"
+texture = ExtResource("5_6rfm5")
+walkable_rects = Array[Rect2]([Rect2(0, 10, 1600, 1590)])
+wall_segments = Array[Resource]([SubResource("Resource_ghmgw"), SubResource("Resource_r5nrq"), SubResource("Resource_80wy2"), SubResource("Resource_5qxkx"), SubResource("Resource_6rfm5"), SubResource("Resource_gf2mj"), SubResource("Resource_6e11u"), SubResource("Resource_2mlt2"), SubResource("Resource_3mnw5"), SubResource("Resource_ce4ew"), SubResource("Resource_o8551"), SubResource("Resource_r5hgv"), SubResource("Resource_mu31e"), SubResource("Resource_f1c0i"), SubResource("Resource_7pf7d")])
+invisible_wall_rects = Array[Rect2]([Rect2(0, 1570, 1600, 30), Rect2(0, 0, 20, 1600), Rect2(0, 0, 1600, 30), Rect2(1580, 0, 20, 1600)])
+
+[sub_resource type="Resource" id="Resource_1v1ry"]
+script = ExtResource("2_r5nrq")
+surface_id = &"level_1"
+display_name = "Level 1"
+elevation_feet = 10.0
+
+[resource]
+script = ExtResource("1_ghmgw")
+map_id = &"goblin_entry"
+display_name = "Goblin Entry"
+surfaces = Array[ExtResource("2_r5nrq")]([SubResource("Resource_ir6h6"), SubResource("Resource_1v1ry")])

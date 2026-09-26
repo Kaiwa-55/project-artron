@@ -234,9 +234,39 @@ func use_hide(combatant_id: String) -> ActionResult:
 func use_search(combatant_id: String, target_id: String) -> ActionResult:
 	return search_action_executor.execute(combatant_id, target_id)
 
+func interact_door(combatant_id: String, surface_id: StringName, door_id: StringName) -> ActionResult:
+	if combat_state == null or combat_state.is_finished():
+		return ActionResult.failure("Combat is not active.")
+	if has_pending_reaction() or has_pending_step_back_move() or has_pending_ability_movement():
+		return ActionResult.failure("Resolve the pending action first.")
+	var actor: CombatantState = combat_state.get_combatant(combatant_id)
+	if actor == null or actor.id != combat_state.current_actor_id or actor.is_dying():
+		return ActionResult.failure("Actor is not the current actor.")
+	var door: BuildingDoorData = map_rules.get_door(surface_id, door_id)
+	if door == null:
+		return ActionResult.failure("Door not found.")
+	if actor.surface_id != surface_id:
+		return ActionResult.failure("Door is on another floor.")
+	var rect := Rect2(map_rules.building_map.map_to_logic(door.rect.position), door.rect.size)
+	var closest := actor.position.clamp(rect.position, rect.end)
+	var reach: float = (actor.collision_radius_feet + 5.0) * map_rules.world_units_per_foot
+	if actor.position.distance_to(closest) > reach:
+		return ActionResult.failure("Move closer to the door.")
+	if actor.ap < 1:
+		return ActionResult.failure("Not enough AP.")
+	var opening: bool = not map_rules.door_is_open(surface_id, door_id)
+	if not opening:
+		for other in combat_state.combatants.values():
+			if other != null and not other.is_dying() and other.surface_id == surface_id and rect.grow(map_rules.get_combatant_radius_world_units(other)).has_point(other.position):
+				return ActionResult.failure("Cannot close a door on a character.")
+	cancel_remaining_movement(actor)
+	actor.spend_ap(1)
+	map_rules.set_door_open(surface_id, door_id, opening)
+	return ActionResult.success_result()
 
-func use_consumable_item(combatant_id: String, item_id: String, target_id: String = "") -> ActionResult:
-	return consumable_item_executor.execute(combatant_id, item_id, target_id)
+
+func use_consumable_item(combatant_id: String, item_id: String, target_id: String = "", target_position: Vector2 = Vector2.INF, target_world: Vector3 = Vector3.INF) -> ActionResult:
+	return consumable_item_executor.execute(combatant_id, item_id, target_id, target_position, target_world)
 
 
 func is_player_controlled(combatant: CombatantState) -> bool:
@@ -253,12 +283,12 @@ func cancel_remaining_movement(combatant: CombatantState) -> void:
 	combatant.movement_remaining_feet = 0.0
 
 
-func execute_ground_skill(combatant_id: String, skill_id: String, target_point: Vector2) -> ActionResult:
-	return area_action_executor.execute_skill(combatant_id, skill_id, target_point)
+func execute_ground_skill(combatant_id: String, skill_id: String, target_point: Vector2, target_world: Vector3 = Vector3.INF) -> ActionResult:
+	return area_action_executor.execute_skill(combatant_id, skill_id, target_point, target_world)
 
 
-func execute_ground_ability(combatant_id: String, ability_id: String, target_point: Vector2) -> ActionResult:
-	return area_action_executor.execute_ability(combatant_id, ability_id, target_point)
+func execute_ground_ability(combatant_id: String, ability_id: String, target_point: Vector2, target_world: Vector3 = Vector3.INF) -> ActionResult:
+	return area_action_executor.execute_ability(combatant_id, ability_id, target_point, target_world)
 
 
 func get_ground_skill(actor: CombatantState, skill_id: String):
@@ -324,6 +354,22 @@ func use_active_ability(combatant_id: String, target_id: String, ability_id: Str
 	return active_ability_executor.execute(combatant_id, target_id, ability_id)
 
 
+func offer_on_kill_movement(actor: CombatantState, target: CombatantState, result: ActionResult) -> void:
+	if actor == null or target == null or result == null or not target.is_dying() or actor.is_dying() or result.requires_reaction_choice or not is_player_controlled(actor):
+		return
+	if not combat_state.combatants.values().any(func(other): return other != null and other.team != actor.team and not other.is_dying()):
+		return
+	var pursuit: Dictionary = ability_system.get_on_kill_movement(actor)
+	if pursuit.is_empty():
+		return
+	var pursuit_ability = pursuit["ability"]
+	actor.ability_uses_this_turn[pursuit_ability.id] = 1
+	reaction_resolver.move_actor_id = actor.id
+	reaction_resolver.move_distance_feet = pursuit["distance_feet"]
+	reaction_resolver.move_name = pursuit_ability.display_name
+	result.events.append(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, target.id, {"ability_name": pursuit_ability.display_name, "distance_feet": pursuit["distance_feet"]}))
+
+
 func apply_active_ability_effects(actor: CombatantState, target: CombatantState, ability, attack_events: Array[CombatEvent], output_events: Array[CombatEvent], include_always: bool = true, include_conditional: bool = true) -> void:
 	active_ability_executor.apply_effects(actor, target, ability, attack_events, output_events, include_always, include_conditional)
 
@@ -338,6 +384,10 @@ func apply_dynamic_ability_effect(actor: CombatantState, target: CombatantState,
 
 func offer_step_back(request: ActionRequest, attacker: CombatantState, target: CombatantState, result: ActionResult) -> void:
 	reaction_resolver.offer_step_back(request, attacker, target, result)
+
+
+func offer_counterattack(request: ActionRequest, attacker: CombatantState, target: CombatantState, attack: AttackData, attack_result: AttackResult, result: ActionResult) -> void:
+	reaction_resolver.offer_counterattack(request, attacker, target, attack, attack_result, result)
 
 
 func offer_mobile_shooter(request: ActionRequest, attacker: CombatantState, attack: AttackData, attack_result: AttackResult, result: ActionResult) -> void:
@@ -402,6 +452,11 @@ func set_active_weapon_slot(combatant_id: String, target_slot: int) -> ActionRes
 	return equipment_action_executor.set_active_weapon_slot(combatant_id, target_slot)
 
 
+func reload_weapon(combatant_id: String) -> ActionResult:
+	var request := ActionRequest.new(combatant_id, ActionTypes.Type.RELOAD)
+	return execute_action(request)
+
+
 func advance_turn() -> void:
 	turn_coordinator.advance_turn()
 
@@ -419,8 +474,12 @@ func reaction_has_trait(reaction, trait_id: String) -> bool:
 	return false
 
 
-func clear_hidden(combatant: CombatantState, reason: String) -> void:
-	if combatant != null and combatant.remove_status("hidden"):
+func clear_hidden(combatant: CombatantState, reason: String, clear_hide_bonus: bool = true) -> void:
+	if combatant == null:
+		return
+	if clear_hide_bonus:
+		combatant.clear_hide_concealment()
+	if combatant.remove_status("hidden"):
 		event_system.emit(CombatEvent.new(EventTypes.Type.EFFECT_EXPIRED, combatant.id, "", {"effect_name": "Hidden", "reason": reason}))
 
 
@@ -436,6 +495,9 @@ func check_for_combat_end() -> bool:
 			living_teams[combatant.team] = true
 
 	if living_teams.size() > 1:
+		var current_actor: CombatantState = combat_state.get_current_actor()
+		if combat_state.turn_state == CombatEnums.TurnState.ACTIVE and current_actor != null and current_actor.is_dying():
+			turn_coordinator.advance_turn()
 		return false
 
 	var winning_team := 0

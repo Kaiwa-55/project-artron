@@ -10,11 +10,14 @@ func _init() -> void:
 	var player: CombatantState = PlayerData.create_combatant_state()
 	var ally: CombatantState = PlayerData.create_combatant_state()
 	ally.id = "ally"
-	ally.position = Vector2(390, 370)
+	ally.position = Vector2(0, 120)
 	var spider: CombatantState = SpiderData.create_combatant_state()
 	spider.id = "enemy"
+	spider.position = Vector2(300, 120)
 	var giant: CombatantState = GiantSpiderData.create_combatant_state()
 	giant.id = "giantspider"
+	giant.position = Vector2(300, 0)
+	player.position = Vector2.ZERO
 	var system := CombatSystem.new()
 	system.start_combat([player, ally, spider, giant])
 	var ai = EnemyAI.new()

@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://data/character/character_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/token/goblin_skullmaul.jpg" id="2"]
+[ext_resource type="Resource" path="res://data/attack/goblin_skullmaul_club.tres" id="3"]
+[ext_resource type="Resource" path="res://data/trait/goblin.tres" id="4"]
+[ext_resource type="Resource" path="res://data/trait/humanoid.tres" id="5"]
+[ext_resource type="Resource" path="res://data/ai/goblin_skullmaul_ai_profile.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = "goblin_skullmaul"
+display_name = "Goblin Skullmaul"
+portrait = ExtResource("2")
+token_texture = ExtResource("2")
+team = 2
+position = Vector2(600, 0)
+collision_radius_feet = 3.0
+level = 2
+base_max_hp = 24
+base_max_ap = 3
+base_speed = 10.0
+reflex_stat_bonus = -1
+fortitude_stat_bonus = 3
+strength = 16
+dexterity = 8
+constitution = 16
+intelligence = 8
+wisdom = 10
+charisma = 8
+equipped_weapon_attack = ExtResource("3")
+natural_attack = ExtResource("3")
+traits = [ExtResource("4"), ExtResource("5")]
+ai_profile = ExtResource("6")

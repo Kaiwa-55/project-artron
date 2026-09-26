@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://dlk4pcf0ueemh"]
+
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="2"]
+[ext_resource type="Resource" uid="uid://chffmthbnxjuj" path="res://data/world/goblin_entry/goblin_road_battle_map.tres" id="3"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="3_ky4qh"]
+[ext_resource type="Resource" uid="uid://wfevisfrxbhy" path="res://data/character/goblin_shiv.tres" id="4"]
+[ext_resource type="Resource" uid="uid://ob8fqcae5xgu" path="res://data/character/goblin_slinger.tres" id="5"]
+[ext_resource type="Resource" uid="uid://bqcs6ode7fr2o" path="res://data/encounter/run_boss_goblin_village.tres" id="6"]
+[ext_resource type="Texture2D" uid="uid://llgfu0fb2wkl" path="res://assets/cutscenes/goblin_boss/road.png" id="7"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="8_883hb"]
+
+[sub_resource type="Resource" id="Shivs"]
+script = ExtResource("2")
+id = "road_shivs"
+enemy = ExtResource("4")
+count = 2
+spawn_center_feet = Vector2(26, -8)
+spacing_feet = 14.0
+
+[sub_resource type="Resource" id="Slinger"]
+script = ExtResource("2")
+id = "road_slinger"
+enemy = ExtResource("5")
+spawn_center_feet = Vector2(37, 18)
+
+[resource]
+script = ExtResource("1")
+id = "run_boss_goblin_road"
+display_name = "Goblin Village: Approach"
+encounter_description = "แนวหน้าถูกตีแตก แต่เส้นทางสู่ใจกลางหมู่บ้านยังมี Goblin ซุ่มคอยอยู่ เดินหน้าต่อให้ถึงลานกลาง"
+cutscene_image = ExtResource("7")
+type = 5
+building_map = ExtResource("3")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-36, 0), Vector2(-44, -12), Vector2(-44, 12)])
+enemy_groups = Array[Resource]([SubResource("Shivs"), SubResource("Slinger")])
+next_encounter = ExtResource("6")

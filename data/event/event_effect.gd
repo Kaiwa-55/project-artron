@@ -13,6 +13,7 @@ enum Type {
 	START_ENCOUNTER,
 	TELEPORT,
 	REWARD,
+	GAIN_EXPERIENCE,
 }
 
 @export var type: Type = Type.MODIFY_FLAG
@@ -58,6 +59,15 @@ func apply(context: EventContext) -> Dictionary:
 			context.data["teleport_position"] = position
 		Type.REWARD:
 			context.data.get_or_add("rewards", []).append({"id": String(key), "amount": amount, "text": text_value})
+		Type.GAIN_EXPERIENCE:
+			var progression := ProgressionSystem.new()
+			if not target_id.is_empty():
+				if actor != null:
+					progression.add_experience(actor, maxi(0, amount))
+			else:
+				for member in context.party:
+					if member != null:
+						progression.add_experience(member, maxi(0, amount))
 	return {"success": true, "effect_type": type}
 
 

@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="BuildingMapData" format=3 uid="uid://vbeu41lpm70f"]
+
+[ext_resource type="Script" uid="uid://dwa7gyayp7org" path="res://data/world/building_map_data.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://dxhodagv7ao8y" path="res://data/world/building_surface_data.gd" id="2_surface"]
+[ext_resource type="Script" uid="uid://dms6mgageamnx" path="res://data/world/building_door_data.gd" id="3_7fc5a"]
+[ext_resource type="Script" uid="uid://xciyd7037q4n" path="res://data/world/building_transition_data.gd" id="3_transition"]
+[ext_resource type="Script" uid="uid://bnaf2k38xl30b" path="res://data/world/building_object_data.gd" id="4_5tdr2"]
+[ext_resource type="Texture2D" uid="uid://b4qtw37aimtx0" path="res://assets/maps/dungeondraft/wooden_watchtower/Ground.png" id="4_ground"]
+[ext_resource type="Texture2D" uid="uid://k472lrm44qhe" path="res://assets/maps/dungeondraft/wooden_watchtower/Level1.png" id="5_level"]
+[ext_resource type="Texture2D" uid="uid://enhisyq2qly5" path="res://assets/maps/dungeondraft/wooden_watchtower/Roof.png" id="6_roof"]
+
+[sub_resource type="Resource" id="GroundSurface"]
+script = ExtResource("2_surface")
+surface_id = &"ground"
+display_name = "Ground"
+texture = ExtResource("4_ground")
+walkable_rects = Array[Rect2]([Rect2(0, 0, 1600, 1600)])
+wall_rects = Array[Rect2]([Rect2(140, 140, 680, 40), Rect2(140, 140, 40, 680), Rect2(140, 780, 20, 40), Rect2(320, 780, 500, 40), Rect2(780, 140, 40, 345), Rect2(780, 630, 40, 190)])
+
+[sub_resource type="Resource" id="Level1Surface"]
+script = ExtResource("2_surface")
+surface_id = &"level_1"
+display_name = "Level 1"
+elevation_feet = 10.0
+texture = ExtResource("5_level")
+walkable_rects = Array[Rect2]([Rect2(175, 175, 610, 610), Rect2(785, 320, 175, 490)])
+opening_rects = Array[Rect2]([Rect2(160, 780, 160, 40)])
+wall_rects = Array[Rect2]([Rect2(140, 140, 680, 40), Rect2(140, 140, 40, 680), Rect2(140, 780, 20, 40), Rect2(320, 780, 500, 40), Rect2(780, 140, 40, 290), Rect2(780, 520, 40, 300), Rect2(780, 310, 180, 20), Rect2(940, 310, 20, 510), Rect2(780, 800, 180, 20)])
+railing_rects = Array[Rect2]([Rect2(800, 320, 140, 10), Rect2(950, 320, 10, 490), Rect2(800, 800, 150, 10)])
+
+[sub_resource type="Resource" id="RoofSurface"]
+script = ExtResource("2_surface")
+surface_id = &"roof"
+display_name = "Roof"
+elevation_feet = 20.0
+texture = ExtResource("6_roof")
+
+[sub_resource type="Resource" id="SouthStairs"]
+script = ExtResource("3_transition")
+transition_id = &"south_stairs"
+from_surface_id = &"ground"
+to_surface_id = &"level_1"
+from_area = Rect2(165, 780, 150, 330)
+to_area = Rect2(165, 780, 150, 40)
+from_position = Vector2(240, 1090)
+to_position = Vector2(240, 780)
+width_feet = 12.0
+
+[resource]
+script = ExtResource("1_map")
+map_id = &"wooden_watchtower"
+display_name = "Wooden Watchtower"
+surfaces = Array[ExtResource("2_surface")]([SubResource("GroundSurface"), SubResource("Level1Surface"), SubResource("RoofSurface")])
+transitions = Array[ExtResource("3_transition")]([SubResource("SouthStairs")])

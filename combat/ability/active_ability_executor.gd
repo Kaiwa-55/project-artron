@@ -36,7 +36,7 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 		return ActionResult.failure("Target is out of range.")
 	if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT \
 		and ability.requires_line_of_sight \
-		and not combat_system.map_rules.has_line_of_sight(actor.position, target.position):
+		and not combat_system.map_rules.has_line_of_sight_between(actor, target):
 		return ActionResult.failure("Line of sight to the target is blocked.")
 	if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT and target != actor \
 		and combat_system.map_rules.get_visibility(actor, target).not_visible:
@@ -53,7 +53,7 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 			ability_attack.base_damage += floori(float(actor.get_total_faith()) / float(ability.active_attack_base_damage_faith_divisor))
 		if ability.animation_template != null:
 			ability_attack.animation_template = ability.animation_template
-		ability_attack.active_damage_bonus = ability.active_attack_flat_damage_bonus + ability.active_attack_damage_bonus_per_level * actor.level
+		ability_attack.active_damage_bonus = get_active_damage_bonus(actor, target, ability)
 		ability_attack.active_damage_bonus_source = ability.display_name
 		var attack_validation: ActionResult = combat_system.attack_system.validate_attack(actor, target, ability_attack)
 		if not attack_validation.success:
@@ -94,6 +94,10 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 			"temporary_faith": actor.temporary_faith,
 		}))
 	var defer_conditional: bool = result.requires_reaction_choice and result.reaction_prompt.has("prepared_attack")
+	if ability.replaces_active_stance:
+		for instance in actor.effects.duplicate():
+			if instance != null and instance.is_stance and instance.source_ability_id != ability.id:
+				actor.remove_status(instance.data.id)
 	apply_effects(actor, target, ability, result.events, ability_events, true, not defer_conditional)
 	var trigger_data := {"ability_name": ability.display_name, "ap_cost": ability.ap_cost, "cooldown": cooldown}
 	if ability.finishing_gauge_cost > 0:
@@ -113,8 +117,18 @@ func execute(combatant_id: String, target_id: String, ability_id: String) -> Act
 	return result
 
 
+func get_active_damage_bonus(actor: CombatantState, target: CombatantState, ability) -> int:
+	var bonus: int = ability.active_attack_flat_damage_bonus + ability.active_attack_damage_bonus_per_level * actor.level
+	if target != null and ability.active_target_hp_at_or_below_percent > 0 and target.max_hp > 0 and target.hp * 100 <= target.max_hp * ability.active_target_hp_at_or_below_percent:
+		bonus += ability.active_conditional_damage_bonus
+	return bonus
+
+
 func apply_effects(actor: CombatantState, target: CombatantState, ability, attack_events: Array[CombatEvent], output_events: Array[CombatEvent], include_always: bool = true, include_conditional: bool = true) -> void:
 	var hit := attack_events.any(func(event): return event.type == EventTypes.Type.ATTACK_HIT)
+	if include_conditional and hit and target != null and ability.on_hit_next_attack_to_hit_bonus > 0:
+		actor.next_attack_target_id = target.id
+		actor.next_attack_to_hit_bonus = ability.on_hit_next_attack_to_hit_bonus
 	var missed := attack_events.any(func(event): return event.type == EventTypes.Type.ATTACK_MISS)
 	var damaged := target != null and attack_events.any(func(event): return event.type == EventTypes.Type.DAMAGE_APPLIED and event.target_id == target.id and int(event.data.get("amount", 0)) > 0)
 	for entry in combat_system.ability_system.get_use_effects(ability):

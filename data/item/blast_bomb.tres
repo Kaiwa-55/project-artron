@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3]
+
+[ext_resource type="Script" path="res://data/item/consumable_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/trait/consumable.tres" id="2"]
+[ext_resource type="Resource" path="res://data/trait/manipulate.tres" id="3"]
+[ext_resource type="Resource" path="res://data/item/effect/blast_bomb_damage.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+id = "blast_bomb"
+display_name = "Blast Bomb"
+description = "Throw within 30 ft. Deals 6 fire damage to every combatant in a 10 ft radius, including allies."
+traits = [ExtResource("2"), ExtResource("3")]
+maximum_stack_size = 5
+sell_price = 25
+ap_cost = 2
+target_mode = 2
+target_filter = 3
+effects = Array[EffectData]([ExtResource("4")])
+targeting_range_feet = 30.0
+area_radius_feet = 10.0

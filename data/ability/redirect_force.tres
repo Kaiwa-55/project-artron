@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://deu5vqh26dj46"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_totgp"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_lqh50"]
 [ext_resource type="Resource" path="res://data/trait/move.tres" id="4"]
-[ext_resource type="Resource" path="res://data/reaction/redirect_force_reaction.tres" id="5"]
+[ext_resource type="Resource" uid="uid://l75luien7dhh" path="res://data/reaction/redirect_force_reaction.tres" id="5"]
 
 [resource]
 script = ExtResource("1")
@@ -16,6 +18,5 @@ required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
 reaction_only = true
 ap_cost = 1
-description = "When hit by a Melee Attack with Margin 0-2, Move up to 5 ft before Hit/Miss resolves. The movement does not trigger Reactions; leaving the Attack's range turns it into a Miss. Once per Round."
+description = "เมื่อถูกโจมตีประชิดโดนด้วยผลต่าง 0–2 ใช้ปฏิกิริยาตอบโต้ 1 AP เคลื่อนที่ได้สูงสุด 5 ฟุตก่อนตัดสินผลการโจมตี ไม่กระตุ้นปฏิกิริยาตอบโต้ หากพ้นระยะโจมตี การโจมตีนั้นพลาด ใช้ได้รอบละครั้ง"
 granted_reactions = [ExtResource("5")]
-

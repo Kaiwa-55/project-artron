@@ -123,7 +123,7 @@ func raw_character() -> CharacterData:
 	result.starting_equipment = []
 	result.starting_equipment_slots = {}
 	result.equipment_inventory = owned_equipment.duplicate()
-	for slot in [0, 3, 1]:
+	for slot in EquipmentSystem.LOADOUT_SLOTS:
 		var item = equipment_slots.get(slot)
 		if item != null and not result.starting_equipment.has(item):
 			result.starting_equipment.append(item)
@@ -269,11 +269,17 @@ func equip(item, slot: int) -> void:
 		return
 	var temporary := CombatantState.new()
 	temporary.equipped_items = equipment_slots.duplicate()
-	if item.slot == EquipmentData.Slot.ARMOR:
-		temporary.equipped_items[EquipmentData.Slot.ARMOR] = item
-	else:
+	if item.slot == EquipmentData.Slot.WEAPON or item.slot == EquipmentData.Slot.SHIELD:
 		equipment_rules.remove_hand_item_from_all_slots(temporary, item)
 		equipment_rules.equip_hand_item_without_cost(temporary, item, slot)
+	else:
+		if not equipment_rules.get_valid_slots(item).has(slot):
+			notice = "This equipment cannot use that slot."
+			return
+		var old_slot: int = equipment_rules.find_equipped_slot(temporary, item)
+		if old_slot >= 0:
+			temporary.equipped_items.erase(old_slot)
+		temporary.equipped_items[slot] = item
 	equipment_slots = temporary.equipped_items.duplicate()
 	rebuild()
 

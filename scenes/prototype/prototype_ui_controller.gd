@@ -1,6 +1,6 @@
 extends "res://scenes/combat/combat_arena.gd"
 
-const CharacterPanelScript := preload("res://scenes/ui/inventory_and_more.gd")
+const CharacterPanelControllerScript := preload("res://scenes/prototype/prototype_character_panel_controller.gd")
 const UITheme := preload("res://scenes/ui/artron_ui_theme.gd")
 const CombatTheme := preload("res://scenes/ui/combat_ui_theme.gd")
 const DevoteeFallbackPortrait := preload("res://assets/character_creation/devotee.png")
@@ -9,11 +9,13 @@ const ObstacleVisualScript := preload("res://scenes/combat/obstacle_visual.gd")
 const CombatantScript := preload("res://entities/combatant.gd")
 const DefaultEncounter := preload("res://data/encounter/prototype_encounter.tres")
 const EncounterDataScript := preload("res://data/encounter/encounter_data.gd")
-const GMConsoleScript := preload("res://scenes/prototype/gm_console.gd")
-const CreationCatalog := preload("res://data/creation/default_creation_catalog.tres")
+const GMConsoleControllerScript := preload("res://scenes/prototype/prototype_gm_console_controller.gd")
+const ActionMenuScript := preload("res://scenes/prototype/prototype_action_menu.gd")
 const MAP_SIZE_FEET := Vector2(250.0, 250.0)
+const ACTION_DOCK_WIDTH := 290.0
 
 var inventory_drawer: Control
+var character_panel_controller: RefCounted
 var inventory_list: VBoxContainer
 var inventory_status: Label
 var character_summary: VBoxContainer
@@ -39,6 +41,7 @@ var minor_action_scroll: ScrollContainer
 var minor_action_list: GridContainer
 var minor_action_title: Label
 var action_category_buttons: Dictionary = {}
+var action_menu_controller: RefCounted
 var enemy_ai = EnemyAIScript.new()
 var enemy_actions_this_turn: int = 0
 @export var encounter_data: Resource
@@ -46,6 +49,7 @@ var enemy_nodes: Dictionary = {}
 var party_nodes: Dictionary = {}
 var selected_character_id: String = ""
 var gm_console
+var gm_console_controller: RefCounted
 
 # Coordinator extension points. PrototypeCombat overrides these with combat
 # state and encounter behavior while this base owns the UI presentation.
@@ -70,7 +74,6 @@ func _apply_prototype_layout() -> void:
 	$UILayer/Control/Enemy_panel.z_index = 10
 	style_panel($UILayer/Control/Header, UITheme.WINDOW_BACKGROUND, UITheme.WINDOW_BORDER, 4)
 	style_panel($UILayer/Control/Enemy_panel, UITheme.CARD_BACKGROUND, UITheme.GOLD, 4)
-	style_panel($UILayer/Control/CombatLogPanel, UITheme.CARD_BACKGROUND, UITheme.CARD_BORDER, 4)
 	style_panel($UILayer/Control/ReactionPrompt, UITheme.CARD_BACKGROUND, UITheme.GOLD, 4)
 	for button in $UILayer/Control/ActionSources.get_children():
 		if button is Button:
@@ -82,6 +85,7 @@ func _apply_prototype_layout() -> void:
 	$UILayer/Controllers/CombatHUD.build()
 	$UILayer/Controllers/ActionBar.build()
 	_apply_combat_theme()
+	_style_combat_log_strip()
 	_apply_combat_typography()
 	_apply_responsive_layout()
 	if not $UILayer/Control.resized.is_connected(_apply_responsive_layout):
@@ -98,6 +102,9 @@ func _apply_responsive_layout() -> void:
 	var header_height := CombatTheme.HEADER_HEIGHT
 	var bottom_gap := 4.0 if small_screen else (8.0 if compact else 20.0)
 	var dock_height := CombatTheme.DOCK_HEIGHT
+	var log_panel: Control = $UILayer/Control/CombatLogPanel
+	var log_width := clampf(viewport_size.x * 0.22, 210.0, 420.0)
+	var log_inset := log_width if log_panel.visible else 0.0
 	var combat_ui: Control = $UILayer/Control/CombatUI
 	combat_ui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var combat_bar: Control = $UILayer/Control/CombatUI/Combat_bar
@@ -106,7 +113,7 @@ func _apply_responsive_layout() -> void:
 	combat_bar.custom_minimum_size = Vector2.ZERO
 	combat_bar.offset_top = -dock_height - edge
 	combat_bar.offset_bottom = -edge
-	combat_bar.offset_right = edge + minf(CombatTheme.DOCK_WIDTH, viewport_size.x - 120.0)
+	combat_bar.offset_right = edge + minf(ACTION_DOCK_WIDTH, viewport_size.x - 120.0)
 	var combat_bar_container: MarginContainer = $UILayer/Control/CombatUI/Combat_bar/Combat_bar_Container
 	combat_bar_container.custom_minimum_size = Vector2.ZERO
 	combat_bar_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -126,30 +133,40 @@ func _apply_responsive_layout() -> void:
 	content_margin.offset_bottom = -3
 	content_margin.add_theme_constant_override("margin_left", 3)
 	content_margin.add_theme_constant_override("margin_right", 3)
+	var dock_content: HBoxContainer = content_margin.get_node("HBoxContainer")
+	dock_content.add_theme_constant_override("separation", 4)
 	var profile: VBoxContainer = content_margin.get_node("HBoxContainer/Profile")
 	profile.offset_transform_enabled = false
 	profile.offset_transform_position = Vector2.ZERO
-	profile.custom_minimum_size.x = 80
+	profile.custom_minimum_size.x = 58
 	profile.size_flags_horizontal = Control.SIZE_FILL
 	for child in profile.get_children():
 		if child is Label:
+			child.add_theme_font_size_override("font_size", 7)
 			child.autowrap_mode = TextServer.AUTOWRAP_OFF
 			child.clip_text = true
+	var defense_column: VBoxContainer = dock_content.get_node("DefenseAndResource")
+	for defense in defense_column.get_node("HBoxContainer").get_children():
+		for child in defense.get_children():
+			if child is Label:
+				child.add_theme_font_size_override("font_size", 7)
 	combat_status_bar.get_node("Status").add_theme_stylebox_override("normal", UITheme.style(UITheme.BUTTON_BACKGROUND, UITheme.CARD_BORDER, 2))
 	var minor_column: VBoxContainer = combat_bar.get_node("Action_bar_Minor")
 	minor_column.add_theme_constant_override("separation", 0)
 	minor_column.custom_minimum_size = Vector2.ZERO
 	minor_column.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	minor_column.offset_right = minf(CombatTheme.DOCK_WIDTH, maxf(150.0, minor_action_list.columns * 83.0 + 6.0))
-	minor_column.offset_top = -78
+	minor_column.offset_right = minf(ACTION_DOCK_WIDTH, maxf(60.0, minor_action_list.columns * 30.0 + 6.0))
+	minor_column.offset_top = -60
 	minor_column.offset_bottom = -6
 	minor_column.get_node("VSeparator").hide()
-	minor_column.get_node("NinePatchRect").custom_minimum_size = Vector2(0, 56)
+	minor_column.get_node("NinePatchRect").custom_minimum_size = Vector2(0, 36)
+	minor_action_title.add_theme_font_size_override("font_size", 4)
+	minor_column.get_node("MenuHeader/Close").add_theme_font_size_override("font_size", 4)
 	var turn_panel: Control = combat_ui.get_node("Endturn")
 	turn_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	turn_panel.offset_left = -edge - 86
+	turn_panel.offset_left = -edge - log_inset - 86
 	turn_panel.offset_top = -edge - 50
-	turn_panel.offset_right = -edge
+	turn_panel.offset_right = -edge - log_inset
 	turn_panel.offset_bottom = -edge
 	var major_action_grid: GridContainer = $UILayer/Control/CombatUI/Combat_bar/Combat_bar_Container/VBoxContainer/Combat_bar/MarginContainer/HBoxContainer/Action_Bar_Major
 	major_action_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -158,7 +175,10 @@ func _apply_responsive_layout() -> void:
 	major_action_grid.add_theme_constant_override("v_separation", 2 if small_screen else 4)
 	for action_card in major_action_grid.get_children():
 		if action_card is Control:
-			action_card.custom_minimum_size = Vector2(48.0, 24.0)
+			action_card.custom_minimum_size = Vector2(40.0, 24.0)
+			var action_button := action_card.get_node_or_null("Button") as Button
+			if action_button != null:
+				action_button.add_theme_font_size_override("font_size", 7)
 		if action_card is NinePatchRect:
 			action_card.patch_margin_left = 6
 			action_card.patch_margin_right = 6
@@ -200,9 +220,9 @@ func _apply_responsive_layout() -> void:
 	var target_height := 80.0 if small_screen else 100.0
 	var enemy_panel: Control = $UILayer/Control/Enemy_panel
 	enemy_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	enemy_panel.offset_left = -edge - side_width
+	enemy_panel.offset_left = -edge - log_inset - side_width
 	enemy_panel.offset_top = edge + header_height + (6.0 if small_screen else 10.0)
-	enemy_panel.offset_right = -edge
+	enemy_panel.offset_right = -edge - log_inset
 	enemy_panel.offset_bottom = enemy_panel.offset_top + target_height
 	var target_title: Label = $UILayer/Control/Enemy_panel/VBoxContainer/PanelTitle
 	var target_name: Label = $UILayer/Control/Enemy_panel/VBoxContainer/Name
@@ -215,35 +235,36 @@ func _apply_responsive_layout() -> void:
 	target_name.clip_text = small_screen
 	target_effects.max_lines_visible = 1 if small_screen else -1
 	target_effects.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	var log_panel: Control = $UILayer/Control/CombatLogPanel
-	var log_width := minf(200.0 if small_screen else 280.0, viewport_size.x - edge * 2.0)
 	log_panel.custom_minimum_size = Vector2.ZERO
-	log_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	log_panel.offset_left = -edge - log_width
-	log_panel.offset_top = enemy_panel.offset_bottom + (6.0 if small_screen else 10.0)
-	log_panel.offset_right = -edge
-	var requested_log_height := 138.0 * 3.0
-	var available_log_height := viewport_size.y - log_panel.offset_top - dock_height - edge * 2.0
-	log_panel.offset_bottom = log_panel.offset_top + minf(requested_log_height, available_log_height)
+	log_panel.anchor_left = 1.0
+	log_panel.anchor_top = 0.0
+	log_panel.anchor_right = 1.0
+	log_panel.anchor_bottom = 1.0
+	log_panel.offset_left = -log_width
+	log_panel.offset_top = 0.0
+	log_panel.offset_right = 0.0
+	log_panel.offset_bottom = 0.0
 	var log_margin: MarginContainer = $UILayer/Control/CombatLogPanel/Margin
-	log_margin.add_theme_constant_override("margin_left", 5 if small_screen else 14)
-	log_margin.add_theme_constant_override("margin_top", 5 if small_screen else 12)
-	log_margin.add_theme_constant_override("margin_right", 5 if small_screen else 14)
-	log_margin.add_theme_constant_override("margin_bottom", 5 if small_screen else 12)
+	log_margin.add_theme_constant_override("margin_left", 7)
+	log_margin.add_theme_constant_override("margin_top", 8)
+	log_margin.add_theme_constant_override("margin_right", 7)
+	log_margin.add_theme_constant_override("margin_bottom", 8)
 	var log_column: VBoxContainer = $UILayer/Control/CombatLogPanel/Margin/VBoxContainer
-	log_column.add_theme_constant_override("separation", 3 if small_screen else 8)
+	log_column.add_theme_constant_override("separation", 4)
 	var log_title: Label = $UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Header/Title
-	log_title.add_theme_font_size_override("font_size", 9 if small_screen else 20)
-	log_title.clip_text = small_screen
+	log_title.add_theme_font_size_override("font_size", 9)
+	log_title.clip_text = true
 	var log_close: Button = $UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Header/Close
-	log_close.custom_minimum_size = Vector2(22.0, 22.0) if small_screen else Vector2(42.0, 36.0)
-	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Turn.add_theme_font_size_override("font_size", CombatTheme.BODY)
-	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/ModeHint.add_theme_font_size_override("font_size", CombatTheme.BODY)
+	log_close.custom_minimum_size = Vector2(24.0, 24.0)
+	log_close.add_theme_font_size_override("font_size", 8)
+	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Turn.add_theme_font_size_override("font_size", 7)
+	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/ModeHint.add_theme_font_size_override("font_size", 7)
+	$UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var log_entries: VBoxContainer = $UILayer/Control/CombatLogPanel/Margin/VBoxContainer/Scroll/Entries
-	log_entries.add_theme_constant_override("separation", 4 if small_screen else 10)
+	log_entries.add_theme_constant_override("separation", 5)
 	for card in log_entries.get_children():
 		if card.has_method("apply_compact_layout"):
-			card.apply_compact_layout(small_screen)
+			card.apply_compact_layout(true)
 	var action_menu: Control = $UILayer/Control/ActionMenu
 	action_menu.set_anchors_preset(Control.PRESET_CENTER)
 	var menu_width := minf(390.0, viewport_size.x - edge * 2.0)
@@ -357,6 +378,14 @@ func _apply_combat_theme() -> void:
 		status_strip.add_theme_color_override("font_color", UITheme.MUTED)
 
 
+func _style_combat_log_strip() -> void:
+	var log_style := UITheme.style(UITheme.CARD_BACKGROUND, Color("d4463f"), 0)
+	log_style.set_border_width_all(0)
+	log_style.border_width_left = 2
+	log_style.set_corner_radius_all(0)
+	$UILayer/Control/CombatLogPanel.add_theme_stylebox_override("panel", log_style)
+
+
 func _build_shadow_step_button() -> void:
 	shadow_step_button = Button.new()
 	shadow_step_button.name = "ShadowStep"
@@ -466,174 +495,18 @@ func _build_combat_log_toggle() -> void:
 func toggle_combat_log() -> void:
 	$UILayer/Controllers/CombatLog.toggle()
 	combat_log_button.text = "CLOSE LOG" if $UILayer/Control/CombatLogPanel.visible else "COMBAT LOG"
+	_apply_responsive_layout()
 
 
 func _build_gm_console() -> void:
-	if gm_console != null:
-		return
-	gm_console = GMConsoleScript.new()
-	gm_console.name = "GMConsole"
-	gm_console.z_index = 40
-	# Debug controls must remain above the presentation input blocker (layer 50).
-	var console_layer := CanvasLayer.new()
-	console_layer.name = "GMConsoleLayer"
-	console_layer.layer = 60
-	$UILayer/Control.add_child(console_layer)
-	console_layer.add_child(gm_console)
-	gm_console.configure(CreationCatalog.classes, CreationCatalog.get_abilities(), CreationCatalog.get_skills())
-	gm_console.class_requested.connect(_gm_change_class)
-	gm_console.ability_requested.connect(_gm_grant_ability)
-	gm_console.skill_requested.connect(_gm_grant_skill)
-	gm_console.attribute_requested.connect(_gm_change_attribute)
-	gm_console.command_requested.connect(_gm_command)
+	if gm_console_controller == null:
+		gm_console_controller = GMConsoleControllerScript.new(self)
+	gm_console_controller.build()
 
 
 func _input(event: InputEvent) -> void:
-	if not event is InputEventKey or event.keycode != KEY_F1 or gm_console == null:
-		return
-	# Handle the global shortcut before focused controls can consume it.
-	get_viewport().set_input_as_handled()
-	if not event.pressed or event.echo:
-		return
-	gm_console.toggle_console()
-	if gm_console.visible:
-		var character := _gm_character()
-		gm_console.set_status("Character: %s" % character.display_name if character != null else "No character available.")
-
-
-func _gm_character() -> CombatantState:
-	var character := get_displayed_party_member()
-	return character if character != null else get_player_controlled_actor()
-
-
-func _gm_target(character: CombatantState, command: String) -> CombatantState:
-	var state = combat_system.get_combat_state()
-	var selected: CombatantState = state.get_combatant(selected_character_id)
-	if selected != null and selected.is_alive():
-		return selected
-	if command == "heal_target":
-		return character
-	var target: CombatantState = state.get_combatant(selected_target_id)
-	if target != null and target.is_alive():
-		return target
-	for candidate in state.combatants.values():
-		if candidate != null and candidate.team != character.team and candidate.is_alive():
-			return candidate
-	return null
-
-
-func _gm_change_class(class_data) -> void:
-	var character := _gm_character()
-	if character == null or class_data == null:
-		gm_console.set_status("Class change failed: no character.")
-		return
-	var previous = character.get_meta("class_data", null)
-	if previous != null:
-		var reversed_bonuses: Dictionary = {}
-		for attribute in previous.fixed_attribute_bonuses:
-			reversed_bonuses[attribute] = -int(previous.fixed_attribute_bonuses[attribute])
-		CharacterClassSystem.new().apply_fixed_attribute_bonuses(character, reversed_bonuses)
-		if previous.base_speed_feet >= 0.0: character.base_speed -= previous.base_speed_feet
-		if previous.base_mana >= 0: character.base_max_mana = 0
-		if previous.base_faith >= 0: character.base_max_faith = 0
-		for trait_data in previous.traits:
-			character.active_traits.erase(trait_data)
-		for ability in previous.granted_abilities:
-			character.available_abilities.erase(ability)
-			character.equipped_abilities.erase(ability.id)
-	character.set_meta("class_data", class_data)
-	CharacterClassSystem.new().apply_class(character)
-	StatSystem.new().refresh_combatant(character)
-	combat_system.ability_system.sync_granted_reactions(character)
-	refresh_essential_hud()
-	refresh_action_dock()
-	gm_console.set_status("%s changed to %s." % [character.display_name, class_data.display_name])
-	$UILayer/Control.add_log_message("GM: %s is now %s." % [character.display_name, class_data.display_name])
-
-
-func _gm_grant_ability(ability) -> void:
-	var character := _gm_character()
-	if character == null or ability == null:
-		gm_console.set_status("Grant failed: no character or ability.")
-		return
-	if not character.available_abilities.has(ability): character.available_abilities.append(ability)
-	if not ability.is_passive and not ability.reaction_only and not character.equipped_abilities.has(ability.id): character.equipped_abilities.append(ability.id)
-	combat_system.ability_system.sync_granted_reactions(character)
-	refresh_essential_hud()
-	refresh_action_dock()
-	gm_console.set_status("Granted %s to %s." % [ability.display_name, character.display_name])
-	$UILayer/Control.add_log_message("GM: granted %s." % ability.display_name)
-
-
-func _gm_grant_skill(skill) -> void:
-	var character := _gm_character()
-	if character == null or skill == null:
-		gm_console.set_status("Grant Skill failed: no character or skill.")
-		return
-	if not character.available_skills.has(skill):
-		character.available_skills.append(skill)
-	_sync_gm_character_to_run()
-	refresh_action_dock()
-	gm_console.set_status("Granted Skill %s to %s." % [skill.display_name, character.display_name])
-	$UILayer/Control.add_log_message("GM: granted Skill %s." % skill.display_name)
-
-
-func _gm_change_attribute(attribute_name: String, delta: int) -> void:
-	var character := _gm_character()
-	var attributes := {"STR": "strength", "DEX": "dexterity", "CON": "constitution", "INT": "intelligence", "WIS": "wisdom", "CHA": "charisma"}
-	var property_name: String = attributes.get(attribute_name, "")
-	if character == null or property_name.is_empty():
-		gm_console.set_status("Attribute change failed.")
-		return
-	character.set(property_name, maxi(1, int(character.get(property_name)) + delta))
-	StatSystem.new().refresh_combatant(character)
-	_sync_gm_character_to_run()
-	refresh_essential_hud()
-	refresh_combatant_nodes()
-	refresh_action_dock()
-	gm_console.set_status("%s %s: %d." % [character.display_name, attribute_name, int(character.get(property_name))])
-	$UILayer/Control.add_log_message("GM: %s %s changed to %d." % [character.display_name, attribute_name, int(character.get(property_name))])
-
-
-func _sync_gm_character_to_run() -> void:
-	if has_method("sync_run_party_state"):
-		call("sync_run_party_state")
-
-
-func _gm_command(command: String) -> void:
-	if command == "reset_combat":
-		if has_method("reset_combat"):
-			call("reset_combat")
-		return
-	var character := _gm_character()
-	if character == null:
-		gm_console.set_status("Command failed: no character.")
-		return
-	var result_message := ""
-	match command:
-		"full_resources":
-			character.hp = character.max_hp
-			character.mana = character.max_mana
-			character.faith = character.max_faith
-			character.ap = character.max_ap
-			result_message = "%s: resources restored." % character.display_name
-		"reset_turn":
-			character.ap = character.max_ap
-			character.attacks_declared_this_turn = 0
-			character.movement_remaining_feet = character.get_effective_speed()
-			result_message = "%s: turn reset." % character.display_name
-		"damage_target", "heal_target":
-			var target := _gm_target(character, command)
-			if target != null:
-				target.hp = clampi(target.hp + (-5 if command == "damage_target" else 5), 0, target.max_hp)
-				result_message = "%s: %s 5 HP." % [target.display_name, "damaged" if command == "damage_target" else "healed"]
-			else:
-				result_message = "Command failed: no target."
-	refresh_essential_hud()
-	refresh_combatant_nodes()
-	refresh_action_dock()
-	gm_console.set_status(result_message)
-	$UILayer/Control.add_log_message("GM: %s" % result_message)
+	if gm_console_controller != null:
+		gm_console_controller.handle_input(event)
 
 
 func _build_essential_hud() -> void:
@@ -697,6 +570,7 @@ func _build_action_menu() -> void:
 	close.pressed.connect(func(): action_menu_panel.visible = false)
 	action_menu_panel.visible = false
 	_build_minor_action_list()
+	action_menu_controller = ActionMenuScript.new(self)
 
 
 func _build_minor_action_list() -> void:
@@ -754,266 +628,19 @@ func _on_action_category_pressed(category: String) -> void:
 
 
 func show_action_menu(category: String) -> void:
-	var minor_action_panel: VBoxContainer = $UILayer/Control/CombatUI/Combat_bar/Action_bar_Minor
-	minor_action_panel.visible = false
-	for child in action_menu_list.get_children():
-		action_menu_list.remove_child(child)
-		child.queue_free()
-	action_menu_title.text = "BASIC ACTION" if category == "basic" else category.to_upper()
-	minor_action_title.text = action_menu_title.text
-	minor_action_panel.set_meta("category", category)
-	minor_action_scroll.visible = true
-	minor_action_scroll.scroll_horizontal = 0
-	var player: CombatantState = get_displayed_party_member()
-	if player == null:
-		return
-	match category:
-		"move":
-			var available_move := combat_system.movement_system.get_available_distance_feet(player)
-			add_action_menu_note("Speed %.1f ft · Available %.1f ft" % [player.get_effective_speed(), available_move])
-			add_action_menu_note("Continuing an unfinished Move is free. A new Move costs 1 AP.")
-		"attack":
-			var listed_items: Array = []
-			for slot in [0, 3]:
-				var item = player.equipped_items.get(slot)
-				if item != null and item.weapon_attack != null and not listed_items.has(item):
-					listed_items.append(item)
-					add_action_menu_button(item.weapon_attack.display_name, item.description, use_equipment_attack.bind(item.weapon_attack))
-			if player.unarmed_attack != null:
-				var free_hand: bool = combat_system.equipment_system.has_free_hand(player)
-				var unarmed_hint := "Melee · Unarmed · Requires at least one free hand."
-				if not free_hand:
-					unarmed_hint += " Both hands are occupied."
-				add_action_menu_button(player.unarmed_attack.display_name, unarmed_hint, use_equipment_attack.bind(player.unarmed_attack))
-				var unarmed_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
-				unarmed_button.disabled = not free_hand or player.ap < player.unarmed_attack.ap_cost
-			if listed_items.is_empty() and player.unarmed_attack == null:
-				add_action_menu_note("No equipped weapon attacks.")
-		"basic":
-			add_action_menu_button("SEARCH", "1 AP · Choose any enemy, visible or not. Roll 3d8 + Perception vs 10 + Stealth. Success: that enemy's Concealment against you -1.", begin_search_targeting, true)
-			add_action_menu_button("HIDE", "1 AP · Roll 3d8 + Stealth against every enemy's 10 + Perception DC. Enemies with Line of Sight add +4 DC. Success: Concealment +1.", use_hide_from_menu, true)
-			add_action_menu_button("GRAB", "Melee · 1 AP · 3d8 + STR vs Highest Defense. Applies Grabbed.", begin_basic_maneuver_targeting.bind(ActionTypes.Maneuver.GRAB), true)
-			add_action_menu_button("PUSH", "Melee · 1 AP · Push up to STR modifier × 2 + 5 ft.", begin_basic_maneuver_targeting.bind(ActionTypes.Maneuver.PUSH), true)
-			add_action_menu_button("PULL", "Melee · 1 AP · Pull up to STR modifier × 2 + 5 ft without overlapping.", begin_basic_maneuver_targeting.bind(ActionTypes.Maneuver.PULL), true)
-			add_action_menu_button("TRIP", "Melee · 1 AP · Applies Prone until the target's next turn.", begin_basic_maneuver_targeting.bind(ActionTypes.Maneuver.TRIP), true)
-			if player.has_status("prone"):
-				add_action_menu_button("STAND", "1 AP · Remove Prone.", use_stand_from_menu, true)
-			add_action_menu_button("THROW", "Open throwable weapons and items.", show_action_menu.bind("throw"), true)
-			add_action_menu_button("ESCAPE", "Attempt to remove an escapable Status.", show_action_menu.bind("escape"), true)
-		"throw":
-			add_action_menu_button("← BACK TO BASIC ACTION", "Return to the Basic Action list.", show_action_menu.bind("basic"), true)
-			var listed_items: Array = []
-			for item in player.equipment_inventory:
-				if item == null or listed_items.has(item):
-					continue
-				var thrown_attack: AttackData = combat_system.equipment_system.create_throw_attack(item)
-				if thrown_attack == null:
-					continue
-				listed_items.append(item)
-				var held: bool = combat_system.equipment_system.find_hand_slot(player, item) >= 0
-				var returning: bool = combat_system.trait_system.attack_has_trait(thrown_attack, "returning")
-				var hint := "Range %.0f ft. %s" % [thrown_attack.range_feet, "Returning: weapon is kept." if returning else "Weapon is consumed when thrown."]
-				if not held:
-					hint += " Equip this item in a hand slot first."
-				elif player.ap < thrown_attack.ap_cost:
-					hint += " Not enough AP."
-				add_action_menu_button(item.display_name, hint, use_equipment_attack.bind(thrown_attack))
-				var button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
-				button.disabled = not held or player.ap < thrown_attack.ap_cost
-			if listed_items.is_empty():
-				add_action_menu_note("No throwable items in inventory.")
-		"escape":
-			add_action_menu_button("← BACK TO BASIC ACTION", "Return to the Basic Action list.", show_action_menu.bind("basic"), true)
-			var escapable := combat_system.effect_system.get_escapable_effects(player)
-			for instance in escapable:
-				var dc: int = instance.source_class_dc if instance.source_class_dc > 0 else instance.data.default_escape_dc
-				var tooltip := "Roll 3d8 + STR modifier vs DC %d. AP is spent whether the roll succeeds or fails." % dc
-				add_action_menu_button(instance.data.display_name, tooltip, use_escape_from_menu.bind(instance.data.id))
-				var escape_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
-				escape_button.disabled = player.ap < instance.data.escape_ap_cost
-			if escapable.is_empty():
-				add_action_menu_note("No active Status can be escaped.")
-		"skill":
-			for skill in player.available_skills:
-				if skill != null:
-					add_action_menu_button(skill.display_name, skill.description, use_skill_from_menu.bind(skill))
-			if player.available_skills.is_empty():
-				add_action_menu_note("No Skills available.")
-		"ability":
-			var abilities: Array = combat_system.ability_system.get_active_abilities(player)
-			for ability in abilities:
-				if ability != null and not ability.is_passive and not ability.reaction_only:
-					var ability_target: CombatantState = player
-					if ability.target_mode == AbilityData.TargetMode.SINGLE_COMBATANT:
-						ability_target = get_first_valid_ability_target(player, ability)
-					var validation: ActionResult = combat_system.ability_system.validate_active_use(player, ability, ability_target)
-					var tooltip: String = ability.description if validation.success else "%s\nUnavailable: %s" % [ability.description, validation.failure_reason]
-					add_action_menu_button(ability.display_name, tooltip, use_ability_from_menu.bind(ability))
-					var ability_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
-					ability_button.disabled = not validation.success
-			if action_menu_list.get_child_count() == 0:
-				add_action_menu_note("No Active Abilities available.")
-		"item":
-			for stack in player.item_inventory:
-				if stack == null or stack.item == null or not (stack.item is ConsumableData):
-					continue
-				var item: ConsumableData = stack.item
-				var target_id := player.id
-				if item.target_mode == ConsumableData.TargetMode.SINGLE_COMBATANT:
-					var first_target := get_first_valid_item_target(player, item)
-					target_id = first_target.id if first_target != null else ""
-				var validation: ActionResult = combat_system.consumable_item_executor.validate(player.id, item.id, target_id)
-				var tooltip: String = item.description if validation.success else "%s\nUnavailable: %s" % [item.description, validation.failure_reason]
-				add_action_menu_button(item.display_name, tooltip, use_item_from_menu.bind(item))
-				var item_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
-				item_button.disabled = not validation.success
-			if player.item_inventory.is_empty():
-				add_action_menu_note("No Items available.")
-	var current_actor: CombatantState = combat_system.get_combat_state().get_current_actor()
-	var read_only: bool = current_actor == null or current_actor.id != player.id
-	if read_only:
-		for child in action_menu_list.get_children():
-			if child is Button and not child.get_meta("menu_navigation", false):
-				child.disabled = true
-				child.tooltip_text = "This character can only use Actions during their Turn."
-	minor_action_panel.visible = action_menu_list.get_child_count() > 0
-	action_menu_panel.visible = false
-
-
-func get_first_valid_ability_target(actor: CombatantState, ability: AbilityData) -> CombatantState:
-	if actor == null or ability == null or combat_system == null:
-		return null
-	for candidate in combat_system.get_combat_state().combatants.values():
-		if candidate != null and not candidate.is_dying() and combat_system.ability_system.target_filter_matches(actor, candidate, ability):
-			return candidate
-	return null
-
-
-func get_first_valid_item_target(actor: CombatantState, item: ConsumableData) -> CombatantState:
-	if actor == null or item == null or combat_system == null:
-		return null
-	for candidate in combat_system.get_combat_state().combatants.values():
-		if candidate != null and combat_system.consumable_item_executor.validate(actor.id, item.id, candidate.id).success:
-			return candidate
-	return null
+	action_menu_controller.show_action_menu(category)
 
 
 func add_action_menu_button(text: String, tooltip: String, action: Callable, menu_navigation: bool = false) -> void:
-	var button := Button.new()
-	var arguments := action.get_bound_arguments()
-	if not arguments.is_empty() and (arguments[0] is AttackData or arguments[0] is SkillData or arguments[0] is AbilityData):
-		button.set_script(preload("res://scenes/combat/ui/action_detail_button.gd"))
-		button.detail_source = arguments[0]
-		button.detail_actor = get_displayed_party_member()
-		button.detail_system = combat_system
-	button.text = text
-	button.tooltip_text = tooltip
-	button.set_meta("menu_navigation", menu_navigation)
-	button.custom_minimum_size = Vector2(80, 26)
-	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	button.add_theme_font_size_override("font_size", CombatTheme.BODY)
-	button.pressed.connect(func():
-		action.call()
-		if not menu_navigation:
-			$UILayer/Control/CombatUI/Combat_bar/Action_bar_Minor.hide()
-	)
-	style_minor_action_button(button, _get_minor_action_icon(arguments))
-	action_menu_list.add_child(button)
-	_update_minor_action_columns()
+	action_menu_controller.add_action_menu_button(text, tooltip, action, menu_navigation)
 
 
 func add_action_menu_note(text: String) -> void:
-	var label := Label.new()
-	label.text = text
-	label.custom_minimum_size = Vector2(80, 26)
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_color_override("font_color", Color("a99d8b"))
-	label.add_theme_font_size_override("font_size", CombatTheme.BODY)
-	action_menu_list.add_child(label)
-	_update_minor_action_columns()
-
-
-func _update_minor_action_columns() -> void:
-	minor_action_list.columns = maxi(1, ceili(float(minor_action_list.get_child_count()) / 2.0))
-	$UILayer/Control/CombatUI/Combat_bar/Action_bar_Minor.offset_right = minf(CombatTheme.DOCK_WIDTH, maxf(150.0, minor_action_list.columns * 83.0 + 6.0))
-
-
-func _get_minor_action_icon(arguments: Array) -> Texture2D:
-	if arguments.is_empty():
-		return null
-	var source = arguments[0]
-	if source is Object and "icon_texture" in source:
-		return source.icon_texture
-	return null
+	action_menu_controller.add_action_menu_note(text)
 
 
 func style_minor_action_button(button: Button, icon_texture: Texture2D) -> void:
-	UITheme.apply_button_style(button)
-	button.custom_minimum_size = Vector2(80, 26)
-	var action_name := button.text
-	# Keep the no-icon button caption available to existing menu integrations.
-	button.text = action_name if icon_texture == null else ""
-	for color_name in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color"]:
-		button.add_theme_color_override(color_name, Color.TRANSPARENT)
-	var label := UITheme.label(action_name, CombatTheme.BODY)
-	label.name = "ActionName"
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	label.offset_left = 6
-	label.offset_right = -6
-	label.offset_bottom = -12
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.max_lines_visible = 2
-	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	button.add_child(label)
-	if icon_texture != null:
-		var icon := TextureRect.new()
-		icon.name = "ActionIcon"
-		icon.texture = icon_texture
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.position = Vector2(6, 5)
-		icon.size = Vector2(16, 16)
-		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		button.add_child(icon)
-		label.offset_left = 26
-	var cost_badge_text := _get_action_cost_badge(button)
-	if not cost_badge_text.is_empty():
-		var badge := UITheme.label(cost_badge_text, CombatTheme.BODY, UITheme.GOLD)
-		badge.name = "CostBadge"
-		badge.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-		badge.offset_left = 6
-		badge.offset_top = -14
-		badge.offset_right = -6
-		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		button.add_child(badge)
-
-
-func _get_action_cost_badge(button: Button) -> String:
-	if not "detail_source" in button or button.detail_source == null:
-		return ""
-	var source = button.detail_source
-	var actor: CombatantState = get_displayed_party_member()
-	var parts := PackedStringArray()
-	if "ap_cost" in source and int(source.ap_cost) > 0:
-		parts.append("%d AP" % int(source.ap_cost))
-	if source is SkillData:
-		var mana_cost: int = combat_system.skill_system.get_effective_mana_cost(actor, source) if actor != null else source.mana_cost
-		if mana_cost > 0:
-			parts.append("%d M" % mana_cost)
-		var skill_cooldown: int = combat_system.skill_system.get_remaining_cooldown(actor, source.id) if actor != null else 0
-		if skill_cooldown > 0:
-			parts.append("CD%d" % skill_cooldown)
-	elif source is AbilityData:
-		if source.faith_cost > 0:
-			parts.append("%d F" % source.faith_cost)
-		if source.finishing_gauge_cost > 0:
-			parts.append("%d G" % source.finishing_gauge_cost)
-		var ability_cooldown: int = combat_system.ability_system.get_remaining_cooldown(actor, source.id) if actor != null else 0
-		if ability_cooldown > 0:
-			parts.append("CD%d" % ability_cooldown)
-	return " ".join(parts)
+	action_menu_controller.style_minor_action_button(button, icon_texture)
 
 
 func use_equipment_attack(attack: AttackData) -> void:
@@ -1065,6 +692,8 @@ func draw_attack_targeting() -> void:
 	for target in state.combatants.values():
 		if target == null or target.team == player.team or target.is_dying():
 			continue
+		if not combat_system.map_rules.has_line_of_sight_between(player, target):
+			continue
 		var in_range: bool = pending_search_targeting or combat_system.map_rules.is_target_in_range(player, target, range_feet)
 		var color := Color("d5a84c") if in_range else Color(0.55, 0.58, 0.60, 0.45)
 		var radius: float = combat_system.map_rules.get_combatant_radius_world_units(target) + 7.0
@@ -1074,6 +703,8 @@ func draw_attack_targeting() -> void:
 func confirm_attack_target(mouse_position: Vector2) -> bool:
 	var player: CombatantState = get_player_controlled_actor()
 	for combatant_node in get_enemy_nodes():
+		if not combatant_node.is_spatially_selectable():
+			continue
 		if combatant_node.state == null or combatant_node.state.is_dying():
 			continue
 		var target: CombatantState = combatant_node.state
@@ -1139,6 +770,13 @@ func use_skill_from_menu(skill: SkillData) -> void:
 	if skill.target_mode == SkillData.TargetMode.GROUND:
 		begin_ground_targeting("skill", skill.id)
 		return
+	if skill.target_mode == SkillData.TargetMode.SELF:
+		var actor_id := get_player_controlled_actor_id()
+		var request := ActionRequest.new(actor_id, ActionTypes.Type.SKILL)
+		request.target_id = actor_id
+		request.skill_data = skill
+		handle_menu_action_result(combat_system.execute_action(request))
+		return
 	begin_single_targeting("skill", skill)
 
 
@@ -1190,7 +828,7 @@ func use_item_from_menu(item: ConsumableData) -> void:
 	if item.target_mode == ConsumableData.TargetMode.SINGLE_COMBATANT:
 		begin_single_targeting("item", item)
 		return
-	$UILayer/Control.set_mode_hint("%s requires ground targeting, which is not available for Items yet." % item.display_name)
+	begin_ground_targeting("item", item.id)
 
 
 func begin_single_targeting(kind: String, source) -> void:
@@ -1228,6 +866,8 @@ func draw_single_targeting() -> void:
 	for target in state.combatants.values():
 		if target == null or not is_valid_single_target(player, target):
 			continue
+		if target.team != player.team and not combat_system.map_rules.has_line_of_sight_between(player, target):
+			continue
 		var in_range: bool = combat_system.map_rules.is_target_in_range(player, target, range_feet)
 		var color := Color("d5a84c") if in_range else Color(0.55, 0.58, 0.60, 0.45)
 		draw_arc(target.position, combat_system.map_rules.get_combatant_radius_world_units(target) + 7.0, 0.0, TAU, 40, color, 4.0 if in_range else 2.0)
@@ -1254,6 +894,8 @@ func confirm_single_target(mouse_position: Vector2) -> bool:
 	var player: CombatantState = get_player_controlled_actor()
 	var range_feet: float = get_single_target_range(pending_single_target_kind, pending_single_target_source)
 	for combatant_node in get_all_combatant_nodes():
+		if not combatant_node.is_spatially_selectable():
+			continue
 		var target: CombatantState = combatant_node.state
 		if target == null or not is_valid_single_target(player, target):
 			continue
@@ -1433,71 +1075,38 @@ func get_combat_resource_text(player: CombatantState) -> String:
 
 
 func _build_inventory_drawer() -> void:
-	inventory_drawer = $UILayer/Control/CharacterPanel
-	inventory_drawer.equipment_change_requested.connect(change_inventory_item)
-	if inventory_drawer.has_signal("item_use_requested"):
-		inventory_drawer.item_use_requested.connect(use_item_from_menu)
-	inventory_drawer.setup(combat_system, "player")
-	inventory_list = inventory_drawer.content_list
-	inventory_status = inventory_drawer.status_label
-	character_summary = inventory_drawer.summary
-	character_page_title = inventory_drawer.page_title
-	character_tab_buttons = inventory_drawer.tab_buttons
+	if character_panel_controller == null:
+		character_panel_controller = CharacterPanelControllerScript.new(self)
+	character_panel_controller.build()
 
 
 func toggle_inventory() -> void:
-	inventory_drawer.visible = not inventory_drawer.visible
-	if inventory_drawer.visible:
-		refresh_inventory()
+	character_panel_controller.toggle_inventory()
 
 
 func open_character_from_portrait() -> void:
-	if inventory_drawer == null or is_movement_animating():
-		return
-	if combat_system.has_pending_reaction() or combat_system.has_pending_step_back_move() or combat_system.has_pending_ability_movement():
-		return
-	if action_menu_panel != null:
-		action_menu_panel.hide()
-	inventory_drawer.show()
-	refresh_inventory()
+	character_panel_controller.open_character_from_portrait()
 
 
 func set_character_tab(tab_id: String) -> void:
-	character_active_tab = tab_id
-	if inventory_drawer != null and inventory_drawer.get_script() == CharacterPanelScript:
-		inventory_drawer.set_tab(tab_id)
-		return
-	refresh_inventory()
+	character_panel_controller.set_character_tab(tab_id)
 
 
 func refresh_inventory() -> void:
-	if inventory_drawer != null and inventory_drawer.get_script() == CharacterPanelScript:
-		var displayed_actor := get_displayed_party_member()
-		if displayed_actor != null and inventory_drawer.combatant_id != displayed_actor.id:
-			inventory_drawer.setup(combat_system, displayed_actor.id)
-		inventory_drawer.refresh()
-		character_active_tab = inventory_drawer.active_tab
-		return
+	character_panel_controller.refresh_inventory()
+
+
+func refresh_character_panel_interaction_lock(state: CombatState, reaction_locked: bool) -> void:
+	if character_panel_controller != null:
+		character_panel_controller.refresh_interaction_lock(state, reaction_locked)
 
 
 func change_inventory_item(item, slot: int) -> void:
-	var result := combat_system.toggle_equipment(get_player_controlled_actor_id(), item, slot)
-	sync_move_mode_from_state()
-	if result.success:
-		$UILayer/Control.add_log_message("Inventory updated: %s." % item.display_name)
-	else:
-		$UILayer/Control.add_log_message("Inventory failed: %s" % result.failure_reason)
-	$UILayer/Control.update_ui()
-	refresh_inventory()
+	character_panel_controller.change_inventory_item(item, slot)
 
 
 func is_two_handed_item(item) -> bool:
-	if item == null or item.weapon_attack == null:
-		return false
-	for trait_data in item.weapon_attack.traits:
-		if trait_data != null and trait_data.id == "two_handed":
-			return true
-	return false
+	return character_panel_controller.is_two_handed_item(item)
 
 
 func style_panel(panel: Control, background: Color, border: Color, radius: int) -> void:

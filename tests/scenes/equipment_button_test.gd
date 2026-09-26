@@ -21,10 +21,13 @@ func run_test() -> void:
 	var panel = arena.inventory_drawer
 	panel.set_changes_locked(false)
 	panel.show()
-	panel.set_tab("equipment")
+	arena.set_character_tab("inventory")
+	var success: bool = panel.active_tab == "inventory" and arena.character_active_tab == "inventory"
+	arena.set_character_tab("equipment")
+	success = success and panel.active_tab == "equipment" and arena.character_active_tab == "equipment"
 	await process_frame
 	var item_button: Button = panel.equipment_entries.get_child(0) as Button
-	var success: bool = item_button != null
+	success = success and item_button != null
 	if item_button != null:
 		item_button.pressed.emit()
 	var button: Button

@@ -20,5 +20,5 @@ required_level = 3
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Increase the casting and attack range of your Skills by 5 ft. This does not enlarge a Circle's radius or a Cone's angle."
+description = "เพิ่มระยะร่ายและระยะโจมตีของสกิล 5 ฟุต แต่ไม่เพิ่มรัศมีวงหรือมุมกรวย"
 effects = [SubResource("Range")]

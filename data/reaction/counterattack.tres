@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3]
+
+[ext_resource type="Script" path="res://data/reaction/reaction_data.gd" id="script"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[resource]
+script = ExtResource("script")
+id = "counterattack"
+display_name = "Counterattack"
+description = "เมื่อศัตรูโจมตีประชิดพลาด ใช้ Reaction และ 1 AP เพื่อโจมตีสวนด้วยอาวุธประชิดที่ถืออยู่"
+traits = [ExtResource("reactive"), ExtResource("warrior")]
+trigger = 10
+attack_source = 1
+required_weapon_trait_ids = Array[String](["melee"])
+auto_resolve = false
+ap_cost = 1

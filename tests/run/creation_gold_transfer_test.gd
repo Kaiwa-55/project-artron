@@ -17,7 +17,10 @@ func run_test() -> void:
 	var run_map = RunMapScene.instantiate()
 	root.add_child(run_map)
 	await process_frame
-	var success: bool = run_map.run_state.gold == 295
+	var success: bool = run_map.run_state.gold == 295 and run_map.gold_label.text == "GOLD  295"
+	run_map.run_state.gold = 180
+	run_map.refresh_map_state()
+	success = success and run_map.gold_label.text == "GOLD  180"
 	run_map.queue_free()
 	root.get_tree().remove_meta("active_party_characters")
 	print("CREATION_GOLD_TRANSFER_TEST: " + ("PASS" if success else "FAIL"))

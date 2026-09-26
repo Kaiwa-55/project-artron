@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bvted75uyg4de"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_0uc7y"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_klq8e"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="effect"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="passive"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="StationaryDefense"]
+script = ExtResource("effect")
+effect_type = 19
+passive_value = 1
+
+[resource]
+script = ExtResource("ability")
+id = "stand_firm"
+display_name = "Stand Firm"
+required_level = 0
+required_trait_ids = Array[String](["warrior"])
+traits = [ExtResource("passive"), ExtResource("warrior")]
+is_passive = true
+description = "หากยังไม่เคลื่อนที่ในเทิร์นนี้ ได้ Defense +1 จนถึงต้นเทิร์นถัดไป เมื่อเคลื่อนที่ โบนัสจะหายทันที"
+effects = [SubResource("StationaryDefense")]

@@ -33,7 +33,7 @@ func get_closest_enemy() -> CombatantState:
 	var result: CombatantState
 	var best_distance := INF
 	for enemy in enemies:
-		var distance := actor.position.distance_squared_to(enemy.position)
+		var distance := actor.world_position.distance_squared_to(enemy.world_position)
 		if distance < best_distance:
 			best_distance = distance
 			result = enemy

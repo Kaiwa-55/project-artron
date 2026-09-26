@@ -15,7 +15,7 @@ func _init() -> void:
 	var spider: CombatantState = SpiderData.create_combatant_state()
 	check(spider.id == "spider" and spider.display_name == "Spider", "Spider resource creates the correct monster")
 	check(spider.level == 1 and spider.max_hp == 8 and spider.max_ap == 3, "Spider has Level 1 combat stats")
-	check(spider.get_effective_speed() == 25.0 and spider.collision_radius_feet == 2.5, "Spider uses a small fast movement profile")
+	check(spider.get_effective_speed() == 15.0 and spider.collision_radius_feet == 2.5, "Spider uses a small fast movement profile")
 	check(spider.equipped_weapon_attack != null and spider.equipped_weapon_attack.id == "spider_bite", "Spider Bite is equipped")
 	check(spider.equipped_weapon_attack.base_damage == 3 and spider.equipped_weapon_attack.ap_cost == 1, "Spider Bite has Level 1 damage and cost")
 	check(spider.equipped_weapon_attack.effects_on_hit.any(func(effect): return effect.id == "poisoned"), "Spider Bite can apply Poisoned")

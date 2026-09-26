@@ -13,6 +13,7 @@ script = ExtResource("script")
 id = "shortbow_attack"
 display_name = "Shortbow"
 attack_attribute = 1
+ammunition_item_ids = Array[String](["standard_arrow", "heavy_arrow"])
 base_damage = 4
 range_feet = 30.0
 damage_type = "pierce"

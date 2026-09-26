@@ -23,5 +23,5 @@ required_level = 2
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. Gain Slashing, Pierce, and Bludgeoning Resistance equal to floor(Level / 2), minimum 1."
+description = "ได้รับค่าต้านทานความเสียหายฟัน เจาะ และทุบ เท่ากับครึ่งหนึ่งของเลเวลโดยปัดเศษลง อย่างน้อย 1"
 effects = [SubResource("AbilityEffect_iron_skin")]

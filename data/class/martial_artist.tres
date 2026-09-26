@@ -6,7 +6,7 @@
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="4_trait"]
 [ext_resource type="Script" uid="uid://dn1s3mlpvne4k" path="res://data/progression/class_progression_entry.gd" id="5_progression"]
 [ext_resource type="Resource" uid="uid://dso253emhcod0" path="res://data/ability/martial_sense.tres" id="10_martial_sense"]
-[ext_resource type="Resource" path="res://data/ability/finishing_move.tres" id="11_finishing_move"]
+[ext_resource type="Resource" uid="uid://c3gjfna0f5m8j" path="res://data/ability/finishing_move.tres" id="11_finishing_move"]
 
 [sub_resource type="Resource" id="Progression_L1"]
 script = ExtResource("5_progression")

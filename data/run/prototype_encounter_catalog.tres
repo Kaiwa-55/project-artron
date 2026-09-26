@@ -7,10 +7,11 @@
 [ext_resource type="Resource" uid="uid://287k8stty8us" path="res://data/encounter/run_normal_thornscale_scout.tres" id="6"]
 [ext_resource type="Resource" uid="uid://ccllk2jdfnpka" path="res://data/encounter/run_elite_crimson_stalker.tres" id="7"]
 [ext_resource type="Resource" uid="uid://23pvh3vthah" path="res://data/encounter/run_elite_ravager_pack.tres" id="8"]
-[ext_resource type="Resource" uid="uid://bvwn0wvra7y2r" path="res://data/encounter/run_boss_velkaria_brood.tres" id="9"]
+[ext_resource type="Resource" path="res://data/encounter/run_boss_goblin_entrance.tres" id="9"]
+[ext_resource type="Resource" path="res://data/encounter/run_elite_goblin_skullmaul.tres" id="10"]
 
 [resource]
 script = ExtResource("1")
 combat_encounters = Array[ExtResource("3")]([ExtResource("4"), ExtResource("5"), ExtResource("6")])
-elite_encounters = Array[ExtResource("3")]([ExtResource("7"), ExtResource("8")])
+elite_encounters = Array[ExtResource("3")]([ExtResource("7"), ExtResource("8"), ExtResource("10")])
 boss_encounters = Array[ExtResource("3")]([ExtResource("9")])

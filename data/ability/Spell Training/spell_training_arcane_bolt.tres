@@ -14,5 +14,5 @@ display_name = "Spell Training: Arcane Bolt"
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("2"), ExtResource("3")]
 is_passive = true
-description = "Add Arcane Bolt to your available Skills."
+description = "เพิ่มสกิล Arcane Bolt ในรายการสกิลที่ใช้ได้"
 granted_skills = Array[ExtResource("2_osdfe")]([ExtResource("4")])

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://data/equipment/equipment_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/attack/mage_staff.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "focus_staff"
+display_name = "Focus Staff"
+description = "Two-handed staff. Max Mana +1 and +1 accuracy for Mana Skills that roll to hit while held."
+purchase_price = 80
+weapon_attack = ExtResource("2")
+max_mana_bonus = 1
+spell_skill_to_hit_bonus = 1

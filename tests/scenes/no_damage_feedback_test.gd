@@ -14,6 +14,11 @@ func run_test() -> void:
 		arena.combat_system.event_system.emit(event)
 		presenter.sync_movement()
 		success = success and is_instance_valid(target.no_damage_icon)
+		success = success and target.no_damage_icon is Sprite3D
+		if target.no_damage_icon is Sprite3D:
+			var icon := target.no_damage_icon as Sprite3D
+			success = success and icon.get_parent() == target.spatial_visual
+			success = success and icon.texture != null and icon.pixel_size > 0.0
 		await create_timer(0.9).timeout
 		success = success and target.no_damage_icon == null
 		presenter.sync_movement()

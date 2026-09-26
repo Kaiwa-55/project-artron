@@ -14,5 +14,5 @@ display_name = "Spell Training: Frost Shard"
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("5_hns34"), ExtResource("6_6d46d")]
 is_passive = true
-description = "Add Frost Shard to your available Skills."
+description = "เพิ่มสกิล Frost Shard ในรายการสกิลที่ใช้ได้"
 granted_skills = Array[ExtResource("2_1kiix")]([ExtResource("3_wiggg")])

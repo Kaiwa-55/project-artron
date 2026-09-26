@@ -14,7 +14,7 @@ func _init() -> void:
 	var system := CombatSystem.new()
 	system.start_combat([player, enemy])
 	system.combat_state.current_actor_id = player.id
-	var roster := {"dagger": [3, 5.0, 1, 0], "club": [5, 5.0, 0, 1], "sword": [5, 5.0, 0, 0], "hand_axe": [5, 5.0, 0, 0], "short_spear": [4, 5.0, 0, 0], "shortbow": [4, 30.0, 1, 0]}
+	var roster := {"dagger": [3, 5.0, 1, DefenseTypes.Type.HIGHEST], "club": [5, 5.0, 0, DefenseTypes.Type.REFLEX], "sword": [5, 5.0, 0, DefenseTypes.Type.HIGHEST], "hand_axe": [5, 5.0, 0, DefenseTypes.Type.HIGHEST], "short_spear": [4, 5.0, 0, DefenseTypes.Type.HIGHEST], "shortbow": [4, 30.0, 1, DefenseTypes.Type.HIGHEST]}
 	for id in roster:
 		var item = load("res://data/equipment/%s.tres" % id)
 		var attack: AttackData = item.weapon_attack
@@ -37,7 +37,7 @@ func _init() -> void:
 		enemy.position.x += 1.0
 		check(not system.attack_system.validate_attack(player, enemy, attack).success, id + " beyond reach")
 	var dagger = load("res://data/attack/dagger.tres")
-	check(dagger.to_hit_bonus == 1 and dagger.critical_chance == 15 and dagger.can_critical, "Dagger accuracy and critical")
+	check(dagger.to_hit_bonus == 0 and dagger.critical_chance == 15 and dagger.can_critical, "Dagger accuracy and critical")
 	check(not load("res://data/attack/club.tres").can_critical, "Club cannot critical")
 	for id in ["simple", "advanced", "melee", "ranged", "thrown", "reach", "two_handed", "shield_compatible", "heavy", "light", "finesse", "reload", "dual_weapon", "slash", "pierce", "blunt"]:
 		var trait_data = load("res://data/trait/%s.tres" % id)

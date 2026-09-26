@@ -19,5 +19,5 @@ display_name = "Martial Training"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("3_passive"), ExtResource("5_ucbx4")]
 is_passive = true
-description = "Passive: gain +1 To Hit with attacks."
+description = "การโจมตีได้รับค่าโจมตี +1"
 effects = [SubResource("AbilityEffect_training")]

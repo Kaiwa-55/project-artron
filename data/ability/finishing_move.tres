@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://c3gjfna0f5m8j"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/attack/finishing_move_attack.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_e5y7f"]
 [ext_resource type="Resource" path="res://data/trait/martial_artist.tres" id="3"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_b4g8c"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
 
 [resource]
@@ -16,7 +18,7 @@ traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
 auto_equip_on_grant = true
 ap_cost = 3
 finishing_gauge_cost = 10
-description = "Spend 10 Finishing Gauge and make an Unarmed Attack against one enemy. On Hit, deal Blunt Damage equal to 10 × Level. The Gauge is spent even if the Attack misses."
+description = "ใช้ 3 AP และเกจปิดฉาก 10 หน่วย โจมตีมือเปล่าหนึ่งครั้ง เมื่อโดนจะสร้างความเสียหายทุบเท่ากับ 10 เท่าของเลเวล เกจถูกใช้แม้โจมตีพลาด"
 attack_source = 2
 attack_data = ExtResource("2")
 required_attack_trait_ids = Array[String](["unarmed"])

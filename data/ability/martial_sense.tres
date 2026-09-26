@@ -16,5 +16,5 @@ traits = [ExtResource("2"), ExtResource("3")]
 auto_equip_on_grant = true
 reaction_only = true
 ap_cost = 1
-description = "When a Melee Attack hits at Defense +1, spend 1 AP to turn it into a Miss."
+description = "เมื่อถูกโจมตีประชิดโดนด้วยผลทอยที่ผ่านค่าป้องกันเพียง 1 ใช้ปฏิกิริยาตอบโต้ 1 AP เพื่อเปลี่ยนเป็นโจมตีพลาด"
 granted_reactions = [ExtResource("4")]

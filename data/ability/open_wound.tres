@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/ability/effect/open_wound_bleeding.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_uvmp5"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_84cjp"]
 [ext_resource type="Resource" uid="uid://cif2nm8gwigh5" path="res://data/trait/assassin.tres" id="4"]
 
 [resource]
@@ -13,5 +14,5 @@ display_name = "Open Wound"
 required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. The first Melee Attack that Hits each Turn applies Bleeding 1. Limit 1/Turn."
+description = "การโจมตีประชิดครั้งแรกที่โดนในแต่ละเทิร์นทำให้เป้าหมายติดเลือดไหล 1 สแต็ก"
 effects = [ExtResource("2")]

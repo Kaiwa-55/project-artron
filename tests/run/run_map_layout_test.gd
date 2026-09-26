@@ -29,7 +29,7 @@ func run_test() -> void:
 	var canvas_rect := Rect2(Vector2.ZERO, scene.map_canvas.custom_minimum_size)
 	for node_button in scene.node_buttons.values():
 		check(canvas_rect.encloses(Rect2(node_button.position, node_button.size)), "Every Run node stays inside the Map canvas", failures)
-		check(node_button.get_theme_font_size("font_size") == 7, "Run node labels use the compact 640x360 font", failures)
+		check(node_button.icon != null and node_button.text.is_empty(), "Run nodes show icons in place of text", failures)
 	var start_button: Button = scene.node_buttons.get("start")
 	check(start_button != null and absf(start_button.get_rect().get_center().y - scene.map_canvas.custom_minimum_size.y * 0.5) < 1.0, "The starting node is vertically centered after layout", failures)
 	for button in scene.party_inventory.get_children():

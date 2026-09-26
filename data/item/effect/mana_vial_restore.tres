@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "mana_vial_restore"
+display_name = "Mana Vial"
+effect_type = 3
+resource_type = 2
+amount = 2

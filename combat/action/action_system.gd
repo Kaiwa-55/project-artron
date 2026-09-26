@@ -61,6 +61,9 @@ func validate(
 				request.attack_data
 			)
 
+		ActionTypes.Type.RELOAD:
+			return ActionResult.success_result()
+
 		ActionTypes.Type.MOVE:
 
 			return movement_system.validate_move(
@@ -119,8 +122,12 @@ func execute(
 				attack_result
 			)
 
+		ActionTypes.Type.RELOAD:
+			return ActionResult.success_result()
+
 		ActionTypes.Type.MOVE:
 			var origin := actor.position
+			var distance_before := actor.movement_distance_this_turn
 			var was_moving: bool = actor.movement_in_progress
 			var move_result := movement_system.execute_move(
 				actor,
@@ -145,8 +152,9 @@ func execute(
 						"from": origin,
 						"to": actor.position,
 						"distance": origin.distance_to(actor.position),
-						"distance_feet": origin.distance_to(actor.position) \
-							/ request.movement_data.world_units_per_foot,
+						"distance_feet": actor.movement_distance_this_turn - distance_before,
+						"world_position": actor.world_position,
+						"surface_id": actor.surface_id,
 						"remaining_speed_feet": actor.movement_remaining_feet
 					}
 				)
@@ -162,8 +170,10 @@ func execute(
 
 		ActionTypes.Type.SKILL:
 			var target := combat_state.get_combatant(request.target_id)
+			if request.skill_data != null and request.skill_data.self_effect != null and request.skill_data.target_mode == SkillData.TargetMode.SELF:
+				return skill_system.execute_self_effect_skill(actor, request.skill_data, attack_system.effect_system)
 			skill_system.consume_skill_costs(actor, request.skill_data)
-			var skill_attack: AttackData = skill_system.get_attack_data(request.skill_data, actor)
+			var skill_attack: AttackData = skill_system.get_attack_data(request.skill_data, actor, true)
 			var attack_result := attack_system.resolve_attack(actor, target, skill_attack)
 			var skill_result := build_attack_result(actor, target, skill_attack, attack_result)
 			skill_result.events.push_front(CombatEvent.new(
@@ -197,26 +207,36 @@ func build_attack_result(
 				{
 					"attack_id": attack.id,
 					"attack_name": attack.display_name,
+					"requires_to_hit": attack.requires_to_hit,
+					"can_critical": attack.can_critical,
 					"roll": attack_result.roll,
 					"animation_template": attack.animation_template,
 					"is_damaging_attack": attack.base_damage > 0,
 					"animation_origin": attacker.position,
 					"animation_target": target.position,
 					"attack_modifier": attack_result.attack_modifier,
+					"to_hit_breakdown": attack_result.to_hit_breakdown.duplicate(true),
 					"repeated_attack_penalty": attack_result.repeated_attack_penalty,
+					"offhand_penalty": attack_result.offhand_penalty,
 					"visibility_penalty": attack_result.visibility_penalty,
 					"attack_total": attack_result.roll + attack_result.attack_modifier,
 					"defense": attack_result.defense,
+					"original_defense": attack_result.original_defense,
+					"defense_type": attack.defense_type,
+					"ap_cost": attack.ap_cost,
 					"damage": attack_result.damage,
+					"damage_breakdown": attack_result.damage_breakdown.duplicate(true),
 					"conditional_damage_bonus": attack_result.conditional_damage_bonus,
 					"damage_bonus_source": attack_result.damage_bonus_source,
 					"conditional_damage_bonuses": attack_result.conditional_damage_bonuses,
 					"critical": attack_result.critical,
 					"critical_roll": attack_result.critical_roll,
+					"critical_chance": attack_result.critical_chance,
 					"immune": attack_result.immune,
 					"damage_type": attack.damage_type,
 					"resistance": attack_result.resistance,
 					"final_damage": attack_result.final_damage,
+					"reaction_damage_reduction": attack_result.reaction_damage_reduction,
 					"finishing_gauge_gained": attack_result.finishing_gauge_gained,
 					"finishing_gauge": attacker.finishing_gauge,
 					"max_finishing_gauge": attacker.max_finishing_gauge
@@ -240,11 +260,12 @@ func build_attack_result(
 			)
 
 		for effect_name in attack_result.applied_effects:
+			var effect_target_id: String = attack_result.redirected_damage_target.id if attack_result.redirect_hit_effects and attack_result.redirected_damage_target != null else target.id
 			result.events.append(
 				CombatEvent.new(
 					EventTypes.Type.EFFECT_APPLIED,
 					attacker.id,
-					target.id,
+					effect_target_id,
 					{"effect_name": effect_name}
 				)
 			)
@@ -259,12 +280,18 @@ func build_attack_result(
 				{
 					"attack_id": attack.id,
 					"attack_name": attack.display_name,
+					"requires_to_hit": attack.requires_to_hit,
 					"roll": attack_result.roll,
 					"attack_modifier": attack_result.attack_modifier,
+					"to_hit_breakdown": attack_result.to_hit_breakdown.duplicate(true),
 					"repeated_attack_penalty": attack_result.repeated_attack_penalty,
+					"offhand_penalty": attack_result.offhand_penalty,
 					"visibility_penalty": attack_result.visibility_penalty,
 					"attack_total": attack_result.roll + attack_result.attack_modifier,
 					"defense": attack_result.defense,
+					"original_defense": attack_result.original_defense,
+					"defense_type": attack.defense_type,
+					"ap_cost": attack.ap_cost,
 					"animation_template": attack.animation_template,
 					"is_damaging_attack": attack.base_damage > 0,
 					"animation_origin": attacker.position,

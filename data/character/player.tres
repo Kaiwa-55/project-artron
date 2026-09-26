@@ -17,12 +17,17 @@
 [ext_resource type="Resource" path="res://data/trait/blunt.tres" id="29_qn4w5"]
 [ext_resource type="Resource" uid="uid://bm7e73pueqb80" path="res://data/trait/light.tres" id="30_ax7ba"]
 [ext_resource type="Resource" uid="uid://mwn86gfa6f6d" path="res://data/equipment/club.tres" id="item_club"]
+[ext_resource type="Resource" path="res://data/equipment/crossbow.tres" id="item_crossbow"]
+[ext_resource type="Resource" path="res://data/item/crossbow_bolt_stack.tres" id="item_crossbow_bolt"]
 [ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="item_dagger"]
-[ext_resource type="Resource" uid="uid://dy5ai2cdwi0dj" path="res://data/equipment/dagger_offhand.tres" id="item_dagger_offhand"]
+[ext_resource type="Resource" path="res://data/equipment/greatsword.tres" id="item_greatsword"]
 [ext_resource type="Resource" uid="uid://y0eqxm0uunff" path="res://data/equipment/hand_axe.tres" id="item_hand_axe"]
+[ext_resource type="Resource" path="res://data/item/heavy_arrow_stack.tres" id="item_heavy_arrow"]
 [ext_resource type="Resource" path="res://data/item/minor_healing_potion_stack.tres" id="item_minor_healing_potion"]
 [ext_resource type="Resource" uid="uid://dn48gsppkugs0" path="res://data/equipment/shortbow.tres" id="item_shortbow"]
 [ext_resource type="Resource" uid="uid://qi8e4p706jhp" path="res://data/equipment/short_spear.tres" id="item_short_spear"]
+[ext_resource type="Resource" path="res://data/item/standard_arrow_stack.tres" id="item_standard_arrow"]
+[ext_resource type="Resource" path="res://data/equipment/warhammer.tres" id="item_warhammer"]
 [ext_resource type="Resource" uid="uid://c1tpa53aw63r" path="res://data/skill/arcane_bolt.tres" id="skill_arcane_bolt"]
 [ext_resource type="Resource" uid="uid://dsgkcvrpmemcm" path="res://data/skill/arcane_burst.tres" id="skill_arcane_burst"]
 [ext_resource type="Resource" uid="uid://k6apocdyw1ee" path="res://data/skill/arcane_cone.tres" id="skill_arcane_cone"]
@@ -37,7 +42,7 @@ id = "unarmed_attack"
 display_name = "Unarmed Attack"
 animation_template = ExtResource("24_mgsqb")
 is_unarmed = true
-base_damage = 1
+base_damage = 3
 damage_type = "blunt"
 traits = [ExtResource("27_aempt"), ExtResource("28_d8f8g"), ExtResource("29_qn4w5"), ExtResource("30_ax7ba")]
 
@@ -57,12 +62,12 @@ base_max_hp = 0
 base_max_ap = 4
 strength = 14
 unarmed_attack = SubResource("Resource_mgsqb")
-equipment_inventory = [ExtResource("3_xo044"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_dagger_offhand"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow")]
-item_inventory = Array[ExtResource("13_yufwi")]([ExtResource("item_minor_healing_potion")])
-starting_equipment = [ExtResource("item_dagger"), ExtResource("item_dagger_offhand")]
+equipment_inventory = [ExtResource("3_xo044"), ExtResource("9_long_spear"), ExtResource("10_leather_armor"), ExtResource("11_buckler"), ExtResource("item_dagger"), ExtResource("item_club"), ExtResource("item_hand_axe"), ExtResource("item_short_spear"), ExtResource("item_shortbow"), ExtResource("item_greatsword"), ExtResource("item_warhammer"), ExtResource("item_crossbow")]
+item_inventory = Array[ExtResource("13_yufwi")]([ExtResource("item_minor_healing_potion"), ExtResource("item_standard_arrow"), ExtResource("item_heavy_arrow"), ExtResource("item_crossbow_bolt")])
+starting_equipment = [ExtResource("item_dagger")]
 starting_equipment_slots = {
-"dagger": 0,
-"dagger_offhand": 3
+"dagger": 0
 }
 skills = [ExtResource("skill_arcane_bolt"), ExtResource("skill_arcane_burst"), ExtResource("skill_arcane_cone"), ExtResource("skill_ember_bolt"), ExtResource("skill_flame_wave"), ExtResource("skill_frost_shard"), ExtResource("skill_frozen_ground")]
+skill_ranks = null
 reactions = [null]

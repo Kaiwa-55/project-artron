@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="BuildingMapData" format=3 uid="uid://cyox8pe8wihoj"]
+
+[ext_resource type="Script" uid="uid://dwa7gyayp7org" path="res://data/world/building_map_data.gd" id="1_6q17j"]
+[ext_resource type="Script" uid="uid://dxhodagv7ao8y" path="res://data/world/building_surface_data.gd" id="2_d65bm"]
+[ext_resource type="Texture2D" uid="uid://c7e5rvffpuh1t" path="res://assets/maps/dungeondraft/TestMap2/Grounf.png" id="3_6q17j"]
+[ext_resource type="Script" uid="uid://dms6mgageamnx" path="res://data/world/building_door_data.gd" id="3_lveju"]
+[ext_resource type="Script" uid="uid://bnaf2k38xl30b" path="res://data/world/building_object_data.gd" id="4_cyig6"]
+[ext_resource type="Texture2D" uid="uid://dfboigo7131f8" path="res://assets/maps/dungeondraft/TestMap2/Level1.png" id="4_d65bm"]
+[ext_resource type="Script" uid="uid://xciyd7037q4n" path="res://data/world/building_transition_data.gd" id="5_to5qs"]
+
+[sub_resource type="Resource" id="Resource_6q17j"]
+script = ExtResource("2_d65bm")
+surface_id = &"ground"
+display_name = "Ground"
+texture = ExtResource("3_6q17j")
+walkable_rects = Array[Rect2]([Rect2(0, 0, 1600, 1600)])
+wall_rects = Array[Rect2]([Rect2(140, 140, 840, 40), Rect2(940, 140, 40, 840), Rect2(140, 140, 40, 840)])
+
+[sub_resource type="Resource" id="Resource_d65bm"]
+script = ExtResource("2_d65bm")
+surface_id = &"level_1"
+display_name = "Level 1"
+elevation_feet = 10.0
+texture = ExtResource("4_d65bm")
+walkable_rects = Array[Rect2]([Rect2(140, 620, 840, 360), Rect2(140, 980, 280, 160), Rect2(420, 980, 60, 160)])
+opening_rects = Array[Rect2]([Rect2(440, 980, 60, 160)])
+
+[sub_resource type="Resource" id="Resource_lveju"]
+script = ExtResource("2_d65bm")
+surface_id = &"roof"
+display_name = "Roof"
+elevation_feet = 20.0
+
+[sub_resource type="Resource" id="Resource_cyig6"]
+script = ExtResource("5_to5qs")
+transition_id = &"stairs_1"
+from_surface_id = &"ground"
+to_surface_id = &"level_1"
+from_position = Vector2(780, 1040)
+to_position = Vector2(480, 1040)
+use_custom_elevations = true
+to_elevation_feet = 10.0
+width_feet = 13.333333333333334
+
+[resource]
+script = ExtResource("1_6q17j")
+map_id = &"new_building"
+display_name = "New Building"
+surfaces = Array[ExtResource("2_d65bm")]([SubResource("Resource_6q17j"), SubResource("Resource_d65bm"), SubResource("Resource_lveju")])
+transitions = Array[ExtResource("5_to5qs")]([SubResource("Resource_cyig6")])

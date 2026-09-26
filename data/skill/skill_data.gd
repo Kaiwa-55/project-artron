@@ -15,6 +15,8 @@ enum TargetFilter { ENEMIES, ALLIES, ALL_COMBATANTS }
 # Number of the caster's following turns for which this skill is unavailable.
 @export_range(0, 99) var cooldown_turns: int = 0
 @export var attack_data: AttackData
+@export var self_effect: EffectData
+@export var granted_reactions: Array[ReactionData] = []
 @export var target_mode: TargetMode = TargetMode.SINGLE_COMBATANT
 @export var area_shape: AreaShape = AreaShape.NONE
 @export var target_filter: TargetFilter = TargetFilter.ENEMIES

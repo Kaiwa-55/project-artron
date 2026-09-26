@@ -55,7 +55,7 @@ func _init() -> void:
 	check(bleeding_stacks(enemy) == 0, "A final Miss after a defensive Reaction does not apply Bleeding")
 	check(int(player.ability_uses_this_turn.get("open_wound", 0)) == 0, "A defensive Reaction does not consume Open Wound")
 
-	var ranged: AttackData = load("res://data/attack/shortbow.tres").duplicate(true)
+	var ranged: AttackData = system.equipment_system.create_ammunition_attack(load("res://data/attack/shortbow.tres"), load("res://data/item/standard_arrow.tres"))
 	ranged.to_hit_bonus = 1000
 	check(execute_attack(system, player, enemy, ranged).success, "Ranged hit resolves")
 	check(bleeding_stacks(enemy) == 0, "Ranged Hit does not apply Open Wound")

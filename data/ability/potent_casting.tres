@@ -20,5 +20,5 @@ required_level = 2
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Your damaging Skills deal +1 Damage. Area Skills apply this bonus once to each target."
+description = "สกิลที่สร้างความเสียหายจะสร้างเพิ่ม 1 สกิลพื้นที่เพิ่มผลนี้ให้แต่ละเป้าหมายหนึ่งครั้ง"
 effects = [SubResource("Damage")]

@@ -15,4 +15,4 @@ traits = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
 auto_equip_on_grant = true
 execution_mode = 1
 ap_cost = 1
-description = "Attack one enemy with both held weapons. Each attack rolls, triggers Reactions, deals damage, and resolves critical effects separately. The off-hand takes -2 To Hit unless it has Light."
+description = "ใช้ 1 AP โจมตีเป้าหมายเดียวด้วยอาวุธทั้งสองมือแยกกัน มือรองมีค่าโจมตี -2 เพิ่มจากโทษการตีซ้ำ แม้อาวุธมีคุณสมบัติ Light แต่ละครั้งคิดผลโจมตี ความเสียหาย คริติคอล และปฏิกิริยาตอบโต้แยกกัน"

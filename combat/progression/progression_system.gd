@@ -121,6 +121,8 @@ func get_learn_ability_failure_reason(character: CombatantState, ability: Abilit
 		return "%s is granted automatically and cannot be purchased." % ability.display_name
 	if character.level < ability.required_level:
 		return "%s requires Level %d." % [ability.display_name, ability.required_level]
+	if not ability.learnable_ancestry_ids.is_empty() and not ability.learnable_ancestry_ids.has(character.ancestry_id):
+		return "%s cannot be learned by this Ancestry." % ability.display_name
 	for trait_id in ability.required_trait_ids:
 		if not _character_has_trait(character, trait_id):
 			return "%s requires the %s Trait." % [ability.display_name, trait_id.capitalize()]

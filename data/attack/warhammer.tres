@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://data/attack/attack_data.gd" id="script"]
+[ext_resource type="Resource" path="res://animation/lunge_return.tres" id="animation"]
+[ext_resource type="Resource" path="res://data/trait/advanced.tres" id="advanced"]
+[ext_resource type="Resource" path="res://data/trait/melee.tres" id="melee"]
+[ext_resource type="Resource" path="res://data/trait/two_handed.tres" id="two_handed"]
+[ext_resource type="Resource" path="res://data/trait/blunt.tres" id="blunt"]
+
+[resource]
+script = ExtResource("script")
+id = "warhammer_attack"
+display_name = "Warhammer"
+animation_template = ExtResource("animation")
+base_damage = 6
+range_feet = 7.0
+damage_type = "blunt"
+traits = [ExtResource("advanced"), ExtResource("melee"), ExtResource("two_handed"), ExtResource("blunt")]

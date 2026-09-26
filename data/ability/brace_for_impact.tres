@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/reaction/brace_for_impact_reaction.tres" id="reaction"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[resource]
+script = ExtResource("ability")
+id = "brace_for_impact"
+display_name = "Brace for Impact"
+required_level = 1
+required_trait_ids = Array[String](["warrior"])
+traits = [ExtResource("reactive"), ExtResource("warrior")]
+reaction_only = true
+description = "When an attack hits you, use a Reaction and 1 AP to reduce its damage by 3. Once per round."
+granted_reactions = [ExtResource("reaction")]

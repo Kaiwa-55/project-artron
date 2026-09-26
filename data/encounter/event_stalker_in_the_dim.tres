@@ -1,0 +1,72 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://dmv6cjnbggdqj"]
+
+[ext_resource type="Resource" uid="uid://bql7xi5nkl2wl" path="res://data/world/stalker_in_the_dim/stalker_in_the_dim_map.tres" id="1_ydner"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="2_ruy8v"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="3_vhk7q"]
+[ext_resource type="Resource" uid="uid://vd4qe1jly2x2" path="res://data/character/crimson_spine_stalker.tres" id="4_yfmy8"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="5_djref"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="6_6ld3o"]
+[ext_resource type="Resource" path="res://data/item/focus_draught.tres" id="7_0dk6x"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="8_yjc8t"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="9_700jt"]
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="10_6fc4m"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="11_sn0pa"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="12_obuv2"]
+
+[sub_resource type="Resource" id="Resource_ruy8v"]
+script = ExtResource("5_djref")
+id = "stalker"
+enemy = ExtResource("4_yfmy8")
+spawn_center_feet = Vector2(25, 0)
+
+[sub_resource type="Resource" id="Resource_vhk7q"]
+script = ExtResource("6_6ld3o")
+id = &"goal_stalker_in_the_dim"
+description = "กำจัดสัตว์นักล่าในเงามืด"
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Resource_yfmy8"]
+script = ExtResource("8_yjc8t")
+type = 2
+amount = 1
+item = ExtResource("7_0dk6x")
+
+[sub_resource type="Resource" id="Resource_djref"]
+script = ExtResource("8_yjc8t")
+type = 11
+amount = 120
+
+[sub_resource type="Resource" id="Resource_6ld3o"]
+script = ExtResource("10_6fc4m")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Resource_0dk6x"]
+script = ExtResource("12_obuv2")
+id = &"victory_stalker_in_the_dim"
+title = "ขับไล่นักล่าในเงามืด"
+description = "คุณเก็บยาจดจ่อได้ 1 ขวดหลังการต่อสู้ และทุกคนได้รับ 120 XP"
+illustration = ExtResource("2_ruy8v")
+choices = Array[ExtResource("10_6fc4m")]([SubResource("Resource_6ld3o")])
+
+[resource]
+script = ExtResource("9_700jt")
+id = "event_stalker_in_the_dim"
+display_name = "เงาที่สะกดรอย"
+encounter_name = "เงาที่สะกดรอย"
+encounter_description = "ค้นหาและกำจัดคริมสันสไปน์สตอล์กเกอร์ในพื้นที่แสงสลัว"
+encounter_image = ExtResource("2_ruy8v")
+building_map = ExtResource("1_ydner")
+initial_light_level = 2
+desert_storm_enabled = true
+desert_storm_intensity = 0.95
+desert_storm_wind = Vector2(-1, -0.3)
+desert_storm_speed = 1.2
+desert_storm_density = 3.5
+desert_storm_color = Color(0.61875, 0.42598557, 0.13148436, 1)
+desert_storm_opacity = 1.0
+desert_storm_particle_size = 0.5
+player_spawn_positions_feet = Array[Vector2]([Vector2(-38, 0), Vector2(-48, -10), Vector2(-48, 10)])
+enemy_groups = Array[Resource]([SubResource("Resource_ruy8v")])
+objectives = Array[ExtResource("6_6ld3o")]([SubResource("Resource_vhk7q")])
+victory_event = SubResource("Resource_0dk6x")
+rewards = Array[Resource]([SubResource("Resource_yfmy8"), SubResource("Resource_djref")])

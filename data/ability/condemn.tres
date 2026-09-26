@@ -26,6 +26,6 @@ traits = [ExtResource("4"), ExtResource("5")]
 ap_cost = 2
 faith_cost = 1
 uses_per_turn = 1
-description = "Condemn one enemy within 15 ft. Deal Light Damage equal to floor(Faith / 4) and apply Weakened equal to floor(Faith / 5). Faith is measured before paying this Ability's cost. Once per Turn."
+description = "ใช้ 2 AP และ 1 Faith ใส่ศัตรูในระยะ 15 ฟุต สร้างความเสียหายแสงเท่ากับ Faith หาร 4 และทำให้อ่อนแอตาม Faith หาร 5 โดยปัดเศษลง ใช้ค่า Faith ก่อนจ่าย ใช้ได้เทิร์นละครั้ง"
 use_effects = [SubResource("CondemnEffect")]
 targeting_range_feet = 15.0

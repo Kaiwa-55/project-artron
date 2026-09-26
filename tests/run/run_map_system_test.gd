@@ -6,11 +6,11 @@ func _init() -> void:
 	var generator := RunGenerator.new()
 	var catalog: RunEncounterCatalog = load("res://data/run/prototype_encounter_catalog.tres")
 	check(catalog.combat_encounters.size() == 3, "The Run catalog should contain three normal Combat encounters.", failures)
-	check(catalog.elite_encounters.size() == 2, "The Run catalog should contain two Elite encounters.", failures)
+	check(catalog.elite_encounters.size() == 3, "The Run catalog should contain three Elite encounters.", failures)
 	check(catalog.boss_encounters.size() == 1, "The Run catalog should contain one Boss encounter.", failures)
 	check_encounter_levels(catalog.combat_encounters, 3, 4, "Combat", failures)
 	check_encounter_levels(catalog.elite_encounters, 4, 5, "Elite", failures)
-	check_encounter_levels(catalog.boss_encounters, 6, 6, "Boss", failures)
+	check_boss_sequence(catalog.boss_encounters, failures)
 	var first := generator.generate(424242, RunGenerator.DEFAULT_FLOORS, catalog)
 	var second := generator.generate(424242, RunGenerator.DEFAULT_FLOORS, catalog)
 	var state := RunState.new()
@@ -48,3 +48,22 @@ func check_encounter_levels(encounters: Array[EncounterData], minimum: int, maxi
 		for enemy in encounter.enemies:
 			total_level += enemy.level
 		check(total_level >= minimum and total_level <= maximum, "%s encounter %s has total monster level %d; expected %d-%d." % [tier, encounter.id, total_level, minimum, maximum], failures)
+
+
+func check_boss_sequence(encounters: Array[EncounterData], failures: Array[String]) -> void:
+	if encounters.is_empty():
+		return
+	var phase: EncounterData = encounters[0]
+	var phase_count := 0
+	var total_level := 0
+	while phase != null and phase_count < 10:
+		phase_count += 1
+		for enemy in phase.enemies:
+			if enemy != null:
+				total_level += enemy.level
+		for resource in phase.enemy_groups:
+			if resource is EnemyGroupData and resource.enemy != null:
+				total_level += resource.enemy.level * resource.count
+		phase = phase.next_encounter
+	check(phase_count == 3 and phase == null, "Boss should contain exactly three encounters.", failures)
+	check(total_level >= 6, "Boss sequence needs at least the original total monster level budget.", failures)

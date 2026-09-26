@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cvp405bdtn7gy"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_wqo10"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_pn4l0"]
 [ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3"]
-[ext_resource type="Resource" path="res://data/skill/arcane_cone.tres" id="4"]
+[ext_resource type="Resource" uid="uid://k6apocdyw1ee" path="res://data/skill/arcane_cone.tres" id="4"]
 
 [resource]
 script = ExtResource("1")
@@ -12,5 +14,5 @@ display_name = "Spell Training: Arcane Cone"
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("2"), ExtResource("3")]
 is_passive = true
-description = "Add Arcane Cone to your available Skills."
-granted_skills = Array[SkillData]([ExtResource("4")])
+description = "เพิ่มสกิล Arcane Cone ในรายการสกิลที่ใช้ได้"
+granted_skills = Array[ExtResource("2_pn4l0")]([ExtResource("4")])

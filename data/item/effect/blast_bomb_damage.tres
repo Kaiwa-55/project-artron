@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "blast_bomb_damage"
+display_name = "Blast Bomb"
+effect_type = 0
+amount = 6
+damage_type = "fire"

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="BuildingMapData" format=3 uid="uid://nafk4084m580"]
+
+[ext_resource type="Script" uid="uid://dwa7gyayp7org" path="res://data/world/building_map_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dxhodagv7ao8y" path="res://data/world/building_surface_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://8smrku64pb3y" path="res://assets/maps/Goblin_Hideout/Village.png" id="3"]
+[ext_resource type="Script" uid="uid://dms6mgageamnx" path="res://data/world/building_door_data.gd" id="3_1w0tx"]
+[ext_resource type="Script" uid="uid://bnaf2k38xl30b" path="res://data/world/building_object_data.gd" id="4_vaxtv"]
+[ext_resource type="Script" uid="uid://xciyd7037q4n" path="res://data/world/building_transition_data.gd" id="6_mi88o"]
+
+[sub_resource type="Resource" id="Ground"]
+script = ExtResource("2")
+surface_id = &"ground"
+display_name = "Ground"
+texture = ExtResource("3")
+walkable_rects = Array[Rect2]([Rect2(0, 0, 1600, 1600)])
+invisible_wall_rects = Array[Rect2]([Rect2(0, 0, 1600, 25), Rect2(0, 1575, 1600, 25), Rect2(0, 0, 25, 1600), Rect2(1575, 0, 25, 1600)])
+
+[resource]
+script = ExtResource("1")
+map_id = &"goblin_village_battle"
+display_name = "Goblin Village"
+surfaces = Array[ExtResource("2")]([SubResource("Ground")])

@@ -6,6 +6,14 @@
 [ext_resource type="Resource" uid="uid://es4q141m7c8y" path="res://data/event/Strange Caravan/strange_caravan.tres" id="3_5jlbe"]
 [ext_resource type="Resource" uid="uid://cutkb3uuqdjpm" path="res://data/event/Other/wandering_healer.tres" id="4_healer"]
 [ext_resource type="Resource" uid="uid://be0elcdhcoiji" path="res://data/event/A Gift from Old Man/A Gift from Old Man.tres" id="5_5jlbe"]
+[ext_resource type="Resource" uid="uid://c6s6l8yvilry3" path="res://data/event/Combat Encounters/goblin_crossfire.tres" id="6_crossfire"]
+[ext_resource type="Resource" uid="uid://dbk6j6udf8x4v" path="res://data/event/Combat Encounters/webbed_passage.tres" id="7_webbed"]
+[ext_resource type="Resource" uid="uid://815xs470gm31" path="res://data/event/Combat Encounters/hunt_the_slinger.tres" id="8_hunt"]
+[ext_resource type="Resource" uid="uid://cfhjqa5w3bly5" path="res://data/event/Combat Encounters/hold_the_line.tres" id="9_hold"]
+[ext_resource type="Resource" uid="uid://cggovet15ygu3" path="res://data/event/Combat Encounters/thornscale_pincer.tres" id="10_pincer"]
+[ext_resource type="Resource" uid="uid://bea78mu1mw0va" path="res://data/event/Combat Encounters/stalker_in_the_dim.tres" id="11_stalker"]
+[ext_resource type="Resource" uid="uid://dj8wsbhwlekoh" path="res://data/event/Combat Encounters/escape_the_ravager.tres" id="12_escape"]
+[ext_resource type="Resource" uid="uid://djcntrvn53ebw" path="res://data/event/Combat Encounters/velkarias_brood.tres" id="13_brood"]
 
 [sub_resource type="Resource" id="Entry_caravan"]
 script = ExtResource("2_entry")
@@ -26,7 +34,71 @@ weight = 10.0
 remove_after_victory = true
 metadata/_custom_type_script = "uid://r7oflsoiydsx"
 
+[sub_resource type="Resource" id="Entry_crossfire"]
+script = ExtResource("2_entry")
+id = &"goblin_crossfire"
+event = ExtResource("6_crossfire")
+weight = 2.0
+
+[sub_resource type="Resource" id="Entry_webbed"]
+script = ExtResource("2_entry")
+id = &"webbed_passage"
+event = ExtResource("7_webbed")
+weight = 2.0
+
+[sub_resource type="Resource" id="Entry_hunt"]
+script = ExtResource("2_entry")
+id = &"hunt_the_slinger"
+event = ExtResource("8_hunt")
+weight = 2.0
+
+[sub_resource type="Resource" id="Entry_hold"]
+script = ExtResource("2_entry")
+id = &"hold_the_line"
+event = ExtResource("9_hold")
+weight = 2.0
+
+[sub_resource type="Resource" id="Condition_elite"]
+script = ExtResource("2_bpv1s")
+type = 3
+target_id = "player"
+required_number = 3.0
+
+[sub_resource type="Resource" id="Entry_pincer"]
+script = ExtResource("2_entry")
+id = &"thornscale_pincer"
+event = ExtResource("10_pincer")
+weight = 0.8
+conditions = Array[ExtResource("2_bpv1s")]([SubResource("Condition_elite")])
+
+[sub_resource type="Resource" id="Entry_stalker"]
+script = ExtResource("2_entry")
+id = &"stalker_in_the_dim"
+event = ExtResource("11_stalker")
+weight = 0.8
+conditions = Array[ExtResource("2_bpv1s")]([SubResource("Condition_elite")])
+
+[sub_resource type="Resource" id="Entry_escape"]
+script = ExtResource("2_entry")
+id = &"escape_the_ravager"
+event = ExtResource("12_escape")
+weight = 0.8
+conditions = Array[ExtResource("2_bpv1s")]([SubResource("Condition_elite")])
+
+[sub_resource type="Resource" id="Condition_boss"]
+script = ExtResource("2_bpv1s")
+type = 3
+target_id = "player"
+required_number = 6.0
+
+[sub_resource type="Resource" id="Entry_brood"]
+script = ExtResource("2_entry")
+id = &"velkarias_brood"
+event = ExtResource("13_brood")
+weight = 0.2
+conditions = Array[ExtResource("2_bpv1s")]([SubResource("Condition_boss")])
+
 [resource]
 script = ExtResource("1_table")
 id = &"default_run_events"
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_caravan"), SubResource("Entry_healer"), SubResource("Resource_dpp1q")])
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_caravan"), SubResource("Entry_healer"), SubResource("Resource_dpp1q"), SubResource("Entry_crossfire"), SubResource("Entry_webbed"), SubResource("Entry_hunt"), SubResource("Entry_hold"), SubResource("Entry_pincer"), SubResource("Entry_stalker"), SubResource("Entry_escape"), SubResource("Entry_brood")])

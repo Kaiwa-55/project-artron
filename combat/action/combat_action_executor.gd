@@ -30,7 +30,8 @@ func execute(
 		request.target_position = combat_system.movement_system.clamp_destination_to_remaining_speed(
 			combat_system.combat_state.get_combatant(request.actor_id),
 			request.target_position,
-			request.movement_data
+			request.movement_data,
+			combat_system.combat_state
 		)
 		var move_validation: ActionResult = combat_system.action_system.validate(request, combat_system.combat_state)
 		if not move_validation.success:
@@ -42,6 +43,9 @@ func execute(
 			combat_system.pending_action = request
 			return combat_system.continue_reaction_queue()
 	if request.action_type == ActionTypes.Type.ATTACK:
+		var ammunition_validation: ActionResult = combat_system.equipment_system.validate_ammunition(combat_system.combat_state.get_combatant(request.actor_id), request.attack_data)
+		if not ammunition_validation.success:
+			return ammunition_validation
 		var unarmed_validation: ActionResult = combat_system.equipment_system.validate_unarmed_attack(combat_system.combat_state.get_combatant(request.actor_id), request.attack_data)
 		if not unarmed_validation.success:
 			return unarmed_validation
@@ -64,19 +68,17 @@ func execute(
 				"amount": request.attack_data.active_damage_bonus,
 				"consume_on_hit": false,
 			})
-		var attacker_was_hidden := attacker.has_status("hidden")
 		var repeated_penalty: int = request.repeated_attack_penalty if request.attack_sequence_continuation else combat_system.attack_system.declare_attack_action(attacker, request.attack_data)
 		# An attack counts as declared before To Hit and Reaction resolution, even
 		# when it later misses, is parried, or is cancelled by a Reaction.
 		target.last_attack_declared_round = combat_system.combat_state.current_round
-		var prepared: AttackResult = combat_system.attack_system.resolve_attack(attacker, target, request.attack_data, true, conditional_damage_bonuses, repeated_penalty)
+		var prepared: AttackResult = combat_system.attack_system.resolve_attack(attacker, target, request.attack_data, true, conditional_damage_bonuses, repeated_penalty, request.offhand_penalty)
+		combat_system.equipment_system.consume_ammunition(attacker, request.attack_data)
 		if request.attack_data.thrown_item != null:
 			var consumed: bool = combat_system.equipment_system.consume_thrown_weapon(attacker, request.attack_data)
 			combat_system.ability_system.sync_granted_reactions(attacker)
 			combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.EQUIPMENT_CHANGED, attacker.id, "", {"item_name": "%s (%s)" % [request.attack_data.thrown_item.display_name, "consumed by throw" if consumed else "Returning"]}))
-		if attacker_was_hidden:
-			attacker.remove_status("hidden")
-			combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.EFFECT_EXPIRED, attacker.id, "", {"effect_name": "Hidden", "reason": "Attack declared"}))
+		combat_system.clear_hidden(attacker, "Attack declared")
 		var post_prompt: Dictionary = combat_system.reaction_system.get_post_hit_prompt(attacker, target, request.attack_data, prepared, combat_system.combat_state.current_round)
 		if not post_prompt.is_empty():
 			if request.attack_sequence_continuation:
@@ -110,11 +112,21 @@ func execute(
 				return combat_system.resolve_pending_reaction(0)
 		combat_system.attack_system.finalize_attack(attacker, target, request.attack_data, prepared)
 		var prepared_result: ActionResult = combat_system.action_system.build_attack_result(attacker, target, request.attack_data, prepared)
-		combat_system.offer_step_back(request, attacker, target, prepared_result)
+		combat_system.offer_counterattack(request, attacker, target, request.attack_data, prepared, prepared_result)
+		if not prepared_result.requires_reaction_choice:
+			combat_system.offer_step_back(request, attacker, target, prepared_result)
 		combat_system.offer_mobile_shooter(request, attacker, request.attack_data, prepared, prepared_result)
+		combat_system.offer_on_kill_movement(attacker, target, prepared_result)
 		combat_system.emit_events(prepared_result.events)
 		combat_system.check_for_combat_end()
 		return prepared_result
+	if request.action_type == ActionTypes.Type.RELOAD:
+		var reloader: CombatantState = combat_system.combat_state.get_combatant(request.actor_id)
+		var reload_result: ActionResult = combat_system.equipment_system.reload_weapon(reloader)
+		if reload_result.success:
+			reload_result.events.append(CombatEvent.new(EventTypes.Type.EQUIPMENT_CHANGED, reloader.id, "", {"item_name": "Reload"}))
+		combat_system.emit_events(reload_result.events)
+		return reload_result
 	if request.action_type == ActionTypes.Type.SKILL:
 		if request.skill_data != null and request.skill_data.target_mode == SkillDataScript.TargetMode.SELF:
 			request.target_id = request.actor_id
@@ -126,8 +138,13 @@ func execute(
 		var skill_actor: CombatantState = combat_system.combat_state.get_combatant(request.actor_id)
 		var skill_target: CombatantState = combat_system.combat_state.get_combatant(request.target_id)
 		combat_system.cancel_remaining_movement(skill_actor)
+		if request.skill_data.self_effect != null and request.skill_data.target_mode == SkillDataScript.TargetMode.SELF:
+			var shield_result: ActionResult = combat_system.skill_system.execute_self_effect_skill(skill_actor, request.skill_data, combat_system.effect_system)
+			combat_system.clear_hidden(skill_actor, "Skill used")
+			combat_system.emit_events(shield_result.events)
+			return shield_result
 		combat_system.skill_system.consume_skill_costs(skill_actor, request.skill_data)
-		var skill_attack: AttackData = combat_system.skill_system.get_attack_data(request.skill_data, skill_actor)
+		var skill_attack: AttackData = combat_system.skill_system.get_attack_data(request.skill_data, skill_actor, true)
 		var skill_repeated_penalty: int = combat_system.attack_system.declare_attack_action(skill_actor, skill_attack)
 		var skill_conditional_bonuses: Array[Dictionary] = []
 		var skill_prepared: AttackResult = combat_system.attack_system.resolve_attack(skill_actor, skill_target, skill_attack, true, skill_conditional_bonuses, skill_repeated_penalty)
@@ -150,7 +167,9 @@ func execute(
 		combat_system.attack_system.finalize_attack(skill_actor, skill_target, skill_attack, skill_prepared)
 		var skill_result: ActionResult = combat_system.action_system.build_attack_result(skill_actor, skill_target, skill_attack, skill_prepared)
 		skill_result.events.push_front(CombatEvent.new(EventTypes.Type.SKILL_CAST, skill_actor.id, skill_target.id, {"skill_name": request.skill_data.display_name, "mana_cost": combat_system.skill_system.get_effective_mana_cost(skill_actor, request.skill_data), "cooldown": combat_system.skill_system.get_effective_cooldown_turns(skill_actor, request.skill_data)}))
-		combat_system.offer_step_back(request, skill_actor, skill_target, skill_result)
+		combat_system.offer_counterattack(request, skill_actor, skill_target, skill_attack, skill_prepared, skill_result)
+		if not skill_result.requires_reaction_choice:
+			combat_system.offer_step_back(request, skill_actor, skill_target, skill_result)
 		combat_system.offer_mobile_shooter(request, skill_actor, skill_attack, skill_prepared, skill_result)
 		combat_system.emit_events(skill_result.events)
 		combat_system.check_for_combat_end()

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://bea78mu1mw0va"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_0efgv"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_6ecb6"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_grjb8"]
+[ext_resource type="Resource" uid="uid://dmv6cjnbggdqj" path="res://data/encounter/event_stalker_in_the_dim.tres" id="4_surqw"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_guttr"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="11_82mr6"]
+
+[sub_resource type="Resource" id="Resource_ifmro"]
+script = ExtResource("1_0efgv")
+text = "ตามหานักล่าในเงามืด"
+encounter = ExtResource("4_surqw")
+
+[sub_resource type="Resource" id="Resource_bdh0m"]
+script = ExtResource("1_0efgv")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("11_82mr6")
+id = &"stalker_in_the_dim"
+title = "เงาที่สะกดรอย"
+description = "ฝุ่นหนาทำให้เส้นทางมืดสลัว บางสิ่งเคลื่อนไหวอยู่ตรงขอบแสงที่ส่องไปไม่ถึง"
+illustration = ExtResource("5_guttr")
+choices = Array[ExtResource("1_0efgv")]([SubResource("Resource_ifmro"), SubResource("Resource_bdh0m")])

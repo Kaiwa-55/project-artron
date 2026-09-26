@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="BuildingMapData" format=3 uid="uid://bebautdu5mlj4"]
+
+[ext_resource type="Script" uid="uid://dwa7gyayp7org" path="res://data/world/building_map_data.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://dxhodagv7ao8y" path="res://data/world/building_surface_data.gd" id="2_surface"]
+[ext_resource type="Script" uid="uid://dms6mgageamnx" path="res://data/world/building_door_data.gd" id="3_2g2r8"]
+[ext_resource type="Script" uid="uid://xciyd7037q4n" path="res://data/world/building_transition_data.gd" id="3_transition"]
+[ext_resource type="Script" uid="uid://bnaf2k38xl30b" path="res://data/world/building_object_data.gd" id="4_3kihy"]
+[ext_resource type="Texture2D" uid="uid://bj45expyttp0m" path="res://assets/maps/dungeondraft/Ground.png" id="4_ground"]
+[ext_resource type="Texture2D" uid="uid://chx30e34trowq" path="res://assets/maps/dungeondraft/Level1.png" id="5_level"]
+[ext_resource type="Texture2D" uid="uid://85vjwvhqr1bh" path="res://assets/maps/dungeondraft/roof.png" id="6_roof"]
+
+[sub_resource type="Resource" id="GroundSurface"]
+script = ExtResource("2_surface")
+surface_id = &"ground"
+display_name = "Ground"
+texture = ExtResource("4_ground")
+walkable_rects = Array[Rect2]([Rect2(0, 0, 1600, 1600)])
+wall_rects = Array[Rect2]([Rect2(150, 150, 1300, 20), Rect2(150, 150, 20, 1300), Rect2(1430, 150, 20, 1300), Rect2(150, 1430, 570, 20), Rect2(800, 1430, 650, 20), Rect2(310, 170, 20, 230), Rect2(550, 170, 20, 230), Rect2(790, 170, 20, 230), Rect2(170, 870, 390, 20), Rect2(550, 880, 20, 44), Rect2(550, 996, 20, 434), Rect2(950, 880, 20, 44), Rect2(950, 996, 20, 434), Rect2(960, 870, 470, 20), Rect2(1200, 630, 230, 20), Rect2(320, 390, 124, 20), Rect2(516, 390, 88, 20), Rect2(676, 390, 168, 20), Rect2(916, 390, 284, 20), Rect2(1190, 170, 20, 376), Rect2(1190, 616, 20, 68), Rect2(1190, 756, 20, 114)])
+
+[sub_resource type="Resource" id="Level1Surface"]
+script = ExtResource("2_surface")
+surface_id = &"level_1"
+display_name = "Level 1"
+elevation_feet = 10.0
+texture = ExtResource("5_level")
+walkable_rects = Array[Rect2]([Rect2(170, 170, 1260, 360), Rect2(298, 530, 1132, 340), Rect2(170, 820, 1260, 610)])
+opening_rects = Array[Rect2]([Rect2(170, 530, 128, 290)])
+wall_rects = Array[Rect2]([Rect2(150, 150, 1300, 20), Rect2(150, 150, 20, 1300), Rect2(1430, 150, 20, 1300), Rect2(150, 1430, 570, 20), Rect2(800, 1430, 650, 20), Rect2(310, 170, 20, 230), Rect2(550, 170, 20, 230), Rect2(790, 170, 20, 230), Rect2(170, 870, 390, 20), Rect2(550, 880, 20, 44), Rect2(550, 996, 20, 434), Rect2(950, 880, 20, 44), Rect2(950, 996, 20, 434), Rect2(960, 870, 470, 20), Rect2(1200, 630, 230, 20), Rect2(320, 390, 80, 20), Rect2(480, 390, 200, 20), Rect2(760, 390, 80, 20), Rect2(920, 390, 280, 20), Rect2(1190, 170, 20, 270), Rect2(1190, 520, 20, 160), Rect2(1190, 760, 20, 110)])
+
+[sub_resource type="Resource" id="RoofSurface"]
+script = ExtResource("2_surface")
+surface_id = &"roof"
+display_name = "Roof"
+elevation_feet = 20.0
+texture = ExtResource("6_roof")
+
+[sub_resource type="Resource" id="WestStairs"]
+script = ExtResource("3_transition")
+transition_id = &"west_stairs"
+from_surface_id = &"ground"
+to_surface_id = &"level_1"
+from_area = Rect2(177, 590, 108, 230)
+to_area = Rect2(177, 590, 108, 230)
+from_position = Vector2(235, 820)
+to_position = Vector2(235, 530)
+
+[resource]
+script = ExtResource("1_map")
+map_id = &"artron_keep"
+display_name = "Artron Keep"
+surfaces = Array[ExtResource("2_surface")]([SubResource("GroundSurface"), SubResource("Level1Surface"), SubResource("RoofSurface")])
+transitions = Array[ExtResource("3_transition")]([SubResource("WestStairs")])

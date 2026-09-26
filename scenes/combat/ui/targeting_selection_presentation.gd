@@ -5,6 +5,8 @@ func find_combatant_at(world_position: Vector2, combatant_nodes: Array, units_pe
 	for combatant_node in combatant_nodes:
 		if not is_instance_valid(combatant_node) or combatant_node.state == null or combatant_node.state.is_dying():
 			continue
+		if not combatant_node.is_spatially_selectable():
+			continue
 		var radius: float = combatant_node.state.collision_radius_feet * units_per_foot
 		if world_position.distance_to(combatant_node.global_position) <= radius:
 			return combatant_node

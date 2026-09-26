@@ -1,8 +1,12 @@
-[gd_resource type="Resource" script_class="AbilityData" load_steps=5 format=3]
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://di2q4v1x1s5tx"]
+
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_xljvg"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="2"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_ujlql"]
 [ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="3"]
-[ext_resource type="Resource" path="res://data/skill/flame_wave.tres" id="4"]
+[ext_resource type="Resource" uid="uid://ld6omfqnqxcv" path="res://data/skill/flame_wave.tres" id="4"]
+
 [resource]
 script = ExtResource("1")
 id = "spell_training_flame_wave"
@@ -11,5 +15,5 @@ required_level = 2
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("2"), ExtResource("3")]
 is_passive = true
-description = "Add Flame Wave to your available Skills."
-granted_skills = Array[SkillData]([ExtResource("4")])
+description = "เพิ่มสกิล Flame Wave ในรายการสกิลที่ใช้ได้"
+granted_skills = Array[ExtResource("2_ujlql")]([ExtResource("4")])

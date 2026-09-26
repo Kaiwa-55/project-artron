@@ -6,6 +6,7 @@ var busy: bool = false
 var blocker: Control
 var tooltip: Label
 var preview: Dictionary = {}
+var preview_signature: String = ""
 var observed_event_system
 var event_cursor: int = 0
 var attack_queue: Array[CombatEvent] = []
@@ -68,9 +69,10 @@ func _ready() -> void:
 	canvas.add_child(blocker)
 	tooltip = Label.new()
 	tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tooltip.add_theme_color_override("font_shadow_color", Color.BLACK)
-	tooltip.add_theme_constant_override("shadow_offset_x", 2)
-	tooltip.add_theme_constant_override("shadow_offset_y", 2)
+	tooltip.add_theme_font_size_override("font_size", 8)
+	tooltip.add_theme_color_override("font_shadow_color", Color.TRANSPARENT)
+	tooltip.add_theme_constant_override("shadow_offset_x", 0)
+	tooltip.add_theme_constant_override("shadow_offset_y", 0)
 	canvas.add_child(tooltip)
 
 
@@ -102,6 +104,12 @@ func sync_movement() -> bool:
 				float(event.data.get("cone_angle_degrees", 90.0)),
 				float(event.data.get("area_radius_feet", 0.0))
 			)
+			if arena.has_method("show_area_animation_3d") and event.type in [EventTypes.Type.SKILL_CAST, EventTypes.Type.ABILITY_TRIGGERED] \
+					and event.data.animation_template.animation_type in [AttackAnimationData.Type.ATTACHED_DIRECTIONAL, AttackAnimationData.Type.CONE_BURST, AttackAnimationData.Type.CIRCLE_GROUND]:
+				if is_instance_valid(attacker.attack_sprite) and is_instance_valid(attacker.spatial_visual):
+					attacker.attack_sprite.set_meta("spatial_area_effect", true)
+					attacker.spatial_visual._set_capture_layer(attacker.attack_sprite)
+				arena.show_area_animation_3d(event, attacker)
 			if is_no_damage_result(event):
 				if target != null and attacker.is_attack_animating():
 					attacker.attack_tween.finished.connect(target.show_no_damage_feedback, CONNECT_ONE_SHOT)
@@ -137,19 +145,42 @@ func _process(_delta: float) -> void:
 	if busy and not moving:
 		settled.emit()
 	busy = moving
-	preview = {}
 	var system = arena.combat_system
+	var next_signature := ""
 	if system != null and not moving and not system.has_pending_reaction() and arena.move_mode:
 		var hovered := get_viewport().gui_get_hovered_control()
 		if hovered == null or hovered == arena.get_node("UILayer/Control"):
-			preview = build_preview(get_global_mouse_position())
+			var destination: Vector2 = arena.get_combat_pointer_position(get_viewport().get_mouse_position())
+			var state: CombatState = system.get_combat_state()
+			var actor: CombatantState = arena.get_player_controlled_actor()
+			if state != null and actor != null:
+				var occupants := PackedStringArray()
+				for other in state.combatants.values():
+					occupants.append(str([other.id, other.world_position, other.collision_radius_feet]))
+				occupants.sort()
+				var pick_context: Dictionary = arena.get_movement_preview_context() if arena.has_method("get_movement_preview_context") else {}
+				next_signature = str([
+					destination, actor.id, actor.world_position, actor.surface_id,
+					actor.requested_surface_id, actor.collision_radius_feet, actor.ap,
+					actor.movement_in_progress, actor.is_dying(), actor.has_status("rooted"),
+					actor.has_status("grabbed"), system.movement_system.get_available_distance_feet(actor),
+					state.current_actor_id, state.is_finished(), system.map_rules.door_revision,
+					system.has_pending_step_back_move(), system.has_pending_ability_movement(),
+					pick_context, occupants
+				])
+				if next_signature != preview_signature:
+					preview = build_preview(destination)
+					queue_redraw()
+	if next_signature == "" and not preview.is_empty():
+		preview = {}
+		queue_redraw()
+	preview_signature = next_signature
 	tooltip.visible = not preview.is_empty()
 	if tooltip.visible:
 		tooltip.text = preview.text
 		tooltip.modulate = preview.color
 		var mouse := get_viewport().get_mouse_position() + Vector2(20, 22)
 		tooltip.position = mouse.clamp(Vector2.ZERO, (get_viewport_rect().size - tooltip.size - Vector2(12, 12)).max(Vector2.ZERO))
-	queue_redraw()
 
 
 func build_preview(destination: Vector2) -> Dictionary:
@@ -175,14 +206,30 @@ func build_preview(destination: Vector2) -> Dictionary:
 			return {}
 		budget = system.ability_system.get_movement_effect(ability).movement_distance_feet
 	var endpoint: Vector2 = actor.position + (destination - actor.position).limit_length(maxf(0.0, budget) * movement.world_units_per_foot)
-	var validation: ActionResult = system.map_rules.validate_movement_path(actor, endpoint, state.combatants) if special else system.movement_system.validate_move(actor, endpoint, movement, state)
+	var requested_surface := actor.requested_surface_id
+	var spatial_route := PackedVector3Array()
+	if not special and system.map_rules.spatial_navigation != null:
+		endpoint = system.movement_system.clamp_destination_to_remaining_speed(actor, destination, movement, state)
+		spatial_route = system.movement_system.spatial_path(actor, endpoint, state)
+	var validation: ActionResult = system.map_rules.validate_movement_path(actor, endpoint, state.combatants) if special else system.movement_system.validate_move(actor, endpoint, movement, state, spatial_route)
 	var distance := actor.position.distance_to(endpoint) / movement.world_units_per_foot
-	var caption := "%.1f / %.1f ft" % [distance, budget]
-	if not endpoint.is_equal_approx(destination):
-		caption += "  • Speed limit"
+	if not spatial_route.is_empty():
+		distance = system.map_rules.spatial_navigation.length_of(spatial_route)
+	actor.requested_surface_id = requested_surface
+	var caption := "%.1f/%.1f ft" % [distance, budget]
+	if not special and arena.has_method("get_movement_preview_context"):
+		var pick_context: Dictionary = arena.get_movement_preview_context()
+		var selected: Dictionary = pick_context.get("selected", {})
+		if not selected.is_empty() and system.map_rules.building_map != null:
+			var on_stairs: bool = system.map_rules.building_map.get_surface(StringName(selected.surface_id)) == null
+			if on_stairs:
+				var stop_height: float = spatial_route[-1].y if not spatial_route.is_empty() else Vector3(selected.world_position).y
+				caption = "Stairs %.1f ft · %s" % [stop_height, caption]
+			if pick_context.get("ambiguous", false):
+				caption += "\nSpace: %s" % ["floor" if on_stairs else "stairs"]
 	if not validation.success:
 		caption += "\n" + validation.failure_reason
-	return {"origin": actor.position, "endpoint": endpoint, "requested": destination, "text": caption, "color": Color("79E5C1") if validation.success else Color("F47777")}
+	return {"origin": actor.position, "endpoint": endpoint, "requested": destination, "route": spatial_route, "text": caption, "color": Color("79E5C1") if validation.success else Color("F47777")}
 
 
 func _draw() -> void:
@@ -191,7 +238,12 @@ func _draw() -> void:
 	var origin := to_local(preview.origin)
 	var endpoint := to_local(preview.endpoint)
 	var color: Color = preview.color
-	draw_line(origin, endpoint, color, 3.0, true)
+	var route: PackedVector3Array = preview.get("route", PackedVector3Array())
+	if route.size() > 1:
+		for i in range(1, route.size()):
+			draw_line(to_local(Vector2(route[i - 1].x, route[i - 1].z) * arena.combat_system.map_rules.world_units_per_foot), to_local(Vector2(route[i].x, route[i].z) * arena.combat_system.map_rules.world_units_per_foot), color, 3.0, true)
+	else:
+		draw_line(origin, endpoint, color, 3.0, true)
 	draw_circle(endpoint, 9.0, Color(color, 0.2))
 	draw_arc(endpoint, 10.0, 0.0, TAU, 40, color, 2.0, true)
 	if not preview.endpoint.is_equal_approx(preview.requested):

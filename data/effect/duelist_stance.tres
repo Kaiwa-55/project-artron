@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="effect"]
+[resource]
+script = ExtResource("effect")
+id = "duelist_stance"
+display_name = "Duelist Stance"
+persists_until_combat_end = true
+speed_bonus_per_stack = 5.0
+can_be_cleansed = false

@@ -3,8 +3,18 @@
 [ext_resource type="Texture2D" uid="uid://cx2767i875fhu" path="res://assets/events/DesertCaravan.jpg" id="1_cwg3q"]
 [ext_resource type="Script" uid="uid://puwk2c6cvm6q" path="res://data/shop/shop_data.gd" id="1_shop"]
 [ext_resource type="Script" uid="uid://di4maw5cs6h6d" path="res://data/shop/shop_offer_data.gd" id="2_offer"]
-[ext_resource type="Resource" path="res://data/item/minor_healing_potion.tres" id="3_potion"]
+[ext_resource type="Resource" uid="uid://d2qqwwh5i6son" path="res://data/item/minor_healing_potion.tres" id="3_potion"]
 [ext_resource type="Resource" uid="uid://bhhoxxnegmjdv" path="res://data/equipment/dagger.tres" id="4_dagger"]
+[ext_resource type="Resource" path="res://data/item/smoke_flask.tres" id="5_smoke"]
+[ext_resource type="Resource" path="res://data/item/warding_charm.tres" id="6_ward"]
+[ext_resource type="Resource" path="res://data/equipment/hunters_lantern.tres" id="7_lantern"]
+[ext_resource type="Resource" path="res://data/equipment/silent_boots.tres" id="8_boots"]
+[ext_resource type="Resource" path="res://data/equipment/arcane_thread_ring.tres" id="9_ring"]
+[ext_resource type="Resource" path="res://data/equipment/apprentice_staff.tres" id="10_apprentice"]
+[ext_resource type="Resource" path="res://data/equipment/focus_staff.tres" id="11_focus"]
+[ext_resource type="Resource" path="res://data/equipment/ember_staff.tres" id="12_ember"]
+[ext_resource type="Resource" path="res://data/equipment/frost_staff.tres" id="13_frost"]
+[ext_resource type="Resource" path="res://data/item/blast_bomb.tres" id="14_bomb"]
 
 [sub_resource type="Resource" id="PotionOffer"]
 script = ExtResource("2_offer")
@@ -16,10 +26,61 @@ script = ExtResource("2_offer")
 product = ExtResource("4_dagger")
 price = 45
 
+[sub_resource type="Resource" id="SmokeOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("5_smoke")
+price = 30
+
+[sub_resource type="Resource" id="BlastBombOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("14_bomb")
+price = 50
+
+[sub_resource type="Resource" id="WardOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("6_ward")
+price = 36
+
+[sub_resource type="Resource" id="LanternOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("7_lantern")
+price = 60
+
+[sub_resource type="Resource" id="BootsOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("8_boots")
+price = 70
+
+[sub_resource type="Resource" id="RingOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("9_ring")
+price = 80
+
+[sub_resource type="Resource" id="ApprenticeStaffOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("10_apprentice")
+price = 45
+
+[sub_resource type="Resource" id="FocusStaffOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("11_focus")
+price = 80
+
+[sub_resource type="Resource" id="EmberStaffOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("12_ember")
+price = 90
+
+[sub_resource type="Resource" id="FrostStaffOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("13_frost")
+price = 90
+
 [resource]
 script = ExtResource("1_shop")
 id = "outfitter"
 display_name = "TRAILSIDE OUTFITTER"
 description = "Reliable tools for dangerous paths."
 banner_texture = ExtResource("1_cwg3q")
-offers = Array[Resource]([SubResource("PotionOffer"), SubResource("DaggerOffer")])
+offers = Array[Resource]([SubResource("PotionOffer"), SubResource("DaggerOffer"), SubResource("SmokeOffer"), SubResource("BlastBombOffer"), SubResource("WardOffer"), SubResource("LanternOffer"), SubResource("BootsOffer"), SubResource("RingOffer"), SubResource("ApprenticeStaffOffer"), SubResource("FocusStaffOffer"), SubResource("EmberStaffOffer"), SubResource("FrostStaffOffer")])
+stock_enhanced_weapons = true

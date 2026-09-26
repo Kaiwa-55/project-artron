@@ -19,10 +19,10 @@ func execute_dual_weapon(actor: CombatantState, target: CombatantState, ability:
 	var off_attack: AttackData = off_item.weapon_attack.duplicate(true)
 	main_attack.ap_cost = 0
 	off_attack.ap_cost = 0
-	if not combat_system.trait_system.attack_has_trait(off_attack, "light"):
-		off_attack.to_hit_bonus -= 2
+	var offhand_penalty := -2
 	if combat_system.trait_system.attack_has_trait(main_attack, "paired") and combat_system.trait_system.attack_has_trait(off_attack, "paired"):
 		off_attack.base_damage += 1
+		off_attack.base_damage_bonus_sources.append({"source": "Paired weapons", "amount": 1})
 	var range_feet: float = minf(main_attack.range_feet, off_attack.range_feet)
 	if not combat_system.map_rules.is_target_in_range(actor, target, range_feet):
 		return ActionResult.failure("Target is out of Dual Strike range (%.0f ft)." % range_feet)
@@ -41,6 +41,7 @@ func execute_dual_weapon(actor: CombatantState, target: CombatantState, ability:
 		"attacks": [main_attack, off_attack],
 		"index": 0,
 		"repeated_attack_penalty": 0,
+		"offhand_penalty": offhand_penalty,
 		# Dual Strike makes two distinct Attack declarations. This makes its
 		# off-hand strike receive the next RAP step and leaves later attacks at -4.
 		"count_each_attack_for_penalty": true,
@@ -118,6 +119,7 @@ func _continue(carried_events: Array[CombatEvent]) -> ActionResult:
 		request.target_id = target.id
 		request.attack_data = attacks[index]
 		request.attack_sequence_continuation = true
+		request.offhand_penalty = int(pending_context.get("offhand_penalty", 0)) if index == 1 else 0
 		if pending_context.get("count_each_attack_for_penalty", false):
 			request.repeated_attack_penalty = combat_system.attack_system.declare_attack_action(actor, attacks[index])
 		else:

@@ -52,18 +52,15 @@ func execute(destination: Vector2) -> ActionResult:
 	if actor == null or ability == null or movement_effect == null or actor.is_dying() or actor.has_status("rooted") or actor.has_status("grabbed"):
 		clear_pending()
 		return ActionResult.failure("The character cannot complete this movement.")
-	var maximum_distance: float = movement_effect.movement_distance_feet * combat_system.map_rules.world_units_per_foot
-	var clamped_destination := destination
-	if actor.position.distance_to(destination) > maximum_distance:
-		clamped_destination = actor.position + actor.position.direction_to(destination) * maximum_distance
-	var validation: ActionResult = combat_system.map_rules.validate_movement_path(actor, clamped_destination, combat_system.combat_state.combatants)
+	var plan: Dictionary = combat_system.movement_system.plan_bounded_move(actor, destination, movement_effect.movement_distance_feet, combat_system.combat_state)
+	var validation: ActionResult = plan["validation"]
 	if not validation.success:
 		return validation
 	if not actor.spend_ap(ability.ap_cost):
 		return ActionResult.failure("Not enough AP.")
 	combat_system.cancel_remaining_movement(actor)
 	var origin := actor.position
-	actor.position = clamped_destination
+	combat_system.movement_system.apply_bounded_move(actor, plan)
 	combat_system.maneuver_action_executor.refresh_grabs()
 	actor.ability_uses_this_turn[ability.id] = int(actor.ability_uses_this_turn.get(ability.id, 0)) + 1
 	combat_system.ability_system.start_cooldown(actor, ability)
@@ -72,7 +69,7 @@ func execute(destination: Vector2) -> ActionResult:
 	var event_data := {"ability_name": ability.display_name, "triggers_reactions": movement_effect.movement_triggers_reactions}
 	result.events.append(CombatEvent.new(EventTypes.Type.ABILITY_TRIGGERED, actor.id, "", event_data))
 	result.events.append(CombatEvent.new(EventTypes.Type.MOVE_STARTED, actor.id, "", event_data))
-	result.events.append(CombatEvent.new(EventTypes.Type.POSITION_CHANGED, actor.id, "", {"from": origin, "to": actor.position, "distance": origin.distance_to(actor.position), "distance_feet": origin.distance_to(actor.position) / combat_system.map_rules.world_units_per_foot, "remaining_speed_feet": 0.0, "ability_name": ability.display_name}))
+	result.events.append(CombatEvent.new(EventTypes.Type.POSITION_CHANGED, actor.id, "", {"from": origin, "to": actor.position, "distance": origin.distance_to(actor.position), "distance_feet": plan["distance_feet"], "world_position": actor.world_position, "surface_id": actor.surface_id, "remaining_speed_feet": 0.0, "ability_name": ability.display_name}))
 	result.events.append(CombatEvent.new(EventTypes.Type.MOVE_COMPLETED, actor.id, "", event_data))
 	combat_system.emit_events(result.events)
 	return result

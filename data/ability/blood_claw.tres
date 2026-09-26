@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bq3m5jsmqld54"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/attack/blood_claw_attack.tres" id="2"]
-[ext_resource type="Resource" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_cdy40"]
+[ext_resource type="Resource" uid="uid://cefqsb1cdyms4" path="res://data/trait/melee.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_c5yko"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="4"]
 
 [resource]
@@ -14,9 +16,7 @@ traits = [ExtResource("3"), ExtResource("4")]
 auto_equip_on_grant = true
 ap_cost = 2
 cooldown_turns = 2
-description = "Strike at 8 ft for 9 Pierce damage. On Hit, apply Bleeding 5."
-target_mode = 0
-target_filter = 0
+description = "ใช้ 2 AP โจมตีระยะ 8 ฟุตด้วยความเสียหายเจาะ 9 เมื่อโจมตีโดนจะทำให้ติดเลือดไหล 5 สแต็ก คูลดาวน์ 2 เทิร์น"
 attack_source = 2
 attack_data = ExtResource("2")
 required_attack_trait_ids = Array[String](["unarmed"])

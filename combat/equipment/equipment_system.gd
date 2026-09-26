@@ -4,6 +4,10 @@ extends RefCounted
 const EquipmentDataScript = preload("res://data/equipment/equipment_data.gd")
 const WEAPON_SLOT_1 := 0
 const WEAPON_SLOT_2 := 3
+const ACCESSORY_SLOTS := [8, 9, 10]
+const LOADOUT_SLOTS := [0, 3, 1, 4, 5, 6, 7, 8, 9, 10]
+const SLOT_NAMES := {0: "Hand 1", 3: "Hand 2", 1: "Body", 4: "Head", 5: "Legs", 6: "Boots", 7: "Gloves", 8: "Accessory 1", 9: "Accessory 2", 10: "Accessory 3"}
+const SLOT_TYPE_NAMES := {0: "Weapon", 1: "Armor", 2: "Shield", 4: "Head", 5: "Legs", 6: "Boots", 7: "Gloves", 8: "Accessory"}
 
 
 func has_free_hand(combatant: CombatantState) -> bool:
@@ -93,7 +97,96 @@ func initialize_combatant(combatant: CombatantState) -> void:
 				starting_slot = requested_slot
 			equip_hand_item_without_cost(combatant, item, starting_slot)
 		else:
-			combatant.equipped_items[item.slot] = item
+			var requested_slot: int = int(combatant.starting_equipment_slots.get(item.id, -1))
+			var target_slot: int = get_non_hand_slot(combatant, item, requested_slot)
+			if target_slot >= 0:
+				combatant.equipped_items[target_slot] = item
+	initialize_ammunition(combatant)
+
+
+func uses_ammunition(attack: AttackData) -> bool:
+	return attack != null and attack.ammunition_capacity > 0 and TraitSystem.new().attack_has_trait(attack, "reload")
+
+
+func initialize_ammunition(combatant: CombatantState) -> void:
+	if combatant == null:
+		return
+	for item in combatant.equipment_inventory:
+		if item == null or item.weapon_attack == null or not uses_ammunition(item.weapon_attack):
+			continue
+		if not combatant.ammunition.has(item.weapon_attack.id):
+			combatant.ammunition[item.weapon_attack.id] = item.weapon_attack.ammunition_capacity
+
+
+func get_ammunition(combatant: CombatantState, attack: AttackData) -> int:
+	if not uses_ammunition(attack):
+		return -1
+	initialize_ammunition(combatant)
+	return int(combatant.ammunition.get(attack.id, attack.ammunition_capacity))
+
+
+func validate_ammunition(combatant: CombatantState, attack: AttackData) -> ActionResult:
+	if attack != null and not attack.ammunition_item_ids.is_empty():
+		if combatant == null or attack.ammunition_item_id.is_empty() or not attack.ammunition_item_ids.has(attack.ammunition_item_id):
+			return ActionResult.failure("เลือกชนิดลูกธนูก่อนยิง")
+		if find_ammunition_stack(combatant, attack.ammunition_item_id) == null:
+			return ActionResult.failure("ลูกธนูชนิดนี้หมดแล้ว")
+	if not uses_ammunition(attack):
+		return ActionResult.success_result()
+	if get_ammunition(combatant, attack) <= 0:
+		return ActionResult.failure("ไม่มี ammunition เหลือ ต้อง Reload ก่อน")
+	return ActionResult.success_result()
+
+
+func consume_ammunition(combatant: CombatantState, attack: AttackData) -> void:
+	if attack != null and not attack.ammunition_item_id.is_empty():
+		var stack: ItemStack = find_ammunition_stack(combatant, attack.ammunition_item_id)
+		if stack != null and stack.consume():
+			if stack.quantity == 0:
+				combatant.item_inventory.erase(stack)
+	if uses_ammunition(attack):
+		combatant.ammunition[attack.id] = maxi(0, get_ammunition(combatant, attack) - 1)
+
+
+func find_ammunition_stack(combatant: CombatantState, item_id: String) -> ItemStack:
+	if combatant == null:
+		return null
+	for stack in combatant.item_inventory:
+		if stack != null and stack.item != null and stack.item.id == item_id and stack.quantity > 0:
+			return stack
+	return null
+
+
+func create_ammunition_attack(source: AttackData, arrow: ItemData) -> AttackData:
+	if source == null or arrow == null or not source.ammunition_item_ids.has(arrow.id):
+		return null
+	var attack: AttackData = source.duplicate()
+	attack.ammunition_item_id = arrow.id
+	attack.display_name = "%s · %s" % [source.display_name, arrow.display_name]
+	attack.to_hit_bonus_sources = source.to_hit_bonus_sources.duplicate(true)
+	attack.base_damage_bonus_sources = source.base_damage_bonus_sources.duplicate(true)
+	attack.base_damage += arrow.ammunition_damage_bonus
+	attack.to_hit_bonus += arrow.ammunition_to_hit_bonus
+	if arrow.ammunition_damage_bonus != 0:
+		attack.base_damage_bonus_sources.append({"source": arrow.display_name, "amount": arrow.ammunition_damage_bonus})
+	if arrow.ammunition_to_hit_bonus != 0:
+		attack.to_hit_bonus_sources.append({"source": arrow.display_name, "amount": arrow.ammunition_to_hit_bonus})
+	return attack
+
+
+func reload_weapon(combatant: CombatantState) -> ActionResult:
+	if combatant == null:
+		return ActionResult.failure("Character does not exist.")
+	var attack: AttackData = combatant.equipped_weapon_attack
+	if not uses_ammunition(attack):
+		return ActionResult.failure("อาวุธที่ถืออยู่ไม่ต้อง Reload")
+	if combatant.ap < attack.reload_ap_cost:
+		return ActionResult.failure("Not enough AP to Reload.")
+	if get_ammunition(combatant, attack) >= attack.ammunition_capacity:
+		return ActionResult.failure("กระสุนเต็มอยู่แล้ว")
+	combatant.spend_ap(attack.reload_ap_cost)
+	combatant.ammunition[attack.id] = attack.ammunition_capacity
+	return ActionResult.success_result()
 
 
 func toggle_equipment(combatant: CombatantState, item, target_slot: int = -1) -> ActionResult:
@@ -105,7 +198,7 @@ func toggle_equipment(combatant: CombatantState, item, target_slot: int = -1) ->
 		return ActionResult.failure("Armor cannot be equipped or removed during combat.")
 	if item.slot == EquipmentDataScript.Slot.WEAPON or item.slot == EquipmentDataScript.Slot.SHIELD:
 		return toggle_hand_item(combatant, item, target_slot)
-	return ActionResult.failure("Unsupported equipment slot.")
+	return ActionResult.failure("This equipment cannot be changed during combat.")
 
 
 func toggle_hand_item(combatant: CombatantState, item, target_slot: int) -> ActionResult:
@@ -118,19 +211,53 @@ func toggle_equipment_without_cost(combatant: CombatantState, item, target_slot:
 	if not combatant.equipment_inventory.has(item):
 		return ActionResult.failure("Item is not in this character's inventory.")
 	var result: ActionResult
-	if item.slot == EquipmentDataScript.Slot.ARMOR:
-		if combatant.equipped_items.get(item.slot) == item:
-			combatant.equipped_items.erase(item.slot)
-		else:
-			combatant.equipped_items[item.slot] = item
-		result = ActionResult.success_result()
-	elif item.slot == EquipmentDataScript.Slot.WEAPON or item.slot == EquipmentDataScript.Slot.SHIELD:
+	if item.slot == EquipmentDataScript.Slot.WEAPON or item.slot == EquipmentDataScript.Slot.SHIELD:
 		result = _toggle_hand_item(combatant, item, target_slot, false)
 	else:
-		return ActionResult.failure("Unsupported equipment slot.")
+		var equipped_slot: int = find_equipped_slot(combatant, item)
+		var chosen_slot: int = get_non_hand_slot(combatant, item, target_slot)
+		if chosen_slot < 0:
+			return ActionResult.failure("Unsupported equipment slot.")
+		if equipped_slot >= 0:
+			combatant.equipped_items.erase(equipped_slot)
+		if equipped_slot != chosen_slot:
+			combatant.equipped_items[chosen_slot] = item
+		result = ActionResult.success_result()
 	if result.success:
 		refresh_equipment(combatant)
 	return result
+
+
+func get_valid_slots(item) -> Array:
+	if item == null:
+		return []
+	if item.slot == EquipmentDataScript.Slot.WEAPON or item.slot == EquipmentDataScript.Slot.SHIELD:
+		return [WEAPON_SLOT_1, WEAPON_SLOT_2]
+	if item.slot == EquipmentDataScript.Slot.ACCESSORY:
+		return ACCESSORY_SLOTS.duplicate()
+	return [item.slot] if SLOT_NAMES.has(item.slot) else []
+
+
+func get_non_hand_slot(combatant: CombatantState, item, requested_slot: int = -1) -> int:
+	var valid_slots: Array = get_valid_slots(item)
+	if valid_slots.is_empty() or valid_slots.has(WEAPON_SLOT_1):
+		return -1
+	if requested_slot >= 0:
+		return requested_slot if valid_slots.has(requested_slot) else -1
+	var equipped_slot: int = find_equipped_slot(combatant, item)
+	if equipped_slot >= 0:
+		return equipped_slot
+	for slot in valid_slots:
+		if combatant.equipped_items.get(slot) == null:
+			return slot
+	return valid_slots[0]
+
+
+func find_equipped_slot(combatant: CombatantState, item) -> int:
+	for slot in combatant.equipped_items:
+		if combatant.equipped_items[slot] == item:
+			return int(slot)
+	return -1
 
 
 func _toggle_hand_item(combatant: CombatantState, item, target_slot: int, spend_action_point: bool) -> ActionResult:
@@ -173,6 +300,8 @@ func refresh_equipment(combatant: CombatantState) -> void:
 	combatant.equipment_reflex_bonus = 0
 	combatant.equipment_fortitude_bonus = 0
 	combatant.equipment_will_bonus = 0
+	combatant.equipment_stealth_bonus = 0
+	combatant.equipment_max_mana_bonus = 0
 	combatant.equipment_damage_resistances.clear()
 	combatant.equipped_weapon_attack = combatant.natural_attack
 	var processed_items: Array = []
@@ -185,6 +314,8 @@ func refresh_equipment(combatant: CombatantState) -> void:
 		combatant.equipment_reflex_bonus += item.reflex_bonus
 		combatant.equipment_fortitude_bonus += item.fortitude_bonus
 		combatant.equipment_will_bonus += item.will_bonus
+		combatant.equipment_stealth_bonus += item.stealth_bonus
+		combatant.equipment_max_mana_bonus += item.max_mana_bonus
 		for damage_type in item.damage_resistances:
 			var key := String(damage_type).strip_edges().to_lower()
 			combatant.equipment_damage_resistances[key] = int(combatant.equipment_damage_resistances.get(key, 0)) + int(item.damage_resistances[damage_type])

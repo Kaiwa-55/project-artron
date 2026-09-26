@@ -7,5 +7,5 @@
 script = ExtResource("script")
 id = "shortbow"
 display_name = "Shortbow"
-description = "A two-handed Dexterity bow with 30-foot range. Cannot make melee Opportunity Attacks. Close-range penalty is not implemented yet."
+description = "ธนูสองมือ ระยะ 30 ฟุต เลือกลูกธนูธรรมดาหรือลูกธนูหนักก่อนยิง ใช้ลูกธนู 1 ดอกต่อครั้ง ไม่ใช้โจมตีสวนระยะประชิด"
 weapon_attack = ExtResource("attack")

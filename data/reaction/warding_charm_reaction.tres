@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://dngaxvhkqoqs1"]
+
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="2"]
+
+[sub_resource type="Resource" id="DamageReduction"]
+script = ExtResource("2")
+effect_type = 9
+amount = 4
+
+[resource]
+script = ExtResource("1")
+id = "warding_charm_reaction"
+display_name = "Warding Charm"
+description = "Consume a Warding Charm to reduce this hit's damage by 4."
+trigger = 1
+auto_resolve = false
+ap_cost = 0
+effects = [SubResource("DamageReduction")]

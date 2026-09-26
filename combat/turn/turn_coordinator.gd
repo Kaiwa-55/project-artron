@@ -9,9 +9,12 @@ func _init(p_combat_system) -> void:
 
 
 func start_combat(combatants: Array[CombatantState]) -> void:
+	combat_system.map_rules.temporary_light_areas.clear()
+	combat_system.map_rules.light_emitters = combatants.duplicate()
 	combat_system.combat_state = CombatState.new()
 	combat_system.ability_system.combat_state = combat_system.combat_state
 	for combatant in combatants:
+		combatant.clear_hide_concealment()
 		combatant.last_attack_declared_round = 0
 		combatant.last_step_back_round = 0
 		if not combatant.has_meta("creation_rules_applied"):
@@ -41,7 +44,9 @@ func advance_turn() -> void:
 		return
 	combat_system.ability_movement_executor.clear_pending()
 	var previous_actor: CombatantState = combat_system.combat_state.get_current_actor()
-	combat_system.clear_hidden(previous_actor, "Turn ended")
+	previous_actor.focus_draught_ready_bonus = 0
+	previous_actor.focus_draught_skill_bonus = 0
+	combat_system.clear_hidden(previous_actor, "Turn ended", false)
 	for cooldown in combat_system.skill_system.reduce_cooldowns(previous_actor):
 		combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.SKILL_COOLDOWN_REDUCED, previous_actor.id, "", cooldown))
 	for cooldown in combat_system.ability_system.reduce_cooldowns(previous_actor):
@@ -64,6 +69,7 @@ func advance_turn() -> void:
 	if next_actor == null:
 		combat_system.check_for_combat_end()
 		return
+	combat_system.map_rules.expire_temporary_light_areas(combat_system.combat_state.current_round)
 	start_current_turn()
 
 
@@ -71,7 +77,11 @@ func start_current_turn() -> void:
 	if combat_system.combat_state == null or combat_system.combat_state.is_finished():
 		return
 	var actor: CombatantState = combat_system.combat_state.get_current_actor()
-	if actor == null or actor.is_dying():
+	if actor == null:
+		return
+	actor.clear_hide_concealment()
+	if actor.is_dying():
+		advance_turn()
 		return
 	combat_system.turn_system.start_turn(combat_system.combat_state)
 	for effect in combat_system.effect_system.expire_start_turn_effects(actor):
@@ -82,5 +92,8 @@ func start_current_turn() -> void:
 	combat_system.event_system.emit(CombatEvent.new(EventTypes.Type.TURN_STARTED, actor.id))
 	combat_system.emit_effect_resolutions(actor, combat_system.effect_system.resolve_effects(actor, EffectData.Trigger.START_OF_TURN))
 	if combat_system.check_for_combat_end():
+		return
+	if actor.is_dying():
+		advance_turn()
 		return
 	combat_system.turn_system.activate_turn(combat_system.combat_state, actor.max_ap + combat_system.effect_system.get_max_ap_bonus(actor) - combat_system.effect_system.get_max_ap_penalty(actor))

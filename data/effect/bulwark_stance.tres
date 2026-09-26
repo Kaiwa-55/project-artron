@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="effect"]
+[resource]
+script = ExtResource("effect")
+id = "bulwark_stance"
+display_name = "Bulwark Stance"
+persists_until_combat_end = true
+reflex_bonus = 1
+fortitude_bonus = 1
+will_bonus = 1
+can_be_cleansed = false

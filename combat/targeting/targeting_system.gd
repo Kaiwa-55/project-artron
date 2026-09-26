@@ -3,20 +3,26 @@ extends RefCounted
 
 const SkillDataScript = preload("res://data/skill/skill_data.gd")
 
-func validate_target_point(actor: CombatantState, point: Vector2, skill, map_rules, range_override_feet: float = -1.0) -> ActionResult:
+func validate_target_point(actor: CombatantState, point: Vector2, skill, map_rules, range_override_feet: float = -1.0, target_world: Vector3 = Vector3.INF) -> ActionResult:
 	if actor == null or skill == null:
 		return ActionResult.failure("Targeting data is missing.")
 	var range_feet: float = range_override_feet if range_override_feet >= 0.0 else skill.targeting_range_feet
 	if range_feet <= 0.0 and skill.attack_data != null:
 		range_feet = skill.attack_data.range_feet
 	var distance_feet: float = actor.position.distance_to(point) / map_rules.world_units_per_foot
+	if is_instance_valid(map_rules.spatial_world):
+		distance_feet = actor.world_position.distance_to(resolve_target_world(actor, point, map_rules, target_world))
 	if distance_feet > range_feet:
 		return ActionResult.failure("Target point is out of range.")
-	if skill.requires_line_of_sight and not map_rules.has_line_of_sight(actor.position, point):
-		return ActionResult.failure("Target point is blocked by an obstacle.")
+	if skill.requires_line_of_sight:
+		var clear: bool = map_rules.has_line_of_sight(actor.position, point)
+		if is_instance_valid(map_rules.spatial_world):
+			clear = map_rules.has_spatial_line_of_effect(actor.world_position + actor.eye_offset, resolve_target_world(actor, point, map_rules, target_world) + Vector3.UP * 0.1)
+		if not clear:
+			return ActionResult.failure("Target point is blocked by an obstacle.")
 	return ActionResult.success_result()
 
-func collect_targets(actor: CombatantState, point: Vector2, skill, combat_state: CombatState, map_rules, range_override_feet: float = -1.0) -> Array[CombatantState]:
+func collect_targets(actor: CombatantState, point: Vector2, skill, combat_state: CombatState, map_rules, range_override_feet: float = -1.0, target_world: Vector3 = Vector3.INF) -> Array[CombatantState]:
 	var targets: Array[CombatantState] = []
 	if actor == null or skill == null:
 		return targets
@@ -25,23 +31,23 @@ func collect_targets(actor: CombatantState, point: Vector2, skill, combat_state:
 			continue
 		if candidate == actor and not skill.include_caster:
 			continue
-		if is_inside_area(actor, candidate, point, skill, map_rules, range_override_feet):
-			if skill.area_blocked_by_obstacles and not map_rules.has_line_of_sight(get_area_origin(actor, point, skill), candidate.position):
+		if is_inside_area(actor, candidate, point, skill, map_rules, range_override_feet, target_world):
+			if skill.area_blocked_by_obstacles and not has_area_line_of_effect(actor, candidate, point, skill, map_rules, target_world):
 				continue
 			targets.append(candidate)
 	if skill.include_caster and not actor.is_dying() and target_filter_matches(actor, actor, skill.target_filter) \
-		and is_inside_area(actor, actor, point, skill, map_rules, range_override_feet) and not targets.has(actor):
-		if not skill.area_blocked_by_obstacles or map_rules.has_line_of_sight(get_area_origin(actor, point, skill), actor.position):
+		and is_inside_area(actor, actor, point, skill, map_rules, range_override_feet, target_world) and not targets.has(actor):
+		if not skill.area_blocked_by_obstacles or has_area_line_of_effect(actor, actor, point, skill, map_rules, target_world):
 			targets.append(actor)
 	targets.sort_custom(func(first, second): return combat_state.turn_order.find(first.id) < combat_state.turn_order.find(second.id))
 	return targets
 
-func get_targeting_preview(actor: CombatantState, point: Vector2, skill, combat_state: CombatState, map_rules, range_override_feet: float = -1.0) -> Dictionary:
-	var validation := validate_target_point(actor, point, skill, map_rules, range_override_feet)
+func get_targeting_preview(actor: CombatantState, point: Vector2, skill, combat_state: CombatState, map_rules, range_override_feet: float = -1.0, target_world: Vector3 = Vector3.INF) -> Dictionary:
+	var validation := validate_target_point(actor, point, skill, map_rules, range_override_feet, target_world)
 	return {
 		"valid": validation.success,
 		"failure_reason": validation.failure_reason,
-		"targets": collect_targets(actor, point, skill, combat_state, map_rules, range_override_feet) if validation.success else [],
+		"targets": collect_targets(actor, point, skill, combat_state, map_rules, range_override_feet, target_world) if validation.success else [],
 		"origin": get_area_origin(actor, point, skill),
 		"point": point,
 		"area_shape": skill.area_shape,
@@ -63,8 +69,10 @@ func target_filter_matches(actor: CombatantState, candidate: CombatantState, fil
 			return candidate.team == actor.team
 	return true
 
-func is_inside_area(actor: CombatantState, candidate: CombatantState, point: Vector2, skill, map_rules, range_override_feet: float = -1.0) -> bool:
+func is_inside_area(actor: CombatantState, candidate: CombatantState, point: Vector2, skill, map_rules, range_override_feet: float = -1.0, target_world: Vector3 = Vector3.INF) -> bool:
 	var candidate_radius: float = map_rules.get_combatant_radius_world_units(candidate)
+	if is_instance_valid(map_rules.spatial_world):
+		return is_inside_spatial_area(actor, candidate, point, skill, map_rules, range_override_feet, target_world)
 	match skill.area_shape:
 		SkillDataScript.AreaShape.CIRCLE:
 			return candidate.position.distance_to(point) <= skill.area_radius_feet * map_rules.world_units_per_foot + candidate_radius
@@ -88,3 +96,50 @@ func is_inside_area(actor: CombatantState, candidate: CombatantState, point: Vec
 			return center_angle <= skill.cone_angle_degrees * 0.5 + angular_padding
 		_:
 			return candidate.position.distance_to(point) <= candidate_radius
+
+func logic_point_to_world(point: Vector2, elevation_feet: float, map_rules) -> Vector3:
+	return Vector3(point.x / map_rules.world_units_per_foot, elevation_feet, point.y / map_rules.world_units_per_foot)
+
+func resolve_target_world(actor: CombatantState, point: Vector2, map_rules, target_world: Vector3) -> Vector3:
+	return target_world if target_world != Vector3.INF else logic_point_to_world(point, actor.elevation_feet, map_rules)
+
+func get_area_origin_world(actor: CombatantState, point: Vector2, skill, map_rules, target_world: Vector3 = Vector3.INF) -> Vector3:
+	if skill.area_shape == SkillDataScript.AreaShape.LINE or skill.area_shape == SkillDataScript.AreaShape.CONE:
+		return actor.world_position + Vector3.UP * actor.body_height_feet * 0.5
+	return resolve_target_world(actor, point, map_rules, target_world) + Vector3.UP * 0.1
+
+func has_area_line_of_effect(actor: CombatantState, candidate: CombatantState, point: Vector2, skill, map_rules, target_world: Vector3 = Vector3.INF) -> bool:
+	if not is_instance_valid(map_rules.spatial_world):
+		return map_rules.has_line_of_sight(get_area_origin(actor, point, skill), candidate.position)
+	var target := candidate.world_position + Vector3.UP * candidate.body_height_feet * 0.5
+	return map_rules.has_spatial_line_of_effect(get_area_origin_world(actor, point, skill, map_rules, target_world), target)
+
+func is_inside_spatial_area(actor: CombatantState, candidate: CombatantState, point: Vector2, skill, map_rules, range_override_feet: float, target_world: Vector3 = Vector3.INF) -> bool:
+	var radius := candidate.collision_radius_feet
+	var actor_origin := actor.world_position
+	var target := candidate.world_position
+	match skill.area_shape:
+		SkillDataScript.AreaShape.CIRCLE:
+			var center := resolve_target_world(actor, point, map_rules, target_world)
+			return target.distance_to(center) <= skill.area_radius_feet + radius
+		SkillDataScript.AreaShape.LINE:
+			var effective_length: float = range_override_feet if range_override_feet >= 0.0 else skill.line_length_feet
+			var aimed := resolve_target_world(actor, point, map_rules, target_world)
+			var direction := actor_origin.direction_to(aimed)
+			if direction.is_zero_approx(): return false
+			var projection := (target - actor_origin).dot(direction)
+			var finish := actor_origin + direction * effective_length
+			return projection >= -radius and projection <= effective_length + radius and Geometry3D.get_closest_point_to_segment(target, actor_origin, finish).distance_to(target) <= skill.line_width_feet * 0.5 + radius
+		SkillDataScript.AreaShape.CONE:
+			var effective_range: float = range_override_feet if range_override_feet >= 0.0 else skill.targeting_range_feet
+			var offset := target - actor_origin
+			if offset.length() > effective_range + radius: return false
+			if offset.is_zero_approx(): return skill.include_caster
+			var aimed := resolve_target_world(actor, point, map_rules, target_world)
+			var direction := actor_origin.direction_to(aimed)
+			if direction.is_zero_approx(): return false
+			var center_angle := rad_to_deg(direction.angle_to(offset.normalized()))
+			var angular_padding := rad_to_deg(asin(minf(1.0, radius / maxf(radius, offset.length()))))
+			return center_angle <= skill.cone_angle_degrees * 0.5 + angular_padding
+		_:
+			return target.distance_to(resolve_target_world(actor, point, map_rules, target_world)) <= radius

@@ -19,5 +19,5 @@ display_name = "Combo Techniques"
 prerequisite_id = "build_up_body"
 required_trait_ids = Array[String](["martial_artist"])
 traits = [ExtResource("4_cickv"), ExtResource("3_ykeoi")]
-description = "After an Unarmed Attack, gain +2 To Hit. Stacks until End Turn."
+description = "หลังโจมตีด้วยมือเปล่า ได้รับค่าโจมตี +2 ซึ่งสะสมได้จนจบเทิร์น"
 effects = [SubResource("AbilityEffect_combo")]

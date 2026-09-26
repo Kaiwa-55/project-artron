@@ -65,5 +65,6 @@ func run_test() -> void:
 	if not success:
 		push_error("Velkaria must change phases, execute its Web combo, and reserve Reaction AP outside Phase 3.")
 		print("SEQUENCE=", sequence, " PHASE2=", phase_two_decision.get("candidate").get_source_id(), " PHASE3=", phase_three_decision.get("candidate").get_source_id())
-	print("VELKARIA_BOSS_AI_TEST: " + ("PASS" if success else "FAIL") + " sequence=" + str(sequence) + " AP=" + str(boss.ap))
+	print("VELKARIA_SEQUENCE=", sequence, " AP=", boss.ap)
+	print("VELKARIA_BOSS_AI_TEST: " + ("PASS" if success else "FAIL"))
 	quit(0 if success else 1)

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="passive"]
+
+[resource]
+script = ExtResource("ability")
+id = "relentless_pursuit"
+display_name = "Relentless Pursuit"
+required_level = 2
+prerequisite_id = "opening_strike"
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "assault_stance"
+traits = [ExtResource("warrior")]
+description = "เมื่อล้มศัตรูได้ เคลื่อนที่ฟรีสูงสุด 5 ฟุตได้เทิร์นละครั้ง ขณะอยู่ใน Assault Stance"
+is_passive = true
+on_kill_move_distance_feet = 5.0
+traits = [ExtResource("warrior"), ExtResource("passive")]

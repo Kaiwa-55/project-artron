@@ -14,5 +14,5 @@ display_name = "Brutal Strike"
 required_trait_ids = Array[String](["assassin"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. The first Melee Attack Hit each Turn gains +2 Damage, or +3 Damage instead if the target has 50% HP or less. Limit 1/Turn."
+description = "การโจมตีประชิดครั้งแรกที่โดนในแต่ละเทิร์นสร้างความเสียหายเพิ่ม 2 หรือเพิ่ม 3 หากเป้าหมายมี HP ไม่เกินครึ่งหนึ่ง"
 effects = [ExtResource("2")]

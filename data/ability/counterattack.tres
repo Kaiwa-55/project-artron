@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/reaction/counterattack.tres" id="reaction"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+
+[resource]
+script = ExtResource("ability")
+id = "counterattack"
+display_name = "Counterattack"
+required_level = 0
+required_trait_ids = Array[String](["warrior"])
+traits = [ExtResource("reactive"), ExtResource("warrior")]
+reaction_only = true
+description = "เมื่อศัตรูโจมตีประชิดพลาด ใช้ Reaction และ 1 AP เพื่อโจมตีสวนด้วยอาวุธประชิดที่ถืออยู่"
+granted_reactions = [ExtResource("reaction")]

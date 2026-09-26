@@ -22,6 +22,6 @@ traits = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")
 auto_equip_on_grant = true
 ap_cost = 1
 uses_per_turn = 2
-description = "Gain Faith equal to your Wisdom modifier. Faith above Max Faith becomes Temporary Faith. Temporary Faith Reduces 2 per Turn. Use per Turn 2."
+description = "ใช้ 1 AP เพิ่ม Faith เท่ากับตัวปรับ Wisdom ส่วนที่เกิน Faith สูงสุดจะเป็น Faith ชั่วคราวซึ่งลดลง 2 เมื่อจบเทิร์น ใช้ได้เทิร์นละ 2 ครั้ง"
 target_mode = 1
 use_effects = [SubResource("PrayEffect")]

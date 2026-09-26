@@ -12,6 +12,10 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 @export_range(0, 10) var required_level: int = 1
 @export var prerequisite_id: String = ""
 @export var required_trait_ids: Array[String] = []
+@export var required_stance_id: String = ""
+@export var replaces_active_stance: bool = false
+## Restricts spending Ability Points to these ancestries; class grants ignore this.
+@export var learnable_ancestry_ids: Array[String] = []
 @export_range(1, 10, 1) var ability_point_cost: int = 1
 @export var traits: Array = []
 @export var auto_equip_on_grant: bool = false
@@ -44,6 +48,10 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 # Damage added after the normal Critical calculation. This is used by active
 # attack abilities whose bonus should scale without becoming a global Passive.
 @export var active_attack_flat_damage_bonus: int = 0
+@export_range(0, 100) var active_target_hp_at_or_below_percent: int = 0
+@export var active_conditional_damage_bonus: int = 0
+@export var on_hit_next_attack_to_hit_bonus: int = 0
+@export var on_kill_move_distance_feet: float = 0.0
 @export var active_attack_damage_bonus_per_level: int = 0
 @export var active_attack_base_damage_per_level: int = 0
 # Adds current Faith to an Active Ability's base damage. The executor snapshots
@@ -55,6 +63,7 @@ enum ExecutionMode { STANDARD, ATTACK_SEQUENCE }
 @export var area_shape: AreaShape = AreaShape.NONE
 @export var targeting_range_feet: float = 0.0
 @export var area_radius_feet: float = 0.0
+@export_range(0, 20) var max_area_targets: int = 0
 @export var line_length_feet: float = 0.0
 @export var line_width_feet: float = 5.0
 @export_range(1.0, 360.0, 1.0) var cone_angle_degrees: float = 90.0

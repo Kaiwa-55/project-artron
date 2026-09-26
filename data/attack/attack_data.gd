@@ -24,6 +24,8 @@ var attack_attribute: int = AttackAttribute.STRENGTH
 @export var requires_to_hit: bool = true
 
 @export var to_hit_bonus: int = 0
+# Runtime snapshots keep the sources of bonuses added after this Resource loads.
+var to_hit_bonus_sources: Array[Dictionary] = []
 @export var is_unarmed: bool = false
 
 @export var can_critical: bool = true
@@ -34,7 +36,15 @@ var attack_attribute: int = AttackAttribute.STRENGTH
 
 @export var ap_cost: int = 1
 
+## A positive capacity enables ammunition tracking for attacks with the Reload trait.
+@export_range(0, 99) var ammunition_capacity: int = 0
+@export_range(1, 9) var reload_ap_cost: int = 1
+@export var ammunition_item_ids: Array[String] = []
+# Selected arrow for a single attack declaration; never stored on the shared weapon resource.
+var ammunition_item_id: String = ""
+
 @export var base_damage: int = 0
+var base_damage_bonus_sources: Array[Dictionary] = []
 @export var uses_attribute_damage_modifier: bool = true
 
 @export var range_feet: float = 5.0
@@ -55,6 +65,10 @@ var active_damage_bonus_source: String = ""
 
 
 func resolve_attack_attribute(combatant: CombatantState) -> int:
+	if combatant != null:
+		for trait_data in traits:
+			if trait_data != null and trait_data.id == "finesse":
+				return AttributeTypes.Type.STRENGTH if combatant.strength >= combatant.dexterity else AttributeTypes.Type.DEXTERITY
 	if attack_attribute != AttackAttribute.CLASS_MAIN_ATTRIBUTE:
 		return attack_attribute
 	if combatant != null and combatant.has_meta("class_data"):

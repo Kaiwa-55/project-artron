@@ -49,8 +49,8 @@ func unequip_ability(combatant, ability_id: String) -> ActionResult:
 	return ActionResult.success_result()
 
 
-func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0) -> int:
-	var total_bonus := get_aura_attack_bonus(combatant)
+func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0, breakdown: Array[Dictionary] = []) -> int:
+	var total_bonus := get_aura_attack_bonus(combatant, breakdown)
 	for ability in get_attack_abilities(combatant, attack):
 		for effect_index in range(ability.effects.size()):
 			var effect = ability.effects[effect_index]
@@ -59,9 +59,14 @@ func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0) -> i
 			if not effect.required_attack_trait_ids.all(func(trait_id): return attack_has_trait(attack, trait_id)):
 				continue
 			if effect.effect_type == AbilityEffectDataScript.Type.STACKED_TO_HIT_BONUS:
-				total_bonus += get_stack_count(combatant, ability.id, effect_index) * effect.to_hit_bonus_per_stack
+				var stack_bonus: int = get_stack_count(combatant, ability.id, effect_index) * effect.to_hit_bonus_per_stack
+				total_bonus += stack_bonus
+				if stack_bonus != 0:
+					breakdown.append({"source": ability.display_name, "amount": stack_bonus})
 			elif effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_TO_HIT_BONUS:
 				total_bonus += effect.passive_value
+				if effect.passive_value != 0:
+					breakdown.append({"source": ability.display_name, "amount": effect.passive_value})
 			elif effect.effect_type == AbilityEffectDataScript.Type.CONDITIONAL_TO_HIT_BONUS:
 				if int(combatant.ability_uses_this_turn.get(ability.id, 0)) >= 1:
 					continue
@@ -70,14 +75,17 @@ func get_to_hit_bonus(combatant, attack, target_distance_feet: float = 0.0) -> i
 				if not effect.required_attack_trait_ids.all(func(trait_id): return attack_has_trait(attack, trait_id)):
 					continue
 				total_bonus += effect.passive_value
+				if effect.passive_value != 0:
+					breakdown.append({"source": ability.display_name, "amount": effect.passive_value})
 				combatant.ability_uses_this_turn[ability.id] = 1
 	return total_bonus
 
 
-func get_aura_attack_bonus(combatant) -> int:
+func get_aura_attack_bonus(combatant, breakdown: Array[Dictionary] = []) -> int:
 	if combatant == null or combat_state == null or map_rules == null:
 		return 0
 	var bonuses_by_effect: Dictionary = {}
+	var names_by_effect: Dictionary = {}
 	for source in combat_state.combatants.values():
 		if source == null or source.is_dying():
 			continue
@@ -94,9 +102,13 @@ func get_aura_attack_bonus(combatant) -> int:
 			if not map_rules.is_target_in_range(source, combatant, effect.aura_radius_feet):
 				continue
 			bonuses_by_effect[effect.id] = maxi(int(bonuses_by_effect.get(effect.id, 0)), effect.aura_attack_bonus * instance.stack_count)
+			names_by_effect[effect.id] = effect.display_name
 	var total := 0
-	for bonus in bonuses_by_effect.values():
-		total += int(bonus)
+	for effect_id in bonuses_by_effect:
+		var bonus: int = bonuses_by_effect[effect_id]
+		total += bonus
+		if bonus != 0:
+			breakdown.append({"source": "%s aura" % names_by_effect[effect_id], "amount": bonus})
 	return total
 
 
@@ -135,14 +147,32 @@ func get_first_move_distance_bonus(combatant) -> float:
 	return total
 
 
+func get_on_kill_movement(combatant) -> Dictionary:
+	if combatant == null or combatant.has_status("rooted"):
+		return {}
+	for ability in get_active_abilities(combatant):
+		if ability.on_kill_move_distance_feet > 0.0 and int(combatant.ability_uses_this_turn.get(ability.id, 0)) == 0:
+			return {"ability": ability, "distance_feet": ability.on_kill_move_distance_feet}
+	return {}
+
+
 func get_passive_defense_bonus(combatant) -> int:
 	var total := 0
 	if combatant == null:
 		return total
+	if combat_state != null and map_rules != null:
+		for source in combat_state.combatants.values():
+			if source == null or source.is_dying() or source.team != combatant.team:
+				continue
+			for instance in source.effects:
+				if instance != null and instance.data != null and instance.data.aura_defense_bonus > 0 and map_rules.is_target_in_range(source, combatant, instance.data.aura_radius_feet):
+					total = maxi(total, instance.data.aura_defense_bonus)
 	for ability in get_active_abilities(combatant):
 		for effect in ability.effects:
 			if effect != null and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_DEFENSE_BONUS_FROM_FAITH:
 				total += floori(float(combatant.get_total_faith()) / float(maxi(1, effect.faith_per_defense_bonus)))
+			elif effect != null and effect.effect_type == AbilityEffectDataScript.Type.PASSIVE_DEFENSE_BONUS_WHILE_STATIONARY and is_zero_approx(combatant.movement_distance_this_turn):
+				total += effect.passive_value
 	return total
 
 
@@ -206,6 +236,10 @@ func get_conditional_damage_bonuses(attacker, target, attack, current_round: int
 		for effect in ability.effects:
 			if effect == null or effect.effect_type != AbilityEffectDataScript.Type.CONDITIONAL_DAMAGE_BONUS:
 				continue
+			if not effect.required_reaction_used_id.is_empty():
+				var used_round: int = int(attacker.reaction_last_used_round.get(effect.required_reaction_used_id, -99))
+				if used_round < current_round - 1 or used_round > current_round or combat_state == null or combat_state.current_actor_id != attacker.id:
+					continue
 			if effect.first_successful_hit_per_turn and int(attacker.ability_uses_this_turn.get(ability.id, 0)) >= 1:
 				continue
 			if not effect.required_attack_trait_ids.all(func(trait_id): return attack_has_trait(attack, trait_id)):
@@ -289,8 +323,8 @@ func get_skill_cooldown_modifier(combatant, skill_id: String) -> int:
 	return modifier
 
 
-func get_skill_damage_bonus(combatant) -> int:
-	return _sum_skill_modifier(combatant, AbilityEffectDataScript.Type.PASSIVE_SKILL_DAMAGE_BONUS, "skill_damage_bonus")
+func get_skill_damage_bonus(combatant, breakdown: Array[Dictionary] = []) -> int:
+	return _sum_skill_modifier(combatant, AbilityEffectDataScript.Type.PASSIVE_SKILL_DAMAGE_BONUS, "skill_damage_bonus", breakdown)
 
 
 func get_skill_mana_discount(combatant, skill = null) -> int:
@@ -337,7 +371,7 @@ func get_skill_range_bonus(combatant) -> float:
 	return float(_sum_skill_modifier(combatant, AbilityEffectDataScript.Type.PASSIVE_SKILL_RANGE_BONUS_FEET, "skill_range_bonus_feet"))
 
 
-func _sum_skill_modifier(combatant, effect_type: int, property_name: String) -> int:
+func _sum_skill_modifier(combatant, effect_type: int, property_name: String, breakdown: Array[Dictionary] = []) -> int:
 	var total := 0
 	if combatant == null:
 		return total
@@ -346,7 +380,10 @@ func _sum_skill_modifier(combatant, effect_type: int, property_name: String) -> 
 			continue
 		for effect in ability.effects:
 			if effect != null and effect.effect_type == effect_type:
-				total += int(effect.get(property_name))
+				var amount: int = int(effect.get(property_name))
+				total += amount
+				if amount != 0:
+					breakdown.append({"source": ability.display_name, "amount": amount})
 	return total
 
 
@@ -478,7 +515,7 @@ func get_active_abilities(combatant) -> Array:
 		return abilities
 	for ability_id in combatant.equipped_abilities:
 		var ability = get_available_ability(combatant, ability_id)
-		if ability != null and meets_required_traits(combatant, ability) and not ability_ids.has(ability.id):
+		if ability != null and meets_required_traits(combatant, ability) and stance_matches(combatant, ability) and not ability_ids.has(ability.id):
 			abilities.append(ability)
 			ability_ids.append(ability.id)
 	var weapon_attack = combatant.equipped_weapon_attack
@@ -497,6 +534,15 @@ func meets_required_traits(combatant, ability) -> bool:
 		if not combatant_has_trait(combatant, trait_id):
 			return false
 	return true
+
+
+func stance_matches(combatant, ability) -> bool:
+	if ability == null or ability.required_stance_id.is_empty():
+		return true
+	for instance in combatant.effects:
+		if instance != null and instance.is_stance and instance.source_ability_id == ability.required_stance_id:
+			return true
+	return false
 
 
 func get_movement_effect(ability):
@@ -558,13 +604,22 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 		return ActionResult.failure("Passive abilities cannot be activated.")
 	if ability.reaction_only:
 		return ActionResult.failure("Reaction abilities can only be used when their trigger occurs.")
+	if not stance_matches(combatant, ability):
+		return ActionResult.failure("Requires %s." % ability.required_stance_id.replace("_", " ").capitalize())
+	if ability.id == "shield_brace" or ability.id == "interpose":
+		if not has_equipped_shield(combatant):
+			return ActionResult.failure("Requires an equipped shield.")
 	if ability_has_trait(ability, "stance"):
 		for effect_instance in combatant.effects:
 			if effect_instance == null or not effect_instance.is_stance:
 				continue
+			if effect_instance.source_ability_id == ability.id and ability.replaces_active_stance:
+				return ActionResult.failure("%s is already active." % ability.display_name)
 			if effect_instance.source_ability_id == ability.id and ability_has_trait(ability, "aura"):
 				return ActionResult.failure("%s is already active." % ability.display_name)
 			if effect_instance.source_ability_id != ability.id:
+				if ability.replaces_active_stance:
+					continue
 				var active_name: String = effect_instance.source_ability_name
 				if active_name.is_empty():
 					active_name = effect_instance.source_ability_id
@@ -614,6 +669,15 @@ func validate_active_use(combatant, ability, target = null) -> ActionResult:
 	return ActionResult.success_result()
 
 
+func has_equipped_shield(combatant) -> bool:
+	if combatant == null:
+		return false
+	for item in combatant.equipped_items.values():
+		if item != null and item.slot == EquipmentData.Slot.SHIELD:
+			return true
+	return false
+
+
 func get_use_effects(ability) -> Array:
 	var entries: Array = []
 	if ability == null:
@@ -640,15 +704,27 @@ func sync_granted_reactions(combatant) -> void:
 		for reaction in ability.granted_reactions:
 			if reaction != null and not granted_ids.has(reaction.id):
 				granted_ids.append(reaction.id)
+	for skill in combatant.available_skills:
+		if skill == null:
+			continue
+		for reaction in skill.granted_reactions:
+			if reaction != null and not granted_ids.has(reaction.id):
+				granted_ids.append(reaction.id)
 	for index in range(combatant.active_reactions.size() - 1, -1, -1):
 		var active_reaction = combatant.active_reactions[index]
-		if active_reaction != null and granted_ids.has(active_reaction.id):
+		if active_reaction != null and (granted_ids.has(active_reaction.id) or (not active_reaction.source_skill_id.is_empty() and not combatant.available_skills.any(func(skill): return skill != null and skill.id == active_reaction.source_skill_id))):
 			combatant.active_reactions.remove_at(index)
 	for ability_id in combatant.equipped_abilities:
 		var ability = get_available_ability(combatant, ability_id)
 		if ability == null or combatant.level < ability.required_level:
 			continue
 		for reaction in ability.granted_reactions:
+			if reaction != null and not has_reaction(combatant, reaction.id):
+				combatant.active_reactions.append(reaction)
+	for skill in combatant.available_skills:
+		if skill == null:
+			continue
+		for reaction in skill.granted_reactions:
 			if reaction != null and not has_reaction(combatant, reaction.id):
 				combatant.active_reactions.append(reaction)
 
@@ -665,12 +741,12 @@ func get_attack_abilities(combatant, attack) -> Array:
 	var ability_ids: Array[String] = []
 	for ability_id in combatant.equipped_abilities:
 		var ability = get_available_ability(combatant, ability_id)
-		if ability != null and combatant.level >= ability.required_level and not ability_ids.has(ability.id):
+		if ability != null and combatant.level >= ability.required_level and stance_matches(combatant, ability) and not ability_ids.has(ability.id):
 			abilities.append(ability)
 			ability_ids.append(ability.id)
 	if attack != null:
 		for ability in attack.granted_abilities:
-			if ability != null and combatant.level >= ability.required_level and not ability_ids.has(ability.id):
+			if ability != null and combatant.level >= ability.required_level and stance_matches(combatant, ability) and not ability_ids.has(ability.id):
 				abilities.append(ability)
 				ability_ids.append(ability.id)
 	return abilities

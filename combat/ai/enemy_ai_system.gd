@@ -1,7 +1,7 @@
 class_name EnemyAISystem
 extends RefCounted
 
-enum DecisionType { END_TURN, ATTACK, MOVE, SKILL, ABILITY, SEARCH }
+enum DecisionType { END_TURN, ATTACK, MOVE, SKILL, ABILITY, SEARCH, OPEN_DOOR }
 
 const StandardProfile = preload("res://data/ai/standard_ai_profile.tres")
 const AIContextScript = preload("res://combat/ai/ai_context.gd")
@@ -46,6 +46,7 @@ func collect_candidates(system: CombatSystem, context) -> Array:
 	collect_ground_ability_candidates(system, context, candidates)
 	collect_movement_ability_candidates(system, context, candidates)
 	collect_move_candidates(system, context, candidates)
+	collect_door_candidates(system, context, candidates)
 	var end_turn = CandidateScript.new()
 	end_turn.type = CandidateScript.Type.END_TURN
 	end_turn.actor_id = context.actor.id
@@ -61,6 +62,10 @@ func collect_search_candidates(system: CombatSystem, context, candidates: Array)
 	for target in context.enemies:
 		var visibility: Dictionary = system.map_rules.get_visibility(context.actor, target)
 		if not visibility.not_visible:
+			continue
+		# Search can overcome concealment, but it cannot reveal a target hidden by
+		# solid 3D geometry. In that case the AI must follow its walkable route.
+		if not system.map_rules.has_line_of_sight_between(context.actor, target):
 			continue
 		var candidate = CandidateScript.new()
 		candidate.type = CandidateScript.Type.SEARCH
@@ -102,6 +107,31 @@ func collect_move_candidates(system: CombatSystem, context, candidates: Array) -
 		return
 	for target in context.enemies:
 		var attack: AttackData = context.actor.equipped_weapon_attack
+		if system.map_rules.spatial_navigation != null:
+			var route: PackedVector3Array = system.movement_system.spatial_path(context.actor, target.position, context.combat_state, target.surface_id)
+			if route.size() < 2:
+				continue
+			var navigation = system.map_rules.spatial_navigation
+			# Match MovementSystem's combatant clearance so the generated 3D route
+			# remains executable when it ends beside its target.
+			var stop_distance: float = context.actor.collision_radius_feet + target.collision_radius_feet + 0.6
+			var budget: float = minf(system.movement_system.get_available_distance_feet(context.actor), navigation.length_of(route) - stop_distance)
+			if budget <= 0.01:
+				continue
+			route = navigation.truncate(route, budget)
+			if is_spatial_route_blocked(route, context.actor, context.combat_state.combatants):
+				continue
+			var candidate = CandidateScript.new()
+			candidate.type = CandidateScript.Type.MOVE
+			candidate.actor_id = context.actor.id
+			candidate.target_id = target.id
+			candidate.target_position = system.map_rules.building_map.world_to_logic(route[-1])
+			candidate.target_surface_id = navigation.surface_at(route[-1], target.surface_id if is_equal_approx(route[-1].y, target.elevation_feet) else context.actor.surface_id)
+			candidate.position_value = 1.0
+			candidate.resource_cost = move_ap_cost * profile.ap_cost_weight
+			candidate.reason = "Follow the walkable route toward %s." % target.display_name
+			candidates.append(candidate)
+			continue
 		var preferred_range: float = attack.range_feet if attack != null else 5.0
 		var destination := choose_move_destination(system, context.actor, target, preferred_range)
 		if destination == context.actor.position:
@@ -125,6 +155,95 @@ func collect_move_candidates(system: CombatSystem, context, candidates: Array) -
 		else:
 			candidate.reason = "Move toward %s to improve the next action." % target.display_name
 		candidates.append(candidate)
+
+
+func collect_door_candidates(system: CombatSystem, context, candidates: Array) -> void:
+	var rules = system.map_rules
+	if rules.spatial_navigation == null or rules.building_map == null or context.enemies.is_empty():
+		return
+	for surface in rules.building_map.surfaces:
+		if surface != null:
+			_collect_surface_door_candidates(system, context, candidates, surface)
+
+
+func _collect_surface_door_candidates(system: CombatSystem, context, candidates: Array, surface: BuildingSurfaceData) -> void:
+	var rules = system.map_rules
+	var navigation = rules.spatial_navigation
+	var actor: CombatantState = context.actor
+	for door in surface.doors:
+		if door == null or rules.door_is_open(surface.surface_id, door.door_id):
+			continue
+		var key: String = rules.door_key(surface.surface_id, door.door_id)
+		var useful := false
+		for target in context.enemies:
+			var closed_route: PackedVector3Array = navigation.path(actor, target.position, target.surface_id)
+			var open_route: PackedVector3Array = navigation.path(actor, target.position, target.surface_id, key)
+			if open_route.size() < 2:
+				continue
+			if closed_route.size() < 2 or navigation.length_of(open_route) + 6.0 < navigation.length_of(closed_route):
+				useful = true
+				break
+		if not useful:
+			continue
+		var rect := Rect2(rules.building_map.map_to_logic(door.rect.position), door.rect.size)
+		var closest := actor.position.clamp(rect.position, rect.end)
+		if actor.surface_id == surface.surface_id and actor.position.distance_to(closest) <= (actor.collision_radius_feet + 5.0) * rules.world_units_per_foot:
+			if not can_spend_for_action(context, 1):
+				continue
+			var open_candidate = CandidateScript.new()
+			open_candidate.type = CandidateScript.Type.OPEN_DOOR
+			open_candidate.actor_id = actor.id
+			open_candidate.target_surface_id = surface.surface_id
+			open_candidate.door_id = door.door_id
+			open_candidate.position_value = 1.5
+			open_candidate.resource_cost = profile.ap_cost_weight
+			open_candidate.reason = "Open the door to reach an enemy."
+			candidates.append(open_candidate)
+			continue
+		var move_cost := 0 if actor.movement_in_progress else 1
+		if not can_spend_for_action(context, move_cost) or actor.has_status("rooted"):
+			continue
+		var margin: float = (actor.collision_radius_feet + 0.75) * rules.world_units_per_foot
+		var center := rect.get_center()
+		var approaches := [Vector2(rect.position.x - margin, center.y), Vector2(rect.end.x + margin, center.y), Vector2(center.x, rect.position.y - margin), Vector2(center.x, rect.end.y + margin)]
+		var best_route := PackedVector3Array()
+		var best_length := INF
+		for approach in approaches:
+			var route: PackedVector3Array = navigation.path(actor, approach, surface.surface_id)
+			if route.size() < 2 or is_spatial_route_blocked(route, actor, context.combat_state.combatants):
+				continue
+			var length: float = navigation.length_of(route)
+			if length < best_length:
+				best_length = length
+				best_route = route
+		if best_route.size() < 2:
+			continue
+		var budget: float = minf(system.movement_system.get_available_distance_feet(actor), best_length)
+		if budget <= 0.01:
+			continue
+		var partial: PackedVector3Array = navigation.truncate(best_route, budget)
+		var move_candidate = CandidateScript.new()
+		move_candidate.type = CandidateScript.Type.MOVE
+		move_candidate.actor_id = actor.id
+		move_candidate.target_position = rules.building_map.world_to_logic(partial[-1])
+		move_candidate.target_surface_id = navigation.surface_at(partial[-1], actor.surface_id)
+		move_candidate.door_id = door.door_id
+		move_candidate.position_value = 1.4
+		move_candidate.resource_cost = move_cost * profile.ap_cost_weight
+		move_candidate.reason = "Approach the door to reach an enemy."
+		candidates.append(move_candidate)
+
+
+func is_spatial_route_blocked(route: PackedVector3Array, actor: CombatantState, combatants: Dictionary) -> bool:
+	for other in combatants.values():
+		if other == actor or other == null:
+			continue
+		var clearance: float = actor.collision_radius_feet + other.collision_radius_feet + 0.5
+		for index in range(1, route.size()):
+			var nearest := Geometry3D.get_closest_point_to_segment(other.world_position, route[index - 1], route[index])
+			if nearest.distance_to(other.world_position) < clearance:
+				return true
+	return false
 
 
 func collect_skill_candidates(system: CombatSystem, context, candidates: Array) -> void:
@@ -224,10 +343,11 @@ func collect_ground_ability_candidates(system: CombatSystem, context, candidates
 		if not system.validate_ground_ability_start(context.actor.id, ability.id).success:
 			continue
 		var attack: AttackData = system.ability_system.get_attack_data(context.actor, ability)
-		for target_point in get_area_candidate_points(context):
-			if not system.targeting_system.validate_target_point(context.actor, target_point, ability, system.map_rules).success:
+		for target_world in get_area_candidate_points(context):
+			var target_point: Vector2 = Vector2(target_world.x, target_world.z) * system.map_rules.world_units_per_foot
+			if not system.targeting_system.validate_target_point(context.actor, target_point, ability, system.map_rules, -1.0, target_world).success:
 				continue
-			var affected: Array[CombatantState] = system.targeting_system.collect_targets(context.actor, target_point, ability, context.combat_state, system.map_rules)
+			var affected: Array[CombatantState] = system.targeting_system.collect_targets(context.actor, target_point, ability, context.combat_state, system.map_rules, -1.0, target_world)
 			if affected.is_empty():
 				continue
 			var candidate = CandidateScript.new()
@@ -235,6 +355,7 @@ func collect_ground_ability_candidates(system: CombatSystem, context, candidates
 			candidate.actor_id = context.actor.id
 			candidate.target_id = affected[0].id
 			candidate.target_position = target_point
+			candidate.target_world_position = target_world
 			candidate.source_data = ability
 			candidate.expected_damage = float(attack.base_damage * affected.size()) if attack != null else 0.0
 			for target in affected:
@@ -251,6 +372,11 @@ func collect_movement_ability_candidates(system: CombatSystem, context, candidat
 		return
 	var target: CombatantState = context.get_closest_enemy()
 	if target == null:
+		return
+	# The legacy movement-ability destination is planar and cannot select a
+	# staircase surface. Use the normal spatial Move until both actors share a
+	# surface; abilities may be considered again after the transition.
+	if system.map_rules.spatial_navigation != null and context.actor.surface_id != target.surface_id:
 		return
 	for ability in system.ability_system.get_active_abilities(context.actor):
 		var movement = system.ability_system.get_movement_effect(ability)
@@ -308,14 +434,16 @@ func can_spend_for_action(context, ap_cost: int) -> bool:
 	return context.available_ap - ap_cost >= get_reaction_ap_reserve(context)
 
 
-func get_area_candidate_points(context) -> Array[Vector2]:
-	var points: Array[Vector2] = []
+func get_area_candidate_points(context) -> Array[Vector3]:
+	var points: Array[Vector3] = []
 	for enemy in context.enemies:
-		points.append(enemy.position)
+		points.append(enemy.world_position)
 	for left_index in range(context.enemies.size()):
 		for right_index in range(left_index + 1, context.enemies.size()):
-			var midpoint: Vector2 = (context.enemies[left_index].position + context.enemies[right_index].position) * 0.5
-			if not points.any(func(point: Vector2): return point.is_equal_approx(midpoint)):
+			if context.enemies[left_index].surface_id != context.enemies[right_index].surface_id:
+				continue
+			var midpoint: Vector3 = (context.enemies[left_index].world_position + context.enemies[right_index].world_position) * 0.5
+			if not points.any(func(point: Vector3): return point.is_equal_approx(midpoint)):
 				points.append(midpoint)
 	return points
 
@@ -476,7 +604,7 @@ func choose_target(state, actor: CombatantState) -> CombatantState:
 	for candidate in state.combatants.values():
 		if candidate == null or candidate.team == actor.team or candidate.is_dying():
 			continue
-		var distance := actor.position.distance_squared_to(candidate.position)
+		var distance := actor.world_position.distance_squared_to(candidate.world_position)
 		if distance < best_distance:
 			best_distance = distance
 			best_target = candidate
@@ -544,6 +672,8 @@ func build_action_request(system: CombatSystem, decision: Dictionary) -> ActionR
 			return attack_request
 		DecisionType.MOVE:
 			var move_request := ActionRequest.new(decision.get("actor_id", ""), ActionTypes.Type.MOVE)
+			var moving_actor := system.combat_state.get_combatant(move_request.actor_id)
+			moving_actor.requested_surface_id = StringName(decision.get("target_surface_id", &""))
 			move_request.target_id = decision.get("target_id", "")
 			move_request.target_position = decision.get("target_position", Vector2.ZERO)
 			var movement := MovementData.new()
@@ -563,10 +693,12 @@ func execute_decision(system: CombatSystem, decision: Dictionary) -> ActionResul
 	var result: ActionResult
 	if int(decision.get("type", DecisionType.END_TURN)) == DecisionType.SEARCH:
 		result = system.use_search(decision.get("actor_id", ""), decision.get("target_id", ""))
+	elif int(decision.get("type", DecisionType.END_TURN)) == DecisionType.OPEN_DOOR:
+		result = system.interact_door(decision.get("actor_id", ""), StringName(decision.get("target_surface_id", &"")), StringName(decision.get("door_id", &"")))
 	elif int(decision.get("type", DecisionType.END_TURN)) == DecisionType.ABILITY:
 		var candidate = decision.get("candidate")
 		if candidate.source_data.target_mode == AbilityData.TargetMode.GROUND:
-			result = system.execute_ground_ability(candidate.actor_id, candidate.source_data.id, candidate.target_position)
+			result = system.execute_ground_ability(candidate.actor_id, candidate.source_data.id, candidate.target_position, candidate.target_world_position)
 		elif system.ability_system.get_movement_effect(candidate.source_data) != null:
 			var started := system.begin_ability_movement(candidate.actor_id, candidate.source_data.id)
 			if not started.success:

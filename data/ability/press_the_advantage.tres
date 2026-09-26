@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bthd5pd33gx4x"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_ditdy"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_f8ydn"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="effect"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="passive"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="WoundedTargetDamage"]
+script = ExtResource("effect")
+effect_type = 3
+required_attack_trait_ids = Array[String](["melee"])
+first_successful_hit_per_turn = true
+alternate_target_hp_at_or_below_percent = 50
+alternate_flat_damage_bonus = 3
+
+[resource]
+script = ExtResource("ability")
+id = "press_the_advantage"
+display_name = "Press the Advantage"
+required_level = 2
+prerequisite_id = "opening_strike"
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "assault_stance"
+traits = [ExtResource("warrior"), ExtResource("passive")]
+is_passive = true
+description = "While in Assault Stance, the first successful melee hit each turn against a target at half HP or less deals 3 extra damage."
+effects = [SubResource("WoundedTargetDamage")]

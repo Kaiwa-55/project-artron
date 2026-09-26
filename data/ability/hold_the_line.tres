@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://h8ort32ckjc2"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_eb1pi"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="2_j7a3l"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/effect/hold_the_line.tres" id="line_effect"]
+[ext_resource type="Script" uid="uid://bhvo6uw77w3o1" path="res://data/ability/ability_use_effect_data.gd" id="use"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[sub_resource type="Resource" id="Apply"]
+script = ExtResource("use")
+effect = ExtResource("line_effect")
+
+[resource]
+script = ExtResource("ability")
+id = "hold_the_line"
+display_name = "Hold the Line"
+required_level = 3
+prerequisite_id = "interpose"
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "bulwark_stance"
+traits = [ExtResource("warrior")]
+ap_cost = 2
+cooldown_turns = 3
+description = "ขณะอยู่ใน Bulwark Stance ใช้ 2 AP ให้ตนเองและพันธมิตรในระยะ 5 ฟุตได้ Defense +2 จนถึงต้นเทิร์นถัดไป คูลดาวน์ 3 เทิร์น"
+target_mode = 1
+use_effects = [SubResource("Apply")]

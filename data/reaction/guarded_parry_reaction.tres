@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://co7o2wmstj3k7"]
+
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="effect"]
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="reaction"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+
+[sub_resource type="Resource" id="Defense"]
+script = ExtResource("effect")
+amount = 2
+
+[resource]
+script = ExtResource("reaction")
+id = "guarded_parry_reaction"
+display_name = "Guarded Parry"
+description = "When a melee attack hits you, spend 1 AP to gain Defense +2 against that attack."
+traits = [ExtResource("reactive")]
+trigger = 1
+auto_resolve = false
+defense_bonus = 2
+required_trait_id = "warrior"
+melee_only = true
+effects = [SubResource("Defense")]
+uses_per_round = 1

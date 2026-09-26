@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://cm1xiy6krh40g"]
+
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_5i5kj"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_28hs1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Script" uid="uid://cjv64lfyn6a2a" path="res://data/ability/ability_effect_data.gd" id="effect"]
+[ext_resource type="Resource" path="res://data/trait/passive.tres" id="passive"]
+
+[sub_resource type="Resource" id="ToHit"]
+script = ExtResource("effect")
+effect_type = 1
+passive_value = 2
+required_attack_trait_ids = Array[String](["simple"])
+
+[resource]
+script = ExtResource("ability")
+id = "simple_weapon_training"
+display_name = "Simple Weapon Training"
+required_level = 0
+learnable_ancestry_ids = Array[String](["human"])
+traits = [ExtResource("passive")]
+is_passive = true
+description = "โจมตีด้วยอาวุธประเภท Simple ได้โบนัส To Hit +2"
+effects = [SubResource("ToHit")]

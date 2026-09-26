@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="AbilityData" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="AbilityData" format=3 uid="uid://bdincxchriglq"]
 
-[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://bywi0gdbk35dn" path="res://data/ability/ability_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/ability/effect/arcane_aim_to_hit.tres" id="2"]
+[ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_lvgcy"]
 [ext_resource type="Resource" path="res://data/trait/passive.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_qnqna"]
 [ext_resource type="Resource" path="res://data/trait/arcanist.tres" id="4"]
 
 [resource]
@@ -13,5 +15,5 @@ required_level = 2
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3"), ExtResource("4")]
 is_passive = true
-description = "Passive. Your attacks from Arcane Skills gain +1 To Hit."
+description = "การโจมตีด้วยสกิลสายอาร์เคนได้รับค่าโจมตี +1"
 effects = [ExtResource("2")]

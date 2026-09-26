@@ -15,6 +15,6 @@ traits = [ExtResource("3")]
 auto_equip_on_grant = true
 ap_cost = 1
 cooldown_turns = 2
-description = "Rush up to 20 ft without passing through obstacles or creatures."
+description = "ใช้ 1 AP พุ่งได้สูงสุด 20 ฟุตโดยไม่ผ่านตัวละครหรือสิ่งกีดขวาง คูลดาวน์ 2 เทิร์น"
 effects = [ExtResource("2")]
 target_mode = 1

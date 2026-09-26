@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://bk8x1bp3mr581"]
+
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="effect"]
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="reaction"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+
+[sub_resource type="Resource" id="Reduction"]
+script = ExtResource("effect")
+effect_type = 9
+amount = 3
+
+[resource]
+script = ExtResource("reaction")
+id = "brace_for_impact_reaction"
+display_name = "Brace for Impact"
+description = "When an attack hits you, spend 1 AP to reduce its damage by 3."
+traits = [ExtResource("reactive")]
+trigger = 5
+reach_feet = 0.0
+auto_resolve = false
+required_trait_id = "warrior"
+effects = [SubResource("Reduction")]
+uses_per_round = 1

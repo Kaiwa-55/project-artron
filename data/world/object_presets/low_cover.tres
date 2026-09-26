@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuildingObjectPresetData" format=3]
+
+[ext_resource type="Script" path="res://data/world/building_object_preset_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+preset_id = &"low_cover"
+display_name = "Low Cover"
+default_size_pixels = Vector2(80, 20)
+height_feet = 3.0
+blocks_movement = true
+blocks_line_of_sight = true
+color = Color(0.36, 0.39, 0.42, 1)

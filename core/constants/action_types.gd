@@ -5,7 +5,8 @@ extends RefCounted
 enum Type {
 	ATTACK,
 	MOVE,
-	SKILL
+	SKILL,
+	RELOAD
 }
 
 

@@ -10,6 +10,7 @@ const RUN_MAP_SCENE := "res://scenes/run/RunMap.tscn"
 var run_state: RunState
 var node: MapNodeData
 var reward_system := RewardSystem.new()
+var recipient_picker: OptionButton
 
 
 func _ready() -> void:
@@ -28,8 +29,21 @@ func _ready() -> void:
 	if run_state.reward_claimed_node_ids.has(node.id):
 		return_to_map()
 		return
-	title_label.text = "VICTORY REWARD"
-	subtitle_label.text = "%s • Choose one reward" % node.get_display_name()
+	if node.node_type == MapNodeData.NodeType.TREASURE:
+		title_label.text = "TREASURE CACHE"
+		subtitle_label.text = "Choose one reward and a recipient for any item"
+		recipient_picker = OptionButton.new()
+		recipient_picker.name = "RecipientPicker"
+		for member_id in run_state.party_progression_states:
+			var member: CombatantState = run_state.party_progression_states[member_id]
+			if member != null:
+				recipient_picker.add_item(member.display_name)
+				recipient_picker.set_item_metadata(recipient_picker.item_count - 1, member_id)
+		$Margin/Layout.add_child(recipient_picker)
+		$Margin/Layout.move_child(recipient_picker, cards.get_index())
+	else:
+		title_label.text = "VICTORY REWARD"
+		subtitle_label.text = "%s • Choose one reward" % node.get_display_name()
 	build_cards(reward_system.generate_choices(run_state, node))
 	status_label.text = "Run Gold: %d" % run_state.gold
 
@@ -80,7 +94,8 @@ func _apply_responsive_layout() -> void:
 
 
 func select_reward(reward: RewardOptionData) -> void:
-	if not reward_system.claim(run_state, node.id, reward):
+	var recipient_id := String(recipient_picker.get_selected_metadata()) if recipient_picker != null and recipient_picker.selected >= 0 else ""
+	if not reward_system.claim(run_state, node.id, reward, recipient_id):
 		return
 	for card in cards.get_children():
 		if card is Button:
@@ -92,6 +107,7 @@ func select_reward(reward: RewardOptionData) -> void:
 
 func return_to_map() -> void:
 	get_tree().set_meta("active_run_state", run_state)
+	get_tree().remove_meta("active_run_node_id")
 	get_tree().remove_meta("active_encounter_data")
 	var change_error := get_tree().change_scene_to_file(RUN_MAP_SCENE)
 	if change_error != OK:

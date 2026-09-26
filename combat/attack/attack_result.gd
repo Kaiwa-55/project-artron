@@ -10,21 +10,26 @@ var defense: int = 0
 var margin: int = 0
 
 var attack_modifier: int = 0
+var to_hit_breakdown: Array[Dictionary] = []
 var repeated_attack_penalty: int = 0
+var offhand_penalty: int = 0
 var visibility_penalty: int = 0
 
 var damage: int = 0
+var damage_breakdown: Array[Dictionary] = []
 var conditional_damage_bonus: int = 0
 var damage_bonus_source: String = ""
 var conditional_damage_bonuses: Array[Dictionary] = []
 var critical: bool = false
 var critical_roll: int = 0
+var critical_chance: int = 0
 var immune: bool = false
 var triggered_abilities: Array[Dictionary] = []
 var resistance: int = 0
 var final_damage: int = 0
 var reaction_damage_reduction: int = 0
 var redirected_damage_target: CombatantState
+var redirect_hit_effects: bool = false
 var finishing_gauge_gained: int = 0
 
 var applied_effects: Array[String] = []

@@ -16,9 +16,10 @@ func _init() -> void:
 
 	var sword = find_item(player, "sword")
 	var spear = find_item(player, "long_spear")
+	var dagger = find_item(player, "dagger")
 	var armor = find_item(player, "leather_armor")
 	var shield = find_item(player, "buckler")
-	check(player.equipped_items.get(0) == sword, "starting Weapon should occupy Weapon slot 1")
+	check(player.equipped_items.get(0) == dagger, "starting Dagger should occupy Weapon slot 1")
 	check(not player.equipped_items.has(3), "Weapon slot 2 should start empty")
 
 	var armor_result := system.toggle_equipment(player.id, armor)

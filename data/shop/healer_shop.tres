@@ -2,16 +2,52 @@
 
 [ext_resource type="Script" uid="uid://puwk2c6cvm6q" path="res://data/shop/shop_data.gd" id="1_shop"]
 [ext_resource type="Script" uid="uid://di4maw5cs6h6d" path="res://data/shop/shop_offer_data.gd" id="2_offer"]
-[ext_resource type="Resource" path="res://data/item/minor_healing_potion.tres" id="3_potion"]
+[ext_resource type="Resource" uid="uid://d2qqwwh5i6son" path="res://data/item/minor_healing_potion.tres" id="3_potion"]
+[ext_resource type="Resource" path="res://data/item/mana_vial.tres" id="4_mana"]
+[ext_resource type="Resource" path="res://data/item/antidote_kit.tres" id="5_antidote"]
+[ext_resource type="Resource" path="res://data/item/focus_draught.tres" id="6_focus"]
+[ext_resource type="Resource" path="res://data/item/greater_healing_potion.tres" id="7_greater_healing"]
+[ext_resource type="Resource" path="res://data/item/emergency_bandage.tres" id="8_bandage"]
+[ext_resource type="Resource" path="res://data/item/greater_mana_vial.tres" id="9_greater_mana"]
 
 [sub_resource type="Resource" id="PotionOffer"]
 script = ExtResource("2_offer")
 product = ExtResource("3_potion")
 price = 25
 
+[sub_resource type="Resource" id="ManaOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("4_mana")
+price = 25
+
+[sub_resource type="Resource" id="AntidoteOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("5_antidote")
+price = 25
+
+[sub_resource type="Resource" id="FocusOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("6_focus")
+price = 32
+
+[sub_resource type="Resource" id="GreaterHealingOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("7_greater_healing")
+price = 60
+
+[sub_resource type="Resource" id="BandageOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("8_bandage")
+price = 30
+
+[sub_resource type="Resource" id="GreaterManaOffer"]
+script = ExtResource("2_offer")
+product = ExtResource("9_greater_mana")
+price = 40
+
 [resource]
 script = ExtResource("1_shop")
 id = "healer"
 display_name = "WAYFARER'S APOTHECARY"
 description = "Fresh supplies for the road."
-offers = Array[Resource]([SubResource("PotionOffer")])
+offers = Array[Resource]([SubResource("PotionOffer"), SubResource("ManaOffer"), SubResource("AntidoteOffer"), SubResource("FocusOffer"), SubResource("GreaterHealingOffer"), SubResource("BandageOffer"), SubResource("GreaterManaOffer")])

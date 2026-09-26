@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://data/skill/skill_data.gd" id="skill"]
+[ext_resource type="Resource" path="res://data/effect/arcane_shield.tres" id="effect"]
+[ext_resource type="Resource" path="res://data/trait/arcane.tres" id="arcane"]
+[ext_resource type="Resource" path="res://data/reaction/arcane_shield_reaction.tres" id="reaction"]
+
+[resource]
+script = ExtResource("skill")
+id = "arcane_shield"
+display_name = "Arcane Shield"
+spell_level = 1
+traits = [ExtResource("arcane")]
+description = "Cast for 1 AP and 2 Mana to gain +2 Reflex, Fortitude, and Will until the start of your next turn; or use a Reaction when hit for +2 Defense against that attack and 2 Mana. Both uses share a 2-turn cooldown."
+mana_cost = 2
+ap_cost = 1
+cooldown_turns = 2
+self_effect = ExtResource("effect")
+granted_reactions = Array[ReactionData]([ExtResource("reaction")])
+target_mode = 1
+target_filter = 1

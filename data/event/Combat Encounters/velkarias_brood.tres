@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://djcntrvn53ebw"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_tdfdq"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_ex0xg"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_vg4fx"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4_b362a"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_laxlr"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="6_6o4ja"]
+[ext_resource type="Resource" uid="uid://cfka8kbn040md" path="res://data/character/velkaria.tres" id="7_gh4ib"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="8_eyrin"]
+[ext_resource type="Resource" uid="uid://cwpas6877a5rx" path="res://data/character/spider.tres" id="9_r6hqb"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="10_8tm2v"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="11_3i4y8"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="12_qntgc"]
+[ext_resource type="Resource" path="res://data/item/warding_charm.tres" id="reward_item_0"]
+[ext_resource type="Resource" path="res://data/item/mana_vial.tres" id="reward_item_1"]
+
+[sub_resource type="Resource" id="Resource_llkaf"]
+script = ExtResource("8_eyrin")
+id = "queen"
+enemy = ExtResource("7_gh4ib")
+spawn_center_feet = Vector2(37, 0)
+
+[sub_resource type="Resource" id="Resource_oh23g"]
+script = ExtResource("8_eyrin")
+id = "brood"
+enemy = ExtResource("9_r6hqb")
+count = 2
+spawn_center_feet = Vector2(13, 10)
+
+[sub_resource type="Resource" id="Resource_bn0gi"]
+script = ExtResource("10_8tm2v")
+id = &"goal_velkarias_brood"
+description = "กำจัดเวลคาเรีย"
+type = 1
+target_id = "queen_velkaria"
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Reward_0"]
+script = ExtResource("3_vg4fx")
+type = 2
+amount = 2
+item = ExtResource("reward_item_0")
+
+[sub_resource type="Resource" id="Reward_1"]
+script = ExtResource("3_vg4fx")
+type = 2
+amount = 2
+item = ExtResource("reward_item_1")
+
+[sub_resource type="Resource" id="Reward_xp"]
+script = ExtResource("3_vg4fx")
+type = 11
+amount = 250
+
+[sub_resource type="Resource" id="Victory_choice"]
+script = ExtResource("1_tdfdq")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Victory_event"]
+script = ExtResource("12_qntgc")
+id = &"victory_velkarias_brood"
+title = "พิชิตรังของเวลคาเรีย"
+description = "คุณเก็บเครื่องรางคุ้มครอง 2 ชิ้นและขวดมานา 2 ขวดจากรัง และทุกคนได้รับ 250 XP"
+illustration = ExtResource("5_laxlr")
+choices = Array[ExtResource("1_tdfdq")]([SubResource("Victory_choice")])
+
+[sub_resource type="Resource" id="Resource_0txwf"]
+script = ExtResource("11_3i4y8")
+id = "event_velkarias_brood"
+display_name = "รังของเวลคาเรีย"
+encounter_name = "รังของเวลคาเรีย"
+encounter_description = "กำจัดเวลคาเรีย หากเข้าถึงตัวเธอได้ ก็ไม่จำเป็นต้องกำจัดลูกสมุนทั้งหมด"
+encounter_image = ExtResource("5_laxlr")
+type = 5
+battlefield_texture = ExtResource("4_b362a")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-45, 0), Vector2(-53, -10), Vector2(-53, 10)])
+enemy_groups = Array[Resource]([SubResource("Resource_llkaf"), SubResource("Resource_oh23g")])
+objectives = Array[ExtResource("10_8tm2v")]([SubResource("Resource_bn0gi")])
+victory_event = SubResource("Victory_event")
+rewards = Array[Resource]([SubResource("Reward_0"), SubResource("Reward_1"), SubResource("Reward_xp")])
+
+[sub_resource type="Resource" id="Resource_dwyfs"]
+script = ExtResource("1_tdfdq")
+text = "ท้าสู้กับเวลคาเรีย"
+encounter = SubResource("Resource_0txwf")
+
+[sub_resource type="Resource" id="Resource_nr88q"]
+script = ExtResource("1_tdfdq")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("12_qntgc")
+id = &"velkarias_brood"
+title = "รังของเวลคาเรีย"
+description = "โพรงที่ปกคลุมด้วยใยแมงมุมอยู่เบื้องหน้า เวลคาเรียรออยู่กลางรัง โดยมีแมงมุมตัวเล็กเฝ้าทางเข้า"
+illustration = ExtResource("5_laxlr")
+choices = Array[ExtResource("1_tdfdq")]([SubResource("Resource_dwyfs"), SubResource("Resource_nr88q")])

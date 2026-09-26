@@ -1,0 +1,83 @@
+[gd_resource type="Resource" script_class="EventData" format=3 uid="uid://dj8wsbhwlekoh"]
+
+[ext_resource type="Script" uid="uid://bvaeeo3eqywqf" path="res://data/event/event_choice.gd" id="1_2cntw"]
+[ext_resource type="Script" uid="uid://tv77tod2hxiq" path="res://data/event/event_condition.gd" id="2_3ebwm"]
+[ext_resource type="Script" uid="uid://tj14nr7yv2rr" path="res://data/event/event_effect.gd" id="3_ljptt"]
+[ext_resource type="Texture2D" uid="uid://cti3yrk3vnyh5" path="res://assets/Map/Desert 1.png" id="4_atvto"]
+[ext_resource type="Texture2D" uid="uid://dcaqs5358qoc2" path="res://assets/events/Desert.png" id="5_rqhhp"]
+[ext_resource type="Script" uid="uid://bpjwup2egkfdd" path="res://data/character/character_data.gd" id="6_4jgsx"]
+[ext_resource type="Resource" uid="uid://ds82lj3p3nfhw" path="res://data/character/thornscale_ravager.tres" id="7_2gb6g"]
+[ext_resource type="Script" uid="uid://brcekxnu4c7ug" path="res://data/encounter/enemy_group_data.gd" id="8_m5scs"]
+[ext_resource type="Script" uid="uid://c0tmlmqtwpykc" path="res://data/encounter/encounter_objective.gd" id="9_sb0xn"]
+[ext_resource type="Script" uid="uid://beu8h0igakv0r" path="res://data/encounter/encounter_data.gd" id="10_sy66i"]
+[ext_resource type="Script" uid="uid://w32bv4ws7ufq" path="res://data/event/event_data.gd" id="11_s8ya6"]
+[ext_resource type="Resource" path="res://data/item/smoke_flask.tres" id="reward_item_0"]
+
+[sub_resource type="Resource" id="Resource_8o82a"]
+script = ExtResource("8_m5scs")
+id = "hunter"
+enemy = ExtResource("7_2gb6g")
+spawn_center_feet = Vector2(8, 0)
+
+[sub_resource type="Resource" id="Resource_uupls"]
+script = ExtResource("9_sb0xn")
+id = &"goal_escape_the_ravager"
+description = "ไปถึงทางออกที่ทำเครื่องหมายไว้"
+type = 3
+area_center_feet = Vector2(65, 0)
+area_radius_feet = 8.0
+
+[sub_resource type="Resource" id="Reward_0"]
+script = ExtResource("3_ljptt")
+type = 2
+amount = 2
+item = ExtResource("reward_item_0")
+
+[sub_resource type="Resource" id="Reward_xp"]
+script = ExtResource("3_ljptt")
+type = 11
+amount = 90
+
+[sub_resource type="Resource" id="Victory_choice"]
+script = ExtResource("1_2cntw")
+text = "เดินทางต่อ"
+
+[sub_resource type="Resource" id="Victory_event"]
+script = ExtResource("11_s8ya6")
+id = &"victory_escape_the_ravager"
+title = "หนีพ้นแรเวเจอร์"
+description = "คุณพบขวดควัน 2 ขวดข้างทางออก และทุกคนได้รับ 90 XP"
+illustration = ExtResource("5_rqhhp")
+choices = Array[ExtResource("1_2cntw")]([SubResource("Victory_choice")])
+
+[sub_resource type="Resource" id="Resource_hdx77"]
+script = ExtResource("10_sy66i")
+id = "event_escape_the_ravager"
+display_name = "หนีจากแรเวเจอร์"
+encounter_name = "หนีจากแรเวเจอร์"
+encounter_description = "ไปถึงทางออกที่ทำเครื่องหมายไว้ก่อนแรเวเจอร์จะไล่ทัน"
+encounter_image = ExtResource("5_rqhhp")
+type = 4
+battlefield_texture = ExtResource("4_atvto")
+player_spawn_positions_feet = Array[Vector2]([Vector2(-65, 0), Vector2(-73, -10), Vector2(-73, 10)])
+enemy_groups = Array[Resource]([SubResource("Resource_8o82a")])
+objectives = Array[ExtResource("9_sb0xn")]([SubResource("Resource_uupls")])
+victory_event = SubResource("Victory_event")
+rewards = Array[Resource]([SubResource("Reward_0"), SubResource("Reward_xp")])
+
+[sub_resource type="Resource" id="Resource_27m4c"]
+script = ExtResource("1_2cntw")
+text = "วิ่งไปยังทางออก"
+encounter = SubResource("Resource_hdx77")
+
+[sub_resource type="Resource" id="Resource_6nffl"]
+script = ExtResource("1_2cntw")
+text = "เลือกเส้นทางอื่น"
+
+[resource]
+script = ExtResource("11_s8ya6")
+id = &"escape_the_ravager"
+title = "หนีจากแรเวเจอร์"
+description = "แรเวเจอร์พุ่งมาตามถนนโล่ง รอบตัวไม่มีที่กำบัง แต่มีทางออกแคบอยู่ไกลออกไป"
+illustration = ExtResource("5_rqhhp")
+choices = Array[ExtResource("1_2cntw")]([SubResource("Resource_27m4c"), SubResource("Resource_6nffl")])

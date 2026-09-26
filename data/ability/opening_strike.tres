@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://data/ability/ability_data.gd" id="ability"]
+[ext_resource type="Resource" path="res://data/trait/warrior.tres" id="warrior"]
+
+[resource]
+script = ExtResource("ability")
+id = "opening_strike"
+display_name = "Opening Strike"
+required_level = 1
+required_trait_ids = Array[String](["warrior"])
+required_stance_id = "assault_stance"
+traits = [ExtResource("warrior")]
+description = "ขณะอยู่ใน Assault Stance ใช้ 1 AP โจมตีประชิด เมื่อโจมตีโดน การโจมตีครั้งถัดไปใส่เป้าหมายเดิมในเทิร์นนี้ได้โบนัสความแม่นยำ +1"
+ap_cost = 1
+on_hit_next_attack_to_hit_bonus = 1
+uses_equipped_weapon_attack = true
+required_attack_trait_ids = Array[String](["melee"])
+attack_source = 1

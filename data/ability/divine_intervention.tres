@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="1_alj71"]
 [ext_resource type="Resource" path="res://data/trait/devotee.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/divine.tres" id="3"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="3_lnrbk"]
 [ext_resource type="Resource" path="res://data/trait/reactive.tres" id="4"]
 [ext_resource type="Resource" uid="uid://bi23s6k52nyto" path="res://data/reaction/divine_intervention_reaction.tres" id="5"]
 
@@ -16,5 +17,5 @@ required_trait_ids = Array[String](["devotee"])
 traits = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
 reaction_only = true
 ap_cost = 1
-description = "Reaction. When an ally within 30 ft would take Attack damage, spend 1 AP and 2 Faith to reduce it by floor(Faith / 2), minimum 1. Requires line of sight and cannot target yourself."
+description = "เมื่อพวกเดียวกันในระยะ 30 ฟุตกำลังจะรับความเสียหายจากการโจมตี ใช้ปฏิกิริยาตอบโต้ 1 AP และ 2 Faith เพื่อลดความเสียหายอย่างน้อย 1 ตาม Faith หาร 2 โดยปัดเศษลง ต้องมองเห็นเป้าหมายและใช้กับตนเองไม่ได้"
 granted_reactions = [ExtResource("5")]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EffectData" format=3]
+
+[ext_resource type="Script" path="res://data/effect/effect_data.gd" id="effect"]
+
+[resource]
+script = ExtResource("effect")
+id = "arcane_shield"
+display_name = "Arcane Shield"
+duration_turns = 1
+expire_at_start_of_turn = true
+reflex_bonus = 2
+fortitude_bonus = 2
+will_bonus = 2

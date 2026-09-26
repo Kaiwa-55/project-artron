@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" format=3]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://02ofvyl101h3"]
 
-[ext_resource type="Script" path="res://data/skill/skill_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://htjr7oj5ledf" path="res://data/skill/skill_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/attack/arcane_shatter.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/arcane.tres" id="3"]
 
@@ -10,7 +10,7 @@ id = "arcane_shatter"
 display_name = "Arcane Shatter"
 spell_level = 2
 traits = [ExtResource("3")]
-description = "Fire an arcane blast at an enemy within 30 ft. Deal 6 Arcane damage and apply Dazed on Hit."
+description = "ใช้ 2 AP และ 3 มานา โจมตีศัตรูในระยะ 30 ฟุต สร้างความเสียหายอาร์เคนพื้นฐาน 6 และทำให้ติดมึนงงเมื่อโจมตีโดน คูลดาวน์ 2 เทิร์น"
 mana_cost = 3
 ap_cost = 2
 cooldown_turns = 2

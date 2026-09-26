@@ -22,7 +22,7 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [node name="CombatLogActionCard" type="PanelContainer"]
-custom_minimum_size = Vector2(0, 112)
+custom_minimum_size = Vector2(0, 0)
 theme_override_styles/panel = SubResource("CardStyle")
 script = ExtResource("1")
 
@@ -51,7 +51,7 @@ clip_text = true
 layout_mode = 2
 text = "ATTACK"
 
-[node name="Resolution" type="HBoxContainer" parent="Margin/Content"]
+[node name="Resolution" type="VBoxContainer" parent="Margin/Content"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
@@ -142,5 +142,4 @@ theme_override_colors/font_color = Color(0.62, 0.68, 0.72, 1)
 theme_override_font_sizes/font_size = 12
 text = "Details"
 autowrap_mode = 2
-max_lines_visible = 2
-text_overrun_behavior = 3
+max_lines_visible = -1

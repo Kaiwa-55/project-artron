@@ -20,5 +20,5 @@ display_name = "Arcane Focus"
 required_trait_ids = Array[String](["arcanist"])
 traits = [ExtResource("3_passive"), ExtResource("4_arcanist")]
 is_passive = true
-description = "Passive. Your Skills cost 1 less Mana, to a minimum cost of 1 Mana."
+description = "สกิลทุกชนิดใช้มานาลดลง 1 แต่ต้องใช้มานาอย่างน้อย 1"
 effects = [SubResource("ArcaneFocusDiscount")]

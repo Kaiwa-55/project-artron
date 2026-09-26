@@ -22,18 +22,20 @@ func _init() -> void:
 	var system := CombatSystem.new()
 	system.start_combat([player, enemy])
 	system.combat_state.current_actor_id = player.id
-	var ranged: AttackData = load("res://data/attack/shortbow.tres")
+	var ranged: AttackData = system.equipment_system.create_ammunition_attack(load("res://data/attack/shortbow.tres"), load("res://data/item/standard_arrow.tres"))
 	var melee: AttackData = player.equipped_weapon_attack
+	var ranged_baseline: int = system.ability_system.get_to_hit_bonus(player, ranged, 19.99)
+	var melee_baseline: int = system.ability_system.get_to_hit_bonus(player, melee, 0.0)
 	check(player.equipped_abilities.has("deadeye"), "Learned Deadeye is equipped")
-	check(system.ability_system.get_to_hit_bonus(player, ranged, 19.99) == 0, "Target below 20 ft is ineligible")
+	check(system.ability_system.get_to_hit_bonus(player, ranged, 19.99) == ranged_baseline, "Target below 20 ft is ineligible")
 	check(int(player.ability_uses_this_turn.get("deadeye", 0)) == 0, "Ineligible attack does not spend use")
-	check(system.ability_system.get_to_hit_bonus(player, melee, 20.0) == 0, "Melee attack is ineligible")
+	check(system.ability_system.get_to_hit_bonus(player, melee, 20.0) == melee_baseline, "Melee attack is ineligible")
 	check(int(player.ability_uses_this_turn.get("deadeye", 0)) == 0, "Melee attack does not spend use")
-	check(system.ability_system.get_to_hit_bonus(player, ranged, 20.0) == 1, "Exactly 20 ft gains +1 To Hit")
+	check(system.ability_system.get_to_hit_bonus(player, ranged, 20.0) == ranged_baseline + 1, "Exactly 20 ft gains +1 To Hit")
 	check(int(player.ability_uses_this_turn.get("deadeye", 0)) == 1, "Eligible declaration spends the use")
-	check(system.ability_system.get_to_hit_bonus(player, ranged, 25.0) == 0, "Further ranged attacks this Turn gain no bonus")
+	check(system.ability_system.get_to_hit_bonus(player, ranged, 25.0) == ranged_baseline, "Further ranged attacks this Turn gain no bonus")
 	system.turn_system.start_turn(system.combat_state)
-	check(system.ability_system.get_to_hit_bonus(player, ranged, 30.0) == 1, "New Turn restores Deadeye")
+	check(system.ability_system.get_to_hit_bonus(player, ranged, 30.0) == ranged_baseline + 1, "New Turn restores Deadeye")
 	# Runtime distance is measured edge-to-edge like targeting.
 	system.turn_system.start_turn(system.combat_state)
 	player.position = Vector2.ZERO
@@ -42,7 +44,7 @@ func _init() -> void:
 	player.ap = player.max_ap
 	var result := system.attack_system.resolve_attack(player, enemy, ranged)
 	var base_modifier: int = player.get_attribute_modifier(ranged.attack_attribute) + ranged.to_hit_bonus + system.effect_system.get_attack_bonus(player)
-	check(result.attack_modifier == base_modifier + 1, "Attack resolution applies Deadeye at edge distance")
+	check(result.attack_modifier == base_modifier + ranged_baseline + 1, "Attack resolution applies Deadeye at edge distance")
 	check(not result.hit and int(player.ability_uses_this_turn.get("deadeye", 0)) == 1, "Miss still consumes the first Attack use")
 	for failure in failures:
 		push_error(failure)

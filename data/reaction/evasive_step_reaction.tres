@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ReactionData" format=3 uid="uid://c068v8agrn0pe"]
+
+[ext_resource type="Script" uid="uid://dqbqrq4k0yppq" path="res://data/reaction/reaction_effect_data.gd" id="effect"]
+[ext_resource type="Script" uid="uid://bn2rqsypxi0td" path="res://data/reaction/reaction_data.gd" id="reaction"]
+[ext_resource type="Resource" path="res://data/trait/reactive.tres" id="reactive"]
+
+[sub_resource type="Resource" id="Movement"]
+script = ExtResource("effect")
+effect_type = 3
+distance_feet = 10.0
+
+[resource]
+script = ExtResource("reaction")
+id = "evasive_step_reaction"
+display_name = "Evasive Step"
+traits = [ExtResource("reactive")]
+trigger = 10
+auto_resolve = false
+ap_cost = 0
+required_stance_id = "duelist_stance"
+effects = [SubResource("Movement")]
+uses_per_round = 1

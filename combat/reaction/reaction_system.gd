@@ -3,6 +3,7 @@ extends RefCounted
 
 const ReactionDataScript = preload("res://data/reaction/reaction_data.gd")
 const ReactionEffectDataScript = preload("res://data/reaction/reaction_effect_data.gd")
+const WardingCharmReaction = preload("res://data/reaction/warding_charm_reaction.tres")
 
 var attack_system: AttackSystem
 var action_system: ActionSystem
@@ -148,6 +149,9 @@ func get_post_hit_prompt(attacker, target, attack: AttackData, attack_result, cu
 			continue
 		if target.ap < reaction.ap_cost or (reaction.required_trait_id != "" and not has_trait(target, reaction.required_trait_id)):
 			continue
+		if not reaction.source_skill_id.is_empty():
+			if not can_use_skill_reaction(target, reaction):
+				continue
 		if reaction.uses_per_round > 0 and current_round > 0 and int(target.reaction_last_used_round.get(reaction.id, 0)) == current_round:
 			continue
 		if reaction.melee_only and not attack_has_melee_trait(attack):
@@ -174,6 +178,8 @@ func get_post_hit_prompt(attacker, target, attack: AttackData, attack_result, cu
 			if reaction_attack == null or not map_rules.is_target_in_range(target, attacker, reaction_attack.range_feet):
 				continue
 		available_reactions.append(reaction)
+	if target.team == 1 and target.item_inventory.any(func(stack): return stack != null and stack.item != null and stack.item.id == "warding_charm" and stack.quantity > 0):
+		available_reactions.append(WardingCharmReaction)
 	if available_reactions.is_empty():
 		return {}
 	return {
@@ -183,6 +189,13 @@ func get_post_hit_prompt(attacker, target, attack: AttackData, attack_result, cu
 		"prepared_attack": attack_result,
 		"prepared_attack_data": attack
 	}
+
+
+func can_use_skill_reaction(reactor: CombatantState, reaction: ReactionData) -> bool:
+	if reaction == null or reaction.source_skill_id.is_empty():
+		return true
+	var skill: SkillData = action_system.skill_system.get_available_skill(reactor, reaction.source_skill_id)
+	return skill != null and not reactor.has_status("silenced") and reactor.mana >= action_system.skill_system.get_effective_mana_cost(reactor, skill) and action_system.skill_system.get_remaining_cooldown(reactor, skill.id) == 0
 
 
 func get_ally_damage_reaction_prompt(attacker, target, attack: AttackData, attack_result, combat_state: CombatState) -> Dictionary:
@@ -202,11 +215,17 @@ func get_ally_damage_reaction_prompt(attacker, target, attack: AttackData, attac
 				continue
 			if reactor.ap < reaction.ap_cost or reactor.get_total_faith() < reaction.faith_cost:
 				continue
+			if reaction.uses_per_round > 0 and int(reactor.reaction_last_used_round.get(reaction.id, 0)) == combat_state.current_round:
+				continue
 			if reaction.required_trait_id != "" and not has_trait(reactor, reaction.required_trait_id):
+				continue
+			if not reaction_stance_matches(reactor, reaction):
+				continue
+			if reaction.id == "interpose_reaction" and not has_equipped_shield(reactor):
 				continue
 			if map_rules.get_edge_distance_world_units(reactor, target) > reaction.reach_feet * map_rules.world_units_per_foot:
 				continue
-			if reaction.requires_line_of_sight and not map_rules.has_line_of_sight(reactor.position, target.position):
+			if reaction.requires_line_of_sight and not map_rules.has_line_of_sight_between(reactor, target):
 				continue
 			if reaction.requires_line_of_sight and map_rules.get_visibility(reactor, target).not_visible:
 				continue
@@ -244,6 +263,55 @@ func get_post_attack_reactions(attacker, target, current_round: int) -> Array:
 			continue
 		available.append(reaction)
 	return available
+
+
+func get_miss_counter_reactions(attacker: CombatantState, target: CombatantState, incoming_attack: AttackData, attack_result: AttackResult, current_round: int) -> Array:
+	var available: Array = []
+	if attacker == null or target == null or incoming_attack == null or attack_result == null or attack_result.hit or target.is_dying() or attacker.is_dying() or attacker.team == target.team:
+		return available
+	if not attack_has_trait(incoming_attack, "melee"):
+		return available
+	for reaction in target.active_reactions:
+		if reaction == null or reaction.trigger != ReactionDataScript.Trigger.ENEMY_MISSES_ME or target.ap < reaction.ap_cost:
+			continue
+		if target.has_status("surprise") and reaction_has_trait(reaction, "reactive"):
+			continue
+		if reaction.uses_per_round > 0 and int(target.reaction_last_used_round.get(reaction.id, 0)) == current_round:
+			continue
+		if reaction.required_trait_id != "" and not has_trait(target, reaction.required_trait_id):
+			continue
+		if not reaction_stance_matches(target, reaction):
+			continue
+		if get_effect(reaction, ReactionEffectDataScript.Type.MOVEMENT) != null:
+			if target.has_status("rooted"):
+				continue
+			available.append(reaction)
+			continue
+		var retaliation: AttackData = get_reaction_attack_data(reaction, target)
+		if retaliation == null or not attack_has_trait(retaliation, "melee"):
+			continue
+		if not reaction.required_weapon_trait_ids.all(func(trait_id): return attack_has_trait(retaliation, trait_id)):
+			continue
+		if not attack_system.validate_attack(target, attacker, retaliation).success:
+			continue
+		available.append(reaction)
+	return available
+
+
+func reaction_stance_matches(combatant, reaction) -> bool:
+	if reaction.required_stance_id.is_empty():
+		return true
+	for instance in combatant.effects:
+		if instance != null and instance.is_stance and instance.source_ability_id == reaction.required_stance_id:
+			return true
+	return false
+
+
+func has_equipped_shield(combatant) -> bool:
+	for item in combatant.equipped_items.values():
+		if item != null and item.slot == EquipmentData.Slot.SHIELD:
+			return true
+	return false
 
 
 func get_post_ranged_hit_reactions(attacker, attack: AttackData, attack_hit: bool) -> Array:

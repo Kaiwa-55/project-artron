@@ -31,8 +31,8 @@ func _init() -> void:
 	check(system.ability_system.get_remaining_cooldown(actor, beat_down.id) == 2, "Beat Down starts a two-Turn cooldown", failures)
 	check(Catalog.abilities.any(func(ability): return ability != null and ability.id == "beat_down"), "Beat Down is available in Character Creation", failures)
 	var blocked_actor := make_actor("blocked", 1)
-	blocked_actor.starting_equipment = [load("res://data/equipment/dagger.tres"), load("res://data/equipment/dagger_offhand.tres")]
-	blocked_actor.starting_equipment_slots = {"dagger": EquipmentSystem.WEAPON_SLOT_1, "dagger_offhand": EquipmentSystem.WEAPON_SLOT_2}
+	blocked_actor.starting_equipment = [load("res://data/equipment/dagger.tres"), load("res://data/equipment/sword.tres")]
+	blocked_actor.starting_equipment_slots = {"dagger": EquipmentSystem.WEAPON_SLOT_1, "sword": EquipmentSystem.WEAPON_SLOT_2}
 	blocked_actor.available_abilities.append(beat_down)
 	blocked_actor.selected_ability_ids.append(beat_down.id)
 	blocked_actor.equipped_abilities.append(beat_down.id)

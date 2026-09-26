@@ -33,7 +33,7 @@ func run_test() -> void:
 	for child in arena.action_menu_list.get_children():
 		if child is Button:
 			basic_entries.append(child.text)
-	success = verify(arena.minor_action_scroll.visible and not arena.action_menu_panel.visible and basic_entries == ["THROW", "ESCAPE"], "arena.minor_action_scroll.visible and not arena.action_menu_panel.visible and basic_entries == [\"THROW\", \"ESCAPE\"]") and success
+	success = verify(arena.minor_action_scroll.visible and not arena.action_menu_panel.visible and basic_entries.has("THROW") and basic_entries.has("ESCAPE"), "Basic menu includes THROW and ESCAPE") and success
 	arena.action_category_buttons["ability"].pressed.emit()
 	success = verify(arena.minor_action_scroll.visible and arena.action_menu_list.get_child_count() > 0, "arena.minor_action_scroll.visible and arena.action_menu_list.get_child_count() > 0") and success
 	player.hp = maxi(1, player.max_hp - 6)
@@ -42,10 +42,11 @@ func run_test() -> void:
 	for child in arena.action_menu_list.get_children():
 		if child is Button:
 			item_buttons.append(child)
-	success = verify(item_buttons.size() == 1 and item_buttons[0].text.begins_with("Minor Healing Potion") and not item_buttons[0].disabled, "item_buttons.size() == 1 and item_buttons[0].text.begins_with(\"Minor Healing Potion\") and not item_buttons[0].disabled") and success
-	if item_buttons.size() == 1:
-		item_buttons[0].pressed.emit()
-	success = verify(player.hp == player.max_hp and player.item_inventory.is_empty(), "player.hp == player.max_hp and player.item_inventory.is_empty()") and success
+	var potion_buttons: Array[Button] = item_buttons.filter(func(button): return button.text.begins_with("Minor Healing Potion"))
+	success = verify(potion_buttons.size() == 1 and not potion_buttons[0].disabled, "The healing potion is available among inventory items") and success
+	if potion_buttons.size() == 1:
+		potion_buttons[0].pressed.emit()
+	success = verify(player.hp == player.max_hp and player.item_inventory.all(func(stack): return stack.item.id != "minor_healing_potion"), "Healing potion is consumed while other inventory remains") and success
 	player.ap = player.max_ap
 	var rooted = load("res://data/status/rooted.tres")
 	var enemy: CombatantState = arena.combat_system.get_combat_state().combatants.values().filter(func(actor): return actor.team != player.team).front()
@@ -63,6 +64,10 @@ func run_test() -> void:
 	player.equipped_items.erase(3)
 	arena.combat_system.equipment_system.refresh_equipment(player)
 	arena.show_action_menu("throw")
+	await process_frame
+	var throw_row_y: float = (arena.action_menu_list.get_child(0) as Control).global_position.y
+	for choice in arena.action_menu_list.get_children():
+		success = verify(is_equal_approx((choice as Control).global_position.y, throw_row_y), "Throw choices stay on one row") and success
 	var unequipped_throw_buttons := 0
 	for child in arena.action_menu_list.get_children():
 		if child is Button and child.disabled and not child.get_meta("menu_navigation", false):
@@ -111,10 +116,10 @@ func run_test() -> void:
 	for child in arena.action_menu_list.get_children():
 		arena.action_menu_list.remove_child(child)
 		child.queue_free()
-	for index in range(12):
+	for index in range(16):
 		arena.add_action_menu_button("Action %d" % index, "", func(): pass)
 	await process_frame
-	success = verify(arena.minor_action_list.columns == 6, "arena.minor_action_list.columns == 6") and success
+	success = verify(arena.minor_action_list.columns == 16, "All action choices stay on one row") and success
 	success = verify(arena.minor_action_scroll.get_h_scroll_bar().max_value > arena.minor_action_scroll.get_h_scroll_bar().page, "arena.minor_action_scroll.get_h_scroll_bar().max_value > arena.minor_action_scroll.get_h_scroll_bar().page") and success
 	var icon_button := Button.new()
 	icon_button.text = "Icon Action"

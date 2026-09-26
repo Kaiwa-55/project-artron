@@ -8,7 +8,7 @@ var failures: Array[String] = []
 func _init() -> void:
 	var stalker: CombatantState = StalkerData.create_combatant_state()
 	check(stalker.id == "crimson_spine_stalker" and stalker.level == 4, "Crimson Spine Stalker resource creates a Level 4 Enemy")
-	check(stalker.max_hp == 38 and stalker.max_ap == 4 and stalker.get_effective_speed() == 35.0, "HP, AP, and Speed match the design")
+	check(stalker.max_hp == 38 and stalker.max_ap == 4 and stalker.get_effective_speed() == 20.0, "HP, AP, and Speed match the design")
 	check(stalker.strength == 16 and stalker.dexterity == 18 and stalker.constitution == 14 and stalker.intelligence == 8 and stalker.wisdom == 12 and stalker.charisma == 8, "Attributes match the design")
 	check(stalker.initiative_bonus == 4 and stalker.reflex_stat_bonus == 3 and stalker.fortitude_stat_bonus == 1 and stalker.will_stat_bonus == 0, "Initiative and Defense bonuses match the design")
 	check(stalker.active_traits.any(func(trait_data): return trait_data != null and trait_data.id == "demon"), "Demon trait is present")

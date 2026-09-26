@@ -352,13 +352,13 @@ func build_equipment(host) -> void:
 	UI.label(host.left, "Buy equipment for your character, then equip it without an AP cost.", 14, UI.MUTED)
 	for item in host.catalog.equipment:
 		var owned: bool = host.draft.owned_equipment.has(item)
-		UI.card(host.left, item.display_name, "%s · %d Gold%s" % [["Weapon", "Armor", "Shield"][item.slot], item.purchase_price, " · OWNED" if owned else ""], null, host.focused_item == item, func():
+		UI.card(host.left, item.display_name, "%s · %d Gold%s" % [EquipmentSystem.SLOT_TYPE_NAMES.get(item.slot, "Equipment"), item.purchase_price, " · OWNED" if owned else ""], null, host.focused_item == item, func():
 			host.focused_item = item
 			host.refresh())
 	UI.label(host.center, "EQUIPMENT SHOP", 32, UI.PAPER, true)
-	for slot in [0, 3, 1]:
+	for slot in EquipmentSystem.LOADOUT_SLOTS:
 		var item = host.draft.equipment_slots.get(slot)
-		var slot_name: String = {0: "HAND 1", 3: "HAND 2", 1: "ARMOR"}[slot]
+		var slot_name: String = EquipmentSystem.SLOT_NAMES[slot].to_upper()
 		var row := HBoxContainer.new()
 		host.center.add_child(row)
 		UI.label(row, slot_name + "   ·   " + (item.display_name if item != null else "Empty"), 17, UI.GOLD)
@@ -384,8 +384,8 @@ func build_equipment(host) -> void:
 		for ability in attack.granted_abilities:
 			UI.label(host.center, "Grants: " + ability.display_name, 15, UI.MUTED)
 	var two_handed: bool = host.draft.equipment_rules.is_two_handed(item)
-	UI.label(host.center, "Two-Handed: occupies both hand slots." if two_handed else "Weapons and Shields share the two hand slots.", 15, UI.MUTED)
-	var row := HBoxContainer.new()
+	UI.label(host.center, "Two-Handed: occupies both hand slots." if two_handed else ("Weapons and Shields share the two hand slots." if item.slot == EquipmentData.Slot.WEAPON or item.slot == EquipmentData.Slot.SHIELD else "Choose an equipment slot below."), 15, UI.MUTED)
+	var row := VBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	host.center.add_child(row)
 	if not host.draft.owned_equipment.has(item):
@@ -394,15 +394,10 @@ func build_equipment(host) -> void:
 			host.refresh())
 		buy_button.disabled = host.draft.gold < item.purchase_price
 		return
-	if item.slot == EquipmentData.Slot.ARMOR:
-		UI.button(row, "EQUIP ARMOR", func():
-			host.draft.equip(selected_item, 1)
+	for slot in ([0] if two_handed else host.draft.equipment_rules.get_valid_slots(item)):
+		UI.button(row, "EQUIP BOTH HANDS" if two_handed else "EQUIP %s" % EquipmentSystem.SLOT_NAMES[slot].to_upper(), func():
+			host.draft.equip(selected_item, slot)
 			host.refresh(), true)
-	else:
-		for slot in ([0] if two_handed else [0, 3]):
-			UI.button(row, "EQUIP BOTH HANDS" if two_handed else ("EQUIP HAND 1" if slot == 0 else "EQUIP HAND 2"), func():
-				host.draft.equip(selected_item, slot)
-				host.refresh(), true)
 
 func build_review(host) -> void:
 	UI.label(host.left, "REVIEW YOUR CHARACTER", 19, UI.GOLD, true)
