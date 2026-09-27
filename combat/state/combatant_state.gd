@@ -349,7 +349,7 @@ func add_effect(effect: EffectData, source_ability_id: String = "", source_abili
 				EffectData.StackMode.KEEP_STRONGER:
 					if effect.potency > active_effect.data.potency:
 						active_effect.data = effect
-						active_effect.stack_count = 1
+						active_effect.stack_count = effect.stacks_on_apply
 						active_effect.remaining_turns = effect.duration_turns
 					elif effect.potency == active_effect.data.potency:
 						active_effect.remaining_turns = maxi(active_effect.remaining_turns, effect.duration_turns)

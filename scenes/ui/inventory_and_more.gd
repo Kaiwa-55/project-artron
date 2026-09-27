@@ -232,7 +232,7 @@ func _render_profile(player: CombatantState) -> void:
 	var statuses: Array = []
 	for effect in player.effects:
 		if effect != null and effect.data != null:
-			statuses.append(effect.data.display_name)
+			statuses.append(effect.get_display_name())
 	summary.add_child(_label("Status: " + _names(statuses), 10, inventory_view.MUTED))
 	var abilities: Array = combat_system.ability_system.get_active_abilities(player) if combat_system != null else player.available_abilities
 	profile_abilities.add_child(_label("ABILITIES", 9, inventory_view.GOLD))

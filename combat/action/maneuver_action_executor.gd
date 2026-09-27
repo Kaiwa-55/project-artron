@@ -32,8 +32,10 @@ func execute(actor_id: String, target_id: String, maneuver: ActionTypes.Maneuver
 		return _finish(actor, target, maneuver, false, {"roll": roll, "strength_modifier": strength_modifier, "total": total, "defense": defense})
 	match maneuver:
 		ActionTypes.Maneuver.GRAB:
-			target.add_effect(GrabbedStatus, "", "", false, actor.id, actor.class_dc)
-			actor.add_effect(GrabbingStatus, "", "", false, target.id)
+			var grabbed: EffectInstance = target.add_effect(GrabbedStatus, "", "", false, actor.id, actor.class_dc)
+			grabbed.source_combatant_name = actor.display_name
+			var grabbing: EffectInstance = actor.add_effect(GrabbingStatus, "", "", false, target.id)
+			grabbing.source_combatant_name = target.display_name
 		ActionTypes.Maneuver.TRIP:
 			target.add_effect(ProneStatus, "", "", false, actor.id, actor.class_dc)
 		ActionTypes.Maneuver.PUSH, ActionTypes.Maneuver.PULL:
@@ -61,8 +63,11 @@ func validate(actor_id: String, target_id: String, maneuver: ActionTypes.Maneuve
 		return ActionResult.failure("Choose a living enemy target.")
 	if not combat_system.map_rules.is_target_in_range(actor, target, _get_melee_range(actor)):
 		return ActionResult.failure("Target is outside melee range.")
-	if maneuver == ActionTypes.Maneuver.GRAB and target.has_status("grabbed"):
-		return ActionResult.failure("Target is already Grabbed.")
+	if maneuver == ActionTypes.Maneuver.GRAB:
+		if actor.has_status("grabbing"):
+			return ActionResult.failure("Actor is already Grabbing a target.")
+		if target.has_status("grabbed"):
+			return ActionResult.failure("Target is already Grabbed.")
 	if maneuver == ActionTypes.Maneuver.TRIP and target.has_status("prone"):
 		return ActionResult.failure("Target is already Prone.")
 	if maneuver in [ActionTypes.Maneuver.PUSH, ActionTypes.Maneuver.PULL, ActionTypes.Maneuver.TRIP] and _is_two_sizes_larger(target, actor):
@@ -157,7 +162,7 @@ func refresh_grabs() -> void:
 		if not target.has_status("grabbed"):
 			continue
 		var holder := _get_grab_holder(target)
-		if holder == null or holder.is_dying() or holder.has_status("prone") or not combat_system.map_rules.is_target_in_range(holder, target, _get_melee_range(holder)):
+		if holder == null or holder.is_dying() or holder.has_status("prone") or _get_held_target(holder) != target or not combat_system.map_rules.is_target_in_range(holder, target, _get_melee_range(holder)):
 			target.remove_status("grabbed")
 			if holder != null:
 				holder.remove_status("grabbing")

@@ -114,7 +114,7 @@ func show_action_menu(category: String) -> void:
 			for instance in escapable:
 				var dc: int = instance.source_class_dc if instance.source_class_dc > 0 else instance.data.default_escape_dc
 				var tooltip := "Roll 3d8 + STR modifier vs DC %d. AP is spent whether the roll succeeds or fails." % dc
-				add_action_menu_button(instance.data.display_name, tooltip, host.use_escape_from_menu.bind(instance.data.id))
+				add_action_menu_button(instance.get_display_name(), tooltip, host.use_escape_from_menu.bind(instance.data.id))
 				var escape_button := action_menu_list.get_child(action_menu_list.get_child_count() - 1) as Button
 				escape_button.disabled = player.ap < instance.data.escape_ap_cost
 			if escapable.is_empty():

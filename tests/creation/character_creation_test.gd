@@ -19,6 +19,8 @@ func complete_attributes(draft) -> void:
 	draft.rebuild()
 
 func run_tests() -> void:
+	var arcanist_visual = Catalog.visual_for("arcanist")
+	check(arcanist_visual != null and arcanist_visual.artwork != null, "Arcanist has selectable class artwork")
 	var draft = Draft.new()
 	draft.setup(Catalog)
 	check(draft.preview.strength == 10, "Character Creation starts Strength from the universal baseline, not the prototype player template")

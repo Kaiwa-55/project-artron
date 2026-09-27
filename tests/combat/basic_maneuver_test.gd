@@ -19,10 +19,19 @@ func _init() -> void:
 	check(not combat.movement_system.validate_move(target, target.position + Vector2(12, 0), movement, combat.combat_state).success, "Grabbed target must not be able to Move.", failures)
 
 	combat.combat_state.current_actor_id = target.id
-	target.ap = 3
 	target.strength = 100
+	target.ap = 5
+	var unarmed: AttackData = preload("res://data/attack/unarmed_attack.tres")
+	var grabbed_attack := combat.attack_system.resolve_attack(target, actor, unarmed, true)
+	var has_grab_penalty := false
+	for source in grabbed_attack.to_hit_breakdown:
+		if source.get("source") == "Grabbed" and int(source.get("amount", 0)) == -2:
+			has_grab_penalty = true
+	check(has_grab_penalty, "Grabbed attack breakdown should show a -2 penalty.", failures)
 	var escaped := combat.execute_escape(target.id, "grabbed")
 	check(escaped.success and not target.has_status("grabbed") and not actor.has_status("grabbing"), "Successful Escape should clear both linked Grab statuses.", failures)
+	var freed_attack := combat.attack_system.resolve_attack(target, actor, unarmed, true)
+	check(freed_attack.attack_modifier == grabbed_attack.attack_modifier + 2, "Escape should remove the -2 attack penalty.", failures)
 
 	combat.combat_state.current_actor_id = actor.id
 	actor.ap = 5

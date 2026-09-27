@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cortabj3ljq5h" path="res://data/attack/attack_data.gd" id="1"]
 [ext_resource type="Resource" uid="uid://ce3txaxt1bf61" path="res://animation/frost_shard.tres" id="1_xgy6u"]
-[ext_resource type="Resource" path="res://data/status/elemental_slowed_5.tres" id="2"]
+[ext_resource type="Resource" path="res://data/status/slowed.tres" id="2"]
 [ext_resource type="Script" uid="uid://bmw2mvuy1m5cv" path="res://data/effect/effect_data.gd" id="2_58mjr"]
 [ext_resource type="Resource" path="res://data/trait/cold.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/ranged.tres" id="4"]
@@ -20,4 +20,5 @@ base_damage = 3
 range_feet = 30.0
 damage_type = "cold"
 effects_on_hit = Array[ExtResource("2_58mjr")]([ExtResource("2")])
+hit_effect_overrides = {"slowed": {"stacks_on_apply": 1, "potency": 5, "additional_tags": ["cold"]}}
 traits = [ExtResource("3"), ExtResource("4"), ExtResource("5")]

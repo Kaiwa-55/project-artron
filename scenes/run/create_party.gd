@@ -68,7 +68,7 @@ func start_run() -> void:
 
 
 func back() -> void:
-	get_tree().quit()
+	get_tree().change_scene_to_file("res://scenes/menu/main_menu.tscn")
 
 
 func _leader_name() -> String:

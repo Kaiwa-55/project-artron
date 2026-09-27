@@ -86,6 +86,7 @@
 [ext_resource type="Resource" uid="uid://b3r7x8n0ulubu" path="res://data/ability/unwavering_faith.tres" id="ability_unwavering_faith"]
 [ext_resource type="Resource" uid="uid://ctr38p0r37cjp" path="res://data/class/arcanist.tres" id="arcanist"]
 [ext_resource type="Texture2D" uid="uid://c6rho00y06vft" path="res://assets/character_creation/assassin.png" id="art_assassin"]
+[ext_resource type="Texture2D" uid="uid://crce54ohxus35" path="res://assets/character_creation/arcanist.png" id="art_arcanist"]
 [ext_resource type="Texture2D" uid="uid://ffv7a8il0gnd" path="res://assets/character_creation/devotee.png" id="art_devotee"]
 [ext_resource type="Texture2D" uid="uid://dmpe0tj1w7evo" path="res://assets/character_creation/martial_artist.png" id="art_martial_artist"]
 [ext_resource type="Texture2D" uid="uid://cqp66bjty7hmj" path="res://assets/character_creation/warrior.png" id="art_warrior"]
@@ -138,6 +139,7 @@ script = ExtResource("visual")
 source_id = "arcanist"
 display_name = "The Arcanist"
 subtitle = "Mana / Spellcraft"
+artwork = ExtResource("art_arcanist")
 
 [sub_resource type="Resource" id="Visual_warrior"]
 script = ExtResource("visual")

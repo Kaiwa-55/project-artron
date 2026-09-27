@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AttackData" load_steps=5 format=3]
 [ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
-[ext_resource type="Resource" path="res://data/status/goblin_slowed_5.tres" id="2"]
+[ext_resource type="Resource" path="res://data/status/slowed.tres" id="2"]
 [ext_resource type="Resource" path="res://data/trait/ranged.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/simple.tres" id="4"]
 [ext_resource type="Resource" path="res://animation/stone_sling.tres" id="5"]
@@ -17,4 +17,5 @@ range_feet = 40.0
 minimum_range_feet = 5.0
 damage_type = "bludgeoning"
 effects_on_hit = [ExtResource("2")]
+hit_effect_overrides = {"slowed": {"stacks_on_apply": 1, "duration_turns": 1, "potency": 5, "additional_tags": ["debuff"]}}
 traits = [ExtResource("3"), ExtResource("4")]

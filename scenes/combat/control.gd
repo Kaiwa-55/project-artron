@@ -76,7 +76,8 @@ func get_effect_names(combatant: CombatantState) -> String:
 	var names: PackedStringArray = []
 	for effect in combatant.effects:
 		var stack_text := " x%d" % effect.stack_count if effect.stack_count > 1 else ""
-		names.append("%s%s (%d)" % [effect.data.display_name, stack_text, effect.remaining_turns])
+		var duration_text := "" if effect.data.persists_until_combat_end else " (%d)" % effect.remaining_turns
+		names.append("%s%s%s" % [effect.get_display_name(), stack_text, duration_text])
 	return ", ".join(names)
 
 

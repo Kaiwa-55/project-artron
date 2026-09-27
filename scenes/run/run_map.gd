@@ -37,6 +37,7 @@ const NODE_ICONS := [
 @onready var event_panel: EventPanel = $EventPanel
 @onready var rest_panel: Control = $RestPanel
 @onready var shop_panel: Control = $ShopPanel
+@onready var save_game = get_node("/root/SaveGame")
 
 var run_state: RunState
 var node_buttons: Dictionary = {}
@@ -48,6 +49,7 @@ var pending_encounter_from_event: bool = false
 var current_shop: Resource
 
 const REST_RECOVERY_RATIO := 0.5
+const MAIN_MENU_SCENE := "res://scenes/menu/main_menu.tscn"
 
 
 func _ready() -> void:
@@ -65,6 +67,12 @@ func _ready() -> void:
 	shop_panel.shop_closed.connect(finish_shop)
 	if not character_panel.equipment_change_requested.is_connected(on_run_map_equipment_change):
 		character_panel.equipment_change_requested.connect(on_run_map_equipment_change)
+	var save_button := Button.new()
+	save_button.text = "SAVE & MENU"
+	save_button.custom_minimum_size = Vector2(96, 30)
+	save_button.add_theme_font_size_override("font_size", 9)
+	save_button.pressed.connect(save_and_menu)
+	$Margin/Layout/Footer.add_child(save_button)
 	if get_tree().has_meta("restart_run_seed"):
 		var restart_seed := int(get_tree().get_meta("restart_run_seed"))
 		get_tree().remove_meta("restart_run_seed")
@@ -80,6 +88,8 @@ func _ready() -> void:
 		start_run(int(Time.get_unix_time_from_system()))
 	ensure_player_progression_state()
 	setup_event_flow()
+	if event_manager.active_event == null:
+		save_game.save_run(run_state)
 	refresh_level_up_button()
 	build_party_inventory_buttons()
 	if run_state.has_meta("exploration_selected_node"):
@@ -91,7 +101,23 @@ func _ready() -> void:
 
 func open_building_exploration() -> void:
 	run_state.set_meta("exploration_selected_node", selected_node_id)
+	if save_game.active_slot > 0 and not save_game.save_run(run_state, "exploration"):
+		location_label.text = save_game.last_error
+		return
 	get_tree().change_scene_to_file("res://scenes/exploration/DungeonExploration.tscn")
+
+
+func save_and_menu() -> void:
+	if event_manager != null and event_manager.active_event != null:
+		location_label.text = "Finish the Event before saving."
+		return
+	if save_game.active_slot == 0:
+		location_label.text = "Start the Run from the Main Menu to choose a save slot."
+		return
+	if not save_game.save_run(run_state):
+		location_label.text = save_game.last_error
+		return
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
 
 func open_watchtower_combat() -> void:
@@ -164,6 +190,7 @@ func start_run(seed_value: int, reset_party_to_level_one: bool = false) -> void:
 	refresh_level_up_button()
 	build_party_inventory_buttons()
 	reset_party_to_level_one_on_start = false
+	save_game.save_run(run_state)
 
 
 func ensure_player_progression_state() -> void:
@@ -276,11 +303,14 @@ func on_run_map_equipment_change(item, slot: int) -> void:
 	var result := EquipmentSystem.new().toggle_equipment_without_cost(member, item, slot)
 	location_label.text = "Equipment updated: %s" % item.display_name if result.success else "Equipment failed: %s" % result.failure_reason
 	character_panel.refresh()
+	if result.success:
+		save_game.save_run(run_state)
 
 
 func on_level_up_committed() -> void:
 	refresh_level_up_button()
 	location_label.text = "Progression choices saved for the next Combat."
+	save_game.save_run(run_state)
 
 
 func refresh_level_up_button() -> void:
@@ -357,7 +387,12 @@ func select_node(node_id: String) -> void:
 
 
 func confirm_selected_node() -> void:
-	if selected_node_id.is_empty() or not run_state.enter_node(selected_node_id):
+	if selected_node_id.is_empty():
+		return
+	if save_game.active_slot > 0 and not save_game.save_run(run_state):
+		location_label.text = save_game.last_error
+		return
+	if not run_state.enter_node(selected_node_id):
 		return
 	var node := run_state.get_current_node()
 	selected_node_id = ""
@@ -373,6 +408,7 @@ func confirm_selected_node() -> void:
 		return
 	if node.node_type == MapNodeData.NodeType.TREASURE:
 		get_tree().set_meta("active_run_node_id", node.id)
+		save_game.save_run(run_state, "reward")
 		var change_error := get_tree().change_scene_to_file(REWARD_SCENE)
 		if change_error != OK:
 			location_label.text = "Could not open Treasure: %s" % error_string(change_error)
@@ -414,6 +450,7 @@ func finish_rest() -> void:
 	location_label.text = "Camp complete: each party member chose their own recovery."
 	build_party_inventory_buttons()
 	refresh_level_up_button()
+	save_game.save_run(run_state)
 
 
 func open_shop(_node: MapNodeData) -> void:
@@ -423,6 +460,7 @@ func open_shop(_node: MapNodeData) -> void:
 		if member is CombatantState:
 			party.append(member)
 	shop_panel.open_for_party(party, run_state.gold, current_shop)
+	save_game.save_run(run_state)
 
 
 func purchase_shop_item(actor_id: String, product: Resource, quantity: int, price: int) -> void:
@@ -448,6 +486,7 @@ func purchase_shop_item(actor_id: String, product: Resource, quantity: int, pric
 	shop_panel.refresh_gold(run_state.gold)
 	refresh_gold_label()
 	location_label.text = "%s bought %d %s." % [member.display_name, quantity, product.get("display_name")]
+	save_game.save_run(run_state)
 
 
 func sell_shop_item(actor_id: String, entry, quantity: int) -> void:
@@ -462,6 +501,7 @@ func sell_shop_item(actor_id: String, entry, quantity: int) -> void:
 	refresh_gold_label()
 	var item_name: String = entry.item.display_name if entry is ItemStack else entry.display_name
 	location_label.text = "%s sold %d %s for %d Gold." % [member.display_name, quantity, item_name, proceeds]
+	save_game.save_run(run_state)
 
 
 func add_run_item(member: CombatantState, item: ItemData, quantity: int) -> void:
@@ -515,10 +555,20 @@ func setup_event_flow() -> void:
 	event_manager.name = "EventManager"
 	add_child(event_manager)
 	event_manager.configure(run_state.game_state, encounter_manager)
+	event_manager.event_finished.connect(_on_event_finished)
 	encounter_manager.combat_requested.connect(_on_event_encounter_requested)
 	event_panel.encounter_confirmed.connect(start_presented_encounter)
 	event_panel.setup(event_manager)
 	resume_event_encounter_result()
+
+
+func _on_event_finished(_event: EventData) -> void:
+	call_deferred("_save_finished_event")
+
+
+func _save_finished_event() -> void:
+	if event_manager.active_event == null and not pending_encounter_from_event:
+		save_game.save_run(run_state)
 
 
 func get_event_context() -> EventContext:

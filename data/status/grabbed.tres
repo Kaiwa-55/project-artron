@@ -6,6 +6,7 @@
 script = ExtResource("1")
 id = "grabbed"
 display_name = "Grabbed"
+attack_bonus = -2
 persists_until_combat_end = true
 status_tags = Array[String](["status", "control", "movement", "grabbed"])
 can_escape = true

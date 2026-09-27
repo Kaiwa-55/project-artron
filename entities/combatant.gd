@@ -532,11 +532,11 @@ func refresh_status_icons(force: bool = false) -> void:
 	var statuses: Array[EffectInstance] = []
 	var signature_parts: PackedStringArray = []
 	for instance in state.effects:
-		if instance == null or instance.data == null or instance.data.status_kind == EffectData.StatusKind.NONE:
+		if not is_status_icon_effect(instance):
 			continue
 		statuses.append(instance)
 		var icon_path := instance.data.icon_texture.resource_path if instance.data.icon_texture != null else ""
-		signature_parts.append("%s:%d:%d:%s" % [instance.data.id, instance.stack_count, instance.remaining_turns, icon_path])
+		signature_parts.append("%s:%d:%d:%s" % [instance.get_display_name(), instance.stack_count, instance.remaining_turns, icon_path])
 	var signature := ",".join(signature_parts)
 	if not force and signature == status_icon_signature:
 		return
@@ -560,7 +560,7 @@ func refresh_status_icons(force: bool = false) -> void:
 		icon.mouse_filter = Control.MOUSE_FILTER_PASS
 		icon.tooltip_text = get_status_tooltip(instance)
 		var style := StyleBoxFlat.new()
-		style.bg_color = get_status_color(instance.data.status_kind)
+		style.bg_color = get_status_icon_color(instance)
 		style.border_color = Color("f8fafc")
 		style.set_border_width_all(2)
 		style.set_corner_radius_all(12)
@@ -587,7 +587,7 @@ func refresh_status_icons(force: bool = false) -> void:
 		var label := Label.new()
 		label.name = "StackOrFallback"
 		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		label.text = get_status_abbreviation(instance.data.status_kind) if instance.data.icon_texture == null else ""
+		label.text = get_status_icon_abbreviation(instance) if instance.data.icon_texture == null else ""
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -615,8 +615,30 @@ func refresh_status_icons(force: bool = false) -> void:
 
 
 func get_status_tooltip(instance: EffectInstance) -> String:
+	if instance.data.id in ["grabbed", "grabbing"]:
+		return instance.get_display_name()
 	var stack_text := " · %d stacks" % instance.stack_count if instance.stack_count > 1 else ""
-	return "%s%s · %d turn(s) remaining" % [instance.data.display_name, stack_text, instance.remaining_turns]
+	return "%s%s · %d turn(s) remaining" % [instance.get_display_name(), stack_text, instance.remaining_turns]
+
+
+func is_status_icon_effect(instance: EffectInstance) -> bool:
+	return instance != null and instance.data != null and (instance.data.status_kind != EffectData.StatusKind.NONE or instance.data.id in ["grabbed", "grabbing"])
+
+
+func get_status_icon_abbreviation(instance: EffectInstance) -> String:
+	if instance.data.id == "grabbed":
+		return "GB"
+	if instance.data.id == "grabbing":
+		return "GR"
+	return get_status_abbreviation(instance.data.status_kind)
+
+
+func get_status_icon_color(instance: EffectInstance) -> Color:
+	if instance.data.id == "grabbed":
+		return Color("89502f")
+	if instance.data.id == "grabbing":
+		return Color("276974")
+	return get_status_color(instance.data.status_kind)
 
 
 func get_status_abbreviation(status_kind: EffectData.StatusKind) -> String:

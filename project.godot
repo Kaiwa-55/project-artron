@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Project Artron"
-run/main_scene="uid://cki04qqhvvxl7"
+run/main_scene="res://scenes/menu/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 BoundedTooltips="*res://scenes/ui/bounded_tooltips.gd"
+SaveGame="*res://run/save_game.gd"
 
 [display]
 
@@ -34,7 +35,6 @@ enabled=PackedStringArray("res://addons/encounter_builder/plugin.cfg")
 
 [gui]
 
-fonts/dynamic_fonts/use_oversampling=true
 timers/tooltip_delay_sec=86400.0
 
 [physics]

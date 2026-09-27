@@ -751,6 +751,7 @@ func run_enemy_ai_if_needed() -> void:
 	var result: ActionResult = enemy_ai.execute_decision(combat_system, decision)
 	enemy_actions_this_turn += 1
 	$UILayer/Control.record_action_result(result)
+	refresh_essential_hud()
 	if result.requires_reaction_choice:
 		$UILayer/Control.show_reaction_prompt(result.reaction_prompt)
 		$UILayer/Control.set_mode_hint("Resolve the pending Reaction before Enemy AI continues.")
@@ -1146,6 +1147,9 @@ func open_next_encounter(next_encounter: EncounterData) -> void:
 
 func open_reward_after_victory() -> void:
 	await get_tree().create_timer(0.75).timeout
+	var active_run := get_tree().get_meta("active_run_state", null) as RunState
+	if active_run != null:
+		get_node("/root/SaveGame").save_run(active_run, "reward")
 	var change_error := get_tree().change_scene_to_file(REWARD_SCENE)
 	if change_error != OK:
 		post_combat_transition_started = false
@@ -1171,6 +1175,7 @@ func return_to_dungeon_exploration(combat_result: CombatEnums.CombatResult) -> v
 			var defeated: Dictionary = active_run.get_meta("dungeon_defeated_encounters", {})
 			defeated[String(payload.get("encounter_id", ""))] = true
 			active_run.set_meta("dungeon_defeated_encounters", defeated)
+			get_node("/root/SaveGame").save_run(active_run, "exploration")
 	get_tree().remove_meta("active_encounter_data")
 	get_tree().remove_meta("dungeon_combat_return")
 	var change_error := get_tree().change_scene_to_file("res://scenes/exploration/DungeonExploration.tscn")

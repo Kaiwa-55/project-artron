@@ -26,7 +26,7 @@ func execute(combatant_id: String, status_id: String) -> ActionResult:
 		combat_system.maneuver_action_executor.refresh_grabs()
 	var result := ActionResult.success_result()
 	result.events.append(CombatEvent.new(EventTypes.Type.ESCAPE_ATTEMPTED, actor.id, instance.source_combatant_id, {
-		"effect_name": instance.data.display_name,
+		"effect_name": instance.get_display_name(),
 		"roll": roll,
 		"strength_modifier": modifier,
 		"total": total,

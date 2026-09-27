@@ -60,8 +60,39 @@ var active_damage_bonus_source: String = ""
 
 @export var effects_on_hit: Array[EffectData] = []
 @export var effects_on_miss: Array[EffectData] = []
+@export var hit_effect_overrides: Dictionary = {}
+@export var miss_effect_overrides: Dictionary = {}
 @export var traits: Array = []
 @export var granted_abilities: Array[AbilityData] = []
+
+
+func get_effects_on_hit() -> Array[EffectData]:
+	return _configured_effects(effects_on_hit, hit_effect_overrides)
+
+
+func get_effects_on_miss() -> Array[EffectData]:
+	return _configured_effects(effects_on_miss, miss_effect_overrides)
+
+
+func _configured_effects(effects: Array[EffectData], overrides: Dictionary) -> Array[EffectData]:
+	var configured_effects: Array[EffectData] = []
+	for effect in effects:
+		if effect == null:
+			continue
+		if not overrides.has(effect.id):
+			configured_effects.append(effect)
+			continue
+		var settings: Dictionary = overrides[effect.id]
+		var configured: EffectData = effect.duplicate(true)
+		configured.stacks_on_apply = int(settings.get("stacks_on_apply", configured.stacks_on_apply))
+		configured.max_stacks = maxi(configured.max_stacks, configured.stacks_on_apply)
+		configured.duration_turns = int(settings.get("duration_turns", configured.duration_turns))
+		configured.potency = int(settings.get("potency", configured.potency))
+		for tag in settings.get("additional_tags", []):
+			if not configured.status_tags.has(String(tag)):
+				configured.status_tags.append(String(tag))
+		configured_effects.append(configured)
+	return configured_effects
 
 
 func resolve_attack_attribute(combatant: CombatantState) -> int:

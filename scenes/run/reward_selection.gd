@@ -6,6 +6,7 @@ const RUN_MAP_SCENE := "res://scenes/run/RunMap.tscn"
 @onready var subtitle_label: Label = $Margin/Layout/Subtitle
 @onready var cards: GridContainer = $Margin/Layout/Cards
 @onready var status_label: Label = $Margin/Layout/Status
+@onready var save_game = get_node("/root/SaveGame")
 
 var run_state: RunState
 var node: MapNodeData
@@ -97,6 +98,7 @@ func select_reward(reward: RewardOptionData) -> void:
 	var recipient_id := String(recipient_picker.get_selected_metadata()) if recipient_picker != null and recipient_picker.selected >= 0 else ""
 	if not reward_system.claim(run_state, node.id, reward, recipient_id):
 		return
+	save_game.save_run(run_state)
 	for card in cards.get_children():
 		if card is Button:
 			card.disabled = true

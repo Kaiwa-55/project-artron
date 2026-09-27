@@ -227,7 +227,7 @@ func resolve_attack(
 	ability_system.commit_conditional_damage_bonuses(attacker, result.conditional_damage_bonuses)
 
 	if not result.immune:
-		for effect in attack.effects_on_hit:
+		for effect in attack.get_effects_on_hit():
 			if effect_system.apply_effect(target, effect, "", "", false, attacker):
 				result.applied_effects.append(effect.display_name)
 	apply_passive_on_hit_statuses(attacker, target, attack, result)
@@ -284,7 +284,7 @@ func finalize_attack(attacker: CombatantState, target: CombatantState, attack: A
 	damage_recipient.apply_damage(result.final_damage)
 	ability_system.commit_conditional_damage_bonuses(attacker, result.conditional_damage_bonuses)
 	if not result.immune:
-		for effect in attack.effects_on_hit:
+		for effect in attack.get_effects_on_hit():
 			if effect_system.apply_effect(hit_recipient, effect, "", "", false, attacker): result.applied_effects.append(effect.display_name)
 	apply_passive_on_hit_statuses(attacker, hit_recipient, attack, result)
 	grant_finishing_gauge_on_hit(attacker, result)
@@ -344,7 +344,7 @@ func grant_finishing_gauge_on_hit(attacker: CombatantState, result: AttackResult
 func apply_miss_effects(target: CombatantState, attack: AttackData, result: AttackResult, attacker: CombatantState = null) -> void:
 	if target == null or attack == null:
 		return
-	for effect in attack.effects_on_miss:
+	for effect in attack.get_effects_on_miss():
 		if effect_system.apply_effect(target, effect, "", "", false, attacker):
 			result.applied_effects.append(effect.display_name)
 

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://data/attack/attack_data.gd" id="1"]
 [ext_resource type="Resource" path="res://animation/lunge_return.tres" id="2"]
-[ext_resource type="Resource" path="res://data/status/bleeding_5.tres" id="3"]
+[ext_resource type="Resource" path="res://data/status/bleeding.tres" id="3"]
 [ext_resource type="Resource" path="res://data/trait/melee.tres" id="4"]
 [ext_resource type="Resource" path="res://data/trait/unarmed.tres" id="5"]
 [ext_resource type="Resource" path="res://data/trait/pierce.tres" id="6"]
@@ -22,4 +22,5 @@ base_damage = 9
 range_feet = 8.0
 damage_type = "pierce"
 effects_on_hit = [ExtResource("3")]
+hit_effect_overrides = {"bleeding": {"stacks_on_apply": 5}}
 traits = [ExtResource("4"), ExtResource("5"), ExtResource("6")]

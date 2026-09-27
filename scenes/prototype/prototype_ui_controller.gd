@@ -946,6 +946,7 @@ func handle_menu_action_result(result: ActionResult) -> void:
 	if result.requires_reaction_choice:
 		$UILayer/Control.show_reaction_prompt(result.reaction_prompt)
 	refresh_combatant_nodes()
+	refresh_essential_hud()
 
 
 func refresh_action_dock() -> void:
@@ -977,6 +978,7 @@ func use_escape_from_menu(status_id: String) -> void:
 	else:
 		$UILayer/Control.set_mode_hint("Escape resolved. Choose an action.")
 	refresh_combatant_nodes()
+	refresh_essential_hud()
 
 
 func use_stand_from_menu() -> void:
@@ -1028,7 +1030,7 @@ func refresh_essential_hud() -> void:
 	var status_names := PackedStringArray()
 	for effect in player.effects:
 		var stack_text := " x%d" % effect.stack_count if effect.stack_count > 1 else ""
-		status_names.append("%s%s" % [effect.data.display_name, stack_text])
+		status_names.append("%s%s" % [effect.get_display_name(), stack_text])
 	var visible_statuses := status_names.slice(0, mini(3, status_names.size()))
 	var status_text := " | ".join(visible_statuses) if not visible_statuses.is_empty() else "None"
 	if status_names.size() > visible_statuses.size():

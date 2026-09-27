@@ -8,6 +8,7 @@ const Hostiles = preload("res://scenes/exploration/dungeon_hostiles.gd")
 const TokenBuilder = preload("res://scenes/character_creation/token_image_builder.gd")
 const RUN_MAP := "res://scenes/run/RunMap.tscn"
 const SAVE_KEY := "dungeondraft_exploration"
+@onready var save_game = get_node("/root/SaveGame")
 var player: CharacterBody2D
 var camera: Camera2D
 var upper: Sprite2D
@@ -133,6 +134,7 @@ func make_hud() -> void:
 	row.add_child(floor_label)
 	overview_button = add_button(row, "Overview [Tab]", toggle_overview)
 	roof_button = add_button(row, "Roof [R]", toggle_roof)
+	add_button(row, "Save & Menu", save_and_menu)
 	add_button(row, "Return [Esc]", return_to_run)
 	var bottom := PanelContainer.new()
 	bottom.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
@@ -227,7 +229,8 @@ func toggle_roof() -> void:
 func use_stairs() -> void:
 	if return_started or inspect_roof or not Layout.STAIRS.has_point(player.position):
 		return
-	set_floor(1-floor_id, Layout.STAIR_LANDING)
+	if set_floor(1-floor_id, Layout.STAIR_LANDING):
+		save_location()
 
 
 func encounter_defeated(encounter_id: String) -> bool:
@@ -286,6 +289,13 @@ func set_floor(destination: int, landing: Vector2) -> bool:
 func save_location() -> void:
 	if active_run != null:
 		active_run.set_meta(SAVE_KEY, {"floor": floor_id, "position": player.position})
+		save_game.save_run(active_run, "exploration")
+
+
+func save_and_menu() -> void:
+	save_location()
+	if save_game.last_error.is_empty():
+		get_tree().change_scene_to_file("res://scenes/menu/main_menu.tscn")
 
 func restore_location() -> void:
 	if active_run == null:

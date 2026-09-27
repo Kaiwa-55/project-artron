@@ -3,7 +3,7 @@ extends SceneTree
 const PreCombatStatusScript := preload("res://data/encounter/pre_combat_status.gd")
 const PreCombatStatusSystemScript := preload("res://encounter/pre_combat_status_system.gd")
 const Poisoned := preload("res://data/status/poisoned.tres")
-const Slowed := preload("res://data/status/elemental_slowed_5.tres")
+const Slowed := preload("res://data/status/slowed.tres")
 
 var failures: Array[String] = []
 
@@ -20,11 +20,13 @@ func run_test() -> void:
 	party_status.target_mode = PreCombatStatusScript.TargetMode.PLAYER_PARTY
 	var target_status := PreCombatStatusScript.new()
 	party_status.applications = 1
-	target_status.effect = Slowed
+	var slowed_one: EffectData = Slowed.duplicate(true)
+	slowed_one.stacks_on_apply = 1
+	target_status.effect = slowed_one
 	target_status.target_mode = PreCombatStatusScript.TargetMode.CHARACTER_ID
 	target_status.character_id = "enemy_leader"
 	# EffectData can also be added directly and defaults to the player party.
-	encounter.pre_combat_statuses.assign([party_status, target_status, Slowed])
+	encounter.pre_combat_statuses.assign([party_status, target_status, slowed_one])
 
 	var player := create_member("player", 1)
 	var ally := create_member("ally", 1)

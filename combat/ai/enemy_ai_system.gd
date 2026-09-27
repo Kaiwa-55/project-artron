@@ -95,7 +95,7 @@ func collect_attack_candidates(system: CombatSystem, context, candidates: Array)
 		candidate.source_data = attack
 		candidate.expected_damage = maxf(0.0, float(attack.base_damage))
 		candidate.kill_value = 1.0 if target.hp <= attack.base_damage else 0.0
-		candidate.status_value = evaluate_effects_status_value(attack.effects_on_hit, target)
+		candidate.status_value = evaluate_effects_status_value(attack.get_effects_on_hit(), target)
 		candidate.resource_cost = attack.ap_cost * profile.ap_cost_weight
 		candidate.reason = "Attack %s with %s." % [target.display_name, attack.display_name]
 		candidates.append(candidate)
@@ -266,7 +266,7 @@ func collect_skill_candidates(system: CombatSystem, context, candidates: Array) 
 			candidate.source_data = skill
 			candidate.expected_damage = maxf(0.0, float(attack.base_damage))
 			candidate.kill_value = 1.0 if target.hp <= attack.base_damage else 0.0
-			candidate.status_value = evaluate_effects_status_value(attack.effects_on_hit, target)
+			candidate.status_value = evaluate_effects_status_value(attack.get_effects_on_hit(), target)
 			candidate.resource_cost = skill.ap_cost * profile.ap_cost_weight + skill.mana_cost * profile.mana_cost_weight
 			candidate.reason = "Use %s on %s." % [skill.display_name, target.display_name]
 			candidates.append(candidate)
@@ -547,7 +547,7 @@ func compare_candidates(left, right) -> bool:
 
 
 func evaluate_ability_status_value(ability, attack: AttackData, target: CombatantState) -> float:
-	var value := evaluate_effects_status_value(attack.effects_on_hit, target) if attack != null else 0.0
+	var value := evaluate_effects_status_value(attack.get_effects_on_hit(), target) if attack != null else 0.0
 	for use_effect in ability.use_effects:
 		if use_effect == null or use_effect.effect == null:
 			continue

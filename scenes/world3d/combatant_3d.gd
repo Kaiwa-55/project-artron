@@ -179,7 +179,7 @@ func _refresh_status_visuals() -> void:
 		child.queue_free()
 	var statuses: Array[EffectInstance] = []
 	for instance in proxy.state.effects:
-		if instance != null and instance.data != null and instance.data.status_kind != EffectData.StatusKind.NONE:
+		if proxy.is_status_icon_effect(instance):
 			statuses.append(instance)
 	var units := proxy.state.spatial_units_per_foot
 	for index in range(statuses.size()):
@@ -196,7 +196,7 @@ func _refresh_status_visuals() -> void:
 		disk.height = 0.05
 		background.mesh = disk
 		var material := StandardMaterial3D.new()
-		material.albedo_color = proxy.get_status_color(instance.data.status_kind)
+		material.albedo_color = proxy.get_status_icon_color(instance)
 		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		background.material_override = material
 		anchor.add_child(background)
@@ -210,7 +210,7 @@ func _refresh_status_visuals() -> void:
 			anchor.add_child(icon)
 		else:
 			var abbreviation := Label3D.new()
-			abbreviation.text = proxy.get_status_abbreviation(instance.data.status_kind)
+			abbreviation.text = proxy.get_status_icon_abbreviation(instance)
 			abbreviation.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 			abbreviation.font_size = 10
 			abbreviation.pixel_size = 1.0 / units
