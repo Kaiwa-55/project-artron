@@ -26,7 +26,14 @@ func start_combat(combatants: Array[CombatantState]) -> void:
 		combat_system.ability_system.sync_granted_reactions(combatant)
 		combat_system.equipment_system.initialize_combatant(combatant)
 		combat_system.equipment_system.refresh_equipment(combatant)
+		var preserve_run_resources := bool(combatant.get_meta("preserve_resources_on_combat_start", false))
+		var current_hp := combatant.hp
+		var current_mana := combatant.mana
 		combat_system.stat_system.initialize_combatant(combatant)
+		if preserve_run_resources:
+			combatant.hp = clampi(current_hp, 0, combatant.max_hp)
+			combatant.mana = clampi(current_mana, 0, combatant.max_mana)
+			combatant.remove_meta("preserve_resources_on_combat_start")
 		if combatant.max_faith > 0:
 			combatant.faith = combatant.max_faith
 			combatant.temporary_faith = 0

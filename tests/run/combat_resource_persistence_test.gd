@@ -15,9 +15,21 @@ func _init() -> void:
 	var active := make_combatant("player")
 	prototype.restore_run_resources(active, persistent)
 	check(active.hp == 7 and active.mana == 3, "Combat should start with the HP and Mana stored in RunState.")
+	var next_fight := make_combatant("player")
+	prototype.restore_run_resources(next_fight, persistent)
+	next_fight.ap = 0
+	CombatSystem.new().start_combat([next_fight])
+	check(next_fight.hp == 7 and next_fight.mana == 3, "Starting the next fight must keep remaining HP and Mana.")
+	check(next_fight.ap == next_fight.max_ap, "Starting the next fight still restores AP.")
+	var fresh_enemy := make_combatant("enemy")
+	fresh_enemy.hp = 1
+	CombatSystem.new().start_combat([fresh_enemy])
+	check(fresh_enemy.hp == fresh_enemy.max_hp, "Fresh combatants still start at full HP.")
 	persistent.hp = 0
 	prototype.restore_run_resources(active, persistent)
 	check(active.hp == 0, "A fallen party member must not be silently restored before the Event death decision.")
+	CombatSystem.new().start_combat([active])
+	check(active.hp == 0, "Starting Combat must not silently revive a fallen Run member.")
 
 	active.hp = 0
 	active.mana = 2

@@ -488,6 +488,7 @@ func restore_run_resources(target: CombatantState, source: CombatantState) -> vo
 		return
 	target.hp = clampi(source.hp, 0, target.max_hp)
 	target.mana = clampi(source.mana, 0, target.max_mana)
+	target.set_meta("preserve_resources_on_combat_start", true)
 
 
 func apply_run_progression_state(target: CombatantState, source: CombatantState) -> void:
